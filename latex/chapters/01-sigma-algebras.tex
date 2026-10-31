@@ -1,0 +1,419 @@
+% Chapter 1: sigma-algebras. Translation of pp. 1--11 of P. Siri's handwritten notes
+% ("Teoria della misura", section 1: "sigma-algebre").
+
+Throughout, $X$ is a non-empty set and $\mathcal P(X)$ is the set of all subsets of $X$, its
+\emph{power set}.
+
+\section{Algebras and \texorpdfstring{$\sigma$}{sigma}-algebras}\label{sec:sa-algebras}
+
+\begin{definition}[Algebra]\label{def:sa-algebra}
+Let $\mathcal A\subseteq\mathcal P(X)$ be a non-empty family of subsets of $X$. We say that
+$\mathcal A$ is an \emph{algebra} (of subsets of $X$) if
+\begin{enumerate}[label=(\arabic*)]
+  \item $X\in\mathcal A$;
+  \item $A,B\in\mathcal A\Rightarrow A\cup B\in\mathcal A$ (closure under finite unions);
+  \item $A\in\mathcal A\Rightarrow A^c\in\mathcal A$ (closure under complementation).
+\end{enumerate}
+\end{definition}
+
+\begin{example}\label{exa:sa-three-points}
+Let $X=\{1,2,3\}$. The family $\mathcal A=\{X,\{1\},\{2\},\{3\}\}\subseteq\mathcal P(X)$ is
+\emph{not} an algebra: $\{1\}^c=\{2,3\}$ and $X^c=\emptyset$ are missing. The family
+$\mathcal A=\{X,\emptyset,\{1\},\{2,3\}\}\subseteq\mathcal P(X)$ \emph{is} an algebra: the
+complements of its members are $\emptyset$, $X$, $\{2,3\}$, $\{1\}$, and the union of two of
+its members is one of them ($\emptyset$ and $X$ are neutral and absorbing for unions, and
+$\{1\}\cup\{2,3\}=X$).
+\end{example}
+
+\begin{remark}[Consequences of the axioms]\label{rem:sa-consequences}
+As a consequence of the definition, an algebra $\mathcal A$ has the following properties,
+numbered after the axioms.
+\begin{enumerate}[label=(\arabic*),start=4]
+  \item $\emptyset\in\mathcal A$, because $\emptyset=X^c$.
+  \item $A,B\in\mathcal A\Rightarrow A\cap B\in\mathcal A$, because $A\cap B=(A^c\cup B^c)^c$.
+  \item $A,B\in\mathcal A\Rightarrow A\setminus B\in\mathcal A$, because $A\setminus B=A\cap B^c$.
+  \item $A_1,\dots,A_n\in\mathcal A\Rightarrow A_1\cup\dots\cup A_n\in\mathcal A$ and
+    $A_1\cap\dots\cap A_n\in\mathcal A$, by induction on $n$ from (2) and (5).
+\end{enumerate}
+\end{remark}
+
+\begin{definition}[$\sigma$-algebra]\label{def:sa-sigma-algebra}
+An algebra $\mathcal A$ of subsets of $X$ is a \emph{$\sigma$-algebra} if for every countable
+family $(A_n)_{n\ge1}$ of subsets of $X$ with $A_n\in\mathcal A$ for all $n$,
+\[
+  \bigcup_{n\ge1}A_n\in\mathcal A
+  \qquad\Big(\text{and consequently }\ \bigcap_{n\ge1}A_n=\Big(\bigcup_{n\ge1}A_n^c\Big)^c\in\mathcal A\Big).
+\]
+In words, $\mathcal A$ is closed under countable unions (and countable intersections).
+\end{definition}
+
+\begin{definition}[Measurable space]\label{def:sa-measurable-space}
+Let $\mathcal A$ be a $\sigma$-algebra of subsets of $X$. The pair $(X,\mathcal A)$ is called a
+\emph{measurable space}, and a set $A\in\mathcal A$ is called a \emph{measurable set}.
+\end{definition}
+
+\begin{proposition}\label{prop:sa-algebra-is-sigma}
+Let $\mathcal A$ be an algebra of subsets of $X$. The following are equivalent:
+\begin{enumerate}[label=(\roman*)]
+  \item $\mathcal A$ is a $\sigma$-algebra;
+  \item for every family $(A_n)_{n\ge1}$ of elements of $\mathcal A$ with $A_i\cap A_j=\emptyset$
+    for $i\ne j$, we have $\bigcup_{n\ge1}A_n\in\mathcal A$;
+  \item for every family $(A_n)_{n\ge1}$ of elements of $\mathcal A$ with $A_n\subseteq A_{n+1}$
+    for all $n$, we have $\bigcup_{n\ge1}A_n\in\mathcal A$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i)$\Rightarrow$(ii) and (i)$\Rightarrow$(iii) are obvious: these are particular countable unions.
+
+(ii)$\Rightarrow$(i). Let $(B_n)_{n\ge1}$ be a family of elements of $\mathcal A$, and set
+\[
+  A_1=B_1,\qquad A_2=B_2\setminus A_1,\qquad A_3=B_3\setminus(A_1\cup A_2),\qquad\dots,\qquad
+  A_n=B_n\setminus\bigcup_{i=1}^{n-1}A_i
+\]
+(\cref{fig:sa-disjoint}). Each $A_n$ is in $\mathcal A$, by (6) and (7) of \cref{rem:sa-consequences}. The $A_n$ are pairwise
+disjoint: if $i<j$, then $A_j$ is disjoint from $A_i$ by construction. Moreover
+$\bigcup_{i=1}^nA_i=\bigcup_{i=1}^nB_i$ for every $n$: this is clear for $n=1$, and if it holds
+for $n-1$, then
+\[
+  \bigcup_{i=1}^nA_i=\bigcup_{i=1}^{n-1}A_i\cup\Big(B_n\setminus\bigcup_{i=1}^{n-1}A_i\Big)
+  =\bigcup_{i=1}^{n-1}A_i\cup B_n=\bigcup_{i=1}^nB_i .
+\]
+Taking the union over $n$, $\bigcup_{n\ge1}A_n=\bigcup_{n\ge1}B_n$, and this set is in $\mathcal A$
+by (ii).
+
+(iii)$\Rightarrow$(i).\footnote{Condition (iii) is not in the handwritten notes. It is added here
+because it is convenient later.} Given $(B_n)_{n\ge1}$ in $\mathcal A$, the sets $C_n=B_1\cup\dots\cup B_n$
+are in $\mathcal A$ by (7) of \cref{rem:sa-consequences}, increase with $n$, and have the same union as the $B_n$.
+\end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.62\textwidth]{ch01-disjoint}
+  \caption{Making a sequence disjoint, as in the proof of \cref{prop:sa-algebra-is-sigma}: from
+    $B_1,B_2,B_3$ we keep, at each step, only the part not already covered.}
+  \label{fig:sa-disjoint}
+\end{figure}
+
+\begin{remark}[Notable $\sigma$-algebras]\label{rem:sa-notable}
+\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item $\{X,\emptyset\}$ is the smallest $\sigma$-algebra of subsets of $X$ (every
+    $\sigma$-algebra contains $X$ and $\emptyset$, by (1) and \cref{rem:sa-consequences}). It is called the
+    \emph{trivial $\sigma$-algebra}.
+  \item $\mathcal P(X)$ is the largest $\sigma$-algebra of subsets of $X$.
+\end{enumerate}
+\end{remark}
+
+The next three examples, and \cref{prop:sa-borel-generators} below, are worked exercises of the
+notes.
+
+\begin{example}[An algebra that is not a $\sigma$-algebra]\label{exa:sa-intervals}
+Let $X=[0,1)$, and let $\mathcal A$ consist of $\emptyset$ and of all the sets of the form
+\[
+  A=\bigcup_{i=1}^n[a_i,b_i),\qquad 0\le a_1\le b_1\le a_2\le b_2\le\dots\le a_n\le b_n\le1,
+  \quad n\ge1,
+\]
+that is, the finite unions of disjoint intervals of this type. Then $\mathcal A$ is an algebra,
+but not a $\sigma$-algebra.
+\end{example}
+
+\begin{proof}[Solution]
+\emph{$\mathcal A$ is an algebra.} (1) $X=[0,1)\in\mathcal A$ (take $n=1$, $a_1=0$, $b_1=1$).
+
+(2) $\mathcal A$ is closed under finite unions. Observe first that if $[a,b),[c,d)\subseteq[0,1)$,
+then $[a,b)\cup[c,d)\in\mathcal A$: whatever their relative position (one inside the other,
+disjoint, adjacent with $b=c$, or overlapping), the union is one interval of this type or two
+disjoint ones. In general, if $A=\bigcup_{i=1}^n[a_i,b_i)$ and $B=\bigcup_{j=1}^m[c_j,d_j)$,
+then $A\cup B=\bigcup_{k=1}^{\ell}[x_k,y_k)$ for suitable intervals with
+$0\le x_1\le y_1\le\dots\le x_\ell\le y_\ell\le1$, so $A\cup B\in\mathcal A$. To find them, let
+$0=t_0<t_1<\dots<t_r=1$ be the distinct points among $0$, $1$ and all the endpoints $a_i,b_i,c_j,d_j$.
+No endpoint lies strictly between $t_{k-1}$ and $t_k$, so each of the $n+m$ intervals either
+contains $[t_{k-1},t_k)$ or is disjoint from it. Hence $A\cup B$ is the union of those intervals
+$[t_{k-1},t_k)$ that it contains, which are disjoint and in increasing order. (If $A$ or $B$ is
+empty, there is nothing to prove.)
+
+(3) $\mathcal A$ is closed under complementation. If $A=\bigcup_{i=1}^n[a_i,b_i)$, then
+\[
+  A^c=[0,a_1)\cup[b_1,a_2)\cup\dots\cup[b_{n-1},a_n)\cup[b_n,1)\in\mathcal A,
+\]
+since $0\le a_1\le b_1\le\dots\le b_n\le1$; and $\emptyset^c=X\in\mathcal A$.
+
+\emph{$\mathcal A$ is not a $\sigma$-algebra.} Let $A_1=\emptyset$, $A_2=[\frac12,1)$, \dots,
+$A_n=[\frac1n,1)$, \dots, all in $\mathcal A$. Then (\cref{fig:sa-intervals}, left)
+\[
+  \bigcup_{n\ge1}A_n=\bigcup_{n\ge1}\Big[\frac1n,1\Big)=(0,1)\notin\mathcal A ,
+\]
+because every non-empty element of $\mathcal A$ has a smallest element (the left endpoint of its
+first non-empty interval), and $(0,1)$ has none.
+\end{proof}
+
+\begin{example}[Finite and cofinite sets]\label{exa:sa-finite-cofinite}
+Let $X$ be an infinite set, and
+\[
+  \mathcal A=\{A\in\mathcal P(X): A\text{ is finite or }A^c\text{ is finite}\}.
+\]
+Then $\mathcal A$ is an algebra, but not a $\sigma$-algebra.
+\end{example}
+
+\begin{proof}[Solution]
+(1) $X\in\mathcal A$, since $X^c=\emptyset$ is finite.
+
+(2) $A\in\mathcal A\Rightarrow A^c\in\mathcal A$ by construction, since $A=(A^c)^c$.
+
+(3) Let $A,B\in\mathcal A$. If $A$ and $B$ are both finite, $A\cup B$ is finite, so
+$A\cup B\in\mathcal A$. If at least one of them is infinite, its complement is finite; say it is
+$A$, so that $A^c$ is finite. Then $A\cup B$ is infinite, but
+$(A\cup B)^c=A^c\cap B^c\subseteq A^c$ is finite, so $A\cup B\in\mathcal A$.
+
+Hence $\mathcal A$ is an algebra. It is not closed under countable unions, however. Two
+examples:
+\begin{itemize}
+  \item $X=\N$ and $A_n=\{2n\}$, $n\in\N$. Each $A_n$ is in $\mathcal A$, but
+    $\bigcup_{n\in\N}A_n$ is the set of even numbers and its complement is the set of odd
+    numbers; both are infinite, so $\bigcup_{n\in\N}A_n\notin\mathcal A$.
+  \item $X=\R$ and $A_n=\{q_n\}$, where $(q_n)_{n\in\N}$ is an enumeration of $\Q$. Then
+    $\bigcup_{n\in\N}A_n=\Q$ and $\big(\bigcup_{n\in\N}A_n\big)^c=\R\setminus\Q=\mathbb I$, the
+    set of irrational numbers; both are infinite, so $\bigcup_{n\in\N}A_n\notin\mathcal A$.
+\end{itemize}
+For an arbitrary infinite $X$, choose distinct points $x_0,x_1,x_2,\ldots$ of $X$ and let
+$A_n=\{x_{2n}\}$: the union $\{x_0,x_2,x_4,\dots\}$ is infinite, and so is its complement, which
+contains every $x_{2n+1}$.\footnote{The handwritten notes give only the examples $X=\N$ and
+$X=\R$; the argument for an arbitrary infinite set $X$ is added here.} Therefore $\mathcal A$ is
+not a $\sigma$-algebra.
+\end{proof}
+
+\begin{example}[Countable and cocountable sets]\label{exa:sa-countable-cocountable}
+Let $X$ be an uncountable set, and
+\[
+  \mathcal A=\{A\in\mathcal P(X): A\text{ is at most countable, or }A^c\text{ is at most countable}\},
+\]
+where \emph{at most countable} means finite or countably infinite. Then $\mathcal A$ is a
+$\sigma$-algebra.
+\end{example}
+
+\begin{proof}[Solution]
+(1) $X\in\mathcal A$, since $X^c=\emptyset$.
+
+(2) $A\in\mathcal A\Rightarrow A^c\in\mathcal A$ by construction.
+
+(3) Let $A_n\in\mathcal A$, $n\ge1$. If all the $A_n$ are at most countable, then
+$\bigcup_{n\ge1}A_n$ is at most countable (a countable union of countable sets is countable), so it
+is in $\mathcal A$. If instead there is $\bar n$ such that $A_{\bar n}$ is not at most countable,
+then $A_{\bar n}^c$ is at most countable. In that case $\bigcup_{n\ge1}A_n$ is not at most
+countable, but
+\[
+  \Big(\bigcup_{n\ge1}A_n\Big)^c=\bigcap_{n\ge1}A_n^c\subseteq A_{\bar n}^c
+\]
+is at most countable, so $\bigcup_{n\ge1}A_n\in\mathcal A$. Closure under the union of two sets is
+the case $A_1=A$, $A_2=B$, $A_n=\emptyset$ for $n\ge3$. Hence $\mathcal A$ is a $\sigma$-algebra.
+\end{proof}
+
+\section{Generated \texorpdfstring{$\sigma$}{sigma}-algebras}\label{sec:sa-generated}
+
+\begin{remark}[Intersections and unions of $\sigma$-algebras]\label{rem:sa-intersection}
+Let $\mathcal A_i$, $i\in I$, be $\sigma$-algebras of subsets of $X$, where $I$ is an arbitrary
+non-empty index set.
+\begin{itemize}
+  \item The intersection $\bigcap_{i\in I}\mathcal A_i$ is again a $\sigma$-algebra. Indeed:
+  \begin{enumerate}[label=(\arabic*)]
+    \item $X\in\mathcal A_i$ for all $i\in I$, so $X\in\bigcap_{i\in I}\mathcal A_i$;
+    \item if $A\in\bigcap_{i\in I}\mathcal A_i$, then $A\in\mathcal A_i$ for all $i$, so
+      $A^c\in\mathcal A_i$ for all $i$, that is, $A^c\in\bigcap_{i\in I}\mathcal A_i$;
+    \item if $A_n\in\bigcap_{i\in I}\mathcal A_i$ for all $n\ge1$, then for every $n$,
+      $A_n\in\mathcal A_i$ for all $i$; so $\bigcup_{n\ge1}A_n\in\mathcal A_i$ for all $i$, that
+      is, $\bigcup_{n\ge1}A_n\in\bigcap_{i\in I}\mathcal A_i$.
+  \end{enumerate}
+  (Closure under the union of two sets is the case $A_n=\emptyset$ for $n\ge3$ of (3).)
+  \item The union $\bigcup_{i\in I}\mathcal A_i$, on the other hand, is in general \emph{not} a
+    $\sigma$-algebra, not even an algebra: if $A,B\in\bigcup_{i\in I}\mathcal A_i$, there are
+    $j,k\in I$ with $A\in\mathcal A_j$ and $B\in\mathcal A_k$, and nothing guarantees that
+    $A\cup B$ belongs to $\bigcup_{i\in I}\mathcal A_i$. For example, let $X=\{1,2,3\}$ and
+    \[
+      \mathcal A_1=\{X,\emptyset,\{1\},\{2,3\}\},\qquad \mathcal A_2=\{X,\emptyset,\{1,2\},\{3\}\}.
+    \]
+    Then $A=\{1\}\in\mathcal A_1\subseteq\mathcal A_1\cup\mathcal A_2$ and
+    $B=\{3\}\in\mathcal A_2\subseteq\mathcal A_1\cup\mathcal A_2$, but $A\cup B=\{1,3\}$ is
+    neither in $\mathcal A_1$ nor in $\mathcal A_2$, so $A\cup B\notin\mathcal A_1\cup\mathcal A_2$.
+\end{itemize}
+\end{remark}
+
+\begin{definition}[Generated $\sigma$-algebra]\label{def:sa-generated}
+Let $\mathcal E\subseteq\mathcal P(X)$ be a family of subsets of $X$. The intersection of the
+$\sigma$-algebras that contain $\mathcal E$ is again a $\sigma$-algebra (\cref{rem:sa-intersection};
+there is at least one such $\sigma$-algebra, $\mathcal P(X)$), and it is the smallest
+$\sigma$-algebra containing $\mathcal E$, that is, it is contained in every $\sigma$-algebra
+$\mathcal A$ with $\mathcal E\subseteq\mathcal A$. It is called the \emph{$\sigma$-algebra
+generated by $\mathcal E$} and is denoted $\sigma(\mathcal E)$.
+\end{definition}
+
+For a single set $A\subseteq X$ we write $\sigma(A)$ for $\sigma(\{A\})$.
+
+\begin{example}[Generated $\sigma$-algebras]\label{exa:sa-generated}
+\leavevmode
+\begin{itemize}
+  \item $\sigma(\emptyset)=\{\emptyset,X\}=\sigma(X)$. Indeed $\{\emptyset,X\}$ is a
+    $\sigma$-algebra (\cref{rem:sa-notable}) that contains $\emptyset$ and $X$, and it is
+    contained in every $\sigma$-algebra. (The empty family also generates $\{\emptyset,X\}$.)
+  \item If $A\subseteq X$, then $\sigma(A)=\{X,\emptyset,A,A^c\}$. Indeed this family is closed
+    under complements and under unions ($A\cup A^c=X$), so it is a $\sigma$-algebra containing
+    $A$, and every $\sigma$-algebra containing $A$ contains these four sets.
+  \item If $A,B\subseteq X$, then
+    \[
+      \sigma(\{A,B\})=\{X,\emptyset,A,B,A^c,B^c,A\cup B,(A\cup B)^c,\dots\},
+    \]
+    which has $16$ elements when the four sets $A\cap B$, $A\setminus B$, $B\setminus A$ and
+    $(A\cup B)^c$ are non-empty. Completing the list, and treating the case $A\cap B=\emptyset$
+    (with $A$, $B$ and $(A\cup B)^c$ non-empty, $8$ elements), is left as an exercise
+    (\exref{ex:sa-two-sets}).\footnote{The handwritten notes say ``16 elements'' and ``8
+    elements'' without the non-emptiness conditions, which are needed: for $A=B$, for instance,
+    $\sigma(\{A,B\})=\sigma(A)$ has at most $4$ elements. Corrected here.}
+\end{itemize}
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch01-atoms}
+  \caption{The atoms of $\sigma(\{A,B\})$ (\cref{exa:sa-generated}). Every set in
+    $\sigma(\{A,B\})$ is a union of some of the coloured regions, and every such union is in
+    $\sigma(\{A,B\})$.}
+  \label{fig:sa-atoms}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:sa-atoms}
+On a finite set $X$, $\sigma(\mathcal E)$ can be computed. Group the points of $X$ according to the
+sets of $\mathcal E$ that contain them: the groups, the \emph{atoms} of $\sigma(\mathcal E)$,
+partition $X$, and $\sigma(\mathcal E)$ consists of all their unions, so it has $2^k$ elements if
+there are $k$ atoms (\cref{fig:sa-atoms}; \exref{ex:sa-computing}). The module
+\coderef{code/src/probnotes/sigma.py} computes $\sigma(\mathcal E)$ in this way and,
+independently, by adding to $\mathcal E\cup\{X\}$ complements and unions until nothing changes;
+it also checks the axioms of an algebra. A $\sigma$-algebra on a finite set is determined by its
+atoms, so the $\sigma$-algebras on an $n$-point set are as many as its partitions:
+$1,2,5,15,52,\dots$ for $n=1,2,3,4,5,\dots$, the Bell numbers (\exref{ex:sa-counting}).
+\end{remark}
+
+\demo{01-sigma-algebras.ipynb}{build $\sigma(\mathcal E)$ step by step on a finite set, check the
+axioms of an algebra, and count $\sigma$-algebras.}
+
+\begin{remark}[The join of $\sigma$-algebras]\label{rem:sa-join}
+As we saw in \cref{rem:sa-intersection}, $\bigcup_{i\in I}\mathcal A_i$ is in general not a
+$\sigma$-algebra. The $\sigma$-algebra generated by it is denoted
+\[
+  \bigvee_{i\in I}\mathcal A_i=\sigma\Big(\bigcup_{i\in I}\mathcal A_i\Big).
+\]
+\end{remark}
+
+\begin{proposition}\label{prop:sa-same-generated}
+Let $\mathcal E,\mathcal E'\subseteq\mathcal P(X)$. If $\mathcal E\subseteq\sigma(\mathcal E')$
+and $\mathcal E'\subseteq\sigma(\mathcal E)$, then $\sigma(\mathcal E)=\sigma(\mathcal E')$.
+\end{proposition}
+
+\begin{proof}
+$\sigma(\mathcal E')$ is a $\sigma$-algebra containing $\mathcal E$, so
+$\sigma(\mathcal E)\subseteq\sigma(\mathcal E')$, because $\sigma(\mathcal E)$ is the smallest
+$\sigma$-algebra containing $\mathcal E$. In the same way,
+$\mathcal E'\subseteq\sigma(\mathcal E)$ gives $\sigma(\mathcal E')\subseteq\sigma(\mathcal E)$.
+Hence $\sigma(\mathcal E)=\sigma(\mathcal E')$.
+\end{proof}
+
+\section{Borel sets}\label{sec:sa-borel}
+
+\begin{definition}[Borel $\sigma$-algebra]\label{def:sa-borel}
+Let $X$ be a metric space (or, more generally, a topological space). The $\sigma$-algebra
+generated by the open sets of $X$ is called the \emph{Borel $\sigma$-algebra} of $X$ and is
+denoted $\mathcal B(X)$. The elements of $\mathcal B(X)$ are called \emph{Borel sets}.
+\end{definition}
+
+\begin{proposition}[Generators of $\mathcal B(\R)$]\label{prop:sa-borel-generators}
+Let $X=\R$. Then $\mathcal B(\R)=\sigma(\mathcal E_i)$ for every $i=1,\dots,8$, where
+\begin{align*}
+  \mathcal E_1&=\{(a,b):a,b\in\R,\ a<b\}, & \mathcal E_5&=\{(-\infty,a):a\in\R\},\\
+  \mathcal E_2&=\{(a,b]:a,b\in\R,\ a<b\}, & \mathcal E_6&=\{(-\infty,a]:a\in\R\},\\
+  \mathcal E_3&=\{[a,b):a,b\in\R,\ a<b\}, & \mathcal E_7&=\{(a,+\infty):a\in\R\},\\
+  \mathcal E_4&=\{[a,b]:a,b\in\R,\ a<b\}, & \mathcal E_8&=\{[a,+\infty):a\in\R\}.
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+(1) $\mathcal B(\R)=\sigma(\mathcal E_1)$. Open intervals are open sets, so
+$\mathcal E_1\subseteq\mathcal B(\R)$ and therefore $\sigma(\mathcal E_1)\subseteq\mathcal B(\R)$.
+We prove the opposite inclusion. Let $A$ be an open subset of $\R$; we show that
+$A\in\sigma(\mathcal E_1)$. For every $x\in A$ there are $p_x,q_x\in\Q$ such that
+$x\in(p_x,q_x)\subseteq A$: by the definition of an open set, $(x-\varepsilon,x+\varepsilon)\subseteq A$
+for some $\varepsilon>0$, and since $\Q$ is dense in $\R$ we can choose
+$p_x\in(x-\varepsilon,x)\cap\Q$ and $q_x\in(x,x+\varepsilon)\cap\Q$. Hence
+\[
+  A\subseteq\bigcup_{\substack{p,q\in\Q,\ p<q\\(p,q)\subseteq A}}(p,q)\subseteq A,
+  \qquad\text{so}\qquad
+  A=\bigcup_{\substack{p,q\in\Q,\ p<q\\(p,q)\subseteq A}}(p,q)\in\sigma(\mathcal E_1),
+\]
+since this is a countable union of elements of $\mathcal E_1$ ($\Q\times\Q$ is countable).
+So $\sigma(\mathcal E_1)$ contains every open set, and therefore
+$\mathcal B(\R)\subseteq\sigma(\mathcal E_1)$. Hence $\mathcal B(\R)=\sigma(\mathcal E_1)$.
+
+(2) $\sigma(\mathcal E_1)=\sigma(\mathcal E_2)$. We show that
+$\mathcal E_1\subseteq\sigma(\mathcal E_2)$. Let $A=(a,b)\in\mathcal E_1$. Then
+\[
+  (a,b)=\bigcup_{n\ge1}\Big(a,b-\frac1n\Big]\in\sigma(\mathcal E_2),
+\]
+since each $(a,b-\frac1n]$ is either empty or in $\mathcal E_2$ (\cref{fig:sa-intervals},
+centre). Now we show that $\mathcal E_2\subseteq\sigma(\mathcal E_1)$. Let
+$B=(a,b]\in\mathcal E_2$. Then
+\[
+  (a,b]=\bigcap_{n\ge1}\Big(a,b+\frac1n\Big)\in\sigma(\mathcal E_1)
+\]
+(\cref{fig:sa-intervals}, right). By \cref{prop:sa-same-generated},
+$\sigma(\mathcal E_1)=\sigma(\mathcal E_2)$.
+
+(3)--(8) The other cases.\footnote{The handwritten notes leave cases 3--8 as an exercise; we prove
+them here because \cref{ch:03-measurable-functions} uses them (cases 3, 6 and 7 explicitly).} Every element of
+$\mathcal E_3,\dots,\mathcal E_8$ is a Borel set: $(-\infty,a)$ and $(a,+\infty)$ are open;
+$(-\infty,a]$, $[a,+\infty)$ and $[a,b]$ are closed, that is, complements of open sets; and
+$[a,b)=[a,+\infty)\cap(-\infty,b)$. Hence $\sigma(\mathcal E_i)\subseteq\mathcal B(\R)$ for
+$i=3,\dots,8$. For the opposite inclusion it suffices to show that $\mathcal E_j\subseteq
+\sigma(\mathcal E_i)$ for some $j$ for which we already know that $\sigma(\mathcal E_j)=\mathcal B(\R)$:
+then $\mathcal B(\R)=\sigma(\mathcal E_j)\subseteq\sigma(\mathcal E_i)$. Let $a<b$.
+\begin{itemize}
+  \item[(3)] $(a,b)=\bigcup_{n\ge1}[a+\frac1n,b)$, where each term is empty or in
+    $\mathcal E_3$; so $\mathcal E_1\subseteq\sigma(\mathcal E_3)$.
+  \item[(4)] $(a,b)=\bigcup_{n>2/(b-a)}[a+\frac1n,b-\frac1n]$, where each term is in
+    $\mathcal E_4$ because $a+\frac1n<b-\frac1n$; so $\mathcal E_1\subseteq\sigma(\mathcal E_4)$.
+  \item[(5)] $(-\infty,a]=\bigcap_{n\ge1}(-\infty,a+\frac1n)\in\sigma(\mathcal E_5)$, so
+    $(a,b)=(-\infty,b)\cap(-\infty,a]^c\in\sigma(\mathcal E_5)$; thus
+    $\mathcal E_1\subseteq\sigma(\mathcal E_5)$.
+  \item[(6)] $(-\infty,b)=\bigcup_{n\ge1}(-\infty,b-\frac1n]\in\sigma(\mathcal E_6)$, so
+    $(a,b)=(-\infty,b)\cap(-\infty,a]^c\in\sigma(\mathcal E_6)$; thus
+    $\mathcal E_1\subseteq\sigma(\mathcal E_6)$.
+  \item[(7)] $(-\infty,a]=(a,+\infty)^c\in\sigma(\mathcal E_7)$, so
+    $\mathcal E_6\subseteq\sigma(\mathcal E_7)$, and $\sigma(\mathcal E_6)=\mathcal B(\R)$ by (6).
+  \item[(8)] $(-\infty,a)=[a,+\infty)^c\in\sigma(\mathcal E_8)$, so
+    $\mathcal E_5\subseteq\sigma(\mathcal E_8)$, and $\sigma(\mathcal E_5)=\mathcal B(\R)$ by (5).
+\end{itemize}
+Hence $\mathcal B(\R)=\sigma(\mathcal E_i)$ for $i=1,\dots,8$.
+\end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch01-intervals}
+  \caption{Monotone sequences of intervals. Left: $[\frac1n,1)$ increases to $(0,1)$, which is
+    not in the algebra of \cref{exa:sa-intervals}. Centre and right: the identities of case (2)
+    in the proof of \cref{prop:sa-borel-generators}, drawn with $a=0$, $b=1$.}
+  \label{fig:sa-intervals}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:sa-grid}
+The proof uses countable unions and intersections whose endpoints move, such as $b-\frac1n\uparrow b$
+and $b+\frac1n\downarrow b$. If only finitely many endpoints are allowed, the eight families need
+not generate the same $\sigma$-algebra: \exref{ex:sa-grid} traces them on a finite grid in
+$[0,1]$, and the demo draws their atoms.
+\end{remark}
+
+\demo{01-sigma-algebras.ipynb}{the algebra of \cref{exa:sa-intervals} on $[0,1)$, and the
+families $\mathcal E_1,\dots,\mathcal E_8$ traced on a finite grid.}
+
+\furtherreading
+\textcite{billingsley}, Section~2, introduces fields and $\sigma$-fields (algebras and
+$\sigma$-algebras) with examples like those of this chapter; \textcite{williams}, Sections~1.1
+and~1.2, and \textcite{durrett}, Section~1.1, do the same more briefly. \textcite{rudin-rca}
+proves the existence of the generated $\sigma$-algebra in Theorem~1.10 and defines Borel sets on a
+topological space in Section~1.11.

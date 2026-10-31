@@ -1,0 +1,21 @@
+\documentclass[11pt,oneside]{book}
+\usepackage{coursenotes}
+\setcourse{Probability}{Probability with Measure Theory}{GennaroAlberto/probability-measure-theory}
+\graphicspath{{figures/}}
+% PRIVATE BUILD. latex/solutions/ is copied in from the private solutions repo
+% by `make solutions` and is git-ignored here: never commit it.
+\renewcommand{\coursechapter}[2]{%
+  \chapter{#2}\label{ch:#1}%
+  \IfFileExists{exercises/#1.tex}{\input{exercises/#1}}{}%
+  \IfFileExists{solutions/#1.tex}{\section*{Solutions}\input{solutions/#1}}{}}
+\usepackage{xr}
+\externaldocument[N-]{notes}
+\newcommand{\noteref}[1]{\cref{N-#1}}
+\newcommand{\exref}[1]{\cref{#1}}
+
+\begin{document}
+\coursetitlepage{Exercises with solutions (instructors only)}
+\renewcommand{\documentkind}{Solutions}
+\tableofcontents
+\input{toc}
+\end{document}

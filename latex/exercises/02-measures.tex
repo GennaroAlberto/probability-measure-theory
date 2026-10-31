@@ -1,0 +1,179 @@
+% Exercises for Chapter 2 (Measures). Statements only: solutions are kept privately.
+% Exercises 2.1-2.4 are the points the handwritten notes leave to the reader ("per esercizio").
+
+\begin{exercise}[The examples are measures]\label{ex:ms-examples-are-measures}
+\easy The notes leave these checks to the reader. You may use that a sum of non-negative
+terms over a countable index set does not depend on the order of the terms, and that such a
+sum may be split into the sums over the blocks of any partition of the index set.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the counting measure, the Dirac measure $\delta_{x_0}$, and
+    $\mu(A)=\sum_{i\in A}f(i)$ on a finite or countable $X$
+    (\noteref{exa:ms-examples}) are measures on $(X,\mathcal P(X))$.
+  \item Show that the counting measure on an infinite set $X$ is $\sigma$-finite if and only
+    if $X$ is countable.
+  \item Let $(X,\mathcal A,\mu)$ be a measure space and $A\in\mathcal A$. Show that the
+    restriction $\mu|_A(B)=\mu(B\cap A)$ (\noteref{def:ms-concentrated}) is a measure on
+    $(X,\mathcal A)$. Show that if $\mu$ is concentrated on $A$, then $\mu=\mu|_A$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Zero on finite sets, infinite on infinite sets]\label{ex:ms-infinite-sets}
+\easy Let $X$ be an infinite set and, on $\mathcal P(X)$, let $\mu(A)=0$ if $A$ is finite and
+$\mu(A)=+\infty$ if $A$ is infinite (the variant in \noteref{exa:ms-two-set-functions}).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mu$ is additive, as the notes claim.
+  \item Show that every infinite set is the union of two disjoint infinite sets. Deduce that
+    the function equal to $0$ on finite sets and to $1$ on infinite sets is not additive.
+  \item Show that $\mu$ is monotone and satisfies $\mu(A\cup B)\le\mu(A)+\mu(B)$, but is not
+    countably subadditive (\noteref{prop:ms-subadditive}) and not continuous from below
+    (\noteref{thm:ms-continuity-below}). Which step of the proof of continuity from below
+    breaks down?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The further point of the notes: zero or one on a cofinite algebra]\label{ex:ms-cofinite-zero-one}
+\medium Let $X$ be an infinite set,
+$\mathcal A=\{A\subseteq X:A\text{ is finite or }A^c\text{ is finite}\}$, and $\mu(A)=0$ if $A$
+is finite, $\mu(A)=1$ if $A^c$ is finite (\noteref{exa:ms-zero-one-cofinite}); $\mathcal A$ is
+the algebra of \noteref{exa:sa-finite-cofinite}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mu$ is well defined and additive on $\mathcal A$.
+  \item Let $X$ be countable. Show that $\mu$ is not $\sigma$-additive, and find sets
+    $A_n\in\mathcal A$ decreasing to $\emptyset$ with $\mu(A_n)=1$ for every $n$.
+  \item Let $X$ be uncountable. Show that $\mu$ is $\sigma$-additive on $\mathcal A$.
+    \emph{Hint:} which countable unions of finite sets lie in $\mathcal A$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Independent events and their $\sigma$-algebras]\label{ex:ms-independence-sigma}
+\medium Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove \noteref{prop:ms-independence-generated}: events $A_i$, $i\in I$, are
+    independent if and only if the $\sigma$-algebras $\sigma(A_i)=\{\emptyset,\Omega,A_i,A_i^c\}$
+    are. \emph{Hint:} for finite $J$ and $B_j\in\{A_j,A_j^c\}$, argue by induction on the
+    number of $j$ with $B_j=A_j^c$; the choices $\emptyset$ and $\Omega$ are easy.
+  \item Show that an event $A$ is independent of itself (that is, $A,A$ are independent) if
+    and only if $\mathbb P(A)\in\{0,1\}$, and that such an event is independent of every
+    family of independent events.
+  \item On $\Omega=\{1,2,3,4\}$ with the uniform probability, let $A=\{1,2\}$, $B=\{1,3\}$,
+    $C=\{1,4\}$. Show that any two of these events are independent, but $A,B,C$ are not: in
+    \noteref{def:ms-independence} it is not enough to check pairs.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Continuity and $\sigma$-additivity on an algebra]\label{ex:ms-continuity-algebra}
+\hard Let $\mathcal A$ be an algebra of subsets of $X$ and $\mu:\mathcal A\to[0,+\infty]$ an
+additive function (\noteref{def:ms-additive}).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mu$ is $\sigma$-additive if and only if it is \emph{continuous from below}:
+    $\mu(A_n)\to\mu(A)$ whenever $A_n\in\mathcal A$, $A_n\subseteq A_{n+1}$ and
+    $A=\bigcup_nA_n\in\mathcal A$.
+  \item Assume $\mu(X)<+\infty$. Show that $\mu$ is $\sigma$-additive if and only if it is
+    \emph{continuous at $\emptyset$}: $\mu(A_n)\to0$ whenever $A_n\in\mathcal A$,
+    $A_n\supseteq A_{n+1}$ and $\bigcap_nA_n=\emptyset$.
+  \item Use (b) to give a second solution of \exref{ex:ms-cofinite-zero-one}(b) and~(c).
+  \item Show that in (b) the hypothesis $\mu(X)<+\infty$ cannot be weakened to
+    $\mu(A_1)<+\infty$: the function of \exref{ex:ms-infinite-sets} satisfies
+    $\mu(A_n)\to0$ for every decreasing sequence with $\bigcap_nA_n=\emptyset$ and
+    $\mu(A_1)<+\infty$, yet it is not $\sigma$-additive.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Bonferroni's inequalities]\label{ex:ms-bonferroni}
+\medium (in the style of Ross, Ch.~2) Let $\mu$ be a finite measure, $A_1,\dots,A_n\in\mathcal A$,
+\[
+  S_r=\sum_{1\le i_1<\dots<i_r\le n}\mu(A_{i_1}\cap\dots\cap A_{i_r}),\qquad
+  P_k=\sum_{r=1}^k(-1)^{r+1}S_r\quad(1\le k\le n),
+\]
+so that $P_n=\mu(\bigcup_iA_i)$ by Poincar\'e's formula (\noteref{thm:ms-inclusion-exclusion}).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mu(\bigcup_{i=1}^nA_i)\le P_k$ for odd $k$ and $\mu(\bigcup_{i=1}^nA_i)\ge P_k$
+    for even $k$. \emph{Hint:} induction on $n$, for all $k$ at once, along the lines of the
+    proof of Poincar\'e's formula; set $P_0=0$.
+  \item Write out the cases $k=1$ and $k=2$. Which property of a measure is the case $k=1$?
+  \item In the matching problem of \exref{ex:ms-matching}, $S_r=1/r!$. Deduce that the
+    probability $q_n$ of no match satisfies
+    $\big|q_n-\sum_{r=0}^k(-1)^r/r!\big|\le1/(k+1)!$ for $k<n$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The matching problem]\label{ex:ms-matching}
+\medium (in the style of Ross, Ch.~2) This is a computational exercise. A secretary puts $n$
+letters into $n$ addressed envelopes at random: the outcome is a permutation $\pi$ of
+$\{1,\dots,n\}$, all $n!$ equally likely, and letter $i$ is \emph{matched} if $\pi(i)=i$. Let
+$A_i=\{\pi(i)=i\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mathbb P(A_{i_1}\cap\dots\cap A_{i_r})=(n-r)!/n!$ for distinct indices, and
+    use Poincar\'e's formula to show that
+    \[
+      \mathbb P(\text{no match})=\sum_{r=0}^n\frac{(-1)^r}{r!}\ \xrightarrow[n\to\infty]{}\ e^{-1}.
+    \]
+  \item Show that $\mathbb P(\text{exactly }k\text{ matches})=\frac1{k!}\sum_{r=0}^{n-k}\frac{(-1)^r}{r!}$,
+    and find its limit as $n\to\infty$.
+  \item Implement (b) in exact rational arithmetic and check it against a complete enumeration
+    of the permutations for $n\le8$. Then simulate $10^5$ random permutations of $52$ cards
+    (\texttt{numpy.argsort} of uniform samples) and compare the frequencies of $0,1,\dots,5$
+    matches with (b) and with the limits found there.
+  \item Find the smallest $n$ for which $\mathbb P(\text{no match})$ is within $10^{-6}$ of
+    $e^{-1}$: first from the bound $1/(n+1)!$ on the remainder of the alternating series for
+    $e^{-1}$, then exactly.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Shared birthdays and subadditivity]\label{ex:ms-birthday}
+\easy (in the style of Ross, Ch.~2) This is a computational exercise. Each of $n$ people has a
+birthday among $365$ days, all $365^n$ assignments being equally likely. Let $A_{ij}$ be the
+event that persons $i<j$ share their birthday, and $p_n=\mathbb P(\bigcup_{i<j}A_{ij})$.
+\begin{enumerate}[label=(\alph*)]
+  \item Use subadditivity (\noteref{prop:ms-subadditive}) to show $p_n\le\binom n2/365$.
+    Deduce that at least $20$ people are needed for $p_n>\frac12$.
+  \item Show that $1-p_n=\prod_{j=1}^{n-1}\big(1-\frac j{365}\big)$, and use $1-x\le e^{-x}$
+    (\noteref{eq:ms-exp-bound}) to get $p_n\ge1-e^{-n(n-1)/730}$. For which $n$ does this lower
+    bound exceed $\frac12$?
+  \item Compute $S_2$ of \exref{ex:ms-bonferroni} for the events $A_{ij}$ (two distinct pairs
+    may or may not share a person) and the lower bound $S_1-S_2$.
+  \item Plot $p_n$ and the three bounds for $n\le60$, and check $p_{23}$ by simulating
+    $10^5$ groups of $23$ people. Which bound is useful for which $n$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Simulating Borel--Cantelli]\label{ex:ms-borel-cantelli-sim}
+\medium This is a computational exercise. Let $A_1,A_2,\dots$ be independent events with
+$\mathbb P(A_n)=n^{-\alpha}$, $\alpha>0$, and $N_n=\sum_{k\le n}\1_{A_k}$.
+\begin{enumerate}[label=(\alph*)]
+  \item For which $\alpha$ do infinitely many $A_n$ occur with probability $1$, and for which
+    do only finitely many occur?
+  \item Show that $\mathbb P(\text{no }A_k\text{ with }n<k\le m)=\prod_{k=n+1}^m(1-k^{-\alpha})$.
+    Evaluate it in closed form for $\alpha=1$, and for $\alpha=2$ let $m\to\infty$ to get
+    the probability that some $A_k$ with $k>n$ occurs.
+  \item Simulate $2000$ paths up to $N=10^5$ for $\alpha\in\{\frac12,1,\frac32,2\}$, drawing
+    the indicators in blocks to save memory. Report the mean of $N_N$ next to
+    $\mathbb E[N_N]$, and the fraction of paths with an occurrence in $(10^4,10^5]$ next to its
+    exact value from (b).
+  \item Repeat (c) with $\mathbb P(A_n)=1/(n\log n)$ for $n\ge2$ (and $\mathbb P(A_1)=0$). Does
+    $\sum_n\mathbb P(A_n)$ converge? Estimate $\mathbb E[N_n]$ for $n=10^{12}$ and $n=10^{100}$,
+    and explain why no simulation can tell this case apart from a convergent one.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Independence in Borel--Cantelli; runs in Bernoulli trials]\label{ex:ms-bc-independence}
+\medium (in the style of Ross, Ch.~3)
+\begin{enumerate}[label=(\alph*)]
+  \item Show that part~2 of the Borel--Cantelli lemma (\noteref{lem:ms-borel-cantelli-2})
+    fails without independence: (i) take $A_n=A$ for all $n$, with $\mathbb P(A)=\frac12$;
+    (ii) on $\Omega=\mathbb N^*$ with $\mathbb P(\{k\})=\frac1{k(k+1)}$, take
+    $A_n=\{n,n+1,\dots\}$, and show that $\sum_n\mathbb P(A_n)=+\infty$ but
+    $\limsup_nA_n=\emptyset$.
+  \item In a sequence of independent trials, each a success with probability $p\in(0,1)$
+    (the events $S_i=\{\text{trial }i\text{ is a success}\}$ are independent with
+    $\mathbb P(S_i)=p$), fix $r\ge1$. Show that with probability $1$ there are infinitely many
+    runs of $r$ consecutive successes. \emph{Hint:} use the disjoint blocks of trials
+    $\{jr+1,\dots,(j+1)r\}$, and check the independence of the corresponding events directly
+    from \noteref{def:ms-independence}.
+  \item Deduce that every finite pattern of successes and failures occurs infinitely often
+    with probability $1$.
+  \item Let $p=\frac12$ and let $L_n$ be the length of the run of successes starting at trial
+    $n$ ($L_n=0$ if trial $n$ fails). Show that with probability $1$, $L_n\ge2\log_2n$ for
+    only finitely many $n$.
+\end{enumerate}
+\end{exercise}

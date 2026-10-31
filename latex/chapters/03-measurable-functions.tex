@@ -1,0 +1,765 @@
+% Chapter 3: Lebesgue measure and measurable functions.
+% Translation of Paola Siri's handwritten notes, PDF pages 34 (from "COSTRUZIONE DELLA MISURA DI
+% LEBESGUE") to 50: sections 3 (construction of Lebesgue measure), 4 (measurable functions)
+% and 5 (simple functions) of the part "Teoria della misura".
+
+This chapter closes the part of the notes on measure theory. We first construct the measure
+on $(\mathbb R,\mathcal B(\mathbb R))$ that gives every interval its length, and complete it
+into Lebesgue measure. We then study the functions compatible with $\sigma$-algebras, the
+measurable functions (in probability, the random variables), and among them the simple
+functions, which take finitely many values. Every non-negative measurable function is the
+limit of an increasing sequence of simple functions: this is how the integral will be
+built in \cref{ch:04-integral}.
+
+\section{Construction of Lebesgue measure}\label{sec:mf-lebesgue}
+
+Let $X=\mathbb R$ and $\mathcal A=\mathcal B(\mathbb R)$, the Borel $\sigma$-algebra
+(\cref{def:sa-borel}). We construct a measure on $(\mathbb R,\mathcal B(\mathbb R))$, and for
+this we need the following result.
+
+\begin{theorem}[Extension theorem]\label{thm:mf-extension}
+Let $\mathcal A$ be an algebra of subsets of $X$ (\cref{def:sa-algebra}) and let
+$\lambda:\mathcal A\to[0,+\infty]$ be a $\sigma$-additive function on $\mathcal A$
+(\cref{def:ms-additive}). Then there exists a measure $\mu$ on $\sigma(\mathcal A)$ that
+extends $\lambda$, that is, $\mu(A)=\lambda(A)$ for every $A\in\mathcal A$. If $\lambda$ is
+$\sigma$-finite, that is, if $X=\bigcup_{n\ge1}A_n$ for some $A_n\in\mathcal A$ with
+$\lambda(A_n)<+\infty$, then this extension is unique.
+\end{theorem}
+
+The notes state this theorem without proof. It is \emph{Carath\'eodory's extension theorem}.
+For $\lambda(X)=1$ it is \citet[Theorem~3.1]{billingsley}; in general, existence is proved in
+Section~11 of the same book (Theorem~11.3), and uniqueness for $\sigma$-finite $\lambda$ in
+Section~10 (Theorem~10.3). The measure $\mu$ is the
+restriction to $\sigma(\mathcal A)$ of the \emph{outer measure}
+$\mu^*(E)=\inf\{\sum_{n\ge1}\lambda(A_n):A_n\in\mathcal A,\ E\subseteq\bigcup_{n\ge1}A_n\}$,
+$E\subseteq X$.
+
+\subsection*{Step 1: a measure on \texorpdfstring{$[0,1)$}{[0,1)}}
+
+Let $\mathcal E=\{[a,b):0\le a\le b\le 1\}$, and define a function $m:\mathcal
+E\to[0,+\infty)$ by
+\[
+  m([a,b))=\begin{cases} b-a & \text{if } a<b,\\ 0 & \text{if } a=b \quad(\text{then }[a,b)=\emptyset).\end{cases}
+\]
+Observe that $[0,1)\in\mathcal E$ and $m([0,1))=1$. Let
+\[
+  \mathcal A=\Big\{\bigcup_{i=1}^n I_i:\ n\in\mathbb N^*,\ I_1,\dots,I_n\in\mathcal E\text{ pairwise disjoint}\Big\}.
+\]
+$\mathcal A$ is an algebra of subsets of $[0,1)$, but not a $\sigma$-algebra (\cref{exa:sa-intervals}). We extend $m$ to $\mathcal A$: if
+$A=\bigcup_{i=1}^nI_i\in\mathcal A$ with $I_1,\dots,I_n\in\mathcal E$ pairwise disjoint, we set
+\begin{equation}\label{eq:mf-jordan}
+  m(A)=m\Big(\bigcup_{i=1}^nI_i\Big)=\sum_{i=1}^n m(I_i).
+\end{equation}
+\begin{itemize}
+  \item $m(A)$ does not depend on the decomposition of $A$ into intervals. This $m$ is called
+    the \emph{Jordan--Riemann measure} (but it is not a measure! Its domain $\mathcal A$ is
+    not a $\sigma$-algebra).
+  \item $m$ is $\sigma$-additive on $\mathcal A$.
+\end{itemize}
+The notes do not prove these two facts; \exref{ex:mf-length} does. For the intervals $(a,b]$
+of $(0,1]$ the second one is \citet[Theorem~2.2]{billingsley}. It is the heart of the
+construction, and it rests on the compactness of closed bounded intervals.
+
+By the extension theorem there exists a measure on
+\[
+  \sigma(\mathcal A)=\mathcal B([0,1))=\{A\in\mathcal B(\mathbb R):A\subseteq[0,1)\}
+\]
+that extends $m$ (for the two equalities, see \exref{ex:mf-steps}). Since $m([0,1))=1$ is
+finite, the extension is unique. We denote it by $m_{[0,1)}$ and call it the
+\emph{Borel--Lebesgue measure on $[0,1)$}: it is a measure on $([0,1),\mathcal B([0,1)))$.
+
+\subsection*{Step 2: a measure on \texorpdfstring{$[a,b)$}{[a,b)}, with \texorpdfstring{$a<b$}{a<b}}
+
+The same procedure constructs the \emph{Borel--Lebesgue measure on $[a,b)$}, which we denote
+by $m_{[a,b)}$. One can prove that if $A\in\mathcal B([a,b))$ and $[a,b)\subseteq[c,d)$, then
+$A\in\mathcal B([c,d))$ and
+\[
+  m_{[a,b)}(A)=m_{[c,d)}(A)
+\]
+(\exref{ex:mf-steps}).
+
+\subsection*{Step 3: a measure on \texorpdfstring{$\mathbb R$}{R}}
+
+The family
+\[
+  \Big\{\bigcup_{i=1}^n I_i:\ I_i=[a_i,b_i)\text{ pairwise disjoint},\ a_i,b_i\in\mathbb R,\ a_i\le b_i\Big\}
+\]
+is not an algebra, because $\mathbb R$ does not belong to it: we cannot continue as in
+Step~1! We can, however, define a function on all of $\mathcal B(\mathbb R)$ directly.
+
+\begin{definition}[Borel--Lebesgue measure on $\mathbb R$]\label{def:mf-lebesgue}
+Let $m:\mathcal B(\mathbb R)\to[0,+\infty]$ be defined, for every $A\in\mathcal B(\mathbb R)$, by
+\begin{equation}\label{eq:mf-lebesgue}
+  m(A)=\lim_{n\to\infty}m_{[-n,n)}\big(A\cap[-n,n)\big),
+\end{equation}
+where $A\cap[-n,n)\in\mathcal B([-n,n))$.
+\end{definition}
+
+The limit exists because the sequence is non-decreasing: by Step~2 and monotonicity
+(\cref{prop:ms-monotone}),
+$m_{[-n,n)}(A\cap[-n,n))=m_{[-n-1,n+1)}(A\cap[-n,n))\le m_{[-n-1,n+1)}(A\cap[-n-1,n+1))$.
+One proves that $m$ is $\sigma$-additive on $\mathcal B(\mathbb R)$, hence a measure, called
+the \emph{Borel--Lebesgue measure on $\mathbb R$} (on $(\mathbb R,\mathcal B(\mathbb R))$);
+see \exref{ex:mf-steps}, or \citet[Section~12]{billingsley}. In particular $m([a,b))=b-a$ for
+all $a<b$, and $m$ is $\sigma$-finite, since $\mathbb R=\bigcup_{n\ge1}[-n,n)$ and
+$m([-n,n))=2n$.\footnote{Added to the handwritten notes.}
+
+\begin{definition}[Negligible set]\label{def:mf-negligible}
+Let $(X,\mathcal A,\mu)$ be a measure space (\cref{def:ms-finite}). A measurable set
+$A\in\mathcal A$ with $\mu(A)=0$ is called \emph{negligible}.
+\end{definition}
+
+\begin{definition}[Complete measure]\label{def:mf-complete}
+A measure $\mu$ is \emph{complete} (with respect to the $\sigma$-algebra $\mathcal A$) if the
+subsets of negligible sets are negligible sets, that is, if for every $A\in\mathcal P(X)$
+such that $A\subseteq B$, where $B\in\mathcal A$ and $\mu(B)=0$, we have $A\in\mathcal A$ and
+$\mu(A)=0$. We also say that $\mathcal A$ is \emph{complete with respect to $\mu$}.
+\end{definition}
+
+\begin{remark}\label{rem:mf-cantor}
+$\mathcal B(\mathbb R)$ is not complete with respect to $m$, the Borel--Lebesgue measure.
+The \emph{Cantor set}, which is a negligible Borel set although it is uncountable, has
+subsets that are not Borel sets.
+\end{remark}
+
+The notes take the Cantor set as known; we recall it. Let $C_0=[0,1]$, and obtain $C_{k+1}$
+from $C_k$ by removing the open middle third of each of the $2^k$ closed intervals of
+length $3^{-k}$ that make up $C_k$:
+\[
+  C_1=[0,\tfrac13]\cup[\tfrac23,1],\qquad
+  C_2=[0,\tfrac19]\cup[\tfrac29,\tfrac13]\cup[\tfrac23,\tfrac79]\cup[\tfrac89,1],\ \dots
+\]
+The Cantor set is $C=\bigcap_{k\ge0}C_k$. It is closed, hence a Borel set. Since
+$m(C_k)=2^k3^{-k}=(\frac23)^k$ and $m(C_0)<+\infty$, continuity from above
+(\cref{thm:ms-continuity-above}) gives $m(C)=\lim_km(C_k)=0$. A point $x\in[0,1]$ lies in $C$
+if and only if it has a ternary expansion $x=\sum_{j\ge1}d_j3^{-j}$ with every $d_j\in\{0,2\}$,
+and this expansion is then unique. The map $\sum_jd_j3^{-j}\mapsto\sum_j\frac{d_j}{2}2^{-j}$
+sends $C$ onto $[0,1]$, because every $y\in[0,1]$ has a binary expansion; so $C$ is
+uncountable. A subset of $C$ that is not a Borel set is constructed in
+\exref{ex:mf-cantor-nonborel}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch03-cantor}
+  \caption{Left: the stages $C_0,\dots,C_6$ of the Cantor set; $C_k$ consists of $2^k$
+    intervals of length $3^{-k}$. Centre: a \emph{fat} Cantor set, where step $k$ removes an
+    open interval of length $4^{-k}$ from the middle of each of the $2^{k-1}$ intervals left.
+    Right: $m(C_k)=(\frac23)^k\to0$, while the stages of the fat Cantor set have measure
+    $1-\sum_{j=1}^k2^{j-1}4^{-j}\to\frac12$.}
+  \label{fig:mf-cantor}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:mf-cantor-code}
+\coderef{code/src/probnotes/measurable.py} represents a finite union of intervals as an array
+of endpoints. \texttt{lebesgue\_measure} sorts and merges the intervals and adds up the
+lengths, so different decompositions of the same set give the same value, as in Step~1.
+\texttt{cantor\_stage(k, r)} returns the $2^k$ intervals of a stage of the Cantor set
+($r=\frac13$) or of a fat Cantor set, and \texttt{cantor\_function} computes the map
+$C\to[0,1]$ above (\cref{fig:mf-cantor}, \exref{ex:mf-cantor-sets}).
+\end{remark}
+
+\demo{03-measurable-functions.ipynb}{the stages of Cantor sets, and the Monte Carlo estimate
+of a Lebesgue measure.}
+
+If $\mathcal A$ is not complete with respect to $\mu$, we complete it as follows.
+
+\begin{definition}[Completion]\label{def:mf-completion}
+Let $(X,\mathcal A,\mu)$ be a measure space, and let
+\[
+  \mathcal F_\mu(\mathcal A)=\big\{A\cup N:\ A\in\mathcal A,\ N\in\mathcal P(X)\text{ a subset
+  of a negligible set}\big\}.
+\]
+$\mathcal F_\mu(\mathcal A)$ is a $\sigma$-algebra (\cref{prop:mf-completion}), called the
+\emph{$\mu$-completion of $\mathcal A$}. The function
+$\bar\mu:\mathcal F_\mu(\mathcal A)\to[0,+\infty]$ defined by
+\[
+  \bar\mu(A\cup N)=\mu(A)
+\]
+is a measure on $\mathcal F_\mu(\mathcal A)$, called the \emph{completion of $\mu$}.
+\end{definition}
+
+\begin{proposition}\label{prop:mf-completion}
+In \cref{def:mf-completion}, $\mathcal F_\mu(\mathcal A)$ is a $\sigma$-algebra containing
+$\mathcal A$, $\bar\mu$ is well defined, and $\bar\mu$ is a complete measure on
+$\mathcal F_\mu(\mathcal A)$ that extends $\mu$.\footnote{The handwritten notes assert that
+$\mathcal F_\mu(\mathcal A)$ is a $\sigma$-algebra and that $\bar\mu$ is a measure without
+verifying it, and do not check that $\bar\mu$ is well defined; the proof is added here. See
+also \citet{rudin-rca}, Theorem~1.36.}
+\end{proposition}
+
+\begin{proof}
+Let $\mathcal N$ be the family of subsets of negligible sets. It is closed under subsets and
+countable unions: if $N_n\subseteq B_n\in\mathcal A$ with $\mu(B_n)=0$, then
+$\bigcup_nN_n\subseteq\bigcup_nB_n$ and $\mu(\bigcup_nB_n)\le\sum_n\mu(B_n)=0$ by countable
+subadditivity (\cref{prop:ms-subadditive}).
+
+\emph{$\sigma$-algebra.} Every $A\in\mathcal A$ is $A\cup\emptyset$, so
+$\mathcal A\subseteq\mathcal F_\mu(\mathcal A)$; in particular $X\in\mathcal F_\mu(\mathcal A)$.
+Countable unions: $\bigcup_n(A_n\cup N_n)=\big(\bigcup_nA_n\big)\cup\big(\bigcup_nN_n\big)$,
+with $\bigcup_nA_n\in\mathcal A$ and $\bigcup_nN_n\in\mathcal N$. Complements: let
+$E=A\cup N$ with $N\subseteq B$, $B\in\mathcal A$, $\mu(B)=0$. Since $B^c\subseteq N^c$,
+\[
+  E^c=A^c\cap N^c=(A^c\cap B^c)\cup(A^c\cap B\cap N^c),
+\]
+where $A^c\cap B^c\in\mathcal A$ and $A^c\cap B\cap N^c\subseteq B$. So
+$E^c\in\mathcal F_\mu(\mathcal A)$.
+
+\emph{Well defined.} Let $A_1\cup N_1=A_2\cup N_2$ with $N_i\subseteq B_i\in\mathcal A$ and
+$\mu(B_i)=0$. Then $A_1\subseteq A_2\cup B_2$, so
+$\mu(A_1)\le\mu(A_2)+\mu(B_2)=\mu(A_2)$; by symmetry $\mu(A_1)=\mu(A_2)$.
+
+\emph{Measure.} $\bar\mu(\emptyset)=\mu(\emptyset)=0$, and $\bar\mu(A)=\mu(A)$ for
+$A\in\mathcal A$. If the sets $E_n=A_n\cup N_n$ are pairwise disjoint, so are the
+$A_n\subseteq E_n$, and $\bigcup_nE_n=(\bigcup_nA_n)\cup(\bigcup_nN_n)$; hence
+$\bar\mu(\bigcup_nE_n)=\mu(\bigcup_nA_n)=\sum_n\mu(A_n)=\sum_n\bar\mu(E_n)$.
+
+\emph{Complete.} Let $F\subseteq E=A\cup N$ with $\bar\mu(E)=\mu(A)=0$ and $N\subseteq B$ as
+above. Then $F\subseteq A\cup B$ and $\mu(A\cup B)=0$, so $F=\emptyset\cup F\in\mathcal
+F_\mu(\mathcal A)$ and $\bar\mu(F)=\mu(\emptyset)=0$.
+\end{proof}
+
+\subsection*{Step 4: Lebesgue measure}
+
+\begin{definition}[Lebesgue $\sigma$-algebra, Lebesgue measure]\label{def:mf-lebesgue-sigma}
+Consider the measure space $(\mathbb R,\mathcal B(\mathbb R),m)$ defined above, and let
+\[
+  \mathcal L(\mathbb R)=\mathcal F_m(\mathcal B(\mathbb R))
+\]
+be the completion of $\mathcal B(\mathbb R)$. $\mathcal L(\mathbb R)$ is called the
+\emph{Lebesgue $\sigma$-algebra} of $\mathbb R$, and a set $A\in\mathcal L(\mathbb R)$ is called
+\emph{Lebesgue measurable}. The completion $\bar m$ of the Borel--Lebesgue measure, defined
+on $\mathcal L(\mathbb R)$, is called the \emph{Lebesgue measure on $\mathbb R$}.
+\end{definition}
+
+By \cref{rem:mf-cantor}, $\mathcal B(\mathbb R)\subsetneq\mathcal L(\mathbb R)$: every subset of
+the Cantor set is Lebesgue measurable, with Lebesgue measure $0$.\footnote{Added to the
+handwritten notes.}
+
+\section{Measurable functions}\label{sec:mf-measurable}
+
+\begin{definition}[Preimage]\label{def:mf-preimage}
+Let $X$ and $Y$ be non-empty sets and $f:X\to Y$. For every $A\in\mathcal P(Y)$, the
+\emph{preimage} (or \emph{inverse image}) of $A$ is
+\[
+  f^{-1}(A)=\{x\in X:f(x)\in A\}\in\mathcal P(X).
+\]
+\end{definition}
+
+\begin{definition}[Measurable function]\label{def:mf-measurable}
+Let $(X,\mathcal A)$ and $(Y,\mathcal E)$ be two measurable spaces
+(\cref{def:sa-measurable-space}). A function $f:X\to Y$ is \emph{measurable} if
+$f^{-1}(A)\in\mathcal A$ for every $A\in\mathcal E$. If we write
+$f^{-1}(\mathcal E)=\{f^{-1}(A):A\in\mathcal E\}$, then $f$ is measurable if and only if
+$f^{-1}(\mathcal E)\subseteq\mathcal A$. If $Y$ is a metric space and $\mathcal E=\mathcal B(Y)$,
+$f$ is called a \emph{Borel function}.
+\end{definition}
+
+\begin{proposition}[It suffices to check generators]\label{prop:mf-generators}
+Let $\mathcal E=\sigma(\mathcal G)$, where $\mathcal G\subseteq\mathcal P(Y)$. Then $f:X\to Y$ is
+measurable if and only if $f^{-1}(A)\in\mathcal A$ for every $A\in\mathcal G$.
+\end{proposition}
+
+\begin{proof}
+``$\Rightarrow$'' is trivial, since $\mathcal G\subseteq\mathcal E$. ``$\Leftarrow$'': consider
+\[
+  \mathcal F=\{A\in\mathcal E:f^{-1}(A)\in\mathcal A\}.
+\]
+By hypothesis $\mathcal G\subseteq\mathcal F$. We prove that $\mathcal F$ is a $\sigma$-algebra
+on $Y$.
+\begin{enumerate}[label=(\arabic*)]
+  \item $Y\in\mathcal F$: indeed $Y\in\mathcal E$ and $f^{-1}(Y)=X\in\mathcal A$.
+  \item If $A\in\mathcal F$, then $A\in\mathcal E$ and $f^{-1}(A)\in\mathcal A$. Hence
+    $A^c\in\mathcal E$ and $f^{-1}(A^c)=\big(f^{-1}(A)\big)^c\in\mathcal A$, since a point is
+    sent outside $A$ exactly when it is not sent into $A$. So $A^c\in\mathcal F$.
+  \item If $A_n\in\mathcal F$ for $n\ge1$, then $A_n\in\mathcal E$ and
+    $f^{-1}(A_n)\in\mathcal A$, so $\bigcup_nA_n\in\mathcal E$ and
+    $f^{-1}\big(\bigcup_nA_n\big)=\bigcup_nf^{-1}(A_n)\in\mathcal A$. So
+    $\bigcup_nA_n\in\mathcal F$.
+\end{enumerate}
+Hence $\mathcal F$ is a $\sigma$-algebra and $\mathcal G\subseteq\mathcal F\subseteq\mathcal E$.
+Since $\mathcal E=\sigma(\mathcal G)$ is the smallest $\sigma$-algebra containing $\mathcal G$,
+$\mathcal F=\mathcal E$, that is, $f$ is measurable.
+\end{proof}
+
+\begin{corollary}[Particular case: real functions]\label{cor:mf-real}
+Let $Y=\mathbb R$ and $\mathcal E=\mathcal B(\mathbb R)=\sigma(\{(-\infty,t]:t\in\mathbb R\})$
+(\cref{prop:sa-borel-generators}). A function $f:X\to\mathbb R$ is measurable (Borel) if and
+only if for every $t\in\mathbb R$
+\[
+  f^{-1}((-\infty,t])=\{x\in X:f(x)\le t\}=\{f\le t\}\in\mathcal A .
+\]
+\end{corollary}
+
+The half-lines $(-\infty,t]$ are only an example: by \cref{prop:sa-borel-generators}, any of
+the generating families listed there will do. For instance, $f$ is measurable if and only if
+$\{f>t\}\in\mathcal A$ for every $t\in\mathbb R$.
+
+\begin{definition}[Random variable]\label{def:mf-random-variable}
+In probability, a measurable function $X:\Omega\to\mathbb R$ on a probability space
+$(\Omega,\mathcal F,\mathbb P)$ (\cref{rem:ms-dictionary}) is called a \emph{(real) random
+variable}. (The letter $X$, so far the underlying set, now denotes the function.)
+\end{definition}
+
+\begin{definition}[$\sigma$-algebra generated by functions]\label{def:mf-generated}
+Let $f_i:X\to(Y_i,\mathcal E_i)$, $i\in I$, be functions with values in measurable spaces. The
+\emph{$\sigma$-algebra generated by $\{f_i:i\in I\}$} is the $\sigma$-algebra generated by
+the preimages, under the $f_i$, of the elements of the $\mathcal E_i$:
+\[
+  \sigma(f_i:i\in I)=\sigma\big(\{f_i^{-1}(B_i):B_i\in\mathcal E_i,\ i\in I\}\big).
+\]
+It is the smallest $\sigma$-algebra on $X$ that makes all the $f_i$ measurable.
+\end{definition}
+
+\begin{proposition}\label{prop:mf-sigma-f}
+Let $f:X\to(Y,\mathcal E)$. Then $\sigma(f)=\{f^{-1}(B):B\in\mathcal E\}$.
+\end{proposition}
+
+The notes leave the proof as an exercise (``do it!''): \exref{ex:mf-sigma-f}.
+
+\subsection{Properties of measurable functions}\label{sec:mf-properties}
+
+\begin{proposition}[Continuous functions are Borel]\label{prop:mf-continuous}
+Let $X$ and $Y$ be metric spaces, $\mathcal A=\mathcal B(X)$ and $\mathcal E=\mathcal B(Y)$. If
+$f:X\to Y$ is continuous, then $f$ is measurable.
+\end{proposition}
+
+\begin{proof}
+Let $B$ be an open subset of $Y$. Then $f^{-1}(B)$ is open in $X$, because $f$ is continuous,
+so $f^{-1}(B)\in\mathcal A$. The open sets generate $\mathcal E=\mathcal B(Y)$, and
+\cref{prop:mf-generators} concludes.
+\end{proof}
+
+\begin{proposition}[Composition]\label{prop:mf-composition}
+Consider measurable spaces $(X,\mathcal A)$, $(Y,\mathcal E)$ and $(Z,\mathcal G)$, and let
+$f:X\to Y$ and $g:Y\to Z$ be measurable. Then $g\circ f:X\to Z$ is measurable.
+\end{proposition}
+
+\begin{proof}
+Let $B\in\mathcal G$. Since $g$ is measurable, $g^{-1}(B)\in\mathcal E$; since $f$ is
+measurable, $(g\circ f)^{-1}(B)=f^{-1}\big(g^{-1}(B)\big)\in\mathcal A$. So $g\circ f$ is
+measurable.
+\end{proof}
+
+\begin{example}[Exercise: the reciprocal of a measurable function]\label{exa:mf-reciprocal}
+On $(\mathbb R,\mathcal B(\mathbb R))$, let $f:\mathbb R\to\mathbb R$ be measurable, and let
+$g:\mathbb R\to\mathbb R$ be
+\[
+  g(x)=\begin{cases}\dfrac1{f(x)} & \text{if } f(x)\ne0,\\[4pt] 0 & \text{if } f(x)=0.\end{cases}
+\]
+Then $g$ is a measurable function.
+
+\emph{Solution.} Define $\varphi:\mathbb R\to\mathbb R$ by $\varphi(x)=\frac1x$ if $x\ne0$ and
+$\varphi(0)=0$. Then $g=\varphi\circ f$, and by \cref{prop:mf-composition} it suffices to prove
+that $\varphi$ is measurable, that is, by \cref{cor:mf-real}, that
+$\varphi^{-1}((-\infty,t])=\{x\in\mathbb R:\varphi(x)\le t\}\in\mathcal B(\mathbb R)$ for every
+$t\in\mathbb R$. Reading off the graph of $\varphi$ (a hyperbola, with the point $(0,0)$):
+\begin{itemize}
+  \item if $t<0$: $\varphi^{-1}((-\infty,t])=[\frac1t,0)$;
+  \item if $t=0$: $\varphi^{-1}((-\infty,0])=(-\infty,0]$;
+  \item if $t>0$: $\varphi^{-1}((-\infty,t])=(-\infty,0]\cup[\frac1t,+\infty)$.
+\end{itemize}
+These are Borel sets, so $\varphi$ is measurable, and hence so is $g$.
+\end{example}
+
+\paragraph{Note.} From now on we consider functions $f:(X,\mathcal A)\to(\mathbb R,\mathcal
+B(\mathbb R))$, that is, $Y=\mathbb R$ and $\mathcal E=\mathcal B(\mathbb R)$.
+
+\begin{proposition}[Operations]\label{prop:mf-operations}
+If $f,g:X\to\mathbb R$ are measurable functions, then $f+g$, $f\cdot g$, $\max(f,g)$ and
+$\min(f,g)$ are measurable too.
+\end{proposition}
+
+\begin{proof}
+\emph{$f+g$.} We prove that for every $t\in\mathbb R$,
+$\{f+g>t\}=(f+g)^{-1}((t,+\infty))\in\mathcal A$. First of all,
+\begin{equation}\label{eq:mf-sum}
+  \{f+g>t\}=\bigcup_{q\in\mathbb Q}\{f>q,\ g>t-q\}.
+\end{equation}
+``$\supseteq$'' is trivial: if $f(x)>q$ and $g(x)>t-q$, then $f(x)+g(x)>t$. ``$\subseteq$'':
+let $x\in\{f+g>t\}$ and $a=f(x)$. Then $a+g(x)>t$, that is, $g(x)>t-a$. Since $\mathbb Q$ is
+dense in $\mathbb R$, there exists $q_0\in\mathbb Q$ with $g(x)>t-q_0>t-a$, that is, with
+$q_0<a=f(x)$ and $g(x)>t-q_0$. So $x\in\{f>q_0\}\cap\{g>t-q_0\}=\{f>q_0,\ g>t-q_0\}$, and $x$
+belongs to the right side of \eqref{eq:mf-sum}. Now
+\[
+  \{f+g>t\}=\bigcup_{q\in\mathbb Q}\underbrace{\{f>q\}}_{=f^{-1}((q,+\infty))\in\mathcal A}
+  \cap\underbrace{\{g>t-q\}}_{=g^{-1}((t-q,+\infty))\in\mathcal A}\in\mathcal A,
+\]
+because $f$ and $g$ are measurable and the union is countable. So $f+g$ is measurable.
+
+\emph{$\max(f,g)$.} We prove that $(\max(f,g))^{-1}((-\infty,t])\in\mathcal A$ for every
+$t\in\mathbb R$:
+\[
+  \{\max(f,g)\le t\}=\{f\le t,\ g\le t\}=\{f\le t\}\cap\{g\le t\}\in\mathcal A .
+\]
+
+\emph{$\min(f,g)$.} Likewise $\{\min(f,g)\le t\}=\{f\le t\}\cup\{g\le t\}\in\mathcal A$.
+
+\emph{$f\cdot g$.} For $a\in\mathbb R$, $af=\psi_a\circ f$ and $f^2=\psi\circ f$ with the
+continuous functions $\psi_a(y)=ay$ and $\psi(y)=y^2$, so they are measurable by
+\cref{prop:mf-continuous,prop:mf-composition}. Hence $f-g=f+(-1)g$ is measurable by the first
+part, and so is
+\[
+  f\cdot g=\tfrac14(f+g)^2+\big(-\tfrac14\big)(f-g)^2 .\qedhere
+\]
+\end{proof}
+
+\begin{corollary}\label{cor:mf-parts}
+If $f$ is measurable, so are $f^+=\max(f,0)$, $f^-=-\min(f,0)$, $|f|=f^++f^-$, and $af$ for
+$a\in\mathbb R$ (in particular $-f$, with $a=-1$).
+\end{corollary}
+
+\begin{proof}
+Constant functions are measurable (each preimage is $\emptyset$ or $X$), so
+\cref{prop:mf-operations} applies to $\max(f,0)$ and $\min(f,0)$. The rest follows from
+\cref{prop:mf-operations} and from $af=\psi_a\circ f$ as in its proof.
+\end{proof}
+
+\begin{remark}[The extended real line]\label{rem:mf-extended}
+It can be convenient to consider functions $f:X\to\overline{\mathbb R}$, where
+$\overline{\mathbb R}=\mathbb R\cup\{+\infty,-\infty\}$ is the \emph{extended real line}. Such
+an $f$ is \emph{measurable} if $f^{-1}(B)\in\mathcal A$ for every $B\in\mathcal B(\mathbb R)$,
+and moreover $f^{-1}(\{-\infty\})\in\mathcal A$ and $f^{-1}(\{+\infty\})\in\mathcal A$.
+
+\emph{Note:}
+\begin{align*}
+  f^{-1}(\{+\infty\})&=\{f=+\infty\}=\bigcap_{k=1}^\infty\{f>k\},\\
+  f^{-1}(\{-\infty\})&=\{f=-\infty\}=\bigcap_{k=1}^\infty\{f\le -k\}=\bigcap_{k=1}^\infty\{f>-k\}^c .
+\end{align*}
+Here $\{f>t\}=\{x\in X:f(x)>t\}$ contains the points where $f=+\infty$. So if
+$\{f>t\}\in\mathcal A$ for every $t\in\mathbb R$, the sets $\{f=\pm\infty\}$ are measurable;
+in fact this condition characterises the measurable $f:X\to\overline{\mathbb R}$
+(\exref{ex:mf-limits}).\footnote{These three sentences are added to the handwritten notes.}
+\end{remark}
+
+\begin{proposition}[Limits]\label{prop:mf-limits}
+Let $(f_n)_{n\ge1}$ be measurable functions $f_n:X\to\overline{\mathbb R}$. Then
+\[
+  \sup_nf_n,\qquad\inf_nf_n,\qquad\liminf_nf_n,\qquad\limsup_nf_n
+\]
+are measurable too. These functions are defined pointwise: for instance
+$(\limsup_nf_n)(x)=\limsup_n\big(f_n(x)\big)$.
+\end{proposition}
+
+\begin{corollary}[Pointwise limits]\label{cor:mf-pointwise-limit}
+Let $(f_n)_{n\ge1}$ be a sequence of measurable functions with values in
+$\overline{\mathbb R}$, such that there is $f$ with $f(x)=\lim_nf_n(x)$ for every $x\in X$
+($f_n\to f$ pointwise). Then $f$ is a measurable function.
+\end{corollary}
+
+The notes leave the proofs of \cref{prop:mf-limits,cor:mf-pointwise-limit} as exercises:
+\exref{ex:mf-limits}.
+
+\subsection{Almost-everywhere convergence}\label{sec:mf-ae}
+
+Let $(X,\mathcal A,\mu)$ be a measure space. Recall that $A\in\mathcal A$ is negligible if
+$\mu(A)=0$ (\cref{def:mf-negligible}).
+
+\begin{definition}[Negligible function]\label{def:mf-ae-null}
+Let $f:X\to\overline{\mathbb R}$ be a measurable function. We say that $f$ is
+\emph{negligible}, or \emph{null almost everywhere} (a.e.), if
+$\{x\in X:f(x)\ne0\}=\{f\ne0\}\in\mathcal A$ is negligible, that is, if $\mu(\{f\ne0\})=0$. In
+this case we write $f=0$ a.e.
+\end{definition}
+
+\begin{definition}[Equality almost everywhere]\label{def:mf-ae-equal}
+Let $f$ and $g$ be measurable functions with values in $\overline{\mathbb R}$. We say that $f$
+and $g$ \emph{coincide almost everywhere} if
+$\mu(\{f\ne g\})=0$.\footnote{The handwritten notes define this as ``$f-g$ is negligible'',
+that is, $\mu(\{f-g\ne0\})=\mu(\{f\ne g\})=0$; but $f-g$ is not defined where $f$ and $g$ are
+both $+\infty$ or both $-\infty$. We use the set $\{f\ne g\}$, which is measurable
+(\exref{ex:mf-limits}); for real-valued $f$, $g$ the two definitions agree.} In this case we
+write $f=g$ a.e.
+\end{definition}
+
+\begin{definition}[Convergence almost everywhere]\label{def:mf-ae-convergence}
+Let $(f_n)_{n\ge1}$ be a sequence of measurable functions with values in
+$\overline{\mathbb R}$. We say that $(f_n)_{n\ge1}$ \emph{converges almost everywhere}
+to a function $f$ if there exists a negligible $N\in\mathcal A$ ($\mu(N)=0$) such that
+$f(x)=\lim_nf_n(x)$ for every $x\in N^c$. In this case we write $f_n\to f$ a.e.
+\end{definition}
+
+\begin{remark}\label{rem:mf-ae}
+\begin{enumerate}[label=(\arabic*)]
+  \item If $f_n\to f$ pointwise, then $f_n\to f$ a.e. (take $N=\emptyset$).
+  \item If $f_n\to f$ a.e., it does not follow that $f$ is measurable
+    (\cref{exa:mf-ae-counterexample}).
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Aside: indicator functions]\label{rem:mf-aside}
+The counterexample below uses indicator functions, which we introduce in this aside.
+\end{remark}
+
+\begin{definition}[Indicator function]\label{def:mf-indicator}
+The \emph{indicator function} (or \emph{characteristic function}) of a set $A\in\mathcal P(X)$
+is the function
+\[
+  \1_A(x)=\begin{cases}1 & \text{if } x\in A,\\ 0 & \text{if } x\notin A.\end{cases}
+\]
+It is also written $\chi_A$.
+\end{definition}
+
+\begin{proposition}\label{prop:mf-indicator}
+\begin{enumerate}[label=(\arabic*)]
+  \item $\1_A$ is measurable if and only if $A$ is measurable.
+  \item $\1_A$ is negligible if and only if $A$ is negligible.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) For $B\in\mathcal B(\mathbb R)$,
+\[
+  \1_A^{-1}(B)=\{x\in X:\1_A(x)\in B\}=
+  \begin{cases}
+    \emptyset & \text{if } 0\notin B,\ 1\notin B,\\
+    A & \text{if } 0\notin B,\ 1\in B,\\
+    A^c & \text{if } 0\in B,\ 1\notin B,\\
+    X & \text{if } 0\in B,\ 1\in B.
+  \end{cases}
+\]
+If $A\in\mathcal A$, all four sets are in $\mathcal A$, so $\1_A$ is measurable.
+Conversely, if $\1_A$ is measurable, then $A=\1_A^{-1}(\{1\})\in\mathcal A$.
+(2) Indeed $\{\1_A\ne0\}=A$.
+\end{proof}
+
+\begin{example}[Counterexample]\label{exa:mf-ae-counterexample}
+We work on $(\mathbb R,\mathcal B(\mathbb R),m)$. Let $f_n(x)=0$ for every $x\in\mathbb R$ and
+every $n\ge1$. Then:
+\begin{itemize}
+  \item $f_n\to0$ pointwise;
+  \item $f_n\to f$ a.e., with $f=\1_C$, where $C$ is the Cantor set. Indeed $m(C)=0$, and
+    $f_n(x)\to f(x)$ for every $x\in C^c$;
+  \item $f_n\to g$ a.e., with $g=\1_A$, where $A\subseteq C$ and $A\notin\mathcal
+    B(\mathbb R)$ (\cref{rem:mf-cantor}). Indeed $m(C)=0$, and $f_n(x)\to g(x)$ for every
+    $x\in C^c$.
+\end{itemize}
+$f$ is measurable, but \emph{$g$ is not measurable} (\cref{prop:mf-indicator}).
+\end{example}
+
+\begin{remark}[continued]\label{rem:mf-ae-unique}
+\begin{enumerate}[label=(\arabic*),start=3]
+  \item If $f_n\to f$ a.e.\ and $f_n\to g$ a.e., then $f=g$ on $N^c$, for some $N$ with
+    $\mu(N)=0$: if $N_1$ and $N_2$ are the negligible sets of the two convergences, take
+    $N=N_1\cup N_2$. In \cref{exa:mf-ae-counterexample}, $f=g$ on $C^c$ (in fact $f=g$ also
+    on $A$, but not on $C\setminus A$). \emph{But we cannot say that $f=g$ a.e.!} Equality
+    a.e.\ is defined for measurable functions only, and $g$ is not measurable; indeed
+    $\{f\ne g\}=C\setminus A$ is not a Borel set, for otherwise $A=C\setminus(C\setminus A)$
+    would be one. On the completed space $(\mathbb R,\mathcal L(\mathbb R),\bar m)$ the
+    difficulty disappears (\exref{ex:mf-lebesgue-sets}).
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Dictionary]\label{rem:mf-dictionary}
+Continuing the dictionary of \cref{rem:ms-dictionary}:
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Measure theory & Probability\\
+\midrule
+measure space $(X,\mathcal A,\mu)$ & probability space $(\Omega,\mathcal F,\mathbb P)$\\
+measurable function $f:X\to\mathbb R$ & random variable $X:\Omega\to\mathbb R$\\
+almost everywhere (a.e.) & almost surely (a.s.), with probability $1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{remark}
+
+\section{Simple functions}\label{sec:mf-simple}
+
+We work on a measure space $(X,\mathcal A,\mu)$.
+
+\begin{definition}[Simple function]\label{def:mf-simple}
+Let $f:X\to\overline{\mathbb R}$ be measurable. $f$ is called a \emph{simple function} if its
+image $f(X)$ is a finite set. The class of simple functions is denoted by $\mathcal S(X)$.
+\end{definition}
+
+\begin{remark}\label{rem:mf-indicator-simple}
+$\1_A\in\mathcal S(X)$ if and only if $A\in\mathcal A$ (\cref{prop:mf-indicator}). For
+example $\1_{\mathbb Q}\in\mathcal S(\mathbb R)$, since $\mathbb Q$, a countable union
+of singletons, is a Borel set (and $\1_{\mathbb Q}$ is not a step function).
+\end{remark}
+
+\begin{proposition}[Canonical form]\label{prop:mf-canonical}
+Let $f:X\to\overline{\mathbb R}$ be measurable. Then $f\in\mathcal S(X)$ if and only if there
+exist $a_1,\dots,a_n\in\overline{\mathbb R}$ and a partition $A_1,\dots,A_n\in\mathcal A$ of $X$
+($A_i\cap A_j=\emptyset$ if $i\ne j$, and $\bigcup_{i=1}^nA_i=X$) such that
+\begin{equation}\label{eq:mf-canonical}
+  f(x)=\sum_{i=1}^na_i\1_{A_i}(x)\qquad\forall x\in X .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+``$\Leftarrow$'' is trivial: $f(X)\subseteq\{a_1,\dots,a_n\}$ is finite. (Moreover a function
+of the form \eqref{eq:mf-canonical} is always measurable, since
+$f^{-1}(B)=\bigcup_{i:\,a_i\in B}A_i\in\mathcal A$.) ``$\Rightarrow$'': let $f\in\mathcal S(X)$,
+and let $f(X)=\{a_1,\dots,a_n\}$ with $a_i\ne a_j$ if $i\ne j$. Set $A_i=f^{-1}(\{a_i\})$,
+which belongs to $\mathcal A$ because $f$ is measurable. The $A_i$ are pairwise disjoint and
+cover $X$, and we can write \eqref{eq:mf-canonical}.
+\end{proof}
+
+\begin{proposition}[Common partition]\label{prop:mf-common-partition}
+If $f,g\in\mathcal S(X)$, we can always write both as in \eqref{eq:mf-canonical} using the same
+partition.
+\end{proposition}
+
+\begin{proof}
+Let $f=\sum_{i=1}^na_i\1_{A_i}$ and $g=\sum_{j=1}^mb_j\1_{B_j}$ as in
+\eqref{eq:mf-canonical}. The sets $A_i\cap B_j$, $1\le i\le n$, $1\le j\le m$, form a partition
+of $X$ by sets of $\mathcal A$, and
+\[
+  f=\sum_{i=1}^n\sum_{j=1}^ma_i\1_{A_i\cap B_j},\qquad
+  g=\sum_{i=1}^n\sum_{j=1}^mb_j\1_{A_i\cap B_j},
+\]
+because $\1_{A_i}=\sum_{j=1}^m\1_{A_i\cap B_j}$ and
+$\1_{B_j}=\sum_{i=1}^n\1_{A_i\cap B_j}$. For $n=3$ and $m=2$ the picture is a grid,
+with $f=a_i$ and $g=b_j$ on the cell $A_i\cap B_j$:
+\begin{center}
+\small
+\begin{tabular}{c|c|c|c|}
+  \multicolumn{1}{c}{} & \multicolumn{1}{c}{$A_1$} & \multicolumn{1}{c}{$A_2$} & \multicolumn{1}{c}{$A_3$}\\
+  \cline{2-4}
+  $B_1$ & $a_1,\ b_1$ & $a_2,\ b_1$ & $a_3,\ b_1$\\
+  \cline{2-4}
+  $B_2$ & $a_1,\ b_2$ & $a_2,\ b_2$ & $a_3,\ b_2$\\
+  \cline{2-4}
+\end{tabular}
+\end{center}
+\vspace{-1.2em}
+\end{proof}
+
+\begin{corollary}\label{cor:mf-simple-operations}
+If $f,g\in\mathcal S(X)$, then $f\cdot g$, $\max(f,g)$, $\min(f,g)\in\mathcal S(X)$, and
+$f+g\in\mathcal S(X)$ provided $f+g$ is defined at every point.\footnote{The handwritten notes
+state the corollary for $f+g$ without restriction. With values in $\overline{\mathbb R}$, $f+g$
+is not defined where one function is $+\infty$ and the other $-\infty$; corrected here. For
+products we use the convention $0\cdot(\pm\infty)=0$.}
+\end{corollary}
+
+\begin{proof}
+Write $f$ and $g$ with a common partition (\cref{prop:mf-common-partition}). Then
+\[
+  f+g=\sum_{i=1}^n\sum_{j=1}^m(a_i+b_j)\1_{A_i\cap B_j},
+\]
+where the cells with $a_i+b_j$ undefined are empty, by assumption, and can be dropped. This is
+of the form \eqref{eq:mf-canonical}, hence a simple function (proof of
+\cref{prop:mf-canonical}). The same argument, with $a_ib_j$, $\max(a_i,b_j)$ and
+$\min(a_i,b_j)$ in place of $a_i+b_j$, gives the other cases.
+\end{proof}
+
+\begin{theorem}[Approximation by simple functions]\label{thm:mf-approximation}
+\emph{(Important!)} Let $f:X\to\overline{\mathbb R}^+=[0,+\infty]$ be measurable and
+non-negative ($f\ge0$). Then $f$ is the pointwise limit of an increasing sequence of
+non-negative simple functions.\footnote{The handwritten notes state this theorem without proof
+(``no proof'') and only describe the sequence (\cref{rem:mf-dyadic}). The proof below, and the
+uniform convergence for bounded $f$, are added here. The theorem, with this construction, is
+\citet[Theorem~13.5]{billingsley}.}
+\end{theorem}
+
+\begin{remark}[How the sequence is built]\label{rem:mf-dyadic}
+Let $n\ge1$. Consider the interval $[0,n]$ and partition it into subintervals of width
+$\frac1{2^n}$; there are $n2^n$ of them. Then let
+\begin{equation}\label{eq:mf-dyadic}
+  f_n(x)=\begin{cases}
+    \dfrac{i-1}{2^n} & \text{if } \dfrac{i-1}{2^n}\le f(x)<\dfrac{i}{2^n},\quad i=1,\dots,n2^n,\\[8pt]
+    n & \text{if } f(x)\ge n .
+  \end{cases}
+\end{equation}
+\Cref{fig:mf-dyadic} shows $f_1$, whose levels are $0$, $\frac12$, $1$, and $f_2$, whose levels
+go up to $2$ in steps of $\frac14$. Then:
+\begin{itemize}
+  \item $f_n\in\mathcal S(X)$ and $f_n\ge0$;
+  \item $(f_n)_n$ is an increasing sequence;
+  \item $f_n\to f$ pointwise;
+  \item if $f$ is bounded, $f_n\to f$ uniformly: $0\le f-f_n\le2^{-n}$ on $X$ for every
+    $n\ge\sup_Xf$.
+\end{itemize}
+In a single formula, $f_n=\min\big(n,\,2^{-n}\lfloor2^nf\rfloor\big)$, with
+$\lfloor+\infty\rfloor=+\infty$.
+\end{remark}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{ch03-dyadic}
+  \caption{A non-negative function $f$ (black) and the simple functions $f_n$ of
+    \eqref{eq:mf-dyadic} (blue), for $n=1,2,4$, as in the picture of the notes. The grey lines
+    are the levels $\frac{i}{2^n}$. Where $f\ge n$, $f_n$ is cut at height $n$; elsewhere $f_n$
+    rounds $f$ down to the level below it.}
+  \label{fig:mf-dyadic}
+\end{figure}
+
+\begin{proof}[Proof of \cref{thm:mf-approximation}]
+We prove the four properties of the functions $f_n$ of \eqref{eq:mf-dyadic}.
+
+\emph{$f_n$ is simple and non-negative.} The sets
+\[
+  A_{n,i}=f^{-1}\Big(\Big[\frac{i-1}{2^n},\frac{i}{2^n}\Big)\Big),\quad i=1,\dots,n2^n,\qquad
+  A_{n,n2^n+1}=f^{-1}([n,+\infty])
+\]
+are in $\mathcal A$, since $f$ is measurable ($f^{-1}([n,+\infty])=f^{-1}([n,+\infty))\cup
+f^{-1}(\{+\infty\})$). They are pairwise disjoint and cover $X$, because the intervals
+$[\frac{i-1}{2^n},\frac i{2^n})$ and $[n,+\infty]$ partition $[0,+\infty]$. Since
+$f_n=\sum_{i=1}^{n2^n}\frac{i-1}{2^n}\1_{A_{n,i}}+n\1_{A_{n,n2^n+1}}$, $f_n$ is a
+non-negative simple function by \cref{prop:mf-canonical}.
+
+\emph{Comparison with $f$.} Fix $x$. If $f(x)<n$, then $f(x)\in[\frac{i-1}{2^n},\frac i{2^n})$
+for exactly one $i\le n2^n$, and
+\begin{equation}\label{eq:mf-dyadic-error}
+  0\le f(x)-f_n(x)<\frac1{2^n}.
+\end{equation}
+If $f(x)\ge n$, then $f_n(x)=n\le f(x)$. So $0\le f_n\le f$ in every case.
+
+\emph{Monotonicity.} Fix $x$ and $n$. If $f(x)\ge n+1$, then $f_{n+1}(x)=n+1>n\ge f_n(x)$. If
+$n\le f(x)<n+1$, then $f_n(x)=n$, and $f_{n+1}(x)$ is the left end of the interval of width
+$2^{-(n+1)}$ containing $f(x)$, which is $\ge n$ because $n$ is one of these left ends. If
+$f(x)<n$, let $\frac{i-1}{2^n}\le f(x)<\frac i{2^n}$. The interval
+$[\frac{i-1}{2^n},\frac i{2^n})$ is the union of $[\frac{2i-2}{2^{n+1}},\frac{2i-1}{2^{n+1}})$
+and $[\frac{2i-1}{2^{n+1}},\frac{2i}{2^{n+1}})$, and $f(x)$ lies in one of them, so
+$f_{n+1}(x)\ge\frac{2i-2}{2^{n+1}}=\frac{i-1}{2^n}=f_n(x)$. Hence $f_n\le f_{n+1}$.
+
+\emph{Pointwise convergence.} If $f(x)=+\infty$, then $f_n(x)=n\to+\infty=f(x)$. If
+$f(x)<+\infty$, then $f(x)<n$ for every $n>f(x)$, and \eqref{eq:mf-dyadic-error} gives
+$f_n(x)\to f(x)$.
+
+\emph{Uniform convergence for bounded $f$.} If $f\le M<+\infty$ on $X$ and $n\ge M$, then at
+each $x$ either $f(x)<n$, and \eqref{eq:mf-dyadic-error} applies, or $f(x)=n=M$, and
+$f_n(x)=f(x)$. So $0\le f-f_n\le2^{-n}$ on $X$, and $\sup_X|f-f_n|\to0$.
+\end{proof}
+
+The rate $2^{-n}$ cannot be improved in general: if $f$ takes every value in an interval of
+length greater than $2^{-n}$ contained in $[0,n)$, then $\sup_X(f-f_n)=2^{-n}$, and the
+supremum is not attained (\exref{ex:mf-dyadic-rate}). If $f$ is unbounded, the convergence is
+not uniform, since $\sup_X(f-f_n)=+\infty$ for every $n$; but the error can still be small on
+average (\cref{fig:mf-dyadic-errors}).\footnote{This paragraph and the two figures that
+follow are added to the handwritten notes.}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.72\textwidth]{ch03-dyadic-errors}
+  \caption{How fast $f_n\to f$. Blue: the largest error $\sup_x(f(x)-f_n(x))$ for
+    $f(x)=12x(1-x)$ on $[0,1]$, whose supremum is $3$; it equals $3-n$ while $n<3$, and $2^{-n}$
+    from $n=3$ on. Gold: for the unbounded $f(x)=-\log x$ on $(0,1)$ the largest error is
+    infinite, yet the mean error $\int_0^1(f-f_n)\,\mathrm dx=e^{-n}+O(2^{-n})$ (an improper
+    Riemann integral) still decreases like $2^{-n-1}$. Dashed green: $2^{-n}$.}
+  \label{fig:mf-dyadic-errors}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:mf-dyadic-code}
+\coderef{code/src/probnotes/measurable.py} evaluates the functions $f_n$ on a whole array of
+values of $f$ at once: \texttt{dyadic\_approximation} uses the formula
+$f_n=\min(n,2^{-n}\lfloor2^nf\rfloor)$, and the tests check it against the case-by-case
+definition \eqref{eq:mf-dyadic}. The same module
+computes the canonical form \eqref{eq:mf-canonical} of a function with finitely many values,
+the common partition of \cref{prop:mf-common-partition}, and, on a finite set $X$, preimages,
+$\sigma(f)$ and the measurability criterion of \cref{prop:mf-generators}
+(\exref{ex:mf-finite-sigma} and \exref{ex:mf-dyadic-rate}).
+\end{remark}
+
+\demo{03-measurable-functions.ipynb}{the simple functions $f_n$ approaching $f$, with a slider
+for $n$, and $\sigma(f)$ on a finite set.}
+
+\furtherreading
+\textcite{billingsley}, Sections~2--3 and~10--13, constructs Lebesgue measure through outer
+measure and treats measurable functions and their approximation by simple functions;
+\textcite{rudin-rca}, Chapters~1--2, does the same from the point of view of analysis, with
+Lebesgue measure on $\mathbb R^k$ obtained from the Riesz representation theorem;
+\textcite{williams}, Chapters~1--3, is a short probabilistic introduction.

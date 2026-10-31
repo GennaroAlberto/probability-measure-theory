@@ -1,0 +1,719 @@
+% Chapter 2: Measures. Translation of Paola Siri's handwritten notes, PDF pages 12-34 (top),
+% section 2 "MISURE" of the part "TEORIA DELLA MISURA".
+
+A measure assigns to each measurable set a size in $[0,+\infty]$, in such a way that the size
+of a countable disjoint union is the sum of the sizes. This chapter defines measures, gives
+the first examples, proves the basic properties of a measure, and ends with the
+Borel--Cantelli lemma on the occurrence of infinitely many events. Algebras and
+$\sigma$-algebras are those of \cref{ch:01-sigma-algebras}. Sums of non-negative terms are
+always defined in $[0,+\infty]$, with $a+(+\infty)=+\infty$.
+
+\section{Additive functions and measures}\label{sec:ms-measures}
+
+\begin{definition}[Additive and $\sigma$-additive functions]\label{def:ms-additive}
+Let $\mathcal A$ be an algebra of subsets of $X$ (\cref{def:sa-algebra}) and let
+$\mu:\mathcal A\to[0,+\infty]$ be a function with $\mu(\emptyset)=0$.
+\begin{enumerate}[label=(\roman*)]
+  \item $\mu$ is \emph{additive} if for all $A_1,\dots,A_n\in\mathcal A$ with
+    $A_i\cap A_j=\emptyset$ for $i\ne j$,
+    \[
+      \mu\Big(\bigcup_{i=1}^nA_i\Big)=\sum_{i=1}^n\mu(A_i).
+    \]
+  \item $\mu$ is \emph{$\sigma$-additive} if for every sequence $(A_n)_{n\ge1}$ of elements of
+    $\mathcal A$ with $A_i\cap A_j=\emptyset$ for $i\ne j$ \emph{and such that}
+    $\bigcup_{n\ge1}A_n\in\mathcal A$,
+    \[
+      \mu\Big(\bigcup_{n\ge1}A_n\Big)=\sum_{n\ge1}\mu(A_n).
+    \]
+\end{enumerate}
+\end{definition}
+
+The condition $\bigcup_nA_n\in\mathcal A$ is needed because an algebra need not be closed
+under countable unions; on a $\sigma$-algebra it always holds. The series has non-negative
+terms, so its sum exists in $[0,+\infty]$ and does not depend on the order of the terms; the
+same definition therefore applies to families indexed by $\mathbb N$ or by any countable set.
+
+\emph{Note.} A $\sigma$-additive function is additive: given disjoint
+$A_1,\dots,A_n\in\mathcal A$, set $A_k=\emptyset$ for $k>n$; the union of the sequence is
+$\bigcup_{i=1}^nA_i\in\mathcal A$, and $\sigma$-additivity together with $\mu(\emptyset)=0$
+gives $\mu(\bigcup_{i=1}^nA_i)=\sum_{i=1}^n\mu(A_i)$. Moreover, additivity for two sets
+implies additivity for $n$ sets, by induction on $n$: $\bigcup_{i=1}^nA_i$ is the disjoint
+union of $\bigcup_{i=1}^{n-1}A_i\in\mathcal A$ and $A_n$.
+
+\begin{example}[Worked exercise: additive but not $\sigma$-additive]\label{exa:ms-additive-not-sigma}
+Let $X=\mathbb N$ and
+$\mathcal A=\{A\in\mathcal P(\mathbb N):A\text{ is finite or }A^c\text{ is finite}\}$, an
+algebra that is not a $\sigma$-algebra (\cref{exa:sa-finite-cofinite}). Define
+$\mu:\mathcal A\to[0,+\infty]$ by
+\[
+  \mu(A)=\begin{cases}\displaystyle\sum_{n\in A}2^{-n}&\text{if $A$ is finite},\\[1ex]
+  +\infty&\text{if $A$ is infinite},\end{cases}\qquad\text{so that }\mu(\emptyset)=0.
+\]
+Then $\mu$ is additive but not $\sigma$-additive.
+\end{example}
+
+\begin{proof}[Solution]
+\emph{$\mu$ is additive.} By the Note it suffices to consider two sets $A,B\in\mathcal A$ with
+$A\cap B=\emptyset$. If $A$ and $B$ are finite, so is $A\cup B$, and since $A\cap B=\emptyset$,
+\[
+  \mu(A\cup B)=\sum_{n\in A\cup B}2^{-n}=\sum_{n\in A}2^{-n}+\sum_{n\in B}2^{-n}=\mu(A)+\mu(B).
+\]
+If at least one of them is not finite, its complement is finite (it lies in $\mathcal A$); then
+$A\cup B$ is not finite, while $(A\cup B)^c$ is (it is contained in that complement), and
+\[
+  \mu(A\cup B)=+\infty=\mu(A)+\mu(B).
+\]
+
+\emph{$\mu$ is not $\sigma$-additive.} Let $A_n=\{n\}$, $n\in\mathbb N$. Each $A_n$ is
+finite, with $\mu(A_n)=2^{-n}$, and $A_i\cap A_j=\emptyset$ for $i\ne j$. Their union
+$\bigcup_{n\in\mathbb N}\{n\}=\mathbb N$ lies in $\mathcal A$, since $\mathbb N^c=\emptyset$
+is finite; but $\mathbb N$ is not finite, so
+\[
+  \mu\Big(\bigcup_{n\in\mathbb N}A_n\Big)=\mu(\mathbb N)=+\infty\ \ne\ \sum_{n\in\mathbb N}\mu(A_n)
+  =\sum_{n=0}^{\infty}\Big(\frac12\Big)^n=\frac{1}{1-\frac12}=2. \qedhere
+\]
+\end{proof}
+
+\begin{definition}[Measure]\label{def:ms-measure}
+A $\sigma$-additive function $\mu$ defined on a $\sigma$-algebra $\mathcal A$
+(\cref{def:sa-sigma-algebra}) is called a \emph{measure}.
+\end{definition}
+
+So a measure is a map $\mu:\mathcal A\to[0,+\infty]$ with $\mu(\emptyset)=0$ and
+$\mu(\bigcup_nA_n)=\sum_n\mu(A_n)$ for every sequence of pairwise disjoint sets of
+$\mathcal A$.
+
+\begin{definition}[Finite, $\sigma$-finite and probability measures; measure space]\label{def:ms-finite}
+Let $\mu$ be a measure on a $\sigma$-algebra $\mathcal A$ of subsets of $X$.
+\begin{itemize}
+  \item If $\mu(X)<+\infty$, $\mu$ is a \emph{finite measure}.
+  \item If there is a sequence $(A_n)_{n\ge1}$ of elements of $\mathcal A$ with
+    $X=\bigcup_{n\ge1}A_n$ (a countable covering of $X$) and $\mu(A_n)<+\infty$ for every
+    $n$, $\mu$ is a \emph{$\sigma$-finite measure}.
+  \item If $\mu(X)=1$ ($\mu$ is a finite measure of total mass $1$), $\mu$ is a
+    \emph{probability measure}.
+\end{itemize}
+The triple $(X,\mathcal A,\mu)$ is a \emph{measure space}, and a \emph{probability space}
+when $\mu(X)=1$.
+\end{definition}
+
+\begin{definition}[Concentrated measure, support, restriction]\label{def:ms-concentrated}
+Let $(X,\mathcal A,\mu)$ be a measure space.
+\begin{itemize}
+  \item $\mu$ is \emph{concentrated on} a set $A\in\mathcal A$ if $\mu(A^c)=0$; $A$ is then a
+    \emph{support} for $\mu$.
+  \item For $A\in\mathcal A$, the measure $\mu|_A$ defined by $\mu|_A(B)=\mu(B\cap A)$,
+    $B\in\mathcal A$, is the \emph{restriction of $\mu$ to $A$}. It is a measure
+    (\exref{ex:ms-examples-are-measures}), and it is concentrated on $A$:
+    $\mu|_A(A^c)=\mu(A^c\cap A)=\mu(\emptyset)=0$.
+\end{itemize}
+\end{definition}
+
+A measure has many supports: every measurable set containing a support is one.\footnote{Added to the handwritten notes.}
+
+\begin{remark}[Measure theory and probability]\label{rem:ms-dictionary}
+The same objects carry different names in measure theory and in probability:
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Measure theory & Probability\\
+\midrule
+$X$, a non-empty set & $\Omega$, the sample space\\
+$\mathcal A$, a $\sigma$-algebra of measurable sets & $\mathcal F$, the $\sigma$-algebra of events\\
+$(X,\mathcal A)$, a measurable space & $(\Omega,\mathcal F)$, a ``probabilizable'' space\\
+$A\in\mathcal A$, a measurable set & $A\in\mathcal F$, an event\\
+$\mu$, a measure & $\mathbb P$, a probability (measure)\\
+$(X,\mathcal A,\mu)$, a measure space & $(\Omega,\mathcal F,\mathbb P)$, a probability space, or random model\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{remark}
+
+\begin{example}[Examples of measures]\label{exa:ms-examples}
+\leavevmode
+\begin{enumerate}[label=\arabic*)]
+  \item Let $X$ be an infinite set and $\mathcal A=\mathcal P(X)$. The function
+    $\mu:\mathcal P(X)\to[0,+\infty]$,
+    \[
+      \mu(A)=\begin{cases}\operatorname{card}A&\text{if $A$ is finite},\\+\infty&\text{if $A$ is infinite},\end{cases}
+    \]
+    is a measure on $(X,\mathcal P(X))$, called the \emph{cardinality measure} or
+    \emph{counting measure}. If $X$ is countable, it is $\sigma$-finite: $X$ is the countable
+    union of its singletons, each of measure $1$.
+  \item Let $X$ be a non-empty set, fix $x_0\in X$, and let $\mathcal A=\mathcal P(X)$. The
+    function $\delta_{x_0}:\mathcal P(X)\to[0,+\infty]$,
+    \[
+      \delta_{x_0}(A)=\begin{cases}1&\text{if }x_0\in A,\\0&\text{if }x_0\notin A,\end{cases}
+    \]
+    is a probability measure ($\delta_{x_0}(X)=1$), the \emph{Dirac measure centred at $x_0$}.
+    It is concentrated on $\{x_0\}$, since $\delta_{x_0}(\{x_0\}^c)=0$.
+  \item Let $X$ be finite or countable, $\mathcal A=\mathcal P(X)$, and
+    $f:X\to[0,+\infty)$. Then
+    \[
+      \mu(A)=\sum_{i\in A}f(i),\qquad A\subseteq X,
+    \]
+    is a measure on $\mathcal A$; in particular $\mu(\{i\})=f(i)$.
+    \begin{itemize}
+      \item If $X$ is finite, $\mu$ is a finite measure. In general $\mu$ is $\sigma$-finite,
+        since $X=\bigcup_{i\in X}\{i\}$ with $\mu(\{i\})=f(i)<+\infty$.
+      \item If $\sum_{i\in X}f(i)<+\infty$ (also with $X$ countable), $\mu$ is a finite measure.
+      \item If $\sum_{i\in X}f(i)=1$, $\mu$ is a probability measure.
+    \end{itemize}
+\end{enumerate}
+As an exercise, check that 1), 2) and 3) are measures (\exref{ex:ms-examples-are-measures}).
+\end{example}
+
+\begin{example}[Worked exercise: two set functions on infinite sets]\label{exa:ms-two-set-functions}
+\leavevmode
+\begin{enumerate}[label=\arabic*)]
+  \item Let $X$ be an infinite set, $\mathcal A=\mathcal P(X)$, and
+    $\mu:\mathcal P(X)\to[0,+\infty]$ with $\mu(A)=0$ if $A$ is finite and $\mu(A)=1$ (or, in a
+    variant, $\mu(A)=+\infty$) if $A$ is infinite. Then $\mu$ is not a measure.
+  \item Let $X$ be an uncountable set and
+    $\mathcal A=\{A\in\mathcal P(X):A\text{ or }A^c\text{ is finite or countable}\}$, the
+    $\sigma$-algebra of \cref{exa:sa-countable-cocountable}. Let $\mu(A)=0$ if $A$ is finite or
+    countable and $\mu(A)=1$ if $A^c$ is finite or countable. Then $\mu$ is a probability
+    measure.
+\end{enumerate}
+\end{example}
+
+\begin{proof}[Solution]
+1) In the variant with $\mu(A)=+\infty$ for infinite $A$, $\mu$ is additive
+(\exref{ex:ms-infinite-sets}), but in neither version is it $\sigma$-additive. Indeed, the
+infinite set $X$ contains a countable set $A=\{x_n:n\in\mathbb N\}$, with the $x_n$
+distinct; then $A=\bigcup_{n\in\mathbb N}\{x_n\}$ is a disjoint union, and
+\[
+  \mu\Big(\bigcup_{n\in\mathbb N}\{x_n\}\Big)=\mu(A)=1\ (\text{or }+\infty)
+  \ \ne\ \sum_{n\in\mathbb N}\mu(\{x_n\})=\sum_{n\in\mathbb N}0=0 .
+\]
+(With the value $1$, $\mu$ is not even additive: $X$ is the disjoint union of two infinite
+sets $B$ and $B^c$, and $\mu(X)=1\ne2=\mu(B)+\mu(B^c)$.)\footnote{Added to the handwritten notes.}
+
+2) First, $\mu$ is well defined: if $A$ and $A^c$ were both finite or countable, so would be
+$X=A\cup A^c$. Next, $\mu(X)=1$ and $\mu(\emptyset)=0$; so if $\mu$ is a measure, it is a
+probability measure. We prove $\sigma$-additivity. Let $(A_n)_{n\ge1}$ be elements of
+$\mathcal A$ with $A_i\cap A_j=\emptyset$ for $i\ne j$.
+\begin{itemize}
+  \item If all the $A_n$ are finite or countable, so is $\bigcup_nA_n$, and
+    $\mu(\bigcup_nA_n)=0=\sum_n\mu(A_n)$, as every $\mu(A_n)=0$.
+  \item If instead there is $\bar n$ with $A_{\bar n}^c$ finite or countable, then
+    $\big(\bigcup_nA_n\big)^c=\bigcap_nA_n^c\subseteq A_{\bar n}^c$ is finite or countable.
+    So not only $\mu(A_{\bar n})=1$, but also $\mu(\bigcup_nA_n)=1$. It remains to see that
+    $\sum_n\mu(A_n)=1$. The index $\bar n$ is the only one with $A_{\bar n}^c$ finite or
+    countable: if $A_{\bar{\bar n}}^c$ were finite or countable for some $\bar{\bar n}\ne\bar n$,
+    then $A_{\bar n}\cap A_{\bar{\bar n}}=\emptyset$ would give
+    $A_{\bar n}\subseteq A_{\bar{\bar n}}^c$, an uncountable set (its complement is
+    countable and $X$ is not) inside a finite or countable one: absurd. So all the other $A_n$
+    are finite or countable, $\mu(A_n)=0$ for $n\ne\bar n$, and
+    \[
+      \sum_n\mu(A_n)=\mu(A_{\bar n})=1=\mu\Big(\bigcup_nA_n\Big).
+    \]
+\end{itemize}
+Hence $\mu$ is $\sigma$-additive, and it is a probability measure.
+\end{proof}
+
+\begin{example}[A further point, to do as an exercise]\label{exa:ms-zero-one-cofinite}
+3) Let $X$ be an infinite set and
+$\mathcal A=\{A\in\mathcal P(X):A\text{ is finite or }A^c\text{ is finite}\}$ (an algebra, not
+a $\sigma$-algebra: \cref{exa:sa-finite-cofinite}). Let $\mu(A)=0$ if $A$ is finite and $\mu(A)=1$ if $A^c$ is finite. Then
+$\mu$ is additive; if $X$ is countable, $\mu$ is not $\sigma$-additive.\footnote{The
+handwritten notes state that $\mu$ is not $\sigma$-additive for every infinite $X$, with the
+hint to take $X$ countable for the counterexample. The countability is essential: if $X$ is
+uncountable, $\mu$ is $\sigma$-additive on $\mathcal A$ (\exref{ex:ms-cofinite-zero-one});
+corrected here.} \emph{Hints:} for additivity, argue as for $\sigma$-additivity in 2) of
+\cref{exa:ms-two-set-functions}; for the counterexample, take $X$ countable. See
+\exref{ex:ms-cofinite-zero-one}.
+\end{example}
+
+\begin{remark}[computational]\label{rem:ms-code-measures}
+The module \coderef{code/src/probnotes/measures.py} implements the measures of
+\cref{exa:ms-examples} on finite and countable sets, and the finite or cofinite subsets of
+$\mathbb N$. With it, the function of \cref{exa:ms-additive-not-sigma} gives
+$\mu(\{0,\dots,N-1\})=2-2^{1-N}\to2$, while $\mu(\mathbb N)=+\infty$.
+\end{remark}
+
+\section{Properties of a measure}\label{sec:ms-properties}
+
+Throughout this section $\mu$ is a measure on a $\sigma$-algebra $\mathcal A$ of subsets of
+$X$. Properties 1--3 use only additivity, so they hold for every additive function on an
+algebra. The notes number the properties from 1 to 7.
+
+\begin{proposition}[Property 1: complement]\label{prop:ms-complement}
+For $A\in\mathcal A$, $\mu(X)=\mu(A)+\mu(A^c)$. If $\mu$ is finite,
+$\mu(A^c)=\mu(X)-\mu(A)$; for a probability measure, $\mu(A^c)=1-\mu(A)$.
+\end{proposition}
+
+\begin{proof}
+$X=A\cup A^c$ with $A\in\mathcal A$ and $A\cap A^c=\emptyset$, so by additivity
+$\mu(X)=\mu(A\cup A^c)=\mu(A)+\mu(A^c)$. If $\mu(X)<+\infty$, all three terms are finite and we
+may subtract.
+\end{proof}
+
+\begin{proposition}[Property 2: monotonicity]\label{prop:ms-monotone}
+Let $A,B\in\mathcal A$ with $B\subseteq A$. Then $\mu(A)=\mu(B)+\mu(A\setminus B)$; hence
+\[
+  \mu(B)\le\mu(A),
+\]
+and if $\mu$ is finite, $\mu(A\setminus B)=\mu(A)-\mu(B)$.
+\end{proposition}
+
+\begin{proof}
+$A=B\cup(A\setminus B)$, where $A\setminus B=A\cap B^c\in\mathcal A$ and
+$B\cap(A\setminus B)=\emptyset$. By additivity $\mu(A)=\mu(B)+\mu(A\setminus B)\ge\mu(B)$,
+since $\mu(A\setminus B)\ge0$. If $\mu$ is finite (it suffices that $\mu(B)<+\infty$), we may
+subtract $\mu(B)$.
+\end{proof}
+
+\begin{proposition}[Property 3: union of two sets]\label{prop:ms-union}
+For $A,B\in\mathcal A$,
+\[
+  \mu(A\cup B)\le\mu(A)+\mu(B)\qquad\text{(subadditivity)},
+\]
+and if $\mu$ is finite,
+\[
+  \mu(A\cup B)=\mu(A)+\mu(B)-\mu(A\cap B).
+\]
+\end{proposition}
+
+\begin{proof}
+$A\cup B=B\cup(A\setminus B)$ with $B\cap(A\setminus B)=\emptyset$, so by additivity and by
+Property~2 (as $A\setminus B\subseteq A$)
+\[
+  \mu(A\cup B)=\mu(B)+\mu(A\setminus B)\le\mu(B)+\mu(A).
+\]
+Moreover $A\setminus B=A\setminus(A\cap B)$, and $A=(A\cap B)\cup(A\cap B^c)$ is a disjoint
+union with $A\cap B^c=A\setminus B$; by additivity $\mu(A)=\mu(A\cap B)+\mu(A\setminus B)$. If
+$\mu$ is finite, $\mu(A\setminus B)=\mu(A)-\mu(A\cap B)$, and therefore
+$\mu(A\cup B)=\mu(B)+\mu(A\setminus B)=\mu(B)+\mu(A)-\mu(A\cap B)$.
+\end{proof}
+
+Adding $\mu(A\cap B)$ to both sides of $\mu(A\cup B)=\mu(B)+\mu(A\setminus B)$ gives
+$\mu(A\cup B)+\mu(A\cap B)=\mu(A)+\mu(B)$ for every measure; the form with a subtraction only
+needs $\mu(A\cap B)<+\infty$.\footnote{Added to the handwritten notes.}
+
+\begin{proposition}[Property 4: subadditivity]\label{prop:ms-subadditive}
+For every sequence $(A_n)_{n\ge1}$ of elements of $\mathcal A$,
+\[
+  \mu\Big(\bigcup_{n\ge1}A_n\Big)\le\sum_{n\ge1}\mu(A_n).
+\]
+\end{proposition}
+
+\begin{proof}
+Make the sets disjoint: let $B_1=A_1$, $B_2=A_2\setminus B_1$, $B_3=A_3\setminus(B_1\cup B_2)$,
+and in general
+\[
+  B_{n+1}=A_{n+1}\setminus\bigcup_{i=1}^nB_i .
+\]
+Each $B_n$ is in $\mathcal A$ and $B_n\subseteq A_n$. By induction,
+$\bigcup_{i=1}^nB_i=\bigcup_{i=1}^nA_i$ for every $n$, hence $\bigcup_nB_n=\bigcup_nA_n$; and
+$B_i\cap B_j=\emptyset$ for $i<j$, because $B_j$ is disjoint from $\bigcup_{l<j}B_l\supseteq B_i$.
+By $\sigma$-additivity, then monotonicity ($B_n\subseteq A_n$),
+\[
+  \mu\Big(\bigcup_{n\ge1}A_n\Big)=\mu\Big(\bigcup_{n\ge1}B_n\Big)=\sum_{n\ge1}\mu(B_n)
+  \le\sum_{n\ge1}\mu(A_n). \qedhere
+\]
+\end{proof}
+
+Taking $A_n=\emptyset$ for $n>N$ gives the finite version
+$\mu(\bigcup_{n=1}^NA_n)\le\sum_{n=1}^N\mu(A_n)$.
+
+\begin{theorem}[Property 5: Poincar\'e's formula, or the inclusion--exclusion principle]\label{thm:ms-inclusion-exclusion}
+If $\mu$ is a finite measure and $A_1,\dots,A_n\in\mathcal A$, then
+\begin{equation}\label{eq:ms-poincare}
+  \mu\Big(\bigcup_{i=1}^nA_i\Big)=\sum_{r=1}^n(-1)^{r+1}\sum_{1\le i_1<\dots<i_r\le n}
+  \mu(A_{i_1}\cap\dots\cap A_{i_r}).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By induction on $n$. For $n=1$ there is nothing to prove.
+
+\emph{Base.} For $n=2$, \eqref{eq:ms-poincare} reads
+$\mu(A_1\cup A_2)=\mu(A_1)+\mu(A_2)-\mu(A_1\cap A_2)$: this is Property~3.
+
+\emph{The case $n=3$.} By the base case applied to $A_1\cup A_2$ and $A_3$, with
+$(A_1\cup A_2)\cap A_3=(A_1\cap A_3)\cup(A_2\cap A_3)$, and then again to each union of two sets,
+\begin{align*}
+  \mu(A_1\cup A_2\cup A_3)&=\mu(A_1\cup A_2)+\mu(A_3)-\mu\big((A_1\cap A_3)\cup(A_2\cap A_3)\big)\\
+  &=\big[\mu(A_1)+\mu(A_2)-\mu(A_1\cap A_2)\big]+\mu(A_3)\\
+  &\qquad-\big[\mu(A_1\cap A_3)+\mu(A_2\cap A_3)-\mu(A_1\cap A_2\cap A_3)\big]\\
+  &=\big[\mu(A_1)+\mu(A_2)+\mu(A_3)\big]-\big[\mu(A_1\cap A_2)+\mu(A_1\cap A_3)+\mu(A_2\cap A_3)\big]\\
+  &\qquad+\mu(A_1\cap A_2\cap A_3).
+\end{align*}
+
+\emph{Inductive step.} Assume \eqref{eq:ms-poincare} for every family of $n$ sets. By the base
+case applied to $\bigcup_{i=1}^nA_i$ and $A_{n+1}$, with
+$\big(\bigcup_{i=1}^nA_i\big)\cap A_{n+1}=\bigcup_{i=1}^n(A_i\cap A_{n+1})$,
+\[
+  \mu\Big(\bigcup_{i=1}^{n+1}A_i\Big)=\mu\Big(\bigcup_{i=1}^nA_i\Big)+\mu(A_{n+1})
+  -\mu\Big(\bigcup_{i=1}^n(A_i\cap A_{n+1})\Big).
+\]
+The inductive hypothesis, applied to $A_1,\dots,A_n$ and to
+$A_1\cap A_{n+1},\dots,A_n\cap A_{n+1}$, turns the right side into
+\begin{align*}
+  &\Big[\sum_{r=1}^n(-1)^{r+1}\sum_{1\le i_1<\dots<i_r\le n}\mu(A_{i_1}\cap\dots\cap A_{i_r})\Big]
+  +\mu(A_{n+1})\\
+  &\qquad-\Big[\sum_{r=1}^n(-1)^{r+1}\sum_{1\le i_1<\dots<i_r\le n}
+  \mu(A_{i_1}\cap\dots\cap A_{i_r}\cap A_{n+1})\Big]\\
+  &=\sum_{r=1}^{n+1}(-1)^{r+1}\sum_{1\le i_1<\dots<i_r\le n+1}\mu(A_{i_1}\cap\dots\cap A_{i_r}).
+\end{align*}
+For the last equality, sort the terms $\mu(A_{i_1}\cap\dots\cap A_{i_r})$ of the formula for
+$n+1$ sets by their index set $\{i_1<\dots<i_r\}$. Those with $i_r\le n$ are the first bracket,
+with the same signs. The index set $\{n+1\}$ gives the middle term, with sign
+$(-1)^{1+1}=+1$. Those with $r\ge2$ and $i_r=n+1$ appear in the second bracket, with $r-1$ in
+place of $r$ and sign $-(-1)^{(r-1)+1}=(-1)^{r+1}$, as required. Every term appears exactly once.
+\end{proof}
+
+\begin{remark}[Finiteness in Property 5]\label{rem:ms-inclusion-exclusion-finite}
+Finiteness is used only to subtract, and it suffices that $\mu(A_i)<+\infty$ for every
+$i$.\footnote{Added to the handwritten notes.}
+Then $A=\bigcup_{i=1}^nA_i$ has $\mu(A)\le\sum_i\mu(A_i)<+\infty$ by Property~4, so the
+restriction $\mu|_A$ is a finite measure; it agrees with $\mu$ on the subsets of $A$, which
+include every set in \eqref{eq:ms-poincare}. Without such a condition the right side may be
+meaningless: for the counting measure on $\mathbb N$ and $A_1=A_2=\mathbb N$ it is
+$+\infty+\infty-\infty$.
+\end{remark}
+
+\begin{remark}[computational]\label{rem:ms-code-inclusion-exclusion}
+The function \texttt{inclusion\_exclusion} evaluates the right side of
+\eqref{eq:ms-poincare} for sets in a finite space; the tests of the module
+\coderef{code/src/probnotes/measures.py} compare it with the measure of the union. \exref{ex:ms-matching} uses the formula to
+count permutations without fixed points, and \exref{ex:ms-bonferroni} shows that the
+truncated sums alternately overestimate and underestimate the measure of the union.
+\end{remark}
+
+\begin{theorem}[Property 6: continuity from below]\label{thm:ms-continuity-below}
+Let $(A_n)_{n\ge1}$ be a sequence of elements of $\mathcal A$ with $A_n\subseteq A_{n+1}$ for
+every $n$. Then
+\[
+  \mu\Big(\bigcup_{n\ge1}A_n\Big)=\lim_{n\to\infty}\mu(A_n).
+\]
+Writing $A=\bigcup_{n\ge1}A_n$ (also written $A=\lim_nA_n$): if $A_n\nearrow A$, then
+$\mu(A_n)\nearrow\mu(A)$.
+\end{theorem}
+
+The limit exists in $[0,+\infty]$, because $\mu(A_n)$ is non-decreasing by Property~2.
+
+\begin{proof}
+Let $B_1=A_1$, $B_2=A_2\setminus A_1$, and in general $B_n=A_n\setminus A_{n-1}$ for $n\ge2$.
+Then $B_1\cup B_2=A_1\cup A_2=A_2$ and, for every $n$, $\bigcup_{i=1}^nB_i=\bigcup_{i=1}^nA_i=A_n$.
+Moreover $B_i\cap B_j=\emptyset$ for $i\ne j$, and $\bigcup_nB_n=\bigcup_nA_n=A$. By
+$\sigma$-additivity and then additivity,
+\[
+  \mu(A)=\mu\Big(\bigcup_{n\ge1}B_n\Big)=\sum_{n\ge1}\mu(B_n)
+  =\lim_{n\to\infty}\sum_{i=1}^n\mu(B_i)=\lim_{n\to\infty}\mu\Big(\bigcup_{i=1}^nB_i\Big)
+  =\lim_{n\to\infty}\mu(A_n). \qedhere
+\]
+\end{proof}
+
+\begin{theorem}[Property 7: continuity from above]\label{thm:ms-continuity-above}
+Let $(A_n)_{n\ge1}$ be a sequence of elements of $\mathcal A$ with $A_n\supseteq A_{n+1}$ for
+every $n$, and assume that $\mu(A_k)<+\infty$ for some $k\ge1$. Then
+\[
+  \mu\Big(\bigcap_{n\ge1}A_n\Big)=\lim_{n\to\infty}\mu(A_n).
+\]
+Writing $A=\bigcap_{n\ge1}A_n$ (also written $A=\lim_nA_n$): if $A_n\searrow A$, then
+$\mu(A_n)\searrow\mu(A)$.
+\end{theorem}
+
+\begin{proof}
+Let $B_n=A_k\setminus A_n$ for $n\ge k$ (so $B_{k+1}=A_k\setminus A_{k+1}$,
+$B_{k+2}=A_k\setminus A_{k+2}$, \dots). Then $B_n\subseteq B_{n+1}\subseteq A_k$, and
+$A_k=B_n\cup A_n$, a disjoint union, for $n\ge k$. Since the $A_n$ decrease,
+$\bigcap_{n\ge k}A_n=\bigcap_{n\ge1}A_n=A$, and
+\[
+  \bigcup_{n\ge k}B_n=\bigcup_{n\ge k}(A_k\cap A_n^c)=A_k\cap\Big(\bigcup_{n\ge k}A_n^c\Big)
+  =A_k\cap\Big(\bigcap_{n\ge k}A_n\Big)^c=A_k\setminus A .
+\]
+Hence $A_k=\big(\bigcup_{n\ge k}B_n\big)\cup A$, a disjoint union, and by additivity
+$\mu(A_k)=\mu\big(\bigcup_{n\ge k}B_n\big)+\mu(A)$. All these sets lie in $A_k$, so they have
+finite measure, and by Property~6 applied to the increasing sets $B_n$,
+\[
+  \mu(A)=\mu(A_k)-\mu\Big(\bigcup_{n\ge k}B_n\Big)=\mu(A_k)-\lim_{n\to\infty}\mu(B_n)
+  =\lim_{n\to\infty}\big[\mu(A_k)-\mu(B_n)\big]=\lim_{n\to\infty}\mu(A_n),
+\]
+since $\mu(A_k)=\mu(B_n)+\mu(A_n)$ for $n\ge k$.
+\end{proof}
+
+\begin{remark}[The finite term is needed]\label{rem:ms-continuity-finite}
+Without a set of finite measure, Property~7 fails.\footnote{Added to the handwritten notes.} Let $\mu$ be the counting measure on
+$\mathbb N$ (\cref{exa:ms-examples}) and $A_n=\{n,n+1,n+2,\dots\}$. The sets decrease, and
+$\mu(A_n)=+\infty$ for every $n$, but $\bigcap_nA_n=\emptyset$, so
+$\mu(\bigcap_nA_n)=0\ne+\infty=\lim_n\mu(A_n)$. For a finite measure, in particular for a
+probability measure, the hypothesis always holds.
+\end{remark}
+
+\begin{remark}[computational]\label{rem:ms-code-continuity}
+The notebook follows $\mu(\{0,\dots,n\})\nearrow\mu(\mathbb N)$ and
+$\mu(\{n,n+1,\dots\})\searrow0$ for discrete measures on $\mathbb N$ of your choice, and shows
+the second sequence stuck at $+\infty$ for the counting measure.
+\end{remark}
+
+\demo{02-measures.ipynb}{continuity from below and from above, and its failure for the
+counting measure.}
+
+\section{Lower and upper limits; the Borel--Cantelli lemma}\label{sec:ms-borel-cantelli}
+
+\begin{remark}[Aside: lower and upper limits of a real sequence]\label{rem:ms-aside-limits}
+Let $(a_n)_{n\ge1}$ be a real sequence. Its \emph{lower limit} (limit inferior) is
+\[
+  \liminf_na_n=\lim_n\Big(\inf_{k\ge n}a_k\Big)=\sup_n\Big(\inf_{k\ge n}a_k\Big);
+\]
+the sequence $\inf_{k\ge n}a_k$ is non-decreasing in $n$, so its limit exists and equals
+its supremum. Its \emph{upper limit} (limit superior) is
+\[
+  \limsup_na_n=\lim_n\Big(\sup_{k\ge n}a_k\Big)=\inf_n\Big(\sup_{k\ge n}a_k\Big);
+\]
+the sequence $\sup_{k\ge n}a_k$ is non-increasing, so its limit exists. These limits are
+taken in $\overline{\mathbb R}=\mathbb R\cup\{\pm\infty\}$: for instance
+$\inf_{k\ge n}a_k=-\infty$ if the sequence is unbounded below.
+
+\emph{Observations.} (1) $\liminf_na_n\le\limsup_na_n$, since
+$\inf_{k\ge n}a_k\le\sup_{k\ge n}a_k$ for every $n$. (2) $\lim_na_n$ exists if and only if
+$\liminf_na_n=\limsup_na_n$, and in that case
+$\liminf_na_n=\limsup_na_n=\lim_na_n$. (\citet[Section~1.13]{rudin-rca} states that a
+convergent sequence has $\limsup_na_n=\liminf_na_n=\lim_na_n$; the converse follows from the
+characterisation given there of $\limsup_na_n$ and $\liminf_na_n$ as the largest and smallest
+limits of subsequences.)
+
+\emph{Example 1.} Let $a_n=+1$ if $n$ is even and $a_n=-1$ if $n$ is odd. Both values occur
+after every $n$, so $\inf_{k\ge n}a_k=-1$ and $\sup_{k\ge n}a_k=+1$ for every $n$. Hence
+$\liminf_na_n=\sup_n\inf_{k\ge n}a_k=-1$ and $\limsup_na_n=\inf_n\sup_{k\ge n}a_k=+1$: the
+sequence has no limit.
+
+\emph{Example 2.} Let $a_n=+\frac1n$ if $n$ is even and $a_n=-\frac1n$ if $n$ is odd. Then
+$\inf_{k\ge1}a_k=-1$, $\inf_{k\ge2}a_k=\inf_{k\ge3}a_k=-\frac13$, and in general
+$\inf_{k\ge n}a_k=-\frac1m$ with $m$ the smallest odd number $\ge n$; so
+$\liminf_na_n=\lim_n(\inf_{k\ge n}a_k)=0$. Likewise
+$\sup_{k\ge1}a_k=\sup_{k\ge2}a_k=\frac12$, $\sup_{k\ge3}a_k=\frac14$, \dots, and
+$\limsup_na_n=\lim_n(\sup_{k\ge n}a_k)=0$. Hence $\liminf_na_n=0=\limsup_na_n$, and
+$\lim_na_n=0$. \Cref{fig:ms-limits} draws both examples.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch02-limits}
+  \caption{The two sequences of the aside, with $\inf_{k\ge n}a_k$ (non-decreasing, its limit
+    is $\liminf_na_n$) and $\sup_{k\ge n}a_k$ (non-increasing, its limit is
+    $\limsup_na_n$). Left: Example~1, where the two stay at $-1$ and $+1$. Right: Example~2,
+    where both tend to $0$.}
+  \label{fig:ms-limits}
+\end{figure}
+
+\begin{definition}[Lower and upper limits of a sequence of sets]\label{def:ms-liminf-limsup}
+Let $(A_n)_{n\ge1}$ be a sequence of sets, $A_n\in\mathcal A$, a $\sigma$-algebra. We define
+\begin{align*}
+  \liminf_nA_n&=\bigcup_{n\ge1}\Big(\bigcap_{k\ge n}A_k\Big)=\lim_n\Big(\bigcap_{k\ge n}A_k\Big)\in\mathcal A,\\
+  \limsup_nA_n&=\bigcap_{n\ge1}\Big(\bigcup_{k\ge n}A_k\Big)=\lim_n\Big(\bigcup_{k\ge n}A_k\Big)\in\mathcal A.
+\end{align*}
+Here $\bigcap_{k\ge n}A_k$ is an increasing sequence in $n$ and $\bigcup_{k\ge n}A_k$ a
+decreasing one, and their limits are understood as in Properties~6 and~7. If
+$\liminf_nA_n=\limsup_nA_n$, we say that $\lim_nA_n$ exists, and
+$\lim_nA_n=\liminf_nA_n=\limsup_nA_n$.
+\end{definition}
+
+Both sets are in $\mathcal A$ because $\mathcal A$ is closed under countable unions and
+intersections. For an increasing sequence, $\bigcap_{k\ge n}A_k=A_n$ and
+$\bigcup_{k\ge n}A_k=\bigcup_kA_k$, so $\lim_nA_n=\bigcup_nA_n$, as in Property~6; similarly
+for a decreasing sequence $\lim_nA_n=\bigcap_nA_n$.
+
+\begin{remark}\label{rem:ms-liminf-subset}
+$\liminf_nA_n\subseteq\limsup_nA_n$. Indeed,
+\begin{itemize}
+  \item $x\in\liminf_nA_n=\bigcup_n\bigcap_{k\ge n}A_k$ $\iff$ there is $n$ with
+    $x\in\bigcap_{k\ge n}A_k$ $\iff$ there is $n$ such that $x\in A_k$ for all $k\ge n$: $x$
+    belongs to all the $A_k$ from some $n$ on (and these are infinitely many);
+  \item $x\in\limsup_nA_n=\bigcap_n\bigcup_{k\ge n}A_k$ $\iff$ $x\in\bigcup_{k\ge n}A_k$ for
+    every $n$ $\iff$ for every $n$ there is $k\ge n$ with $x\in A_k$: $x$ belongs to
+    infinitely many of the $A_k$.
+\end{itemize}
+So $x\in\liminf_nA_n$ implies $x\in\limsup_nA_n$.
+\end{remark}
+
+\begin{proposition}\label{prop:ms-liminf-limsup}
+Let $\mu$ be a finite measure on $(X,\mathcal A)$ and $(A_n)_{n\ge1}$ a sequence of elements
+of $\mathcal A$. Then
+\[
+  \mu\Big(\liminf_nA_n\Big)\le\liminf_n\mu(A_n)\le\limsup_n\mu(A_n)\le\mu\Big(\limsup_nA_n\Big).
+\]
+\end{proposition}
+
+\begin{proof}
+The middle inequality is (1) of the aside. For the last one, let
+$A=\limsup_nA_n=\bigcap_nB_n$, where $B_n=\bigcup_{k\ge n}A_k$ and $B_n\supseteq B_{n+1}$. By
+Property~7 ($\mu$ is finite), and since $\mu(B_n)$ is non-increasing,
+\[
+  \mu\Big(\limsup_nA_n\Big)=\mu(A)=\mu\Big(\bigcap_nB_n\Big)=\lim_n\mu(B_n)=\inf_n\mu(B_n)
+  \ge\inf_n\sup_{k\ge n}\mu(A_k)=\limsup_n\mu(A_n),
+\]
+where the inequality holds because $A_k\subseteq B_n$, so $\mu(A_k)\le\mu(B_n)$, for every
+$k\ge n$. Analogously, for the first inequality let $C_n=\bigcap_{k\ge n}A_k$, which increase
+to $\liminf_nA_n$. By Property~6, and since $C_n\subseteq A_k$ for every $k\ge n$,
+\[
+  \mu\Big(\liminf_nA_n\Big)=\lim_n\mu(C_n)=\sup_n\mu(C_n)\le\sup_n\inf_{k\ge n}\mu(A_k)
+  =\liminf_n\mu(A_n). \qedhere
+\]
+\end{proof}
+
+\begin{remark}[Which inequalities need a finite measure]\label{rem:ms-liminf-limsup-finite}
+The first inequality uses only continuity from below,\footnote{Added to the handwritten notes.} so
+$\mu(\liminf_nA_n)\le\liminf_n\mu(A_n)$ holds for every measure; the middle one concerns real
+numbers. Only the last one uses finiteness, through Property~7, and it holds as soon as
+$\mu(\bigcup_{k\ge n}A_k)<+\infty$ for some $n$. Without this it can fail: for the counting
+measure on $\mathbb N$ and $A_n=\{n\}$, $\mu(A_n)=1$ for every $n$, but each point lies in
+only one $A_n$, so $\limsup_nA_n=\emptyset$ and $\mu(\limsup_nA_n)=0<1=\limsup_n\mu(A_n)$.
+\end{remark}
+
+\begin{lemma}[Borel--Cantelli lemma, part 1]\label{lem:ms-borel-cantelli-1}
+Let $(X,\mathcal A,\mu)$ be a measure space and $(A_n)_{n\ge1}$ a sequence of elements of
+$\mathcal A$ such that
+\[
+  \sum_{n\ge1}\mu(A_n)<+\infty .
+\]
+Then $\mu(\limsup_nA_n)=0$.
+\end{lemma}
+
+\begin{proof}
+Let $A=\limsup_nA_n=\bigcap_nB_n$ with $B_n=\bigcup_{k\ge n}A_k$. Since $A\subseteq B_n$ for
+every $n$, monotonicity and subadditivity give
+\[
+  \mu(A)\le\mu(B_n)=\mu\Big(\bigcup_{k\ge n}A_k\Big)\le\sum_{k=n}^\infty\mu(A_k)
+  \qquad\text{for every }n .
+\]
+Hence $\mu(A)\le\lim_n\sum_{k=n}^\infty\mu(A_k)=0$, because $\sum_{k=n}^\infty\mu(A_k)$ is the
+$n$-th remainder of a convergent series.
+\end{proof}
+
+The first part holds in every measure space: $\mu$ need not be finite, and nothing like
+independence is assumed.\footnote{Added to the handwritten notes.}
+
+\begin{remark}[Aside: independence]\label{rem:ms-aside-independence}
+The second part of the lemma needs the notion of independence, which we introduce here.
+Throughout the aside, $(\Omega,\mathcal F,\mathbb P)$ is a probability space.
+\end{remark}
+
+\begin{definition}[Independent events]\label{def:ms-independence}
+Let $(A_i)_{i\in I}$ be a family of events, $A_i\in\mathcal F$, with $I$ any index set. The
+events $A_i$, $i\in I$, are \emph{independent} if for every finite $J\subseteq I$
+\[
+  \mathbb P\Big(\bigcap_{j\in J}A_j\Big)=\prod_{j\in J}\mathbb P(A_j).
+\]
+\end{definition}
+
+\begin{definition}[Independent $\sigma$-algebras]\label{def:ms-independence-sigma}
+Let $(\mathcal F_i)_{i\in I}$ be a family of sub-$\sigma$-algebras of $\mathcal F$
+($\mathcal F_i\subseteq\mathcal F$). The $\sigma$-algebras $\mathcal F_i$, $i\in I$, are
+\emph{independent} if for every finite $J\subseteq I$ and every choice of $A_j\in\mathcal F_j$,
+$j\in J$,
+\[
+  \mathbb P\Big(\bigcap_{j\in J}A_j\Big)=\prod_{j\in J}\mathbb P(A_j).
+\]
+\end{definition}
+
+\begin{proposition}\label{prop:ms-independence-generated}
+Let $(A_i)_{i\in I}$ be events of $(\Omega,\mathcal F,\mathbb P)$. The events $A_i$,
+$i\in I$, are independent if and only if the $\sigma$-algebras
+$\sigma(A_i)=\{\emptyset,\Omega,A_i,A_i^c\}$ (\cref{exa:sa-generated}), $i\in I$, are
+independent.
+\end{proposition}
+
+The proof is left as an exercise (\exref{ex:ms-independence-sigma}; see also
+\citet[Section~4]{billingsley}). In particular, if the events $A_i$ are independent, so are
+the events $B_i$ obtained by replacing some of the $A_i$ by their complements, since
+$B_i\in\sigma(A_i)$. This ends the aside.
+
+\begin{lemma}[Borel--Cantelli lemma, part 2]\label{lem:ms-borel-cantelli-2}
+Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space and $(A_n)_{n\ge1}$ a sequence of
+\emph{independent} events such that
+\[
+  \sum_{n\ge1}\mathbb P(A_n)=+\infty .
+\]
+Then $\mathbb P(\limsup_nA_n)=1$. (The Borel--Cantelli lemma is a \emph{0--1 law}.)
+\end{lemma}
+
+\begin{proof}
+Let $A=\limsup_nA_n=\bigcap_nB_n$, where $B_n=\bigcup_{k\ge n}A_k$ and $B_n\supseteq B_{n+1}$.
+By Property~7 ($\mathbb P$ is finite) and Property~1,
+\[
+  \mathbb P(A)=\lim_n\mathbb P(B_n)=\lim_n\mathbb P\Big(\bigcup_{k\ge n}A_k\Big)
+  =\lim_n\mathbb P\Big(\Big(\bigcap_{k\ge n}A_k^c\Big)^c\Big)
+  =1-\lim_n\mathbb P\Big(\bigcap_{k\ge n}A_k^c\Big).
+\]
+Fix $n$ and let $C_i=\bigcap_{k=n}^iA_k^c$ for $i\ge n$. Then $C_i\supseteq C_{i+1}$ and
+$\bigcap_{i\ge n}C_i=\bigcap_{k\ge n}A_k^c$, so by continuity from above
+$\mathbb P(\bigcap_{k\ge n}A_k^c)=\lim_i\mathbb P(C_i)$. The events $A_k^c$ are independent,
+by \cref{prop:ms-independence-generated}, so with $a_k=\mathbb P(A_k)$,
+\[
+  \mathbb P(A)=1-\lim_n\lim_i\mathbb P\Big(\bigcap_{k=n}^iA_k^c\Big)
+  =1-\lim_n\lim_i\prod_{k=n}^i\mathbb P(A_k^c)
+  =1-\lim_n\lim_i\prod_{k=n}^i(1-a_k).
+\]
+Now $0\le a_k\le1$ implies
+\begin{equation}\label{eq:ms-exp-bound}
+  0\le1-a_k\le e^{-a_k},
+\end{equation}
+because the convex function $x\mapsto e^{-x}$ lies above its tangent line $1-x$ at $x=0$.
+Hence $\prod_{k=n}^i(1-a_k)\le\prod_{k=n}^ie^{-a_k}=e^{-\sum_{k=n}^ia_k}$, and
+\[
+  \mathbb P(A)\ge1-\lim_n\lim_ie^{-\sum_{k=n}^ia_k}=1-\lim_ne^{-\sum_{k=n}^\infty a_k}=1 .
+\]
+Here $\sum_{k=n}^\infty a_k=+\infty$ for every $n$, with $e^{-\infty}=0$: by hypothesis
+$\sum_{k=1}^\infty a_k=\sum_{k=1}^\infty\mathbb P(A_k)=+\infty$, and removing the finitely many
+terms $a_1,\dots,a_{n-1}$, each at most $1$, leaves the series divergent. So
+$\mathbb P(A)=\mathbb P(\limsup_nA_n)\ge1$, that is, $\mathbb P(A)=1$.
+\end{proof}
+
+\begin{remark}[A 0--1 law]\label{rem:ms-zero-one}
+The Borel--Cantelli lemma is a \emph{0--1 law}: for independent events,
+$\mathbb P(\limsup_nA_n)\in\{0,1\}$. It is $0$ if $\sum_n\mathbb P(A_n)<+\infty$ (part~1, which
+does not need independence) and $1$ if $\sum_n\mathbb P(A_n)=+\infty$ (part~2).
+\begin{itemize}
+  \item If $\mathbb P(\limsup_nA_n)=0$, the event $\limsup_nA_n$ is ``negligible'' (in the
+    sense of \cref{def:mf-negligible}), and $\mathbb P\big((\limsup_nA_n)^c\big)=1$: with
+    probability $1$ only finitely many of the events $A_n$ occur.
+  \item If $\mathbb P(\limsup_nA_n)=1$, the event $\limsup_nA_n$ is ``almost sure'': with
+    probability $1$ infinitely many of the events $A_n$ occur.
+\end{itemize}
+\end{remark}
+
+\begin{example}[Bernoulli trials]\label{exa:ms-bernoulli}
+If the events $A_n$ are independent and $\mathbb P(A_n)=p>0$ for every $n$ (for instance,
+$A_n=$ ``success at the $n$-th trial'' in a sequence of Bernoulli trials), then
+$\sum_n\mathbb P(A_n)=\sum_np=+\infty$, and by part~2, with probability $1$ infinitely many
+successes occur (when infinitely many trials are performed).
+\end{example}
+
+\begin{remark}[computational]\label{rem:ms-code-borel-cantelli}
+\Cref{fig:ms-borel-cantelli} simulates independent events with $\mathbb P(A_n)=\frac1n$ and
+with $\mathbb P(A_n)=\frac1{n^2}$, and counts the occurrences $N_n=\sum_{k\le n}\1_{A_k}$.
+In the first case $\sum_n\frac1n=+\infty$, so by part~2, with probability $1$, infinitely
+many $A_n$ occur, and $\mathbb E[N_n]=\sum_{k\le n}\frac1k\approx\log n$. In the second,
+$\sum_n\frac1{n^2}=\frac{\pi^2}{6}$, so by part~1, with probability $1$, only finitely many
+occur. A simulation stops at a finite horizon and cannot see ``infinitely often''. What it
+shows is the rate: with $\frac1n$, a new occurrence after any time $n$ is certain, yet many
+paths stay flat over a whole decade; with $\frac1{n^2}$, an occurrence after time $n$ remains
+possible, with a probability that is small but never zero. Both probabilities are computed,
+and other rates explored, in \exref{ex:ms-borel-cantelli-sim}.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch02-borel-cantelli}
+  \caption{Counts $N_n$ of occurrences among $A_1,\dots,A_n$ for $25$ simulated paths of
+    independent events, up to $n=10^6$ ($\log$ scale), with the expected count
+    $\mathbb E[N_n]=\sum_{k\le n}\mathbb P(A_k)$. Left: $\mathbb P(A_n)=\frac1n$; the counts keep
+    growing, like $\log n$. Right: $\mathbb P(A_n)=\frac1{n^2}$; every path stops early, and
+    $\mathbb E[N_n]\to\frac{\pi^2}{6}\approx1.64$.}
+  \label{fig:ms-borel-cantelli}
+\end{figure}
+
+\demo{02-measures.ipynb}{Borel--Cantelli for $\mathbb P(A_n)=n^{-\alpha}$, with the exponent,
+horizon and number of paths on sliders.}
+
+\furtherreading
+\textcite{billingsley}, Sections~2 and~4, covers probability measures, limits of sets,
+independent events and both Borel--Cantelli lemmas; \textcite{durrett}, Section~1.1, the
+properties of measures, and Sections~2.1 and~2.3, independence and the Borel--Cantelli lemmas;
+\textcite{williams}, Chapters~1, 2 and~4, the same material with a probabilist's emphasis.
+\textcite{ross-5}, Chapters~2 and~3, has many elementary applications of inclusion--exclusion,
+continuity and independence.
