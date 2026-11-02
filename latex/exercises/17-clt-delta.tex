@@ -1,0 +1,224 @@
+% Exercises for Chapter 17 (the central limit theorem and the delta method).
+% Statements only: solutions are kept privately. Throughout, (Omega, F, P) is a probability space,
+% S_n = X_1 + ... + X_n, S_n^* is its standardisation, Xbar_n = S_n / n, Phi is the distribution
+% function of N(0, 1), and the notation is that of the notes.
+
+\begin{exercise}[Affine maps and convergence in law, with distribution functions]\label{ex:ct-affine}
+\medium In the proof of the delta method (\noteref{thm:ct-delta}) the notes remark that one can
+prove directly, with distribution functions, the following statement: \emph{if $a_n\to a$ and
+$b_n\to b$ are real numbers and $Y_n\xrightarrow{\mathcal L}Y$, then
+$a_nY_n+b_n\xrightarrow{\mathcal L}aY+b$.} Prove it, using only the criterion of
+\noteref{thm:cl-cdf-criterion} (convergence of the distribution functions at the continuity points
+of the limit) and the fact that a distribution function has at most countably many discontinuity
+points.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $a>0$. Show that $x$ is a continuity point of $F_{aY+b}$ if and only if
+    $\frac{x-b}a$ is a continuity point of $F_Y$. Fix such an $x$ and $\eta>0$, choose continuity
+    points $y'<\frac{x-b}a<y''$ of $F_Y$ with $F_Y(y'')-F_Y(y')<\eta$, and show that
+    $F_{Y_n}(y')\le\mathbb P(a_nY_n+b_n\le x)\le F_{Y_n}(y'')$ for $n$ large. Conclude.
+  \item Treat the case $a<0$. \emph{Hint:} apply (a) to $-Y_n$, after showing that
+    $-Y_n\xrightarrow{\mathcal L}-Y$.
+  \item Let $a=0$. Show that $(Y_n)_n$ is \emph{bounded in probability}: for every $\eta>0$ there
+    is $K$ such that $\mathbb P(|Y_n|>K)\le\eta$ for every $n$. Deduce that
+    $a_nY_n\xrightarrow{\mathbb P}0$, hence that $a_nY_n+b_n\xrightarrow{\mathcal L}b$.
+  \item Deduce, without Slutsky's theorem, the step ``$X_n\xrightarrow{\mathcal L}\theta$'' of the
+    proof of \noteref{thm:ct-delta}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The speed $\frac1{\sqrt n}$]\label{ex:ct-rate}
+\medium This exercise justifies the negative answer in part~1) of \noteref{rem:ct-fluctuations}. Let
+$(X_n)_{n\ge1}$ be i.i.d.\ in $L^2$, with mean $\mu$ and variance $\sigma^2>0$, and let $\alpha>0$
+and $c\ne0$. You may use \noteref{thm:ct-clt}, \noteref{thm:cl-slutsky},
+\noteref{prop:cl-P-implies-law} and \noteref{prop:cl-continuous-mapping}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $\alpha<\frac12$. Show that $n^\alpha|\bar X_n-\mu|\to0$ in $L^2$ and in probability.
+  \item Let $\alpha=\frac12$. Show that $\sqrt n|\bar X_n-\mu|$ converges in law to $|N'|$, with
+    $N'\sim\mathcal N(0,\sigma^2)$, and deduce that it does not converge in probability to $c$.
+  \item Let $\alpha>\frac12$. Show that $\mathbb P(n^\alpha|\bar X_n-\mu|\le K)\to0$ for every
+    $K>0$.
+  \item Conclude that $n^\alpha|\bar X_n-\mu|$ converges to $c$ neither almost surely, nor in $L^2$,
+    nor in probability, for any $\alpha>0$.
+  \item (Harder.) Let $T_n=\sqrt n(\bar X_n-\mu)$. Show that $(T_n)_n$ converges in probability to no
+    random variable at all. \emph{Hint:} write $T_{2n}=\frac1{\sqrt2}(T_n+T_n')$, where $T_n'$ is
+    built from $X_{n+1},\dots,X_{2n}$, and find the limit in law of $T_{2n}-T_n$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Variance-stabilising transformations]\label{ex:ct-stabilising}
+\easy You may use \noteref{thm:ct-clt} and \noteref{thm:ct-delta}.
+\begin{enumerate}[label=(\alph*)]
+  \item Complete part~b) of \noteref{exa:ct-stabilising}, which the notes leave as an exercise: let
+    $Y_n\sim b(p)$ be i.i.d., $p\in(0,1)$. With the substitution $p=\sin^2x$, compute
+    $\int\frac{\dd p}{\sqrt{p(1-p)}}$, find a transformation $g$ that stabilises the variance of
+    $\bar Y_n$, and show that
+    $\sqrt n\big(\arcsin\sqrt{\bar Y_n}-\arcsin\sqrt p\big)\xrightarrow{\mathcal L}\mathcal N(0,\frac14)$.
+  \item Do the same for $Y_n\sim\mathrm{Exp}(\lambda)$ i.i.d., with $\theta=\mathbb E[Y_n]=\frac1\lambda$.
+  \item In (a), with $n=100$ and $\bar Y_{100}=0.1$, use the limit law to find an interval
+    $[p_-,p_+]$ such that $\big|\arcsin\sqrt{\bar Y_n}-\arcsin\sqrt p\big|\le\frac{1.96}{2\sqrt n}$
+    if and only if $p\in[p_-,p_+]$ (an approximate $95\%$ confidence interval for $p$). Compare it
+    with the interval $\bar Y_n\pm1.96\sqrt{\bar Y_n(1-\bar Y_n)/n}$ obtained from
+    $\bar Y_n\approx\mathcal N(p,\frac{p(1-p)}n)$ with $p$ replaced by $\bar Y_n$. Which one stays
+    inside $[0,1]$ for every value of $\bar Y_n$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Variances and convergence in law]\label{ex:ct-variances}
+\medium Let $Y_n\sim b(\frac1n)$, $n\ge1$, as in \noteref{exa:ct-variances}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\sqrt nY_n\not\to0$ in $L^2$, in two ways, as the notes ask: with
+    part~(4) of \noteref{prop:ll-Lp}, and directly from the definition of convergence in $L^2$.
+  \item Let $Z_n\xrightarrow{\mathcal L}Z$, with $Z_n\in L^2$. Show that
+    $\mathbb E[Z^2]\le\liminf_n\mathbb E[Z_n^2]$. \emph{Hint:} for $M>0$, the function
+    $x\mapsto\min(x^2,M)$ is bounded and continuous; then let $M\to\infty$. Can the variances in
+    \noteref{exa:ct-variances} have a limit smaller than $1$ if, in addition,
+    $\mathbb E[Z_n]=0$ for every $n$?
+  \item For every $c\in(1,+\infty)$, construct $Z_n\in L^2$ with $\mathbb E[Z_n]=0$,
+    $Z_n\xrightarrow{\mathcal L}\mathcal N(0,1)$ and $\operatorname{var}(Z_n)\to c$. Construct also
+    one with $\operatorname{var}(Z_n)\to+\infty$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The vector central limit theorem and the vector delta method]\label{ex:ct-delta-vector}
+\hard This exercise proves \noteref{thm:ct-clt-vector} and \noteref{thm:ct-delta-multivariate},
+which the notes state without proof, from the following facts about random vectors in
+$\mathbb R^K$, which you may use: (i) the \emph{Cramér--Wold device}:
+$\underline Z_n\xrightarrow{\mathcal L}\underline Z$ if and only if
+$\underline t^T\underline Z_n\xrightarrow{\mathcal L}\underline t^T\underline Z$ for every
+$\underline t\in\mathbb R^K$; (ii) the vector forms of \noteref{prop:cl-continuous-mapping} and of
+\noteref{thm:cl-slutsky}: if $\underline Z_n\xrightarrow{\mathcal L}\underline Z$ in $\mathbb R^K$
+and $W_n\xrightarrow{\mathbb P}0$ (real), then $f(\underline Z_n)\xrightarrow{\mathcal L}f(\underline Z)$
+for continuous $f:\mathbb R^K\to\mathbb R$, and $W_n\,|\underline Z_n|\xrightarrow{\mathbb P}0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Deduce \noteref{thm:ct-clt-vector} from \noteref{thm:ct-clt}. Treat separately the
+    $\underline t$ with $\underline t^TC\underline t=0$.
+  \item Prove \noteref{thm:ct-delta-multivariate}, assuming only that $g$ is Borel and
+    differentiable at $\underline\theta$. \emph{Hint:} write
+    $g(\underline x)=g(\underline\theta)+\nabla g(\underline\theta)^T(\underline x-\underline\theta)
+    +|\underline x-\underline\theta|\,\omega(\underline x-\underline\theta)$ with
+    $\omega(\underline h)\to0$ as $\underline h\to\underline0$, as in the proof of
+    \noteref{thm:ct-delta}.
+  \item Let $(X_n)_{n\ge1}$ be i.i.d.\ with $\mathbb E[X_1^4]<+\infty$, mean $\mu$, variance
+    $\sigma^2$ and $\mu_4=\mathbb E[(X_1-\mu)^4]$, and let
+    $V_n=\frac1n\sum_{i=1}^n(X_i-\bar X_n)^2$. Show that
+    $\sqrt n(V_n-\sigma^2)\xrightarrow{\mathcal L}\mathcal N(0,\mu_4-\sigma^4)$. \emph{Hint:} reduce
+    to $\mu=0$, and apply (b) to the vectors $(X_i,X_i^2)^T$ with $g(x,y)=y-x^2$.
+  \item For $X_i\sim b(p)$, compute $\mu_4-\sigma^4$, and explain what happens at $p=\frac12$ in the
+    light of \noteref{thm:ct-delta-second-order} and of \noteref{fig:ct-delta}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How fast is the central limit theorem?]\label{ex:ct-kolmogorov}
+\medium This is a computational exercise. Use SciPy, or \texttt{kolmogorov\_distance} in
+\texttt{probnotes.clt}. Let $D_n=\sup_{x\in\mathbb R}|F_{S_n^*}(x)-\Phi(x)|$ (the Kolmogorov
+distance). The \emph{Berry--Esseen theorem}, which you may use without proof, says that
+$D_n\le C\frac{\rho}{\sigma^3\sqrt n}$, where $\rho=\mathbb E\big[|X_1-\mu|^3\big]$ and $C$ is a
+universal constant; one may take $C=0.4748$. The \emph{skewness} of $X_1$ is
+$\gamma=\mathbb E\big[(X_1-\mu)^3\big]/\sigma^3$.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X_i\sim\mathrm{Exp}(1)$, so that $S_n\sim\Gamma(n,1)$. Compute $D_n$ exactly (up to
+    the precision of a numerical maximisation) for $n=1,10,10^2,10^3,10^4$, and tabulate
+    $\sqrt nD_n$. Compare with the Berry--Esseen bound ($\rho=\frac{12}e-2$; prove it) and with
+    the constant $\frac{2}{6\sqrt{2\pi}}$, the maximum of the first correction term
+    $\frac{\gamma}{6\sqrt n}(1-x^2)\frac{e^{-x^2/2}}{\sqrt{2\pi}}$ to $\Phi$, where $\gamma=2$ is the
+    skewness of $\mathrm{Exp}(1)$.
+  \item Let $X_i\sim b(p)$, $p=\frac12$ and $p=0.1$. Explain why, for a lattice law, the supremum
+    defining $D_n$ is the largest of $|F_{S_n^*}(x_k)-\Phi(x_k)|$ and
+    $|F_{S_n^*}(x_k-)-\Phi(x_k)|$ over the atoms $x_k$ of $S_n^*$. Tabulate $\sqrt nD_n$ as in (a).
+    Why is it larger than for the exponential law, although $b(\frac12)$ is symmetric?
+  \item How large must $n$ be to guarantee $D_n\le0.01$, according to the Berry--Esseen bound, and
+    how large is actually enough, for $\mathrm{Exp}(1)$ and for $b(0.1)$? Compare with the ``$n\ge30$''
+    of \noteref{rem:ct-approximation}.
+  \item With seed $2026$, simulate $10^5$ values of $S_{10}^*$ for $\mathrm{Exp}(1)$ summands,
+    compute the Kolmogorov distance of their empirical distribution function from $\Phi$, and
+    compare it with the exact $D_{10}$. Is the difference compatible with the $95\%$ quantile
+    $\frac{1.36}{\sqrt{10^5}}$ of the Kolmogorov statistic (which you may use)?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The continuity correction in numbers]\label{ex:ct-continuity}
+\medium This is a computational exercise. Use SciPy, or \texttt{probnotes.clt}.
+\begin{enumerate}[label=(\alph*)]
+  \item For the election poll of \noteref{exa:ct-poll}, compute $\mathbb P(Y\ge51)$ exactly, and the
+    approximations $1-\Phi\big(\frac{50+\varepsilon-40}{\sqrt{24}}\big)$ for $\varepsilon=0,\frac12,1$,
+    with $z$ unrounded and with $z$ cut to two decimals, as in the notes. Find the $\varepsilon$ for
+    which the approximation is exact.
+  \item For $Y\sim B(n,p)$ let
+    $E_n(\varepsilon)=\max_{0\le k\le n}\big|\mathbb P(Y\le k)-\Phi\big(\frac{k+\varepsilon-np}{\sqrt{np(1-p)}}\big)\big|$.
+    Tabulate $E_n(0)$ and $E_n(\frac12)$ for $p=\frac12$ and $p=0.1$, $n=10,30,10^2,300,10^3$, and
+    estimate the order of each in $n$. For which $p$ does the continuity correction improve the
+    order?
+  \item Return to \noteref{exa:ct-poisson-sum}, and let
+    \[
+      a_n=e^{-n}\sum_{k=0}^n\frac{n^k}{k!}-\frac12 .
+    \]
+    Compute $\sqrt n\,a_n$ for $n=10,10^2,10^3,10^4$ and compare it with
+    $\frac2{3\sqrt{2\pi}}=0.26596$. Explain the two parts
+    $\frac2{3\sqrt{2\pi}}=\frac1{2\sqrt{2\pi}}+\frac1{6\sqrt{2\pi}}$: the first comes from the continuity
+    correction, $\mathbb P(S_n\le n)=\mathbb P(S_n\le n+\frac12)$, the second from the skewness
+    $\gamma=1$ of $\mathcal P(1)$ through the correction term of \exref{ex:ct-kolmogorov}~(a). (This
+    limit can be proved, for instance from Ramanujan's problem on $\sum_{k<n}\frac{n^k}{k!}$ and
+    Stirling's formula; here you only check it numerically.)
+  \item Generalise \noteref{exa:ct-poisson-sum}: show that
+    $e^{-n}\sum_{0\le k\le n+x\sqrt n}\frac{n^k}{k!}\to\Phi(x)$ for every $x\in\mathbb R$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The delta method in numbers]\label{ex:ct-delta-numerics}
+\medium This is a computational exercise. Use SciPy, or \texttt{probnotes.clt}.
+\begin{enumerate}[label=(\alph*)]
+  \item In \noteref{exa:ct-sqrt-poisson}, $n\bar X_n=S_n\sim\mathcal P(n\lambda)$. Compute
+    exactly, by summing over the Poisson probabilities, the mean and the variance of
+    $\sqrt n(\sqrt{\bar X_n}-\sqrt\lambda)$ for $\lambda=0.5,2,10$ and $n=10,10^2,10^3$. When is
+    the variance within $1\%$ of $\frac14$? Check one entry by simulation, with seed $2026$ and
+    $10^5$ draws, and a tolerance of three standard errors (the standard error of a sample variance
+    is about $s^2\sqrt{2/m}$ for $m$ nearly Gaussian draws).
+  \item Let $X_i\sim b(\frac12)$ and $g(x)=x(1-x)$. Show that
+    $n(g(\bar X_n)-\frac14)=-\frac14(S_n^*)^2$ exactly, so that its mean is $-\frac14$ for every
+    $n$. Compute exactly $\mathbb P\big(n(g(\bar X_n)-\frac14)\le-\frac14\big)$ for $n=10,10^2,10^3$,
+    and compare with the limit given by \noteref{thm:ct-delta-second-order}.
+  \item Now let $X_i\sim b(p)$ with $p\ne\frac12$, and the same $g$. What does
+    \noteref{thm:ct-delta} give? Compute exactly the variance of $\sqrt n(g(\bar X_n)-g(p))$ for
+    $p=0.3$, $n=10^2,10^3$, and for $p=0.49$, $n=10^2,10^4,10^6$, and compare with the limit. Explain
+    why the first-order delta method is poor for $p=0.49$ unless $n$ is huge. \emph{Hint:} compare
+    the two terms $g'(p)(\bar X_n-p)$ and $\frac{g''(p)}2(\bar X_n-p)^2$ of the expansion.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Overbooking (in the style of Ross, Ch.~5)]\label{ex:ct-overbooking}
+\medium An airline flies an aircraft with $180$ seats. Each ticket holder shows up for the flight
+with probability $0.92$, independently of the others, so the number $Y$ of passengers who show up
+when $n$ tickets are sold is $B(n,0.92)$. The flight is \emph{overbooked} if $Y>180$.
+\begin{enumerate}[label=(\alph*)]
+  \item The airline sells $190$ tickets. Check the rule of \noteref{rem:ct-normal-approximation}, and
+    approximate the probability that the flight is overbooked with the normal approximation, with
+    and without the continuity correction. Compare with the exact value.
+  \item The number of no-shows $W=n-Y$ is $B(n,0.08)$, with a small $p$. Approximate the same
+    probability with a Poisson law (\noteref{exa:cl-binomial-poisson}). Which approximation is better
+    here?
+  \item Find the largest $n$ for which the probability of overbooking is at most $0.05$, first with the
+    normal approximation with continuity correction (solve a quadratic equation in $\sqrt n$), then
+    exactly.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[An insurance portfolio (in the style of Ross, Ch.~8)]\label{ex:ct-insurance}
+\hard This is partly a computational exercise. An insurer holds $2500$ independent policies. In a
+year, each policy produces a claim with probability $0.05$, and then the amount of the claim is
+exponential with mean $8000$ (in dollars); otherwise it produces nothing. Let $T$ be the total amount
+claimed in a year.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the mean and the standard deviation of the claim $X_i$ of one policy, and of $T$.
+  \item Approximate $\mathbb P(T>1.2\cdot10^6)$ with the central limit theorem.
+  \item Find, with the central limit theorem, the reserve $r$ such that $\mathbb P(T>r)\approx0.01$.
+    Compare with the reserve guaranteed by the one-sided Chebyshev inequality
+    $\mathbb P(T-\mathbb E[T]\ge a)\le\frac{\operatorname{var}(T)}{\operatorname{var}(T)+a^2}$, which you may use.
+  \item Given the number $M\sim B(2500,0.05)$ of claims, $T$ is a sum of $M$ independent exponentials,
+    so $\mathbb P(T>x)=\sum_{m\ge1}\mathbb P(M=m)\,\mathbb P(\Gamma_m>x)$ with
+    $\Gamma_m\sim\Gamma(m,\frac1{8000})$. Justify this formula, compute the exact values of (b) and of
+    $\mathbb P(T>r)$ for the $r$ of (c), and explain the direction of the error of the central limit
+    theorem. \emph{Hint:} the skewness of $X_i$.
+  \item How many policies of this kind must the insurer hold so that, by the central limit theorem,
+    $\mathbb P(T>1.1\,\mathbb E[T])\le0.01$?
+\end{enumerate}
+\end{exercise}

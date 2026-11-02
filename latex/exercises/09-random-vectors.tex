@@ -1,0 +1,213 @@
+% Exercises for Chapter 9 (transformations of random vectors). Statements only: solutions are
+% kept privately. Throughout, (Omega, F, P) is a probability space, m_ = m (x) m is Lebesgue measure
+% on B(R^2), and the laws are written as in the notes: P(lambda) Poisson, B(n,p) binomial, b(p)
+% Bernoulli, G(p) geometric on N*, Pascal(n,p), U(0,1), Exp(lambda) = Gamma(1,lambda), Gamma(alpha,
+% lambda) with lambda a rate, Beta(alpha,beta), chi^2(n).
+
+\begin{exercise}[Items left to the reader in the worked exercises]\label{ex:rv-worked-details}
+\easy These are the computations that the worked exercises of the notes leave to the reader.
+\begin{enumerate}[label=(\alph*)]
+  \item In \noteref{exa:rv-integer-part}, b): let $X\sim\mathrm{Exp}(\lambda)$ and $Z=\frac12[2X]$.
+    Show that $\mathbb P(Z=\frac k2)=(1-e^{-\lambda/2})e^{-\lambda k/2}$ for $k\in\mathbb N$, and
+    recognise the law of $2Z+1$. Compute $\mathbb E[Z]$, and check that
+    $\mathbb E\big[[X]\big]\le\mathbb E[Z]\le\mathbb E[X]$, as it must be.
+  \item In \noteref{exa:rv-poisson-bernoulli}, c): show that $\operatorname{cov}(X,U)=\lambda p$ and
+    \[
+      \rho(X,U)=\sqrt{\frac p{1+\lambda(1-p)}} .
+    \]
+    What are the limits as $p\to1$ and as $p\to0$? Explain them.
+  \item In \noteref{exa:rv-laplace-uniform}, a): find the density of $U=\sqrt{|X|}$ again with
+    \noteref{cor:tr-piecewise}, using the pieces $(-\infty,0)$ and $(0,+\infty)$ of
+    $\mathbb R\setminus\{0\}$.
+  \item In \noteref{exa:rv-uniform-products}, a): find the law of $Z=-\log X$, $X\sim U(0,1)$,
+    again by computing its distribution function $F_Z$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Minimum and maximum]\label{ex:rv-min-max}
+\easy This is the exercise that the notes leave to the reader in
+\noteref{sec:rv-real-functions}. Let $Z=(X,Y)$ be a random vector with joint distribution function
+$F_{(X,Y)}(x,y)=\mathbb P(X\le x,\,Y\le y)$, let $F_X$, $F_Y$ be the marginal ones, and let
+$T_1=\min(X,Y)$ and $T_2=\max(X,Y)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $F_{T_2}(t)=F_{(X,Y)}(t,t)$ and $F_{T_1}(t)=F_X(t)+F_Y(t)-F_{(X,Y)}(t,t)$ for every
+    $t\in\mathbb R$, and write both when $X\indep Y$.
+  \item Let $X$ and $Y$ be independent, with the same continuous density $f$ and distribution function
+    $F$. Show that $T_1$ and $T_2$ have the densities $2f(1-F)$ and $2fF$. Draw the set
+    $h^{-1}((-\infty,t])$ of the first route of \noteref{sec:rv-real-functions} for $h=\min$ and for
+    $h=\max$.
+  \item (In the style of Ross, Ch.~6.) A device has two components, with independent lifetimes $X\sim\mathrm{Exp}(\lambda)$ and
+    $Y\sim\mathrm{Exp}(\mu)$. Mounted in series, the device works as long as both components work;
+    in parallel, as long as one of them does. Show that the lifetime in series has law
+    $\mathrm{Exp}(\lambda+\mu)$; find the density and the mean of the lifetime in parallel; and show
+    that $\mathbb P(X<Y)=\frac\lambda{\lambda+\mu}$.
+  \item Let $X_1,\dots,X_n$ be independent with law $U(0,1)$. Show that $\max_iX_i\sim\mathrm{Beta}(n,1)$
+    and $\min_iX_i\sim\mathrm{Beta}(1,n)$ (\noteref{def:rv-beta}).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Moments of the Beta law]\label{ex:rv-beta-moments}
+\easy Let $T\sim\mathrm{Beta}(\alpha,\beta)$, with $\alpha,\beta>0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\Var(T)=\dfrac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$, as the notes compute
+    $\mathbb E[T]$ (this is the computation they leave as an exercise).
+  \item Show that $\mathbb E[T^k]=\prod_{j=0}^{k-1}\frac{\alpha+j}{\alpha+\beta+j}$ for $k\in\mathbb N^*$.
+  \item Find the moments of (b) again without computing any Beta integral: with $X$, $Y$, $S$ as in
+    \noteref{prop:rv-gamma-beta}, $X=ST$ with $S\indep T$; compute $\mathbb E[X^k]$ and
+    $\mathbb E[S^k]$ from the Gamma densities.
+  \item For $\alpha,\beta>1$, show that the density of $T$ has a unique maximum, at
+    $\frac{\alpha-1}{\alpha+\beta-2}$. For which $(\alpha,\beta)$ is the density bounded? Match the four
+    shapes of \noteref{fig:rv-beta} with the parameter ranges of its caption.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The notable sums]\label{ex:rv-notable-sums}
+\hard The notes state \noteref{prop:rv-notable-discrete} and a) of \noteref{prop:rv-notable-sums}
+without proof, and use the independence of $X_1^2+\dots+X_k^2$ and $X_{k+1}^2$ in d). You may use
+\noteref{thm:rv-discrete-sum}, \noteref{prop:rv-sum-density}, \noteref{prop:rv-functions-independent},
+and the uniqueness result quoted in \noteref{rem:pm-cdf-independence}: \emph{two probability measures
+that agree on a family of sets closed under finite intersections agree on the $\sigma$-algebra it
+generates.}
+\begin{enumerate}[label=(\alph*)]
+  \item Prove 1) and 2) of \noteref{prop:rv-notable-discrete}. \emph{Hint for 2):} Vandermonde's
+    identity $\sum_i\binom ni\binom m{k-i}=\binom{n+m}k$.
+  \item Prove 3) and 4). \emph{Hint for 4):} show that
+    $\sum_{j=n}^{k-m}\binom{j-1}{n-1}\binom{k-j-1}{m-1}=\binom{k-1}{n+m-1}$ by counting the subsets of
+    $\{1,\dots,k-1\}$ with $n+m-1$ elements according to their $n$-th smallest element.
+  \item Prove a) of \noteref{prop:rv-notable-sums} with the convolution formula, completing the
+    square in the exponent.
+  \item Let $X_1,\dots,X_{k+1}$ be independent. Show that the random vector $(X_1,\dots,X_k)$ is
+    independent of $X_{k+1}$, in the sense of \noteref{prop:rv-functions-independent}. \emph{Hint:} fix $B\in\mathcal B(\mathbb R)$ with
+    $\mathbb P(X_{k+1}\in B)>0$, and compare two probability measures on $\mathcal B(\mathbb R^k)$:
+    \[
+      C\mapsto\mathbb P\big((X_1,\dots,X_k)\in C\mid X_{k+1}\in B\big)\qquad\text{and}\qquad
+      \mathbb P_{(X_1,\dots,X_k)} .
+    \]
+    The $\sigma$-algebra $\mathcal B(\mathbb R^k)$ is generated by the rectangles
+    $A_1\times\dots\times A_k$.
+  \item Deduce d) of \noteref{prop:rv-notable-sums} by induction on $n$, and show that the sum of
+    $n$ independent $\mathrm{Exp}(\lambda)$ variables has law $\Gamma(n,\lambda)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The piecewise transformation theorem]\label{ex:rv-piecewise}
+\medium The notes state \noteref{thm:rv-piecewise} without proof.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove it. \emph{Hint:} for $B\in\mathcal B(\mathbb R^2)$,
+    $\mathbb P(W\in B)=\sum_{i=1}^m\mathbb P\big(Z\in A_i,\ g_i(Z)\in B\big)$; apply
+    \noteref{thm:rv-jacobi} to the inverse $\Phi_i$ of $g_i$, on the open set $g(A_i)$, as in the
+    proof of \noteref{thm:rv-density}.
+  \item Let $X$ and $Y$ be independent with the same density $f$, and $W=(\min(X,Y),\max(X,Y))$.
+    Using the pieces $A_1=\{x<y\}$ and $A_2=\{x>y\}$, show that
+    $f_W(u,v)=2f(u)f(v)\1_{\{u<v\}}$. Deduce the densities of \exref{ex:rv-min-max}, (b), again.
+  \item Let $X$ and $Y$ be independent with law $\mathcal N(0,1)$, and $W=(X^2,Y^2)$. Using the four
+    open quadrants, show that
+    \[
+      f_W(u,v)=\frac1{2\pi\sqrt{uv}}\,e^{-(u+v)/2}\,\1_{(0,+\infty)^2}(u,v),
+    \]
+    and deduce once more that $X^2$ and $Y^2$ are independent with law $\chi^2(1)$
+    (\noteref{exa:tr-chi-square}).
+  \item Why does \noteref{thm:rv-density} not apply to $g(x,y)=(x+y,\,xy)$ on $\mathbb R^2$? Find an
+    almost sure partition of $\mathbb R^2$ on whose pieces it applies.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Products of uniforms, and a sample size]\label{ex:rv-products-uniforms}
+\medium This is a computational exercise; (a) and (b) are item d) of
+\noteref{exa:rv-uniform-products}, which the notes leave to the reader. Let $X,Y,X_1,X_2,\dots$ be
+independent with law $U(0,1)$, $U=XY$ and $U_n=X_1\cdots X_n$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the density of $U$ with the vector transformation $(U,V)=(XY,X)$: show that
+    $f_{(U,V)}(u,v)=\frac1v\1_{\{0<u<v<1\}}$, and integrate out $v$.
+  \item Find it again by computing $F_U(u)=\mathbb P(XY\le u)$ directly, as the area of a subset of the
+    unit square.
+  \item Show that $F_{U_n}(u)=u\sum_{k=0}^{n-1}\frac{(-\log u)^k}{k!}$ for $0<u\le1$, in two ways: by
+    differentiating, and from the Erlang distribution function of \noteref{prop:tr-erlang}, since
+    $\{U_n\le u\}=\{T_n\ge-\log u\}$ with $T_n\sim\Gamma(n,1)$.
+  \item The Dvoretzky--Kiefer--Wolfowitz inequality with Massart's constant (P.~Massart, \emph{Ann.\
+    Probab.}\ 18 (1990), 1269--1283) says
+    that the empirical distribution function $F_N$ of $N$ independent samples from a continuous
+    distribution function $F$ satisfies $\mathbb P\big(\sup_x|F_N(x)-F(x)|>\varepsilon\big)\le
+    2e^{-2N\varepsilon^2}$ whenever $e^{-2N\varepsilon^2}\le\frac12$. Find the smallest $N$ for which
+    this bound guarantees that $\sup_x|F_N-F|$ exceeds $\varepsilon=0.005$ with probability at most
+    $\delta=0.01$. With this $N$, simulate $U_3$ and compute $\sup_x|F_N-F_{U_3}|$ for the seeds
+    $0,1,\dots,99$. In how many runs does it exceed $\varepsilon$? Is this consistent with $\delta$?
+    Compute also the distance from $F_{U_2}$, the wrong law, in one run.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Independent, not just uncorrelated]\label{ex:rv-gamma-beta-sim}
+\medium This is a computational exercise on \noteref{prop:rv-gamma-beta}. For positive independent
+$X$ and $Y$, let $S=X+Y$ and $T=\frac X{X+Y}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that if $X$ and $Y$ have the same law and $\mathbb E[X]<+\infty$, then
+    $\operatorname{cov}(S,T)=0$. \emph{Hint:} $(X,Y)$ and $(Y,X)$ have the same law.
+  \item Let $X$ and $Y$ be independent with law $U(0,1)$. Compute $\mathbb P(S>1.9)$,
+    $\mathbb P(T<0.1)$ and $\mathbb P(S>1.9,\ T<0.1)$, and conclude that $S$ and $T$ are not
+    independent.
+  \item Write a function that returns, for $N$ sampled pairs $(S_k,T_k)$, the largest value of
+    $|F_N(s,t)-F^S_N(s)F^T_N(t)|$ over the grid of the sample quantiles of levels
+    $\frac1{40},\dots,\frac{39}{40}$ of each coordinate, where $F_N$ is the empirical joint distribution
+    function and $F^S_N$, $F^T_N$ the empirical marginal ones. For $N=10^3,10^4,10^5,10^6$ (seed $2026$),
+    compute this gap and the sample correlation of $S$ and $T$ in three cases: $X\sim\Gamma(2,1)$ and
+    $Y\sim\Gamma(3,1)$; $X$, $Y$ uniform on $(0,1)$; $X\sim\Gamma(2,1)$ and $Y\sim\Gamma(3,3)$.
+  \item Which of the three pairs are independent? What do the numbers prove, and what do they only
+    support? E.~Lukacs (\emph{Ann.\ Math.\ Statist.}\ 26 (1955), 319--324) proved that if $X$ and
+    $Y$ are independent, positive and not
+    constant, and $S\indep T$, then $X$ and $Y$ have Gamma laws with the same parameter $\lambda$. Which
+    of the three cases does this theorem decide?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sums by convolution]\label{ex:rv-convolution}
+\medium This is a computational exercise.
+\begin{enumerate}[label=(\alph*)]
+  \item Write a function that computes the discrete convolution of two densities on
+    $\{0,1,\dots,N\}$, and use it to check 1)--3) of \noteref{prop:rv-notable-discrete} numerically.
+    Truncate the Poisson laws at $30$: which values of the convolution are exact, and why?
+  \item Compute the law of the sum of $10$ fair dice. Give the probability that the sum is $35$ as an
+    exact fraction, and the most likely value of the sum. Check by simulating $10^6$ throws of ten dice
+    (seed $2026$), with a $95\%$ confidence interval.
+  \item For densities $f_X$, $f_Y$ on $(0,+\infty)$ and a step $h>0$, let
+    $x_k=(k+\frac12)h$ and approximate $(f_X*f_Y)$ at the points $s_j=(j+1)h$ by
+    $h\sum_{k+l=j}f_X(x_k)f_Y(x_l)$, a convolution of arrays. Apply it to $X\sim\Gamma(2,1)$ and
+    $Y\sim\Gamma(3,1)$, with $h=0.01$ and $h=0.005$, and compare with the density of $\Gamma(5,1)$ on
+    $(0,30]$: what is the order of the error in $h$? Do the same for $X,Y\sim\chi^2(1)$ with $h=0.01$
+    and $h=0.001$, comparing on $[0.5,20]$ with the density of $\chi^2(2)=\mathrm{Exp}(\frac12)$. Why is
+    the error so much larger? Finally, show that for $X,Y\sim\mathrm{Exp}(1)$ the approximation is exact
+    at every $s_j$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Polar coordinates and the Box--Muller method]\label{ex:rv-polar}
+\hard (in the style of Ross, Ch.~6) Let $X$ and $Y$ be independent with law $\mathcal N(0,1)$, and let
+$(R,\Theta)$ be the polar coordinates of $(X,Y)$: $X=R\cos\Theta$, $Y=R\sin\Theta$, with $R>0$ and
+$\Theta\in(0,2\pi)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\Phi(r,\theta)=(r\cos\theta,r\sin\theta)$ is a $C^1$-diffeomorphism of
+    $(0,+\infty)\times(0,2\pi)$ onto $\mathbb R^2\setminus\{(x,0):x\ge0\}$, with
+    $\det J_\Phi(r,\theta)=r$. Why is $\Phi$ not a $C^1$-diffeomorphism on $(0,+\infty)\times\mathbb R$
+    (\noteref{def:rv-diffeomorphism})?
+  \item Show that $(R,\Theta)$ has density $\frac r{2\pi}e^{-r^2/2}$ on $(0,+\infty)\times(0,2\pi)$.
+    Deduce that $R$ and $\Theta$ are independent, that $\Theta\sim U(0,2\pi)$, and that
+    $R^2\sim\mathrm{Exp}(\frac12)$. Compare with d) of \noteref{prop:rv-notable-sums}.
+  \item (Box--Muller.) Let $U_1,U_2$ be independent with law $U(0,1)$. Show that
+    $\sqrt{-2\log U_1}\cos(2\pi U_2)$ and $\sqrt{-2\log U_1}\sin(2\pi U_2)$ are independent with law
+    $\mathcal N(0,1)$.
+  \item Show that $\mathbb P(X^2+Y^2\le1)=1-e^{-1/2}$, and that $Y/X$ has the Cauchy density
+    $\frac1{\pi(1+x^2)}$: first find the law of $\tan\Theta$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sums of uniforms]\label{ex:rv-uniform-sums}
+\medium (in the style of Ross, Ch.~6) Let $U_1,U_2,\dots$ be independent with law $U(0,1)$, and
+$S_n=U_1+\dots+U_n$.
+\begin{enumerate}[label=(\alph*)]
+  \item With \noteref{prop:rv-sum-density}, find the densities of $S_2$ and $S_3$, and draw them.
+  \item Show by induction that $\mathbb P(S_n\le t)=\frac{t^n}{n!}$ for $0\le t\le1$.
+  \item Let $N=\min\{n\ge1:S_n>1\}$, the number of uniforms needed to exceed $1$. Show that
+    $\mathbb P(N>n)=\frac1{n!}$ for $n\in\mathbb N$, find the law of $N$, and show that $\mathbb E[N]=e$.
+  \item Simulate $N$ $10^6$ times (seed $2026$) and give a $95\%$ confidence interval for
+    $\mathbb E[N]$. Does it contain $e$?
+\end{enumerate}
+\end{exercise}

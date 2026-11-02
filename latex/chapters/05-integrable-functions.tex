@@ -1,5 +1,697 @@
-\begin{planned}
-  \item integrable functions of variable sign and properties of the integral
-  \item Lebesgue's dominated convergence theorem
-  \item Lebesgue versus Riemann; integrals against discrete measures
-\end{planned}
+% Chapter 5: Integrable functions and dominated convergence.
+% Translation of Paola Siri's handwritten notes, PDF pages 62-77: section 3 ("Integrazione di
+% funzioni misurabili di segno variabile") of the part "Integrazione secondo Lebesgue", with
+% the properties of the integral, Lebesgue's dominated convergence theorem, and Examples 1
+% (Lebesgue versus Riemann) and 2 (integrals with respect to a discrete measure).
+
+\Cref{ch:04-integral} integrated non-negative measurable functions. This chapter, the third
+section of the part of the notes on Lebesgue integration, removes the sign condition: a
+function is split into its positive and negative parts, and its integral is the difference of
+two integrals of non-negative functions, provided they are not both infinite. We then prove
+the properties of the integral, and the theorem that makes the Lebesgue integral so
+convenient, Lebesgue's dominated convergence theorem. Two examples close the chapter: the
+comparison with the Riemann integral on $\mathbb R$, where improper integrals need care, and
+the integral with respect to a discrete measure, which is a series: there a function is
+integrable exactly when the series converges absolutely.
+
+Throughout, $(X,\mathcal A,\mu)$ is a measure space.
+
+\section{Integration of measurable functions of variable sign}\label{sec:ig-signed}
+
+Let $f:X\to\overline{\mathbb R}$ be measurable, and write
+\[
+  f=f^+-f^-,\qquad f^+=\max(f,0),\quad f^-=-\min(f,0),
+\]
+where $f^+,f^-\ge0$ are measurable (\cref{cor:mf-parts}). Their integrals
+$\int_Xf^+\,\dd\mu$ and $\int_Xf^-\,\dd\mu$ are defined, with values in $[0,+\infty]$
+(\cref{def:in-integral}).
+
+\begin{definition}[Lebesgue integral; integrable function]\label{def:ig-integrable}
+Let $f:X\to\overline{\mathbb R}$ be measurable. If $\int_Xf^+\,\dd\mu<+\infty$ or
+$\int_Xf^-\,\dd\mu<+\infty$, we can define the \emph{Lebesgue integral of $f$} as
+\[
+  \int_Xf\,\dd\mu=\int_Xf^+\,\dd\mu-\int_Xf^-\,\dd\mu\ \in\overline{\mathbb R}.
+\]
+$f$ is called \emph{Lebesgue integrable} if $\int_Xf^+\,\dd\mu<+\infty$ and
+$\int_Xf^-\,\dd\mu<+\infty$; then $\int_Xf\,\dd\mu\in\mathbb R$. We then write
+$f\in\mathcal L^1(X,\mathcal A,\mu)$.
+\end{definition}
+
+If $f\ge0$, then $f^-=0$ and $f^+=f$, so this is the integral of \cref{def:in-integral}, and $f$
+is integrable in the sense of \cref{ch:04-integral} exactly when it is integrable here. If both
+$\int_Xf^+\,\dd\mu$ and $\int_Xf^-\,\dd\mu$ are infinite, $\int_Xf\,\dd\mu$ is not defined.
+
+\begin{proposition}\label{prop:ig-abs}
+$f$ is integrable if and only if $|f|$ is integrable, and in this case
+\[
+  \Big|\int_Xf\,\dd\mu\Big|\le\int_X|f|\,\dd\mu .
+\]
+\end{proposition}
+
+\begin{proof}
+$|f|=f^++f^-$, so by additivity for non-negative functions (\cref{prop:in-additivity})
+$\int_X|f|\,\dd\mu=\int_Xf^+\,\dd\mu+\int_Xf^-\,\dd\mu$, and the left side is finite exactly
+when both terms on the right are. Hence $f$ is integrable $\iff$ $f^+$ and $f^-$ are integrable
+$\iff$ $|f|=f^++f^-$ is integrable. In that case
+\begin{align*}
+  \Big|\int_Xf\,\dd\mu\Big|&=\Big|\int_Xf^+\,\dd\mu-\int_Xf^-\,\dd\mu\Big|
+  \le\Big|\int_Xf^+\,\dd\mu\Big|+\Big|\int_Xf^-\,\dd\mu\Big|\\
+  &=\int_Xf^+\,\dd\mu+\int_Xf^-\,\dd\mu=\int_X(f^++f^-)\,\dd\mu=\int_X|f|\,\dd\mu,
+\end{align*}
+where the last but one equality is again additivity for non-negative functions.
+\end{proof}
+
+\begin{definition}[Integral over a set]\label{def:ig-integral-set}
+Let $E\in\mathcal A$. We define
+\begin{align*}
+  \int_Ef\,\dd\mu&=\int_Xf\1_E\,\dd\mu=\int_X(f\1_E)^+\,\dd\mu-\int_X(f\1_E)^-\,\dd\mu\\
+  &=\int_Xf^+\1_E\,\dd\mu-\int_Xf^-\1_E\,\dd\mu=\int_Ef^+\,\dd\mu-\int_Ef^-\,\dd\mu,
+\end{align*}
+whenever one of the last two integrals is finite, since $(f\1_E)^+=f^+\1_E$ and
+$(f\1_E)^-=f^-\1_E$. If $f$ is integrable, so is $f\1_E$, because $|f\1_E|\le|f|$.
+\end{definition}
+
+\begin{remark}\label{rem:ig-difference}
+Let $f$ be integrable. If $f=\varphi-\psi$, with $\varphi,\psi\ge0$ measurable and
+\emph{integrable}, then
+\[
+  \int_Xf\,\dd\mu=\int_X\varphi\,\dd\mu-\int_X\psi\,\dd\mu .
+\]
+Indeed, $f=\varphi-\psi=f^+-f^-$, with $f^+$ and $f^-$ integrable. Hence
+$\varphi+f^-=\psi+f^+$, a non-negative integrable function,\footnote{At a point where $f$ is
+infinite, one of $\varphi,\psi$ is infinite and the other finite, and both sides equal
+$+\infty$; elsewhere the identity is the rearrangement of $\varphi-\psi=f^+-f^-$.} and
+\[
+  \int_X\varphi\,\dd\mu+\int_Xf^-\,\dd\mu=\int_X(\varphi+f^-)\,\dd\mu=\int_X(\psi+f^+)\,\dd\mu
+  =\int_X\psi\,\dd\mu+\int_Xf^+\,\dd\mu,
+\]
+by additivity for non-negative functions. Since all these integrals are finite, thanks to
+integrability, we can rearrange:
+\[
+  \int_X\varphi\,\dd\mu-\int_X\psi\,\dd\mu=\int_Xf^+\,\dd\mu-\int_Xf^-\,\dd\mu=\int_Xf\,\dd\mu .
+\]
+\end{remark}
+
+\subsection{Properties of the integral}\label{sec:ig-properties}
+
+\begin{proposition}[Linearity and monotonicity]\label{prop:ig-linearity}
+Let $f$ and $g$ be integrable.
+\begin{enumerate}[label=\arabic*)]
+  \item If $\alpha\in\mathbb R$, then $\alpha f$ is integrable and
+    $\int_X\alpha f\,\dd\mu=\alpha\int_Xf\,\dd\mu$.
+  \item If $f+g$ is defined at every point (for instance, if $f$ and $g$ are real-valued),
+    then $f+g$ is integrable and
+    $\int_X(f+g)\,\dd\mu=\int_Xf\,\dd\mu+\int_Xg\,\dd\mu$.%
+    \footnote{The handwritten notes do not say where $f+g$ is defined; the condition is added
+    here. In general $f+g$ is undefined where one function is $+\infty$ and the other
+    $-\infty$, a negligible set by \cref{prop:ig-ae}, and \cref{rem:ig-null-sets} explains
+    why its values there do not matter.}
+  \item If $f\le g$ a.e., then $\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}\footnote{The handwritten notes leave the case $\alpha<0$ of 1), the last step of
+2) and the proof of 3) as exercises (``finish as an exercise''); they are completed here,
+because the rest of the book uses them.}
+1) $f$ integrable $\Rightarrow$ $|f|$ integrable (\cref{prop:ig-abs}) $\Rightarrow$
+$|\alpha f|=|\alpha|\,|f|$ integrable (\cref{prop:in-properties}) $\Rightarrow$ $\alpha f$
+integrable. If $\alpha=0$ there is nothing to prove. If $\alpha>0$, then $(\alpha f)^+=\alpha f^+$
+and $(\alpha f)^-=\alpha f^-$, so
+\begin{align*}
+  \int_X\alpha f\,\dd\mu&=\int_X(\alpha f)^+\,\dd\mu-\int_X(\alpha f)^-\,\dd\mu
+  =\int_X\alpha f^+\,\dd\mu-\int_X\alpha f^-\,\dd\mu\\
+  &=\alpha\int_Xf^+\,\dd\mu-\alpha\int_Xf^-\,\dd\mu=\alpha\int_Xf\,\dd\mu,
+\end{align*}
+by homogeneity for non-negative functions (\cref{prop:in-properties}), since $f^+,f^-\ge0$ and
+$\alpha>0$. If $\alpha<0$, then $(\alpha f)^+=-\alpha f^-$ and $(\alpha f)^-=-\alpha f^+$, with
+$-\alpha>0$, so in the same way
+\[
+  \int_X\alpha f\,\dd\mu=(-\alpha)\int_Xf^-\,\dd\mu-(-\alpha)\int_Xf^+\,\dd\mu
+  =\alpha\Big(\int_Xf^+\,\dd\mu-\int_Xf^-\,\dd\mu\Big)=\alpha\int_Xf\,\dd\mu .
+\]
+
+2) $f,g$ integrable $\Rightarrow$ $|f|,|g|$ integrable $\Rightarrow$ $|f|+|g|$ integrable
+(\cref{prop:in-additivity}) $\Rightarrow$ $|f+g|\le|f|+|g|$ integrable (monotonicity,
+\cref{prop:in-properties}) $\Rightarrow$ $f+g$ integrable. In general
+$(f+g)^+\ne f^++g^+$ and $(f+g)^-\ne f^-+g^-$. However
+\[
+  f+g=\underbrace{(f^++g^+)}_{\varphi\ \ge\ 0}-\underbrace{(f^-+g^-)}_{\psi\ \ge\ 0},
+\]
+with $\varphi$ and $\psi$ integrable, so by \cref{rem:ig-difference} and additivity for
+non-negative functions,
+\begin{align*}
+  \int_X(f+g)\,\dd\mu&=\int_X(f^++g^+)\,\dd\mu-\int_X(f^-+g^-)\,\dd\mu\\
+  &=\int_Xf^+\,\dd\mu-\int_Xf^-\,\dd\mu+\int_Xg^+\,\dd\mu-\int_Xg^-\,\dd\mu
+  =\int_Xf\,\dd\mu+\int_Xg\,\dd\mu .
+\end{align*}
+
+3) Observe that $f\le g$ a.e.\ implies $f^+\le g^+$ a.e.\ and $f^-\ge g^-$ a.e.: at every point
+where $f\le g$, $\max(f,0)\le\max(g,0)$ and $-\min(f,0)\ge-\min(g,0)$. By monotonicity of the
+integral of non-negative functions with respect to inequalities a.e.\ (\cref{prop:in-ae}),
+$\int_Xf^+\,\dd\mu\le\int_Xg^+\,\dd\mu$ and $\int_Xf^-\,\dd\mu\ge\int_Xg^-\,\dd\mu$, and
+subtracting the second inequality from the first gives $\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+\end{proof}
+
+\begin{proposition}\label{prop:ig-ae}
+Let $f$ and $g$ be integrable.
+\begin{enumerate}[label=\arabic*)]
+  \item $\mu(\{f=\pm\infty\})=\mu(\{|f|=+\infty\})=0$: $f$ is finite a.e.
+  \item If $f=0$ a.e., then $\int_Xf\,\dd\mu=0$ (the converse does not hold). Moreover, if $f=g$
+    a.e., then $\int_Xf\,\dd\mu=\int_Xg\,\dd\mu$.
+  \item If $E\in\mathcal A$ and $\mu(E)=0$, then $\int_Ef\,\dd\mu=0$.
+  \item $f=0$ a.e.\ if and only if $\int_Af\,\dd\mu=0$ for every $A\in\mathcal A$. Moreover,
+    $f=g$ a.e.\ if and only if $\int_Af\,\dd\mu=\int_Ag\,\dd\mu$ for every $A\in\mathcal A$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+1)--2) follow from the same properties for non-negative functions (\cref{prop:in-ae}), and 3)
+has the same proof as for $f\ge0$.\footnote{The handwritten notes leave 1)--3), and the step
+$f^-=0$ a.e.\ in the proof of 4), as exercises; the short proofs are added here.} In detail: 1) $|f|$ is non-negative and integrable, so
+$|f|<+\infty$ a.e., and $\{f=\pm\infty\}=\{|f|=+\infty\}$. 2) If $f=0$ a.e., then $f^+=0$ and
+$f^-=0$ a.e., because $\{f^\pm\ne0\}\subseteq\{f\ne0\}$; so $\int_Xf^\pm\,\dd\mu=0$ and
+$\int_Xf\,\dd\mu=0$. The converse fails: on $(\mathbb R,\mathcal B(\mathbb R),m)$,
+$f=\1_{[0,1)}-\1_{[1,2)}$ has $\int_{\mathbb R}f\,\dd m=0$, but $m(\{f\ne0\})=2$. If $f=g$ a.e., then
+$f^+=g^+$ and $f^-=g^-$ a.e., because $\{f^\pm\ne g^\pm\}\subseteq\{f\ne g\}$, so
+$\int_Xf^\pm\,\dd\mu=\int_Xg^\pm\,\dd\mu$. 3) $f^\pm\1_E$ vanishes outside $E$, so
+$f^\pm\1_E=0$ a.e., and $\int_Ef^\pm\,\dd\mu=0$.
+
+4) ``$\Rightarrow$'' is trivial: it follows from 2), since $f$ negligible $\Rightarrow$ $f\1_A$
+negligible ($\{f\1_A\ne0\}\subseteq\{f\ne0\}$). ``$\Leftarrow$'': consider
+$A=\{f^+>0\}\in\mathcal A$. On $A$, $f^+>0$ and $f^-=0$; on $A^c$, $f^+=0$. Hence
+\[
+  0=\int_Af\,\dd\mu=\int_Af^+\,\dd\mu=\int_Xf^+\,\dd\mu .
+\]
+So $f^+\ge0$ and $\int_Xf^+\,\dd\mu=0$, which gives $f^+=0$ a.e.\ (\cref{prop:in-ae}), that
+is, $\mu(A)=0$. In the same way, with $A=\{f^->0\}$, on which $f^+=0$, we get
+$0=\int_Af\,\dd\mu=-\int_Xf^-\,\dd\mu$, so $f^-=0$ a.e. Hence $f=f^+-f^-=0$ a.e.
+
+For the second part, to prove that $f=g$ a.e.\ we consider the function $f-g$ and prove that
+$f-g=0$ a.e. Precisely,\footnote{The handwritten notes write $f-g$, which is undefined where
+$f=g=\pm\infty$; the null set $N$ takes care of this.} by 1) the set
+$N=\{|f|=+\infty\}\cup\{|g|=+\infty\}$ is negligible, and $h=(f-g)\1_{N^c}$ is measurable and
+integrable ($|h|\le|f|+|g|$). By 2) and \cref{prop:ig-linearity},
+$\int_Ah\,\dd\mu=\int_Af\1_{N^c}\,\dd\mu-\int_Ag\1_{N^c}\,\dd\mu=\int_Af\,\dd\mu-\int_Ag\,\dd\mu$
+for every $A\in\mathcal A$. So $\int_Af\,\dd\mu=\int_Ag\,\dd\mu$ for every $A$ if and only if
+$h=0$ a.e., by the first part; and $h=0$ a.e.\ if and only if $f=g$ a.e., because
+$\{h\ne0\}\subseteq\{f\ne g\}\subseteq\{h\ne0\}\cup N$.
+\end{proof}
+
+\begin{remark}[Null sets do not matter]\label{rem:ig-null-sets}
+Sets of measure zero are irrelevant in integration (\cref{prop:ig-ae}). So we can:
+\begin{enumerate}[label=\arabic*)]
+  \item on $\mathbb R$, work with $\mathcal B(\mathbb R)$, ``forgetting'' the completion
+    $\mathcal L(\mathbb R)$: every $\mathcal L(\mathbb R)$-measurable function coincides a.e.\
+    with a Borel function, and the two have the same integral (\exref{ex:ig-borel-version});
+  \item repeat the theory of the Lebesgue integral for functions \emph{defined a.e.}, that is,
+    defined and measurable outside a negligible set $N$: we give them any measurable values on
+    $N$, for instance $0$, and by 2) of \cref{prop:ig-ae} the integral does not depend on this
+    choice.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[The space $L^1$]\label{rem:ig-L1}
+Consider $\mathcal L^1(X,\mathcal A,\mu)$, the set of integrable functions, and define
+\[
+  \|f\|_1=\int_X|f|\,\dd\mu .
+\]
+This is not a norm on $\mathcal L^1(X,\mathcal A,\mu)$, because $\|f\|_1=0\not\Rightarrow f=0$:
+we only have $\|f\|_1=0\Rightarrow f=0$ a.e.\ (\cref{prop:in-ae}). It is a \emph{seminorm}:
+$\|\alpha f\|_1=|\alpha|\,\|f\|_1$ and $\|f+g\|_1\le\|f\|_1+\|g\|_1$, by
+\cref{prop:ig-linearity}.\footnote{Added to the handwritten notes.} We introduce the equivalence relation
+\[
+  f\sim g\iff f=g\ \text{a.e.},
+\]
+and consider the quotient space
+\[
+  L^1(X,\mathcal A,\mu)=\mathcal L^1(X,\mathcal A,\mu)/\!\sim .
+\]
+Then $\|\cdot\|_1$ is a norm on $L^1(X,\mathcal A,\mu)$, and $(L^1(X,\mathcal A,\mu),\|\cdot\|_1)$
+is a \emph{Banach space}. By abuse of notation, one writes $f\in L^1(X,\mathcal A,\mu)$ for an
+integrable function, defined a.e. (By 1) of \cref{prop:ig-ae}, every class contains
+real-valued functions; sums and multiples of classes are computed on these.)
+
+The notes state completeness without proof. It is the case $p=1$ of the Riesz--Fischer theorem:
+see \citet[Chapter~3]{rudin-rca} and \citet[Section~19]{billingsley}.
+\end{remark}
+
+\section{Lebesgue's dominated convergence theorem}\label{sec:ig-dominated}
+
+\begin{theorem}[Lebesgue's dominated convergence theorem]\label{thm:ig-dominated-convergence}
+Let $(f_n)_{n\ge1}$ be a sequence of measurable functions converging pointwise (or a.e.) to a
+measurable function $f$. Suppose there exists an integrable $g\ge0$ such that
+\[
+  |f_n|\le g\qquad\text{for every } n\ge1 .
+\]
+Then $f_n$, for every $n\ge1$, and $f$ are integrable, the limit $\lim_n\int_Xf_n\,\dd\mu$
+exists, and
+\[
+  \int_Xf\,\dd\mu=\lim_{n\to\infty}\int_Xf_n\,\dd\mu .
+\]
+\end{theorem}
+
+\begin{proof}
+Since $|f_n|\le g$ for every $n$ and $f_n\to f$ a.e., also $|f|\le g$ a.e. Hence
+\[
+  \int_X|f_n|\,\dd\mu\le\int_Xg\,\dd\mu<+\infty,\qquad\int_X|f|\,\dd\mu\le\int_Xg\,\dd\mu<+\infty
+\]
+(\cref{prop:in-ae}), so $|f_n|$ and $|f|$ are integrable, and $f_n$ and $f$ are integrable
+(\cref{prop:ig-abs}).
+
+By \cref{rem:ig-null-sets} we may change all the functions on a negligible set. Let $N$ be the
+union of the negligible set off which $f_n\to f$ and of $\{g=+\infty\}$, which is negligible by
+1) of \cref{prop:ig-ae}; replacing $f_n$, $f$ and $g$ by $f_n\1_{N^c}$, $f\1_{N^c}$ and
+$g\1_{N^c}$ changes no integral (2) of \cref{prop:ig-ae}), and afterwards $g$ is finite and
+$f_n\to f$ at every point.\footnote{This reduction makes precise the ``(a.e.)'' of the
+handwritten proof.}
+
+Consider the sequence $(g+f_n)_{n\ge1}$: the functions $g+f_n\ge0$ are measurable and
+$g+f_n\to g+f$. By \cref{prop:ig-linearity} and Fatou's lemma (\cref{lem:in-fatou}),
+\begin{align*}
+  \int_Xf\,\dd\mu+\int_Xg\,\dd\mu&=\int_X(f+g)\,\dd\mu=\int_X\lim_n(f_n+g)\,\dd\mu\\
+  &\le\liminf_n\int_X(f_n+g)\,\dd\mu=\liminf_n\Big(\int_Xf_n\,\dd\mu\Big)+\int_Xg\,\dd\mu .
+\end{align*}
+Since $\int_Xg\,\dd\mu<+\infty$, we can cancel it:
+\begin{equation}\label{eq:ig-dct-1}
+  \int_Xf\,\dd\mu\le\liminf_n\int_Xf_n\,\dd\mu .
+\end{equation}
+Repeating the argument with the sequence $(g-f_n)_{n\ge1}$, whose terms $g-f_n\ge0$ are
+measurable with $g-f_n\to g-f$, we get\footnote{The handwritten notes leave this step as an
+exercise, with the hint $\liminf_n(-a_n)=-\limsup_na_n$; it is written out here.}
+\begin{align*}
+  \int_Xg\,\dd\mu-\int_Xf\,\dd\mu&=\int_X\lim_n(g-f_n)\,\dd\mu\le\liminf_n\int_X(g-f_n)\,\dd\mu\\
+  &=\int_Xg\,\dd\mu+\liminf_n\Big(-\int_Xf_n\,\dd\mu\Big)
+  =\int_Xg\,\dd\mu-\limsup_n\int_Xf_n\,\dd\mu,
+\end{align*}
+that is,
+\begin{equation}\label{eq:ig-dct-2}
+  \int_Xf\,\dd\mu\ge\limsup_n\int_Xf_n\,\dd\mu .
+\end{equation}
+Together, \eqref{eq:ig-dct-1} and \eqref{eq:ig-dct-2} give
+\[
+  \int_Xf\,\dd\mu\le\liminf_n\int_Xf_n\,\dd\mu\le\limsup_n\int_Xf_n\,\dd\mu\le\int_Xf\,\dd\mu,
+\]
+so the limit $\lim_n\int_Xf_n\,\dd\mu$ exists and equals $\int_Xf\,\dd\mu$.
+\end{proof}
+
+The proof uses the bound $|f_n|\le g$ only outside a negligible set, so it is enough that, for
+every $n$, $|f_n|\le g$ a.e.\footnote{Added to the handwritten notes.}
+
+\begin{corollary}[Series]\label{cor:ig-series}
+Let $(f_n)_{n\ge1}$ be measurable functions such that
+\[
+  \sum_{n=1}^\infty\int_X|f_n|\,\dd\mu<+\infty .
+\]
+Then $\sum_{n=1}^\infty f_n$ converges a.e., absolutely, to a finite sum, the sum is integrable,
+and
+\[
+  \int_X\Big(\sum_{n=1}^\infty f_n\Big)\dd\mu=\sum_{n=1}^\infty\Big(\int_Xf_n\,\dd\mu\Big).
+\]
+\end{corollary}
+
+\begin{proof}
+By the corollary of Beppo Levi's theorem (\cref{cor:in-series}) and the hypothesis,
+\[
+  \int_X\sum_{n=1}^\infty|f_n|\,\dd\mu=\sum_{n=1}^\infty\int_X|f_n|\,\dd\mu<+\infty .
+\]
+So $\sum_{n=1}^\infty|f_n|\in\mathcal L^1(X,\mathcal A,\mu)$, and since it is an integrable
+function with values in $\overline{\mathbb R}$, $\sum_{n=1}^\infty|f_n|<+\infty$ a.e.\ (1) of
+\cref{prop:ig-ae}). Hence $\sum_{n=1}^\infty f_n$ converges a.e., absolutely: precisely, it
+converges at every point of $E^c$, where $E=\{\sum_n|f_n|=+\infty\}$ is negligible, and on $E^c$
+every $f_n$ is finite. Let $h=\sum_{n=1}^\infty f_n$ on $E^c$ and $h=0$ on $E$.
+
+Consider now $h_N=\sum_{n=1}^Nf_n\1_{E^c}$. The $h_N$ are measurable functions and
+$h_N\to h$ at every point. Moreover
+\[
+  |h_N|=\Big|\sum_{n=1}^Nf_n\Big|\1_{E^c}\le\sum_{n=1}^N|f_n|\le\sum_{n=1}^\infty|f_n|=g
+  \in\mathcal L^1(X,\mathcal A,\mu).
+\]
+We conclude by applying the dominated convergence theorem to $(h_N)_{N\ge1}$:\footnote{The
+handwritten notes leave this conclusion as an exercise (``finish as an exercise'').} $h$ is
+integrable and, by \cref{prop:ig-linearity} and 2) of \cref{prop:ig-ae} ($f_n\1_{E^c}=f_n$
+a.e.),
+\[
+  \int_Xh\,\dd\mu=\lim_{N\to\infty}\int_Xh_N\,\dd\mu=\lim_{N\to\infty}\sum_{n=1}^N\int_Xf_n\1_{E^c}\,\dd\mu
+  =\sum_{n=1}^\infty\int_Xf_n\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Computational]\label{rem:ig-dominated-code}
+Without an integrable dominating function the theorem fails, as the sequence $\1_{[n,n+1)}$
+shows (\cref{rem:in-monotonicity-essential}). The smallest function that dominates a sequence is its
+\emph{envelope} $\sup_n|f_n|$, so the theorem applies exactly when some integrable $g$ lies
+above the envelope. \coderef{code/src/probnotes/integrable.py} computes envelopes
+(\texttt{envelope}, \texttt{is\_dominated}) and contains the families of the two worked
+exercises of \cref{sec:ig-riemann} and three sequences that tend to $0$ at every point while
+their integrals do not: \texttt{spike} ($n\1_{(0,1/n)}$), \texttt{escaping\_block}
+($\1_{[n,n+1)}$) and \texttt{bump} ($n^2xe^{-nx}$ on $[0,1]$, whose envelope behaves like
+$4/(e^2x)$ near $0$); see \cref{fig:ig-dominated} and \exref{ex:ig-no-domination}.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch05-dominated}
+  \caption{Left: the functions $f_n$ of \cref{exa:ig-exercise-unit} increase to the dominating
+    function $g(x)=x^{-1/2}$. Right: the integrals. Blue: $\int_0^1f_n\,\dd x=4\sqrt n\arctan(1/\sqrt
+    n)-2n\log(1+\frac1n)=2-\frac1{3n}+O(n^{-2})$ tends to $\int_0^1g\,\dd x=2$. Gold: the functions of
+    \cref{exa:ig-exercise-halfline}, with $\int_0^\infty f_n\,\dd x=2\pi/\sqrt n\to0$. Green: $n^2xe^{-nx}\to0$
+    at every point of $[0,1]$, but $\int_0^1n^2xe^{-nx}\,\dd x=1-(1+n)e^{-n}\to1$; no integrable
+    function dominates this sequence.}
+  \label{fig:ig-dominated}
+\end{figure}
+
+\demo{05-integrable-functions.ipynb}{sequences of functions with their envelope and their
+integrals, with a slider for $n$: when does $\lim\int=\int\lim$?}
+
+\section{The Lebesgue integral on \texorpdfstring{$\mathbb R$}{R} and the Riemann integral}\label{sec:ig-riemann}
+
+This is the first of the two examples that close the section of the notes. Here
+$(X,\mathcal A,\mu)=(\mathbb R,\mathcal B(\mathbb R),m)$. Consider a bounded
+function $f:[a,b]\to\mathbb R$. The Riemann integral \emph{partitions the domain} $[a,b]$, and
+squeezes the integral between lower sums and upper sums; the Lebesgue integral \emph{partitions
+the codomain}, and approximates $f$ from below by simple functions, whose integrals are
+computed from the measures of the sets where $f$ lies between two levels
+(\cref{fig:ig-riemann-lebesgue}).
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch05-riemann-lebesgue}
+  \caption{The picture of the notes. Left (Riemann): the domain $[a,b]$ is cut into
+    intervals, and on each one $f$ is replaced by its infimum (lower sum) or its supremum (upper
+    sum). Right (Lebesgue): the codomain is cut by the levels $\frac i4$ (dashed), and $f$ is
+    replaced by the level just below it: this is the simple function $f_2$ of
+    \cref{thm:mf-approximation}, whose integral is
+    $\frac14\sum_{i\ge1}m(\{f\ge\frac i4\})$.}
+  \label{fig:ig-riemann-lebesgue}
+\end{figure}
+
+\begin{theorem}[Riemann and Lebesgue integrals]\label{thm:ig-riemann}
+Consider $([a,b],\mathcal L([a,b]),\bar m)$, and let $f:[a,b]\to\mathbb R$ be
+bounded.\footnote{The handwritten notes state the theorem on $([a,b],\mathcal B([a,b]),m)$.
+But a Riemann integrable function need not be Borel measurable: if $A$ is a subset of the
+Cantor set $C$ that is not a Borel set (\cref{rem:mf-cantor}), then $\1_A$ is continuous at
+every point of the open set $[0,1]\setminus C$, so it is Riemann integrable on $[0,1]$ by 2),
+with integral $0$, but it is not Borel measurable (\cref{prop:mf-indicator}). Measurability
+holds for the Lebesgue $\sigma$-algebra $\mathcal L([a,b])=\{A\in\mathcal L(\mathbb
+R):A\subseteq[a,b]\}$; corrected here. By \cref{rem:ig-null-sets} this changes nothing for
+integrals: such an $f$ coincides a.e.\ with a Borel function.}
+\begin{enumerate}[label=\arabic*)]
+  \item If $f$ is Riemann ($\mathcal R$) integrable, then $f$ is measurable and Lebesgue
+    ($\mathcal L$) integrable, and the two integrals coincide:
+    \[
+      \int_{[a,b]}f\,\dd\bar m=\int_a^bf(x)\,\dd x .
+    \]
+  \item $f$ is Riemann integrable if and only if $f$ is continuous except on a set that is
+    negligible for Lebesgue measure.
+\end{enumerate}
+\end{theorem}
+
+The notes state this theorem without proof. Both parts are \citet[Theorem~2.28]{folland};
+part 2) is \emph{Lebesgue's criterion for Riemann integrability}. See also
+\citet[Section~17]{billingsley}. From now on we write $m$ also for $\bar m$.
+
+\begin{remark}\label{rem:ig-lebesgue-not-riemann}
+$f$ Lebesgue integrable $\not\Rightarrow$ $f$ Riemann integrable.
+\end{remark}
+
+\begin{example}[The Dirichlet function]\label{exa:ig-dirichlet}
+On $([0,1],\mathcal B([0,1]),m)$, let $f=\1_{\mathbb Q\cap[0,1]}$. Then $f$ is not Riemann
+integrable: every interval of positive length contains rational and irrational points, so
+every upper sum equals $1$ and every lower sum equals $0$ (equivalently, $f$ is discontinuous at
+every point, and 2) of \cref{thm:ig-riemann} applies). But $f$ is Lebesgue integrable. Indeed,
+$\mathbb Q\cap[0,1]\in\mathcal B([0,1])$ is measurable, being a countable union of singletons,
+so $\1_{\mathbb Q\cap[0,1]}$ is measurable (\cref{prop:mf-indicator}), and
+\[
+  \int_{[0,1]}f\,\dd m=\int_{[0,1]}\1_{\mathbb Q\cap[0,1]}\,\dd m=m(\mathbb Q\cap[0,1])=0 .
+\]
+So $f$ is integrable, and its integral is $0$.
+\end{example}
+
+\paragraph{But be careful with improper integrals!}
+
+\begin{remark}[Improper integrals]\label{rem:ig-improper}
+Let $I\subseteq\mathbb R$ be an interval, and let $f$ be \emph{locally Riemann integrable} on
+$I$, that is, Riemann integrable on every closed bounded interval $[c,d]\subseteq I$ (so that $f$
+is also locally Lebesgue integrable, by \cref{thm:ig-riemann}). Then
+\begin{center}
+\fbox{\parbox{0.86\textwidth}{\centering $f$ is absolutely integrable in the Riemann sense on
+$I$ (as an improper integral) $\iff$ $f$ is Lebesgue integrable on $I$.}}
+\end{center}
+In this case the two integrals coincide. It is \emph{not} enough that $f$ be Riemann integrable
+in the improper sense. The notes give no proof; \exref{ex:ig-improper} proves the statement
+from \cref{thm:ig-riemann} and the convergence theorems.
+
+\emph{Example.} $\frac{\sin x}{x}$ is Riemann integrable in the improper sense on $[1,+\infty)$,
+but $\big|\frac{\sin x}{x}\big|$ is not Riemann integrable in the improper sense on
+$[1,+\infty)$, hence $\frac{\sin x}x$ is not Lebesgue integrable there
+(\cref{fig:ig-sine}, \exref{ex:ig-improper} and \exref{ex:ig-sine}).
+
+\emph{Summing up}, write $\mathcal R$ for ``Riemann integrable'' and $\mathcal L$ for
+``Lebesgue integrable''.
+\begin{itemize}
+  \item For $f:[a,b]\to\mathbb R$ bounded: $\mathcal R\Rightarrow\mathcal L$, and
+    $\mathcal L\not\Rightarrow\mathcal R$.
+  \item For $f$ locally Riemann integrable on $I$ (hence locally Lebesgue integrable):
+    \[
+      \begin{array}{ccc}
+        |f|\ \mathcal R & \iff & |f|\ \mathcal L\\[2pt]
+        \Downarrow\ \not\Uparrow & & \Updownarrow\\[2pt]
+        f\ \mathcal R\ \text{(in the improper sense)} & & f\ \mathcal L
+      \end{array}
+    \]
+\end{itemize}
+\emph{Conclusion:} the Lebesgue integral extends the Riemann integral; it is very powerful, but
+not very practical for computations, and integrals are computed with the Riemann integral!
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.78\textwidth]{ch05-sine}
+  \caption{The improper integral $\int_1^T\frac{\sin x}x\,\dd x$ (blue) converges to
+    $\frac\pi2-\mathrm{Si}(1)=0.6247\ldots$, where $\mathrm{Si}(t)=\int_0^t\frac{\sin x}x\,\dd x$,
+    while $\int_1^T\frac{|\sin x|}x\,\dd x$ (gold) grows like $\frac2\pi\log T$ (dashed green,
+    shifted by the constant $0.1668\ldots$ of \exref{ex:ig-sine}). The horizontal axis is
+    logarithmic.}
+  \label{fig:ig-sine}
+\end{figure}
+
+\begin{example}[Worked exercise: a dominated sequence on $(0,1)$]\label{exa:ig-exercise-unit}
+Let $f_n:(0,1)\to\mathbb R$,
+\[
+  f_n(x)=\frac{n}{x^{3/2}}\log\Big(1+\frac xn\Big),\qquad n\ge1 .
+\]
+\begin{enumerate}[label=\arabic*)]
+  \item Show that $f_n$ is Lebesgue integrable for every $n\ge1$.
+  \item Compute $\lim_{n\to\infty}\int_{(0,1)}f_n\,\dd m$.
+\end{enumerate}
+
+\emph{Solution.} 1) $f_n$ is continuous on $(0,1)$, hence measurable
+(\cref{prop:mf-continuous}), and $f_n\ge0$. $f_n$ is not bounded (as $x\to0$,
+$f_n(x)\sim x^{-1/2}$), so we cannot speak of Riemann integrability on $[0,1]$; $f_n$ is locally
+Riemann integrable (and also locally Lebesgue integrable). But $f_n$ is integrable in the
+improper sense, and Lebesgue integrable. Indeed, for $t>-1$ we have $\log(1+t)\le t$ (the
+concave function $\log(1+t)$ lies below its tangent $y=t$ at $0$), so
+\[
+  f_n(x)=\frac n{x^{3/2}}\log\Big(1+\frac xn\Big)\le\frac n{x^{3/2}}\cdot\frac xn=\frac1{\sqrt x} .
+\]
+Hence $0\le f_n\le g$, where $g(x)=\frac1{\sqrt x}$ is Lebesgue integrable. (Note: $g=|g|$ is
+Riemann integrable in the improper sense on $(0,1)$, hence Lebesgue integrable, by
+\cref{rem:ig-improper}.) So $f_n$ is Lebesgue integrable.
+
+2) $0\le f_n\le g$, with $g\in\mathcal L^1((0,1),\mathcal B((0,1)),m)$, and, since
+$\log(1+t)\sim t$ as $t\to0$,
+\[
+  f(x)=\lim_nf_n(x)=\lim_n\frac n{x^{3/2}}\log\Big(1+\frac xn\Big)=\lim_n\frac n{x^{3/2}}\cdot\frac xn
+  =\lim_n\frac1{\sqrt x}=\frac1{\sqrt x}=g(x).
+\]
+By the dominated convergence theorem,
+\[
+  \lim_n\int_{(0,1)}f_n\,\dd m=\int_{(0,1)}\lim_nf_n\,\dd m=\int_{(0,1)}g\,\dd m
+  =\int_0^1g(x)\,\dd x=\int_0^1\frac1{\sqrt x}\,\dd x=2,
+\]
+where $\int_{(0,1)}g\,\dd m=\int_0^1g(x)\,\dd x$ because $g$ is Riemann integrable (in the
+improper sense) and Lebesgue integrable, so the two integrals coincide. For the same reason the
+left side is also $\lim_n\int_0^1f_n(x)\,\dd x$, with improper Riemann integrals.
+\end{example}
+
+\begin{example}[Worked exercise: a decreasing sequence on $(0,+\infty)$]\label{exa:ig-exercise-halfline}
+Let $f_n:(0,+\infty)\to\mathbb R$,
+\[
+  f_n(x)=\frac1{x^{3/2}}\log\Big(1+\frac xn\Big),\qquad n\ge1 .
+\]
+\begin{enumerate}[label=\arabic*)]
+  \item Show that $f_n$ is Lebesgue integrable.
+  \item Compute $\lim_n\int_{(0,+\infty)}f_n\,\dd m$.
+\end{enumerate}
+
+\emph{Solution.} 1) On $(0,1)$, $f_n$ is $\frac1n$ times the function of
+\cref{exa:ig-exercise-unit}, so it is integrable in the improper sense and in the sense of
+Lebesgue. One checks that it is also integrable on $[1,+\infty)$, in the improper sense and in
+the sense of Lebesgue (\exref{ex:ig-improper}).
+
+2) $(f_n)_{n\ge1}$ is a decreasing sequence of non-negative measurable functions, and
+$f_n\downarrow0$, since $\log(1+\frac xn)$ decreases to $0$. Consider $(f_1-f_n)_{n\ge1}$: the
+functions $f_1-f_n$ are measurable, $0\le f_1-f_n\uparrow f_1$, and $f_1$ is integrable. By
+monotone convergence (\cref{thm:in-monotone-convergence}),
+\[
+  \lim_n\int_{(0,+\infty)}(f_1-f_n)\,\dd m=\int_{(0,+\infty)}\lim_n(f_1-f_n)\,\dd m
+  =\int_{(0,+\infty)}f_1\,\dd m,
+\]
+while, by \cref{prop:ig-linearity},
+\[
+  \lim_n\int_{(0,+\infty)}(f_1-f_n)\,\dd m=\int_{(0,+\infty)}f_1\,\dd m-\lim_n\int_{(0,+\infty)}f_n\,\dd m .
+\]
+Since $\int_{(0,+\infty)}f_1\,\dd m<+\infty$, it follows that
+$\lim_n\int_{(0,+\infty)}f_n\,\dd m=0$.
+\end{example}
+
+\begin{remark}[Computational]\label{rem:ig-riemann-code}
+\coderef{code/src/probnotes/integrable.py} computes both kinds of approximating sums.
+\texttt{riemann\_sum} and \texttt{darboux\_sums} partition the domain; \texttt{lebesgue\_sum}
+partitions the codomain: it returns $\int f_n\,\dd m=2^{-n}\sum_{i=1}^{n2^n}m(\{f\ge i2^{-n}\})$
+for the simple functions $f_n$ of \cref{thm:mf-approximation}, given the measures of the level
+sets (\exref{ex:ig-lebesgue-sums}). The integrals of the two worked exercises have closed
+forms, $\int_0^1f_n\,\dd x=4\sqrt n\arctan\frac1{\sqrt n}-2n\log(1+\frac1n)=2-\frac1{3n}+O(n^{-2})$
+and $\int_0^\infty f_n\,\dd x=\frac{2\pi}{\sqrt n}$ (\cref{fig:ig-dominated}), and
+\texttt{abs\_sine\_integral\_from\_1} computes $\int_1^T\frac{|\sin x|}x\,\dd x$ exactly, half-period
+by half-period (\cref{fig:ig-sine}, \exref{ex:ig-sine}).
+\end{remark}
+
+\demo{05-integrable-functions.ipynb}{Riemann sums against Lebesgue sums for a function of your
+choice, and $\int_1^T\frac{\sin x}x$ against $\int_1^T\frac{|\sin x|}x$.}
+
+\section{The integral with respect to a discrete measure}\label{sec:ig-discrete}
+
+This is the second example of the notes.
+
+\begin{example}[Integral with respect to a discrete measure]\label{exa:ig-discrete-measure}
+Let $(X,\mathcal A)$ be a measurable space, and let $\mu$ be a measure concentrated on a set
+$D=\{x_i\in X:i\in I\}$ of distinct points with $\{x_i\}\in\mathcal A$, indexed by a set
+$I\subseteq\mathbb N$, finite or infinite
+(\cref{def:ms-concentrated}: $D\in\mathcal A$, as a countable union of singletons, and
+$\mu(D^c)=0$), with
+\[
+  \mu(\{x_i\})=\alpha_i>0\qquad\forall i\in I .
+\]
+Let $A\in\mathcal A$. Then $A\setminus\bigcup_{x_i\in A}\{x_i\}=A\cap D^c$ has measure $0$, and
+\[
+  \mu(A)=\mu\Big(\bigcup_{x_i\in A}\{x_i\}\cup\Big(A\setminus\bigcup_{x_i\in A}\{x_i\}\Big)\Big)
+  =\sum_{x_i\in A}\mu(\{x_i\})+\underbrace{\mu\Big(A\setminus\bigcup_{x_i\in A}\{x_i\}\Big)}_{=\,0}
+  =\sum_{x_i\in A}\alpha_i .
+\]
+In particular $\mu(X)=\sum_{i\in I}\alpha_i$.
+
+\emph{Note.} If we consider a probability space $(\Omega,\mathcal F,\mathbb P)$ with a
+\emph{discrete probability} $\mathbb P$, that is, $\mathbb P(\{x_i\})=p_i>0$, then
+\[
+  1=\mathbb P(\Omega)=\sum_{i\in I}p_i\quad\Longrightarrow\quad 0<p_i\le1\quad\text{and}\quad
+  \sum_{i\in I}p_i=1 .
+\]
+This defines a finite or countable discrete space ($I$ finite or infinite). A uniform space, with $n$ points of probability $\frac1n$ each, is a particular
+case.
+
+We now construct the Lebesgue integral with respect to $\mu$.
+\begin{itemize}
+  \item Let $f\in\mathcal S^+(X)$, $f=\sum_{k=1}^mb_k\1_{B_k}$, with $b_1,\dots,b_m\in[0,+\infty]$
+    and $B_1,\dots,B_m\in\mathcal A$ a partition of $X$. Then
+    \begin{align*}
+      \int_Xf\,\dd\mu&=\sum_{k=1}^mb_k\mu(B_k)=\sum_{k=1}^mb_k\sum_{x_i\in B_k}\alpha_i
+      =\sum_{k=1}^m\sum_{x_i\in B_k}b_k\alpha_i\\
+      &=\sum_{k=1}^m\sum_{x_i\in B_k}f(x_i)\alpha_i
+      =\sum_{i\in I}f(x_i)\alpha_i=\sum_{i\in I}f(x_i)\mu(\{x_i\}),
+    \end{align*}
+    because $f(x_i)=b_k$ if $x_i\in B_k$, and because $B_1,\dots,B_m$ cover $X$, so that every
+    $x_i$ lies in exactly one $B_k$ (the terms are non-negative, so they can be regrouped
+    freely).
+  \item Let $f\ge0$ be measurable. Then
+    \[
+      f=\sum_{i\in I}\underbrace{f\1_{\{x_i\}}}_{f_i}+\underbrace{f\1_{(\bigcup_{i\in I}\{x_i\})^c}}_{g}
+      =\sum_{i\in I}f_i+g,
+    \]
+    and by Beppo Levi's theorem, in the form of \cref{cor:in-series}, and additivity
+    (\cref{prop:in-additivity}),
+    \[
+      \int_Xf\,\dd\mu=\sum_{i\in I}\int_Xf_i\,\dd\mu+\int_Xg\,\dd\mu
+      =\sum_{i\in I}f(x_i)\mu(\{x_i\})+0=\sum_{i\in I}f(x_i)\alpha_i,
+    \]
+    since $f_i=f(x_i)\1_{\{x_i\}}$ is simple, and $g=0$ outside the negligible set $D^c$
+    (\cref{prop:in-ae}).
+  \item Let $f$ be measurable, of any sign. Then $f$ is integrable $\iff$ $|f|$ is integrable
+    $\iff$ $\sum_{i\in I}|f(x_i)|\alpha_i<+\infty$ $\iff$ the series
+    $\sum_{i\in I}f(x_i)\alpha_i$ is absolutely convergent. In this case
+    \begin{equation}\label{eq:ig-discrete-integral}
+      \boxed{\ \int_Xf\,\dd\mu=\sum_{i\in I}f(x_i)\alpha_i\ }
+    \end{equation}
+    Indeed,\footnote{The handwritten notes leave this computation to the reader (``do the
+    computations'').} by the previous point applied to $f^+$ and $f^-$,
+    \[
+      \int_Xf\,\dd\mu=\sum_{i\in I}f^+(x_i)\alpha_i-\sum_{i\in I}f^-(x_i)\alpha_i
+      =\sum_{i\in I}f(x_i)\alpha_i,
+    \]
+    a difference of two convergent series of non-negative terms.
+\end{itemize}
+\end{example}
+
+An absolutely convergent series can be rearranged without changing its sum, as an integral
+should be, since the atoms $x_i$ come in no particular order. A series that converges but not
+absolutely can be rearranged to converge to any value, by Riemann's rearrangement theorem; this
+is why the definition of the integral asks for absolute convergence.\footnote{This paragraph is
+added to the handwritten notes.}
+
+\begin{example}[Worked exercise: a convergent series that is not an integral]\label{exa:ig-discrete-exercise}
+On $(\mathbb R,\mathcal B(\mathbb R))$ consider the discrete measure
+\[
+  \mu(\{x_n\})=\frac1{2^n}=\alpha_n,\quad\text{concentrated on the points}\quad
+  \Big\{x_n=(-1)^{n-1}\frac{2^n}n:\ n\ge1\Big\}.
+\]
+\footnote{Added to the handwritten notes: the
+points $x_n$ are distinct ($|x_n|=\frac{2^n}n$ is strictly increasing for $n\ge2$, and
+$x_1=2\ne x_2=-2$), and $\mu(\mathbb R)=\sum_{n\ge1}2^{-n}=1$: $\mu$ is a probability measure.}
+Then the function $f(x)=x$ does not belong to $\mathcal L^1(\mathbb R,\mathcal B(\mathbb R),\mu)$.
+
+\emph{Solution.} By \cref{exa:ig-discrete-measure} applied to $|f|$,
+\[
+  \int_{\mathbb R}|f|\,\dd\mu=\sum_{n\ge1}|f(x_n)|\alpha_n=\sum_{n\ge1}|x_n|\alpha_n
+  =\sum_{n\ge1}\frac{2^n}n\cdot\frac1{2^n}=\sum_{n\ge1}\frac1n=+\infty .
+\]
+$|f|$ is not integrable (the series $\sum_nf(x_n)\alpha_n$ is not absolutely convergent), so
+$f$ is not integrable (\cref{prop:ig-abs}).
+
+\emph{Note.} The series $\sum_nf(x_n)\alpha_n=\sum_{n\ge1}\frac{(-1)^{n-1}}n$ converges (prove
+it), but this is not enough for $f$ to be integrable. Indeed, $\int_{\mathbb R}f^+\,\dd\mu$ and
+$\int_{\mathbb R}f^-\,\dd\mu$ both diverge (prove it), so $\int_{\mathbb R}f\,\dd\mu$ is not even
+defined. Both proofs are in \exref{ex:ig-discrete}.
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.78\textwidth]{ch05-rearrangement}
+  \caption{Partial sums of the series $\sum_nf(x_n)\mu(\{x_n\})=\sum_n\frac{(-1)^{n-1}}n$ of
+    \cref{exa:ig-discrete-exercise}, summed in three orders: as it stands (limit $\log2$); two
+    positive terms, then one negative term (limit $\frac32\log2$); one positive, then four
+    negative (limit $0$). In general, $p$ positive and $q$ negative terms at a time give
+    $\log2+\frac12\log\frac pq$ (\exref{ex:ig-rearrangement}).}
+  \label{fig:ig-rearrangement}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:ig-discrete-code}
+\coderef{code/src/probnotes/integrable.py} represents a measure with finitely many atoms, or the
+truncation of a countable one, as a \texttt{DiscreteMeasure}, which computes $\mu(A)$,
+$\sum_if(x_i)\alpha_i$ and $\sum_i|f(x_i)|\alpha_i$; \texttt{siri\_discrete} is the measure of
+\cref{exa:ig-discrete-exercise}. \texttt{rearrange\_pq} and \texttt{rearrange\_to\_target}
+rearrange the series of that exercise (\cref{fig:ig-rearrangement}). For an integrable $f$, such
+as $f(x)=\operatorname{sign}(x)|x|^{1/2}$, every rearrangement gives the same sum
+(\exref{ex:ig-rearrangement}).
+\end{remark}
+
+\demo{05-integrable-functions.ipynb}{the series of \cref{exa:ig-discrete-exercise} rearranged to
+converge to a value of your choice.}
+
+\furtherreading
+\textcite{billingsley}, Sections~15--17, defines the integral of functions of any sign, proves
+the convergence theorems, and compares the Lebesgue integral on the line with the Riemann
+integral; Section~19 studies the spaces $L^p$. \textcite{rudin-rca}, Chapter~1, defines the integral of
+complex functions and proves the convergence theorems, and Chapter~3 treats $L^p$ spaces. \textcite{folland}, Chapter~2, is
+close to the notes in spirit, with the comparison with the Riemann integral in Theorem~2.28.
+\textcite{williams}, Chapters~5 and~6, is the probabilistic point of view, where the integral
+is the expectation.

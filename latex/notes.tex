@@ -2,7 +2,7 @@
 \usepackage{coursenotes}
 \setcourse{Probability}{Probability with Measure Theory}{GennaroAlberto/probability-measure-theory}
 \graphicspath{{figures/}}
-\renewcommand{\coursechapter}[2]{\chapter{#2}\label{ch:#1}\input{chapters/#1}}
+\renewcommand{\coursechapter}[3][]{\chapter{#3}\label{ch:#2}\coursechaptermark{#1}\input{chapters/#2}}
 % Exercises live in their own book; \exref{<label>} points into it.
 \usepackage{xr}
 \externaldocument[X-]{exercises}

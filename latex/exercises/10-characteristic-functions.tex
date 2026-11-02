@@ -1,0 +1,223 @@
+% Exercises for Chapter 10 (characteristic functions). Statements only: solutions are kept
+% privately. Throughout, (Omega, F, P) is a probability space, and Phi_X is the characteristic
+% function of X, as in the notes.
+
+\begin{exercise}[Some characteristic functions]\label{ex:cf-standard}
+\easy Compute the following characteristic functions from \noteref{def:cf-characteristic}.
+\begin{enumerate}[label=(\alph*)]
+  \item The Bernoulli law $b(p)$ and the binomial law $B(n,p)$:
+    $\Phi(t)=(1-p+pe^{it})^n$.
+  \item The Poisson law $\mathcal P(\lambda)$, $\Phi(t)=e^{\lambda(e^{it}-1)}$, and the geometric
+    law $G(p)$ on $\mathbb N^*$, $\mathbb P(N=n)=p(1-p)^{n-1}$, $\Phi(t)=\dfrac{pe^{it}}{1-(1-p)e^{it}}$.
+  \item The uniform law $U(a,b)$, $\Phi(t)=\dfrac{e^{itb}-e^{ita}}{it(b-a)}$ for $t\ne0$, and the
+    exponential law $\mathrm{Exp}(\lambda)$, $\Phi(t)=\dfrac\lambda{\lambda-it}$.
+  \item Which of these characteristic functions are real? For which $a<b$ is that of $U(a,b)$
+    real? Compare with \noteref{cor:cf-symmetric}.
+  \item Let $X$ take values in $\mathbb Z$, with $p_k=\mathbb P(X=k)$. Show that $\Phi_X$ is
+    $2\pi$-periodic, that it is not integrable on $\mathbb R$, and that
+    $p_k=\frac1{2\pi}\int_{-\pi}^{\pi}e^{-itk}\Phi_X(t)\,\dd t$ for every $k\in\mathbb Z$. Why does
+    this not contradict \noteref{thm:cf-inversion}?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Derivatives of a characteristic function]\label{ex:cf-derivatives}
+\medium This exercise proves \noteref{thm:cf-moments}, which the notes state without proof. You
+may use the dominated convergence theorem for complex-valued functions
+(\noteref{rem:cf-complex}).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $|e^{ia}-1|\le|a|$ and $|e^{ia}-1-ia|\le\frac{a^2}2$ for every $a\in\mathbb R$.
+    \emph{Hint:} $e^{ia}-1=i\int_0^ae^{is}\,\dd s$.
+  \item Let $X\in L^1$ be a real random variable. Show that $\Phi_X$ is differentiable, with
+    $\Phi_X'(t)=i\,\mathbb E[Xe^{itX}]$, and that $\Phi_X'$ is continuous.
+  \item Deduce by induction that if $X\in L^m$, then $\Phi_X\in C^m(\mathbb R)$ and
+    $\Phi_X^{(k)}(t)=i^k\,\mathbb E[X^ke^{itX}]$ for $k\le m$.
+  \item Let $\underline X=(X_1,\dots,X_N)^T$ with $X_i\in L^m$ for every $i$. Show that
+    $X_{j_1}\cdots X_{j_k}\in L^1$ for $k\le m$, and prove \noteref{thm:cf-moments}.
+  \item Show that if $X\in L^2$, then
+    $\Phi_X(t)=1+it\,\mathbb E[X]-\frac{t^2}2\,\mathbb E[X^2]+o(t^2)$ as $t\to0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Even moments from the characteristic function]\label{ex:cf-even-moments}
+\hard The note in the solution of \noteref{exa:cf-one-over-sqrt} says that if $\Phi_X\in C^m$
+with $m$ even, then $X\in L^m$. Let $X$ be a real random variable.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that
+    $\dfrac{2-\Phi_X(h)-\Phi_X(-h)}{h^2}=\mathbb E\Big[\dfrac{2(1-\cos(hX))}{h^2}\Big]$ for
+    $h\ne0$.
+  \item Suppose that $\Phi_X$ is twice differentiable at $0$. Show that the left-hand side of (a)
+    tends to $-\Phi_X''(0)$ as $h\to0$, and deduce from Fatou's lemma (\noteref{lem:in-fatou})
+    that $\mathbb E[X^2]\le-\Phi_X''(0)<+\infty$.
+  \item Show by induction on $k\ge1$ that $\Phi_X\in C^{2k}(\mathbb R)$ implies $X\in L^{2k}$.
+    \emph{Hint:} if $X\in L^{2k-2}$ and $c=\mathbb E[X^{2k-2}]>0$, consider the probability
+    $\nu(B)=\frac1c\mathbb E\big[X^{2k-2}\1_B(X)\big]$ on $\mathcal B(\mathbb R)$, and compute $\hat\nu$
+    with \noteref{thm:cf-moments}.
+  \item The parity of $m$ matters. Let $c>0$ be such that
+    $\mathbb P(X=n)=\mathbb P(X=-n)=\frac{c}{n^2\log n}$, $n\ge2$, defines a law. Show that
+    $\mathbb E|X|=+\infty$, but that $\Phi_X$ is differentiable at $0$, with $\Phi_X'(0)=0$.
+    \emph{Hint:} $1-\Phi_X(t)=2c\sum_{n\ge2}\frac{1-\cos(nt)}{n^2\log n}$; split the sum at
+    $n=\lfloor1/|t|\rfloor$, use $1-\cos u\le\min(\frac{u^2}2,2)$, and show that
+    $\sum_{2\le n\le M}\frac1{\log n}\le\frac{\sqrt M}{\log2}+\frac{2M}{\log M}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The Laplace and the Cauchy laws]\label{ex:cf-cauchy}
+\medium
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the Laplace density $\frac12e^{-|x|}$ has the characteristic function
+    $\frac1{1+t^2}$. Let $X,Y$ be independent with law $\mathrm{Exp}(1)$. Find $\Phi_{X-Y}$ with
+    \noteref{prop:cf-conjugate} and \noteref{prop:cf-independence}, and deduce the law of $X-Y$.
+  \item Apply \noteref{thm:cf-inversion} to $\frac1{1+t^2}$, and deduce that the Cauchy law,
+    with density $\frac1{\pi(1+x^2)}$, has the characteristic function $e^{-|t|}$.
+  \item Show that a Cauchy random variable $C$ is not in $L^1$, that $\mathbb E[e^{sC}]=+\infty$
+    for every $s\ne0$, and that $e^{-|t|}$ is not differentiable at $0$. Is the last fact
+    consistent with \noteref{thm:cf-moments}?
+  \item Let $C_1,\dots,C_n$ be independent Cauchy random variables. Show that
+    $\frac1n(C_1+\dots+C_n)$ is a Cauchy random variable. What does this say about averages of
+    Cauchy samples?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A fourth moment, directly]\label{ex:cf-fourth-moment}
+\easy This is the direct computation that the notes leave as an exercise in
+\noteref{exa:cf-one-over-sqrt}. Let $X$, $Y$, $Z$ be independent random variables, all with
+characteristic function $(1+t^2)^{-1/2}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Using the binomial series $(1+u)^{-1/2}=\sum_{k\ge0}\binom{-1/2}{k}u^k$ ($|u|<1$), show that
+    $\mathbb E[X^{2k}]=\Big(\dfrac{(2k)!}{2^kk!}\Big)^2$ and $\mathbb E[X^{2k+1}]=0$ for every
+    $k\in\mathbb N$. In particular $\mathbb E[X^2]=1$ and $\mathbb E[X^4]=9$.
+  \item Expand $(X+Y)^4$ and show that $\mathbb E[(X+Y)^4]=24$, saying which result justifies each
+    step.
+  \item Compute $\mathbb E[T^2]$ and $\mathbb E[T^4]$ for $T=X+Y+Z$ in two ways: from (a), and
+    from $\Phi_T(t)=(1+t^2)^{-3/2}$.
+  \item Compute $\mathbb E[N^{2k}]$ for $N\sim\mathcal N(0,1)$ from the Maclaurin series of
+    $e^{-t^2/2}$, and compare with (a). What does the comparison suggest about the law of $X$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sums identified through transforms]\label{ex:cf-sums}
+\medium (in the style of Ross, Ch.~7)
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X\sim\mathcal P(\lambda)$ and $Y\sim\mathcal P(\mu)$ be independent, and
+    $X'\sim B(n,p)$ and $Y'\sim B(m,p)$ be independent. Find the laws of $X+Y$ and $X'+Y'$ with
+    \exref{ex:cf-standard}, and compare with \noteref{prop:rv-notable-discrete}.
+  \item Let $X\sim\Gamma(\alpha,\lambda)$ (\noteref{def:tr-gamma}). Show, integrating by parts,
+    that $\Phi_X'(t)=\dfrac{i\alpha}{\lambda-it}\Phi_X(t)$, and deduce that
+    $\Phi_X(t)=(1-it/\lambda)^{-\alpha}=\exp\big(-\alpha\operatorname{Log}(1-it/\lambda)\big)$, with
+    $\operatorname{Log}$ the principal logarithm. Deduce the law of $X+Y$ for independent
+    $X\sim\Gamma(\alpha,\lambda)$ and $Y\sim\Gamma(\beta,\lambda)$.
+  \item Let $N\sim\mathcal N(0,1)$ and $\Psi(t)=\mathbb E[e^{itN^2}]$. With the method of
+    \noteref{exa:cf-gaussian}, show that $\Psi'(t)=\dfrac{i\Psi(t)}{1-2it}$ (\emph{hint:} integrate
+    $\mathbb E[N\cdot Ne^{itN^2}]$ by parts), and deduce that $\Psi(t)=(1-2it)^{-1/2}$. Conclude that
+    if $N_1,\dots,N_n$ are independent standard Gaussians, then
+    $N_1^2+\dots+N_n^2\sim\Gamma(\frac n2,\frac12)$, the law $\chi^2(n)$.
+  \item A random variable $S$ has the characteristic function $(\cos t)^n$. Identify its law, and
+    compute $\mathbb E[S^2]$ and $\mathbb E[S^4]$ by differentiating at $0$. Check the second by
+    expanding a power of a sum.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Random sums]\label{ex:cf-random-sums}
+\hard (in the style of Ross, Ch.~7) Let $N$ be a random variable with values in $\mathbb N^*$,
+and $X_1,X_2,\dots$ real random variables with a common law, such that $N,X_1,X_2,\dots$ are
+independent. Let $S=\sum_{i=1}^NX_i$, that is, $S(\omega)=\sum_{i=1}^{N(\omega)}X_i(\omega)$, and
+$G_N(s)=\mathbb E[s^N]=\sum_{n\ge1}\mathbb P(N=n)s^n$ for $s\in\mathbb C$, $|s|\le1$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $S$ is a random variable, and that
+    \[
+      \Phi_S(t)=G_N\big(\Phi_{X_1}(t)\big)\qquad\forall t\in\mathbb R .
+    \]
+    \emph{Hint:} $e^{itS}=\sum_n\1_{\{N=n\}}e^{it(X_1+\dots+X_n)}$.
+  \item Let $N\sim G(p)$ and $X_i\sim\mathrm{Exp}(\lambda)$. Show that $S\sim\mathrm{Exp}(p\lambda)$.
+  \item Let $N,X_1\in L^2$. By differentiating $\Phi_S(t)=\sum_n\mathbb P(N=n)\Phi_{X_1}(t)^n$ term
+    by term (justify it), show that
+    \[
+      \mathbb E[S]=\mathbb E[N]\,\mathbb E[X_1],\qquad
+      \operatorname{var}(S)=\mathbb E[N]\operatorname{var}(X_1)+\operatorname{var}(N)\,\mathbb E[X_1]^2 .
+    \]
+  \item Let $N\sim G(\frac14)$ and $X_i\sim\mathcal P(1.5)$. Compute $\mathbb E[S]$ and
+    $\operatorname{var}(S)$ with (c), check them by applying numerical differentiation at $0$
+    (\noteref{rem:cf-code-moments}) to $\Phi_S$, and by simulating $10^6$ values of $S$ (seed
+    $2026$): is the sample mean within $3$ standard errors of $\mathbb E[S]$? Check (b) by
+    simulation too, for $p=\frac14$ and $\lambda=2$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Identifying a law by simulation]\label{ex:cf-product-normals}
+\medium This is a computational exercise. Let $N_1,N_2$ be independent standard Gaussian random
+variables and $X=N_1N_2$.
+\begin{enumerate}[label=(\alph*)]
+  \item Simulate $n=10^4,10^5,10^6$ values of $X$ (seed $2026$) and compute the largest value of
+    $|\Phi_n(t)-(1+t^2)^{-1/2}|$ over a grid of $401$ points of $[-10,10]$, with $\Phi_n$ the
+    empirical characteristic function (\noteref{rem:cf-code-ecf}). How does it depend on $n$?
+  \item Prove that $\Phi_X(t)=(1+t^2)^{-1/2}$. \emph{Hint:} write $\mathbb E[e^{itN_1N_2}]$ as an
+    integral with respect to $\mathbb P_{N_1}\otimes\mathbb P_{N_2}$ and use Fubini's theorem and
+    \noteref{exa:cf-gaussian}. So the random variable of \noteref{exa:cf-one-over-sqrt} has the
+    law of $N_1N_2$. Find $\mathbb E[X^4]$ from this, and estimate it from the sample of size
+    $10^6$, with a standard error.
+  \item Show that $(1+t^2)^{-1/2}$ is not integrable. Using the formula
+    $f_X(x)=\int_{-\infty}^{+\infty}f_{N_1}(x/y)\,f_{N_2}(y)\,\frac{\dd y}{|y|}$ (which follows from
+    \noteref{thm:rv-piecewise} applied to $(x,y)\mapsto(xy,y)$ with $A=\{y\ne0\}$, split into
+    $\{y>0\}$ and $\{y<0\}$) and $K_0(z)=\int_0^\infty e^{-z\cosh u}\,\dd u$ for $z>0$, show that
+    $f_X(x)=\frac1\pi K_0(|x|)$ for $x\ne0$, and that $f_X(x)\to+\infty$ as $x\to0$. Why is this
+    consistent with \noteref{thm:cf-inversion}?
+  \item Compare $\mathbb P(|X|\le a)$, computed from $f_X$ by quadrature, with the sample of size
+    $10^6$, for $a=0.01,0.1,1$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Recovering a density by numerical inversion]\label{ex:cf-inversion-numerics}
+\medium This is a computational exercise on the random variable $T=X+Y+Z$ of
+\noteref{exa:cf-one-over-sqrt}, with $\Phi_T(t)=(1+t^2)^{-3/2}$ and density
+$f_T(x)=\frac1\pi|x|K_1(|x|)$. Let $f_L$ be the truncated inversion integral of
+\noteref{rem:cf-code-inversion}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $|f_L(x)-f_T(x)|\le\frac1\pi\big(1-\frac L{\sqrt{1+L^2}}\big)\le\frac1{2\pi L^2}$ for
+    every $x$, with equality in the first inequality at $x=0$. Find the smallest integer $L$ for
+    which the bound $\frac1{2\pi L^2}$ is below $10^{-4}$.
+  \item With $L=40$, compute $f_L$ on $[-8,8]$ by the trapezoidal rule with step $L/n$, for
+    $n=4000,400,100,40$, and the largest error against $f_T$. Explain the results, using the fact
+    that the trapezoidal rule with step $h$ replaces $f_T$ by its periodisation
+    $\sum_{k\in\mathbb Z}f_T(x+2\pi k/h)$.
+  \item How many simulated values of $T$ are needed for the asymptotic $95\%$ confidence interval
+    for $\mathbb P(T\ge0)$ to have half-width at most $0.002$, whatever the true value? Simulate
+    them (seed $2026$), with $T$ a sum of three independent copies of the product of two
+    independent standard Gaussians (\exref{ex:cf-product-normals}). Does the interval contain
+    $\frac12$?
+  \item For the same sample, compute $\sup_x|F_n(x)-F_T(x)|$ over a fine grid, with $F_n$ the
+    empirical distribution function and $F_T$ obtained by integrating $f_T$. Compare it with the
+    half-width $\varepsilon=\sqrt{\log(2/0.05)/(2n)}$ of the $95\%$ band given by the
+    Dvoretzky--Kiefer--Wolfowitz inequality
+    $\mathbb P\big(\sup_x|F_n(x)-F(x)|>\varepsilon\big)\le2e^{-2n\varepsilon^2}$ (in the form proved by
+    P.~Massart, \emph{Ann.\ Probab.}\ 18, 1990, 1269--1283).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[When the characteristic function is not integrable]\label{ex:cf-non-integrable}
+\hard This is a computational exercise. Let $X\sim\mathrm{Exp}(1)$, so that
+$\Phi_X(t)=\frac1{1-it}$, and let
+$f_L(x)=\frac1{2\pi}\int_{-L}^Le^{-itx}\Phi_X(t)\,\dd t$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\int_0^L|\Phi_X(t)|\,\dd t=\operatorname{arsinh}L$, so that $\Phi_X$ is not
+    integrable, although $X$ is absolutely continuous: the converse of
+    \noteref{thm:cf-inversion} is false.
+  \item Show that
+    \[
+      f_L(x)=\frac1\pi\int_0^L\frac{\cos(tx)+t\sin(tx)}{1+t^2}\,\dd t,
+    \]
+    and that $f_L(0)=\frac1\pi\arctan L$. Using
+    \[
+      \int_0^\infty\frac{\cos(tx)}{1+t^2}\,\dd t=\frac\pi2e^{-|x|},\qquad
+      \int_0^\infty\frac{t\sin(tx)}{1+t^2}\,\dd t=\frac\pi2\operatorname{sign}(x)\,e^{-|x|}\quad(x\ne0),
+    \]
+    the second as an improper integral, find $\lim_{L\to\infty}f_L(x)$ for every $x$. Compute
+    $f_L(-1)$, $f_L(0)$ and $f_L(1)$ for $L=10,100,1000$.
+  \item Compute the maximum of $f_L$ on $(0,10/L]$ for $L=10,100,1000$, and the point where it is
+    attained. Compare with $\frac12+\frac1\pi\operatorname{Si}(\pi)$, where
+    $\operatorname{Si}(z)=\int_0^z\frac{\sin u}u\,\dd u$ (the Gibbs phenomenon).
+  \item Let $B\sim b(0.3)$. Show that $\Phi_B$ is not integrable and that the truncated inversion
+    integral at $0$ tends to $+\infty$ as $L\to\infty$. Compute exactly
+    $\frac1{2L}\int_{-L}^Le^{-itx}\Phi_B(t)\,\dd t$, show that it tends to $\mathbb P(B=x)$ for every
+    $x\in\mathbb R$, and evaluate it numerically for $x=0,\frac12,1$ and $L=10,100,1000$.
+\end{enumerate}
+\end{exercise}

@@ -1,5 +1,841 @@
-\begin{planned}
-  \item the multivariate Gaussian law
-  \item densities and degenerate Gaussian vectors
-  \item independence of Gaussian components
-\end{planned}
+% Chapter 13: Gaussian vectors.
+% Translation of Paola Siri's handwritten notes, PDF pages 203-218 (topic "VETTORI GAUSSIANI (O
+% V.A. GAUSSIANE MULTIVARIATE)", whose heading is repeated as "VETTORI GAUSSIANI" on p. 208, where a
+% new lecture starts): a recap of Gaussian random variables (p. 203), standard Gaussian vectors
+% (pp. 204-205), Gaussian vectors and their characteristic function (pp. 205-208), closure under
+% affine maps (pp. 208-210), covariance matrices, the density theorem and the degenerate case, with
+% three examples (pp. 210-214), the components of a Gaussian vector, the example of Gaussian
+% variables that are not jointly Gaussian, and independence (pp. 215-218).
+
+The Gaussian law is the most important law of probability theory, and this chapter extends it to
+random vectors. A \emph{Gaussian vector} is an affine image $A\underline X+\underline\mu$ of a
+vector $\underline X$ with independent standard Gaussian components. Its law depends only on two
+parameters, the mean vector $\underline\mu$ and the covariance matrix $C=AA^T$, as its
+characteristic function shows (\cref{ch:10-characteristic-functions}), and every symmetric positive
+semidefinite matrix is the covariance matrix of a Gaussian vector. The family is closed under affine
+maps. When $C$ is invertible the vector has an explicit density; when $C$ is singular it lives on a
+proper affine subspace and has no density. The components of a Gaussian vector are Gaussian, but
+Gaussian random variables need not be jointly Gaussian. Finally, and this is what makes Gaussian
+vectors so convenient, their components are independent as soon as they are uncorrelated. The
+conditional laws of Gaussian vectors are the subject of \cref{ch:14-gaussian-conditioning}.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space, vectors are columns, and
+$|\underline x|=(\underline x^T\underline x)^{1/2}$ is the Euclidean norm of
+$\underline x\in\mathbb R^N$. $\mathcal M_{N\times K}(\mathbb R)$ is the space of real matrices
+with $N$ rows and $K$ columns, $\mathcal M_N(\mathbb R)=\mathcal M_{N\times N}(\mathbb R)$, and
+$I_N$ is the identity of $\mathcal M_N(\mathbb R)$.
+
+\section{Gaussian random variables: a recap}\label{sec:gv-recap}
+
+Let us recall the Gaussian random variables. One possible way to define them is the following.
+
+\begin{enumerate}[label=\protect\textcircled{\scriptsize\arabic*},leftmargin=2.2em]
+  \item One defines $X\sim\mathcal N(0,1)$ through its density function:
+    \[
+      f_X(x)=\frac1{\sqrt{2\pi}}\,e^{-\frac{x^2}2}\qquad\forall x\in\mathbb R .
+    \]
+    \begin{itemize}
+      \item $\mathbb E[X]=0$, $\operatorname{var}(X)=1$;
+      \item $\Phi_X(t)=e^{-t^2/2}$ for every $t\in\mathbb R$ (\cref{exa:cf-gaussian}).
+    \end{itemize}
+  \item Let $Y=\sigma X+\mu$ with $\sigma,\mu\in\mathbb R$. $Y$ is called a \emph{Gaussian random
+    variable with parameters $\mu$ and $\sigma^2$}, and we write $Y\sim\mathcal N(\mu,\sigma^2)$.%
+    \footnote{More precisely, $\mathcal N(\mu,\sigma^2)$ is the law of $\sigma X+\mu$, and
+    $Y\sim\mathcal N(\mu,\sigma^2)$ means that $Y$ has this law. It depends on $\sigma$ only through
+    $\sigma^2$, because $-X$ has the same law as $X$ (its density is even, or
+    \cref{exa:cf-normal-symmetric}): $-\sigma X+\mu$ and $\sigma X+\mu$ have the same law. Added to
+    the handwritten notes.}
+    \begin{itemize}
+      \item $\mathbb E[Y]=\sigma\,\mathbb E[X]+\mu=\mu$;
+      \item $\operatorname{var}(Y)=\sigma^2\operatorname{var}(X)=\sigma^2$;
+      \item $\Phi_Y(t)=\Phi_{\sigma X+\mu}(t)=e^{it\mu-\frac{\sigma^2t^2}2}$ for every
+        $t\in\mathbb R$, by \cref{prop:cf-affine} (this is not needed for the definition).
+    \end{itemize}
+  \item If $Y\sim\mathcal N(\mu,\sigma^2)$ and $Z=aY+b$ with $a,b\in\mathbb R$, then, taking
+    $Y=\sigma X+\mu$,
+    \[
+      Z=aY+b=a(\sigma X+\mu)+b=(a\sigma)X+(a\mu+b)\ \Longrightarrow\ Z\sim\mathcal N(a\mu+b,a^2\sigma^2).
+    \]
+  \item \begin{itemize}
+      \item If $\sigma=0$, then $Y=\mu$: $Y$ is \emph{degenerate} (its law is the Dirac mass
+        $\delta_\mu$).
+      \item If $\sigma\ne0$, then $Y$ is absolutely continuous, with density
+        (\cref{prop:tr-affine-gaussian,rem:rv-affine-1d})
+        \begin{equation}\label{eq:gv-density-1d}
+          f_Y(y)=f_X\Big(\frac{y-\mu}\sigma\Big)\frac1{|\sigma|}
+          =\frac1{\sqrt{2\pi\sigma^2}}\,e^{-\frac{(y-\mu)^2}{2\sigma^2}}\qquad\forall y\in\mathbb R .
+        \end{equation}
+    \end{itemize}
+\end{enumerate}
+
+\emph{Note.} If $\sigma^2>0$, $Y\sim\mathcal N(\mu,\sigma^2)$ is the absolutely continuous random
+variable with density \eqref{eq:gv-density-1d}: for $\sigma^2>0$ one may define
+$\mathcal N(\mu,\sigma^2)$ by this density directly, without going through the linear
+transformation $\sigma X+\mu$.
+
+In particular, a Gaussian random variable is either absolutely continuous (if $\sigma^2>0$) or
+almost surely constant (if $\sigma^2=0$).\footnote{This sentence is added to the handwritten notes.}
+
+\section{Standard Gaussian vectors}\label{sec:gv-standard}
+
+We now generalise to the multivariate case.
+
+\textcircled{\scriptsize 1} Let $X_1,\dots,X_K$ be \iid random variables with law
+$\mathcal N(0,1)$, and let
+\[
+  \underline X=\begin{pmatrix}X_1\\\vdots\\X_K\end{pmatrix}.
+\]
+Since the $X_i$ are independent, we can compute the density of $\underline X$: for every
+$\underline x=(x_1,\dots,x_K)^T\in\mathbb R^K$,
+\[
+  f_{\underline X}(\underline x)\overset{(a)}{=}\prod_{i=1}^Kf_{X_i}(x_i)
+  \overset{(b)}{=}\prod_{i=1}^K\frac1{\sqrt{2\pi}}\,e^{-\frac{x_i^2}2}
+  =\frac1{(2\pi)^{K/2}}\,e^{-\frac12\sum_{i=1}^Kx_i^2}
+  \overset{(c)}{=}\frac1{(2\pi)^{K/2}}\,e^{-\frac12|\underline x|^2},
+\]
+where (a) holds because the $X_i$ are independent,\footnote{This is
+\cref{thm:pm-density-independence} for $K$ random variables, which has the same proof: if
+$X_1,\dots,X_K$ are independent and absolutely continuous, then
+$\mathbb P_{\underline X}=\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_K}$, and by Tonelli's
+theorem the measure with density $\prod_if_{X_i}(x_i)$ agrees with it on the rectangles, hence
+everywhere. Conversely, if the density of $\underline X$ factorises as $\prod_if_i(x_i)$, the
+$X_i$ are independent. Added to the handwritten notes.} (b) because each $X_i\sim\mathcal N(0,1)$,
+and (c) because $\sum_{i=1}^Kx_i^2=\underline x^T\underline x=|\underline x|^2$.
+
+Observe that the \emph{mean vector} of $\underline X$ is
+\[
+  \begin{pmatrix}\mathbb E[X_1]\\\vdots\\\mathbb E[X_K]\end{pmatrix}
+  =\begin{pmatrix}0\\\vdots\\0\end{pmatrix}=\underline 0\in\mathbb R^K,
+\]
+while the \emph{variance--covariance matrix} (or \emph{covariance matrix}) of $\underline X$ is
+\[
+  C=(c_{ij})_{i,j=1,\dots,K}\quad\text{with}\quad
+  c_{ij}=\operatorname{cov}(X_i,X_j)=\begin{cases}\operatorname{var}(X_i)=1&\text{if }i=j,\\
+  0&\text{if }i\ne j,\end{cases}
+  \qquad\text{that is, }c_{ij}=\delta_{ij},
+\]
+since $X_i\indep X_j$ implies $\operatorname{cov}(X_i,X_j)=0$ for $i\ne j$
+(\cref{thm:pm-expectation-product}). Hence $C=I_K$, the identity of $\mathcal M_K(\mathbb R)$.
+(For any random vector $\underline Y=(Y_1,\dots,Y_N)^T$ with components in $L^2$, the mean vector
+is $(\mathbb E[Y_1],\dots,\mathbb E[Y_N])^T$ and the covariance matrix is
+$(\operatorname{cov}(Y_i,Y_j))_{i,j=1,\dots,N}$.)
+
+\begin{definition}[Standard Gaussian vector]\label{def:gv-standard}
+A random vector $\underline X$ with values in $\mathbb R^K$ with density function
+\[
+  f_{\underline X}(\underline x)=\frac1{(2\pi)^{K/2}}\,e^{-\frac12|\underline x|^2}\qquad
+  \forall\underline x\in\mathbb R^K
+\]
+is called a \emph{standard Gaussian vector} (or \emph{standard multivariate Gaussian random
+variable}) of dimension $K$, and we write
+\[
+  \underline X\sim\mathcal N_K(\underline 0,I_K).
+\]
+\end{definition}
+
+The density factorises as $\prod_{i=1}^K\frac1{\sqrt{2\pi}}e^{-x_i^2/2}$, so the components of a
+standard Gaussian vector are independent with law $\mathcal N(0,1)$: the vectors of
+\cref{def:gv-standard} are exactly those constructed above.\footnote{By the converse in the
+previous footnote, and \cref{prop:pm-marginal-density} for the marginal densities. Added to the
+handwritten notes.} We compute the characteristic function of $\underline X$: for every
+$\underline t=(t_1,\dots,t_K)^T\in\mathbb R^K$,
+\begin{equation}\label{eq:gv-cf-standard}
+  \Phi_{\underline X}(\underline t)\overset{(\ast)}{=}\prod_{i=1}^K\Phi_{X_i}(t_i)
+  =\prod_{i=1}^Ke^{-\frac{t_i^2}2}=e^{-\frac12\sum_{i=1}^Kt_i^2}=e^{-\frac12|\underline t|^2},
+\end{equation}
+where $(\ast)$ holds because the $X_i$ are independent (\cref{thm:cf-independence-criterion}).
+
+\section{Gaussian vectors}\label{sec:gv-gaussian}
+
+\textcircled{\scriptsize 2} More generally:
+
+\begin{definition}[Gaussian vector]\label{def:gv-gaussian-vector}
+Let $\underline X\sim\mathcal N_K(\underline 0,I_K)$, let $A\in\mathcal M_{N\times K}(\mathbb R)$ and
+let $\underline\mu\in\mathbb R^N$. The random vector with values in $\mathbb R^N$
+\[
+  \underline Y=A\underline X+\underline\mu
+\]
+is called a \emph{Gaussian vector} (or \emph{multivariate Gaussian random variable}) of dimension
+$N$, with parameters $\underline\mu$ and $C=AA^T\in\mathcal M_N(\mathbb R)$, and we write
+\[
+  \underline Y\sim\mathcal N_N(\underline\mu,C).
+\]
+\end{definition}
+
+($\underline Y$ is a random vector, since $\underline x\mapsto A\underline x+\underline\mu$ is
+continuous; and, as in \textcircled{\scriptsize 2} of \cref{sec:gv-recap}, a random vector with
+the same law as $A\underline X+\underline\mu$ is also called a Gaussian vector. We shall see in
+\cref{prop:gv-characteristic} that this law depends on $A$ only through $C$.)\footnote{This
+paragraph is added to the handwritten notes.}
+
+\begin{remark}[The parameters are the mean vector and the covariance matrix]\label{rem:gv-mean-covariance}
+$\underline\mu$ is the mean vector of $\underline Y$, and $C$ is its variance--covariance matrix.
+Indeed, write
+\[
+  \underline Y=A\underline X+\underline\mu\qquad\text{with}\quad A=(a_{ij})_{\substack{i=1,\dots,N\\j=1,\dots,K}},\quad
+  \underline\mu=\begin{pmatrix}\mu_1\\\vdots\\\mu_N\end{pmatrix}.
+\]
+For every $i=1,\dots,N$,
+\[
+  Y_i=\sum_{j=1}^Ka_{ij}X_j+\mu_i ,
+\]
+which is in $L^2$, as a linear combination of random variables in $L^2$, and
+\[
+\begin{aligned}
+  \mathbb E[Y_i]&=\sum_{j=1}^Ka_{ij}\underbrace{\mathbb E[X_j]}_{=\,0}+\mu_i=\mu_i,\\
+  \operatorname{var}(Y_i)&=\operatorname{var}\Big(\sum_{j=1}^Ka_{ij}X_j\Big)
+  \overset{(a)}{=}\sum_{j=1}^Ka_{ij}^2\underbrace{\operatorname{var}(X_j)}_{=\,1}
+  =\sum_{j=1}^Ka_{ij}^2=(AA^T)_{ii}=c_{ii},
+\end{aligned}
+\]
+where (a) holds because the $X_j$ are independent. More generally, since the covariance is
+bilinear,
+\[
+\begin{aligned}
+  \operatorname{cov}(Y_i,Y_j)&=\operatorname{cov}\Big(\sum_{k=1}^Ka_{ik}X_k+\mu_i,\ \sum_{l=1}^Ka_{jl}X_l+\mu_j\Big)
+  =\sum_{k,l=1}^Ka_{ik}a_{jl}\underbrace{\operatorname{cov}(X_k,X_l)}_{=\,\delta_{kl}}\\
+  &=\sum_{l=1}^Ka_{il}a_{jl}=(AA^T)_{ij}=c_{ij}.
+\end{aligned}
+\]
+\end{remark}
+
+\begin{remark}[Dimension one]\label{rem:gv-one-dimensional}
+If $A\in\mathcal M_{1\times K}(\mathbb R)$, that is, $A=(a_1,\dots,a_K)$ is a row vector, and
+$\mu\in\mathbb R$, then $Y=A\underline X+\mu$ is a real random variable:
+\[
+  Y=\sum_{i=1}^Ka_iX_i+\mu\sim\mathcal N(\mu,\sigma^2),\qquad\text{where }\sigma^2=\sum_{i=1}^Ka_i^2
+\]
+($Y$ is a linear combination of the \iid $X_i\sim\mathcal N(0,1)$, plus a constant).%
+\footnote{The handwritten notes state this without justification. By
+\cref{prop:gv-characteristic} below, with $N=1$ and $C=AA^T=\sum_ia_i^2=\sigma^2$,
+$\Phi_Y(t)=e^{it\mu-\sigma^2t^2/2}$, which is the characteristic function of
+$\mathcal N(\mu,\sigma^2)$ (\textcircled{\scriptsize 2} of \cref{sec:gv-recap}); conclude by
+\cref{thm:cf-uniqueness}. When all $a_i\ne0$ one can also use \cref{prop:rv-notable-sums}~a)
+repeatedly. Added here.} In particular, $\mathcal N_1(\mu,\sigma^2)=\mathcal N(\mu,\sigma^2)$.\footnote{This
+sentence is added to the handwritten notes.}
+$Y$ can be degenerate: this happens if $\sum_{i=1}^Ka_i^2=0$, that is, if $a_i=0$ for every
+$i=1,\dots,K$, and in that case $Y=\mu$.
+\end{remark}
+
+We compute the characteristic function of a Gaussian vector.
+
+\begin{proposition}[Characteristic function of a Gaussian vector]\label{prop:gv-characteristic}
+Let $\underline Y\sim\mathcal N_N(\underline\mu,C)$, that is, $\underline Y=A\underline X+\underline\mu$
+with $A\in\mathcal M_{N\times K}(\mathbb R)$, $C=AA^T$, $\underline\mu\in\mathbb R^N$ and
+$\underline X\sim\mathcal N_K(\underline 0,I_K)$. Then
+\begin{equation}\label{eq:gv-cf}
+  \Phi_{\underline Y}(\underline t)=e^{i\underline t^T\underline\mu-\frac12\underline t^TC\underline t}
+  \qquad\forall\underline t\in\mathbb R^N .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+By \cref{prop:cf-affine} and \eqref{eq:gv-cf-standard},
+\[
+  \Phi_{\underline Y}(\underline t)=\Phi_{A\underline X+\underline\mu}(\underline t)
+  =e^{i\underline t^T\underline\mu}\,\Phi_{\underline X}(A^T\underline t)
+  =e^{i\underline t^T\underline\mu}\,e^{-\frac12|A^T\underline t|^2}
+  =e^{i\underline t^T\underline\mu-\frac12(A^T\underline t)^T(A^T\underline t)}
+  =e^{i\underline t^T\underline\mu-\frac12\underline t^TC\underline t},
+\]
+because $(A^T\underline t)^T(A^T\underline t)=\underline t^TAA^T\underline t=\underline t^TC\underline t$.
+\end{proof}
+
+In particular, by \cref{thm:cf-uniqueness}, the law of $\underline Y$ depends on $A$ (and on $K$)
+only through $C=AA^T$: two Gaussian vectors with the same parameters $\underline\mu$ and $C$ have
+the same law. This is what justifies the notation $\mathcal N_N(\underline\mu,C)$ for this
+law.\footnote{The handwritten notes leave this consequence implicit; it is used in
+\cref{rem:gv-existence} and in the proof of \cref{thm:gv-density}. Added here.} For $N=K$,
+$\underline\mu=\underline 0$ and $A=I_K$ we recover the standard Gaussian vector, and a vector
+$\underline Y$ has the law $\mathcal N_K(\underline 0,I_K)$ of \cref{def:gv-gaussian-vector} if and
+only if its characteristic function is $e^{-|\underline t|^2/2}$, that is, if and only if it is a
+standard Gaussian vector in the sense of \cref{def:gv-standard}: the two notations agree.
+
+\section{Affine transformations}\label{sec:gv-affine}
+
+\textcircled{\scriptsize 3}
+
+\begin{theorem}[Closure under affine maps]\label{thm:gv-affine}
+The family of multivariate Gaussian laws is closed under affine transformations. Precisely: if
+$\underline Y\sim\mathcal N_N(\underline\mu,C)$, $B\in\mathcal M_{M\times N}(\mathbb R)$ and
+$\underline\gamma\in\mathbb R^M$, then
+\[
+  \underline U=B\underline Y+\underline\gamma\sim\mathcal N_M(B\underline\mu+\underline\gamma,\,BCB^T).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $\underline Y$ be a Gaussian vector, $\underline Y\sim\mathcal N_N(\underline\mu,C)$, that is,
+$\underline Y=A\underline X+\underline\mu$ with $A\in\mathcal M_{N\times K}(\mathbb R)$, $C=AA^T$,
+$\underline\mu\in\mathbb R^N$ and $\underline X\sim\mathcal N_K(\underline 0,I_K)$. Let
+$B\in\mathcal M_{M\times N}(\mathbb R)$ and $\underline\gamma\in\mathbb R^M$. Then
+$\underline U=B\underline Y+\underline\gamma$ is a random vector with values in $\mathbb R^M$, and
+\[
+  \underline U=B\underline Y+\underline\gamma=B(A\underline X+\underline\mu)+\underline\gamma
+  =(BA)\underline X+(B\underline\mu+\underline\gamma),
+\]
+with $BA\in\mathcal M_{M\times K}(\mathbb R)$ and $B\underline\mu+\underline\gamma\in\mathbb R^M$.
+Hence $\underline U$ is a Gaussian vector, $\underline U\sim\mathcal N_M(\underline m,\Sigma)$, where
+\[
+  \underline m=B\underline\mu+\underline\gamma,\qquad
+  \Sigma=(BA)(BA)^T=B\,AA^T\,B^T=BCB^T .
+\]
+So $\underline U\sim\mathcal N_M(B\underline\mu+\underline\gamma,\,BCB^T)$.\footnote{If
+$\underline Y$ only has the law $\mathcal N_N(\underline\mu,C)$, then $\underline U$ has the law of
+$B(A\underline X+\underline\mu)+\underline\gamma$, and the conclusion is the same.}
+\end{proof}
+
+\begin{example}[An affine image]\label{exa:gv-affine}
+Let $\underline X=(X_1,X_2,X_3)^T\sim\mathcal N_3(\underline\mu,C)$ with
+\[
+  \underline\mu=\underline 0,\qquad
+  C=\begin{pmatrix}2&1&-1\\1&2&1\\-1&1&3\end{pmatrix}.\footnotemark
+\]
+\footnotetext{The handwritten notes take $c_{33}=1$. Then $\det C=-3<0$, so one eigenvalue is
+negative: that matrix is not positive semidefinite, so it is not the covariance
+matrix of any random vector (\cref{lem:gv-covariance-psd}) and there is no
+$\underline X\sim\mathcal N_3(\underline 0,C)$. With $c_{33}=3$ we have $\det C=3$, $C$ is positive
+definite, and only $\operatorname{var}(Z_2)$ below changes, from $1$ to $3$. Corrected here; see
+also \exref{ex:gv-covariance-matrices}.}
+What is the law of
+\[
+  \underline Z=\begin{pmatrix}X_1-X_2\\X_1+X_3\end{pmatrix}?
+\]
+We have $\underline Z=A\underline X+\underline b$, where $\underline b=\underline 0$ and
+\[
+  A=\begin{pmatrix}1&-1&0\\1&0&1\end{pmatrix}\in\mathcal M_{2\times3}(\mathbb R):\qquad
+  \begin{pmatrix}X_1-X_2\\X_1+X_3\end{pmatrix}=\begin{pmatrix}1&-1&0\\1&0&1\end{pmatrix}
+  \begin{pmatrix}X_1\\X_2\\X_3\end{pmatrix}.
+\]
+By \cref{thm:gv-affine}, $\underline Z\sim\mathcal N_2(\underline m,\Sigma)$, where
+$\underline m=A\underline\mu+\underline b=\underline 0$ and
+\[
+\begin{aligned}
+  \Sigma=ACA^T&=\begin{pmatrix}1&-1&0\\1&0&1\end{pmatrix}
+  \begin{pmatrix}2&1&-1\\1&2&1\\-1&1&3\end{pmatrix}
+  \begin{pmatrix}1&1\\-1&0\\0&1\end{pmatrix}\\
+  &=\begin{pmatrix}1&-1&-2\\1&2&2\end{pmatrix}\begin{pmatrix}1&1\\-1&0\\0&1\end{pmatrix}
+  =\begin{pmatrix}2&-1\\-1&3\end{pmatrix}.
+\end{aligned}
+\]
+Alternatively, since $\underline Z$ is a Gaussian vector, its law is determined by its mean vector
+and its covariance matrix, which we can compute directly:
+\[
+\begin{aligned}
+  \mathbb E[Z_1]&=\mathbb E[X_1-X_2]=\mathbb E[X_1]-\mathbb E[X_2]=0,\qquad
+  \mathbb E[Z_2]=\mathbb E[X_1+X_3]=\mathbb E[X_1]+\mathbb E[X_3]=0,\\
+  \operatorname{var}(Z_1)&=\operatorname{var}(X_1-X_2)=\operatorname{var}(X_1)+\operatorname{var}(X_2)-2\operatorname{cov}(X_1,X_2)=2+2-2=2,\\
+  \operatorname{var}(Z_2)&=\operatorname{var}(X_1+X_3)=\operatorname{var}(X_1)+\operatorname{var}(X_3)+2\operatorname{cov}(X_1,X_3)=2+3-2=3,\\
+  \operatorname{cov}(Z_1,Z_2)&=\operatorname{cov}(X_1-X_2,X_1+X_3)\\
+  &=\underbrace{\operatorname{cov}(X_1,X_1)}_{=\,\operatorname{var}(X_1)}-\operatorname{cov}(X_2,X_1)+\operatorname{cov}(X_1,X_3)-\operatorname{cov}(X_2,X_3)
+  =2-1-1-1=-1 .
+\end{aligned}
+\]
+\end{example}
+
+\section{The density of a Gaussian vector}\label{sec:gv-density}
+
+\textcircled{\scriptsize 4} \emph{Problem}: is a Gaussian vector absolutely continuous? If so, what
+does its density look like?
+
+\begin{lemma}[Covariance matrices]\label{lem:gv-covariance-psd}
+The variance--covariance matrix of any random vector $\underline X$ with values in $\mathbb R^N$
+(with components in $L^2$) is symmetric and positive semidefinite.
+\end{lemma}
+
+(Note that every matrix with these two properties can be regarded as the variance--covariance
+matrix of some random vector: see \cref{rem:gv-existence}.)
+
+\begin{proof}
+\begin{itemize}
+  \item $C=(c_{ij})_{i,j=1,\dots,N}$ with $c_{ij}=\operatorname{cov}(X_i,X_j)=\operatorname{cov}(X_j,X_i)=c_{ji}$,
+    so $C$ is symmetric.
+  \item Let $\underline a=(a_1,\dots,a_N)^T\in\mathbb R^N$. Then
+    \[
+    \begin{aligned}
+      \underline a^TC\underline a&=\sum_{i,j=1}^Nc_{ij}a_ia_j=\sum_{i,j=1}^N\operatorname{cov}(X_i,X_j)\,a_ia_j\\
+      &=\sum_{i=1}^N\operatorname{var}(X_i)\,a_i^2+2\sum_{i<j}\operatorname{cov}(X_i,X_j)\,a_ia_j
+      =\operatorname{var}\Big(\sum_{i=1}^Na_iX_i\Big)\ge0 .
+    \end{aligned}
+    \]
+\end{itemize}
+(In our case, $C=AA^T$ and $\underline a^TC\underline a=\underline a^TAA^T\underline a
+=(A^T\underline a)^T(A^T\underline a)=|A^T\underline a|^2\ge0$.)
+\end{proof}
+
+\begin{theorem}[Density of a Gaussian vector]\label{thm:gv-density}
+Let $\underline Y\sim\mathcal N_N(\underline\mu,C)$. If $C$ is invertible, then $\underline Y$ is
+absolutely continuous, and its density function is
+\begin{equation}\label{eq:gv-density}
+  f_{\underline Y}(\underline y)=\frac1{(2\pi)^{N/2}\sqrt{\det C}}\,
+  \exp\Big[-\frac12(\underline y-\underline\mu)^TC^{-1}(\underline y-\underline\mu)\Big]
+  \qquad\forall\underline y\in\mathbb R^N .
+\end{equation}
+\end{theorem}
+
+(Here ``absolutely continuous'' means that $\mathbb P_{\underline Y}$ is absolutely continuous
+with respect to Lebesgue measure on $\mathbb R^N$, as in \cref{def:pm-ac-vector} for $N=2$.)
+
+\begin{proof}
+Observe that $C$ is invertible and positive semidefinite (\cref{lem:gv-covariance-psd}), hence
+positive definite;\footnote{The eigenvalues of $C$ are $\ge0$, and none is $0$ because $C$ is
+invertible.} moreover, $C$ is symmetric. Therefore there exists $A\in\mathcal M_N(\mathbb R)$
+symmetric and positive definite (hence invertible) such that
+\[
+  C=A^2
+\]
+(the \emph{principal square root} of $C$).\footnote{By the spectral theorem, $C=Q\Lambda Q^T$ with
+$Q$ orthogonal and $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_N)$, $\lambda_i>0$; then
+$A=Q\Lambda^{1/2}Q^T$, with $\Lambda^{1/2}=\operatorname{diag}(\sqrt{\lambda_1},\dots,\sqrt{\lambda_N})$,
+is symmetric, has the eigenvalues $\sqrt{\lambda_i}>0$, and $A^2=Q\Lambda Q^T=C$. Added to the
+handwritten notes.} Set
+\[
+  \underline X=A^{-1}(\underline Y-\underline\mu)=A^{-1}\underline Y-A^{-1}\underline\mu .
+\]
+By \cref{thm:gv-affine}, $\underline X$ is a Gaussian vector of $\mathbb R^N$:
+\[
+  \underline X\sim\mathcal N_N\big(A^{-1}\underline\mu-A^{-1}\underline\mu,\ A^{-1}C(A^{-1})^T\big)
+  =\mathcal N_N(\underline 0,I_N),
+\]
+because $(A^{-1})^T=A^{-1}$ ($A$ is symmetric) and $A^{-1}CA^{-1}=A^{-1}AAA^{-1}=I_N$ ($C=A^2$).
+So $\underline X$ is a standard Gaussian vector, with the density of \cref{def:gv-standard} (see the
+end of \cref{sec:gv-gaussian}). Note that
+\[
+  \underline Y=A\underline X+\underline\mu\qquad\text{with $A$ invertible.}
+\]
+Hence $\underline Y$ is absolutely continuous, and its density function is\footnote{This is
+\cref{cor:rv-linear} in $\mathbb R^N$, with the same proof: by the change-of-variables formula in
+$\mathbb R^N$ (\cref{thm:rv-jacobi} in $\mathbb R^N$; \citet[Theorem~2.47]{folland}) applied to
+$\underline x\mapsto A\underline x+\underline\mu$, whose Jacobian determinant is $\det A$,
+$\mathbb P(\underline Y\in B)=\int_{\mathbb R^N}\1_B(A\underline x+\underline\mu)f_{\underline X}(\underline x)\,\dd\underline x
+=\int_B f_{\underline X}\big(A^{-1}(\underline y-\underline\mu)\big)\frac{\dd\underline y}{|\det A|}$
+for every $B\in\mathcal B(\mathbb R^N)$. Added to the handwritten notes.}
+\[
+\begin{aligned}
+  f_{\underline Y}(\underline y)&=\frac1{|\det A|}\,f_{\underline X}\big(A^{-1}(\underline y-\underline\mu)\big)
+  \overset{(a)}{=}\frac1{|\det A|}\cdot\frac1{(2\pi)^{N/2}}\exp\Big(-\frac12\big|A^{-1}(\underline y-\underline\mu)\big|^2\Big)\\
+  &=\frac1{|\det A|}\cdot\frac1{(2\pi)^{N/2}}\exp\Big(-\frac12\big(A^{-1}(\underline y-\underline\mu)\big)^T\big(A^{-1}(\underline y-\underline\mu)\big)\Big)\\
+  &=\frac1{|\det A|}\cdot\frac1{(2\pi)^{N/2}}\exp\Big(-\frac12(\underline y-\underline\mu)^T(A^{-1})^TA^{-1}(\underline y-\underline\mu)\Big)\\
+  &\overset{(b)}{=}\frac1{(2\pi)^{N/2}\sqrt{\det C}}\exp\Big(-\frac12(\underline y-\underline\mu)^TC^{-1}(\underline y-\underline\mu)\Big)
+\end{aligned}
+\]
+for every $\underline y\in\mathbb R^N$, where (a) holds because
+$\underline X\sim\mathcal N_N(\underline 0,I_N)$, and (b) because
+\begin{itemize}
+  \item $C=A^2$, so $\det C=\det(A^2)=(\det A)^2$ and $|\det A|=\sqrt{\det C}$;
+  \item $A$ is symmetric, so $(A^{-1})^TA^{-1}=(A^{-1})^2=(A^2)^{-1}=C^{-1}$.\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{remark}[Every positive semidefinite matrix is a Gaussian covariance]\label{rem:gv-existence}
+In general, $C$ is symmetric and positive semidefinite. Then there still exists
+$A\in\mathcal M_N(\mathbb R)$ symmetric and positive semidefinite (not necessarily invertible) such
+that $A^2=C$.\footnote{The same construction: $A=Q\Lambda^{1/2}Q^T$, now with $\lambda_i\ge0$.} So
+we can take $\underline X\sim\mathcal N_N(\underline 0,I_N)$ and define
+\[
+  \underline Y=A\underline X+\underline\mu\ \Longrightarrow\ \underline Y\sim\mathcal N_N(\underline\mu,C),
+\]
+since $AA^T=A^2=C$. \emph{It suffices to give $\underline\mu\in\mathbb R^N$ and a symmetric,
+positive semidefinite $C\in\mathcal M_N(\mathbb R)$ to define a Gaussian vector.} Together with
+\cref{lem:gv-covariance-psd}: the covariance matrices of random vectors with components in $L^2$
+are exactly the symmetric positive semidefinite matrices.\footnote{This sentence is added to the
+handwritten notes.}
+\end{remark}
+
+\begin{remark}[Degenerate Gaussian vectors]\label{rem:gv-degenerate}
+One can prove that if $C$ is not invertible, then $\underline Y$ is not absolutely continuous, and
+its law is concentrated on a proper affine subspace of $\mathbb R^N$, namely
+$\underline\mu+\operatorname{Im}C$, which is negligible for Lebesgue measure.\footnote{The
+handwritten notes say ``a proper subset of $\mathbb R^N$''. Every law on $\mathbb R^N$ is
+concentrated on a proper subset (remove one point of probability zero); the point is that the
+subset is a proper affine subspace, which has Lebesgue measure zero. Made precise here.} In this
+case $\underline Y$ is called \emph{degenerate}.
+\end{remark}
+
+The notes state this without proof; \exref{ex:gv-degenerate} proves it, and shows that a degenerate
+Gaussian vector is a non-degenerate one of dimension $\operatorname{rank}C$, placed in
+$\mathbb R^N$ by an affine map. See also \citet[Section~29, ``Normal Distributions in
+$R^k$'']{billingsley} and \citet[Section~3.10]{durrett}. Together with \cref{thm:gv-density}: a
+Gaussian vector is absolutely continuous if and only if its covariance matrix is invertible. In
+dimension $N=1$ we recover \textcircled{\scriptsize 4} of \cref{sec:gv-recap}.
+
+\subsection*{Examples}
+
+\begin{example}[From the covariance matrix to the density]\label{exa:gv-density-from-covariance}
+Let
+\[
+  \underline X\sim\mathcal N_2\left(\begin{pmatrix}0\\0\end{pmatrix},\begin{pmatrix}2&1\\1&1\end{pmatrix}\right).
+\]
+Is it really a Gaussian vector? Does it have a density?
+
+$C=\begin{pmatrix}2&1\\1&1\end{pmatrix}$ has $\det C=1$, so $C$ is invertible; it is symmetric and
+positive definite.\footnote{Its two eigenvalues have product $\det C=1>0$ and sum
+$\operatorname{tr}C=3>0$, so both are positive.} Hence $\underline X$ is a Gaussian vector
+($C=A^2$ and $\underline X=A\underline Y+\underline 0$ with
+$\underline Y\sim\mathcal N_2(\underline 0,I_2)$, \cref{rem:gv-existence}); moreover, it is
+absolutely continuous (\cref{thm:gv-density}) and
+\[
+  f_{\underline X}(\underline x)=\frac1{2\pi\sqrt{\det C}}\exp\Big(-\frac12(\underline x-\underline 0)^TC^{-1}(\underline x-\underline 0)\Big)
+  =\frac1{2\pi}\,e^{-\frac12\underline x^TC^{-1}\underline x}.
+\]
+Here
+\[
+  C^{-1}=\begin{pmatrix}1&-1\\-1&2\end{pmatrix},\qquad
+  \underline x^TC^{-1}\underline x=(C^{-1})_{11}x_1^2+2(C^{-1})_{12}x_1x_2+(C^{-1})_{22}x_2^2
+  =x_1^2-2x_1x_2+2x_2^2,
+\]
+so
+\[
+  f_{\underline X}(\underline x)=\frac1{2\pi}\,e^{-\frac12(x_1^2-2x_1x_2+2x_2^2)}\qquad
+  \forall\underline x=(x_1,x_2)^T\in\mathbb R^2 .
+\]
+\end{example}
+
+\begin{example}[From the density to the parameters]\label{exa:gv-covariance-from-density}
+Let $\underline X$ be a random vector of $\mathbb R^2$ with density
+\[
+  f_{\underline X}(\underline x)=\frac1{2\pi\sqrt3}\,e^{-\frac13(x_1^2+x_1x_2+x_2^2)}\qquad
+  \forall\underline x=(x_1,x_2)^T\in\mathbb R^2 .
+\]
+Is $\underline X\sim\mathcal N_2(\underline\mu,C)$, and for which $\underline\mu$ and $C$?
+
+Comparing with \eqref{eq:gv-density} for $N=2$, we must have $\det C=3$ (compare the constants in
+front of the exponentials, $\frac1{2\pi\sqrt{\det C}}=\frac1{2\pi\sqrt3}$), and
+\[
+  \frac12(\underline x-\underline\mu)^TC^{-1}(\underline x-\underline\mu)=\frac13(x_1^2+x_1x_2+x_2^2)
+  \qquad\forall\underline x\in\mathbb R^2 .
+\]
+There are no terms of degree lower than $2$ on the right, so $\underline\mu=\underline 0$.%
+\footnote{Expanding, the left-hand side is
+$\frac12\underline x^TC^{-1}\underline x-\underline\mu^TC^{-1}\underline x+\frac12\underline\mu^TC^{-1}\underline\mu$.
+The term of degree $1$, $-\underline\mu^TC^{-1}\underline x$, must vanish for every
+$\underline x$, so $C^{-1}\underline\mu=\underline 0$ and $\underline\mu=\underline 0$. Added to
+the handwritten notes.} Hence we must have
+\[
+  \underline x^TC^{-1}\underline x=\frac23(x_1^2+x_1x_2+x_2^2)
+  =(C^{-1})_{11}x_1^2+2(C^{-1})_{12}x_1x_2+(C^{-1})_{22}x_2^2 ,
+\]
+that is,
+\[
+  C^{-1}=\begin{pmatrix}\frac23&\frac13\\[2pt]\frac13&\frac23\end{pmatrix}=\frac13\begin{pmatrix}2&1\\1&2\end{pmatrix}.
+\]
+Then $\det C^{-1}=\frac13$; $C^{-1}$ is invertible, and $C=(C^{-1})^{-1}$ has determinant $3$, as it
+must. Hence
+\[
+  C=\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\qquad\text{and}\qquad
+  \underline X\sim\mathcal N_2\left(\begin{pmatrix}0\\0\end{pmatrix},\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\right).
+\]
+(Conversely, this $C$ is symmetric and positive definite, and with $\underline\mu=\underline 0$ the
+density \eqref{eq:gv-density} is exactly $f_{\underline X}$; two random vectors with the same
+density have the same law, so $\underline X\sim\mathcal N_2(\underline 0,C)$ indeed.)\footnote{This
+check is added to the handwritten notes.}
+\end{example}
+
+\begin{example}[A degenerate Gaussian vector]\label{exa:gv-degenerate}
+Let $X_1,X_2$ be \iid with law $\mathcal N(0,1)$, and let
+$\underline Y=A\underline X+\underline\mu$ with
+\[
+  \underline\mu=\begin{pmatrix}0\\0\end{pmatrix},\qquad A=\begin{pmatrix}1&1\\2&2\end{pmatrix}:\qquad
+  \underline Y=\begin{pmatrix}1&1\\2&2\end{pmatrix}\begin{pmatrix}X_1\\X_2\end{pmatrix}
+  =\begin{pmatrix}X_1+X_2\\2X_1+2X_2\end{pmatrix}=\begin{pmatrix}Y_1\\Y_2\end{pmatrix}.
+\]
+Then $\underline Y\sim\mathcal N_2(\underline 0,C)$ with
+\[
+  C=AA^T=\begin{pmatrix}1&1\\2&2\end{pmatrix}\begin{pmatrix}1&2\\1&2\end{pmatrix}=\begin{pmatrix}2&4\\4&8\end{pmatrix}.
+\]
+$\det C=16-16=0$: $C$ is not invertible. $\underline Y$ is degenerate, so it is not absolutely
+continuous: there is no density $f_{\underline Y}=f_{(Y_1,Y_2)}$. Indeed, observe that $Y_2=2Y_1$:
+\[
+  1=\mathbb P(Y_2=2Y_1)=\mathbb P\big((Y_1,Y_2)\in D\big),\qquad D=\{(y_1,y_2)\in\mathbb R^2:y_2=2y_1\},
+\]
+and $D$ is a line! The law of $\underline Y$ is concentrated on the line $y_2=2y_1$.\footnote{This
+line has Lebesgue measure zero in $\mathbb R^2$: its sections $\{y_2:(y_1,y_2)\in D\}=\{2y_1\}$ are
+points, so $(m\otimes m)(D)=\int_{\mathbb R}m(\{2y_1\})\,\dd y_1=0$ by \cref{thm:pm-product-measure}.
+Hence $\mathbb P_{\underline Y}$ is not absolutely continuous, as \cref{rem:gv-degenerate} says; the
+line is $\underline\mu+\operatorname{Im}C$, the subspace spanned by $(1,2)^T$. Added to the
+handwritten notes.}
+
+\emph{However}, we shall see shortly (\cref{prop:gv-components}) that, reading the diagonal of $C$,
+\[
+  Y_1\sim\mathcal N(0,2),\qquad Y_2\sim\mathcal N(0,8):
+\]
+the densities $f_{Y_1}$ and $f_{Y_2}$ exist.
+\end{example}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=\textwidth]{ch13-densities}
+  \caption{The three examples. For the invertible covariance matrices of
+    \cref{exa:gv-density-from-covariance,exa:gv-covariance-from-density}, a sample and three level
+    sets of the density \eqref{eq:gv-density}: the ellipses
+    $\{\underline y:\underline y^TC^{-1}\underline y\le r\}$ that hold $50\%$, $90\%$ and $99\%$ of
+    the law (the quadratic form has the law $\chi^2(2)$, \exref{ex:gv-sampling}). For the singular
+    $C$ of \cref{exa:gv-degenerate}, every sample point lies on the line $y_2=2y_1$.}
+  \label{fig:gv-densities}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:gv-code-sampling}
+\coderef{code/src/probnotes/gaussian.py} samples $\mathcal N_N(\underline\mu,C)$ as in
+\cref{def:gv-gaussian-vector}, as $A\underline X+\underline\mu$ with $AA^T=C$ and $\underline X$
+standard. \texttt{sample\_gaussian} offers three choices of $A$: the symmetric square root of the
+proof of \cref{thm:gv-density} (\texttt{psd\_sqrt}), the lower-triangular Cholesky factor
+(\texttt{psd\_cholesky}), and $Q\Lambda^{1/2}$ from the spectral decomposition. All three also work
+for singular $C$, where \texttt{numpy.linalg.cholesky} fails; they give the same law, but different
+maps from $\underline X$ to $\underline Y$. \texttt{gaussian\_density} evaluates
+\eqref{eq:gv-density}, and refuses a singular $C$; \texttt{support\_basis} and
+\texttt{distance\_to\_support} describe the subspace $\underline\mu+\operatorname{Im}C$ of
+\cref{rem:gv-degenerate}. See \exref{ex:gv-sampling} and \exref{ex:gv-whitening}.
+\end{remark}
+
+\demo{13-gaussian-vectors.ipynb}{a bivariate Gaussian vector with sliders for the variances and
+the correlation, sampled through the symmetric square root and through the Cholesky factor, and
+its image under an affine map, which becomes degenerate when the map is singular.}
+
+\section{Components of a Gaussian vector and independence}\label{sec:gv-independence}
+
+\begin{proposition}[The components are Gaussian]\label{prop:gv-components}
+Let $\underline X=(X_1,\dots,X_N)^T\sim\mathcal N_N(\underline\mu,C)$. Then
+\[
+  X_j\sim\mathcal N(\mu_j,c_{jj})\qquad\forall j=1,\dots,N .
+\]
+\end{proposition}
+
+\begin{proof}
+Let $\Phi_{\underline X}$ be the characteristic function of $\underline X$:
+\[
+  \Phi_{\underline X}(\underline t)=\exp\Big(i\underline t^T\underline\mu-\frac12\underline t^TC\underline t\Big)
+  \qquad\forall\underline t\in\mathbb R^N
+\]
+(\cref{prop:gv-characteristic}). Then, by \cref{prop:cf-marginals}, for every $t\in\mathbb R$
+\[
+  \Phi_{X_j}(t)=\Phi_{\underline X}(t\underline e_j)
+  =\exp\Big(it\underbrace{\underline e_j^T\underline\mu}_{=\,\mu_j}-\frac12t^2\underbrace{\underline e_j^TC\underline e_j}_{=\,c_{jj}}\Big)
+  =\exp\Big(it\mu_j-\frac12t^2c_{jj}\Big),
+\]
+which is the characteristic function of $\mathcal N(\mu_j,c_{jj})$. Since the characteristic
+function characterises the law (\cref{thm:cf-uniqueness}), $X_j\sim\mathcal N(\mu_j,c_{jj})$.
+\end{proof}
+
+\begin{definition}[Jointly Gaussian random variables]\label{def:gv-jointly-gaussian}
+Real random variables $X_1,\dots,X_N$ are \emph{jointly Gaussian} if
+$\underline X=(X_1,\dots,X_N)^T$ is a Gaussian vector.
+\end{definition}
+
+By \cref{prop:gv-components}, jointly Gaussian random variables are Gaussian.
+
+\begin{remark}\label{rem:gv-converse}
+The converse does not hold: given $N$ Gaussian random variables $X_1,\dots,X_N$, they need not be
+jointly Gaussian.
+\end{remark}
+
+\begin{example}[Gaussian marginals, not jointly Gaussian]\label{exa:gv-not-joint}
+Let $X\sim\mathcal N(0,1)$ and
+\[
+  Y=ZX,\qquad\text{where }Z\sim U(\{-1,1\}),\ \text{that is, }\mathbb P(Z=1)=\mathbb P(Z=-1)=\tfrac12,
+  \ \text{and }Z\indep X .
+\]
+Let $A\in\mathcal B(\mathbb R)$. Then, by the formula of total probability,
+\[
+\begin{aligned}
+  \mathbb P_Y(A)&=\mathbb P(Y\in A)=\mathbb P(ZX\in A)\\
+  &=\mathbb P(ZX\in A\mid Z=1)\,\mathbb P(Z=1)+\mathbb P(ZX\in A\mid Z=-1)\,\mathbb P(Z=-1)\\
+  &=\mathbb P(X\in A\mid Z=1)\cdot\frac12+\mathbb P(-X\in A\mid Z=-1)\cdot\frac12
+  \overset{(a)}{=}\frac12\big(\mathbb P(X\in A)+\mathbb P(-X\in A)\big)\\
+  &\overset{(b)}{=}\mathbb P(X\in A)=\mathbb P_X(A),
+\end{aligned}
+\]
+where (a) holds because $Z\indep X$, and (b) because $\mathbb P(-X\in A)=\mathbb P(X\in A)$, since
+$-X\sim X$. Hence $\mathbb P_Y=\mathbb P_X$, that is,
+\[
+  Y\sim\mathcal N(0,1).
+\]
+The vector $(X,Y)^T$, however, is not a Gaussian vector. If it were, $X+Y$ would also be a
+Gaussian random variable (\cref{thm:gv-affine}), since
+\[
+  X+Y=\begin{pmatrix}1&1\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix}.
+\]
+But $X+Y$ is not Gaussian:
+\[
+  \mathbb P(X+Y=0)=\mathbb P(X+ZX=0)=\mathbb P\big(X(Z+1)=0\big)\overset{(c)}{=}\mathbb P(Z+1=0)=\frac12,
+\]
+where (c) holds because $\{X(Z+1)=0\}=\{X=0\}\cup\{Z=-1\}$ and $\mathbb P(X=0)=0$, $X$ being
+absolutely continuous. So $X+Y$ is not absolutely continuous, and it is not almost surely constant
+either, since $\mathbb P(X+Y=0)=\frac12<1$. Hence $X+Y$ is not Gaussian (by the last observation of
+\cref{sec:gv-recap}),\footnote{The handwritten notes conclude from ``$X+Y$ is not absolutely
+continuous'' alone. A degenerate Gaussian random variable is not absolutely continuous either, so
+one must also exclude that $X+Y$ is almost surely constant. Corrected here.} and $(X,Y)^T$ is not a
+Gaussian vector.
+\end{example}
+
+The law of $X+Y$ is in fact $\frac12\delta_0+\frac12\mathcal N(0,4)$, while a Gaussian vector with
+the same marginals and the same covariance would give $X+Y\sim\mathcal N(0,2)$; see
+\cref{fig:gv-not-joint}. The pair $(X,Y)$ is also an example of uncorrelated random variables that
+are not independent (\exref{ex:gv-random-sign}); by the next theorem, this cannot happen for a
+Gaussian vector.\footnote{This paragraph is added to the handwritten notes.}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=\textwidth]{ch13-not-joint}
+  \caption{\Cref{exa:gv-not-joint}. Left: the pair $(X,ZX)$ lives on the two diagonals $y=\pm x$,
+    although both coordinates are $\mathcal N(0,1)$. Right: the law of $X+ZX$ (simulated,
+    $10^5$ draws), an atom of mass $\frac12$ at $0$ plus half of the $\mathcal N(0,4)$ density,
+    against the $\mathcal N(0,2)$ density it would have if $(X,ZX)$ were a Gaussian vector.}
+  \label{fig:gv-not-joint}
+\end{figure}
+
+\begin{theorem}[Independence of the components]\label{thm:gv-independence}
+Let $\underline X=(X_1,\dots,X_N)^T\sim\mathcal N_N(\underline\mu,C)$. The components
+$X_1,\dots,X_N$ are independent if and only if $C$ is diagonal, that is,
+$c_{ij}=\operatorname{cov}(X_i,X_j)=0$ for all $i\ne j$.
+\end{theorem}
+
+\begin{proof}
+``$\Rightarrow$'': if $X_1,\dots,X_N$ are independent, they are pairwise uncorrelated
+(\cref{thm:pm-expectation-product}; the $X_i$ are in $L^2$ by \cref{rem:gv-mean-covariance}), so
+$c_{ij}=0$ for $i\ne j$.
+
+``$\Leftarrow$'': let $\Phi_{\underline X}$ be the characteristic function of $\underline X$:
+\[
+  \Phi_{\underline X}(\underline t)=\exp\Big(i\underline t^T\underline\mu-\frac12\underline t^TC\underline t\Big)
+  =\exp\Big(i\sum_{j=1}^Nt_j\mu_j-\frac12\sum_{j,k=1}^Nc_{jk}t_jt_k\Big)
+  \qquad\forall\underline t=(t_1,\dots,t_N)^T\in\mathbb R^N .
+\]
+By hypothesis $c_{jk}=0$ if $j\ne k$, so
+\[
+\begin{aligned}
+  \Phi_{\underline X}(\underline t)&=\exp\Big(i\sum_{j=1}^Nt_j\mu_j-\frac12\sum_{j=1}^Nc_{jj}t_j^2\Big)
+  =\exp\Big(\sum_{j=1}^N\Big(it_j\mu_j-\frac12c_{jj}t_j^2\Big)\Big)\\
+  &=\prod_{j=1}^N\exp\Big(it_j\mu_j-\frac12c_{jj}t_j^2\Big)=\prod_{j=1}^N\Phi_{X_j}(t_j),
+\end{aligned}
+\]
+by \cref{prop:gv-components}. By \cref{thm:cf-independence-criterion}, $X_1,\dots,X_N$ are
+independent.
+\end{proof}
+
+The theorem also holds ``by blocks''. Suppose that $\underline X$ is split into two blocks,
+\[
+  \underline X=\begin{pmatrix}\underline X_1\\\underline X_2\end{pmatrix},\qquad
+  \text{where $\underline X_1$ takes values in $\mathbb R^{N_1}$ and $\underline X_2$ in
+  $\mathbb R^{N_2}$, with $N_1+N_2=N$.}
+\]
+Then
+\[
+  \underline\mu=\begin{pmatrix}\underline\mu_1\\\underline\mu_2\end{pmatrix},\qquad
+  C=\begin{pmatrix}C_{11}&C_{12}\\C_{21}&C_{22}\end{pmatrix},
+\]
+where $\underline\mu_i$ is the mean vector of $\underline X_i$, $C_{ii}$ is the covariance matrix of
+$\underline X_i$, and $C_{12}=C_{21}^T$ contains the covariances between the components of
+$\underline X_1$ and those of $\underline X_2$. For example, for $N=3$, $N_1=2$ and $N_2=1$:
+\[
+  \underline X=\left(\begin{array}{c}X_1\\X_2\\\hline X_3\end{array}\right)\sim\mathcal N_3\left(
+  \left(\begin{array}{c}\mu_1\\\mu_2\\\hline\mu_3\end{array}\right),
+  \left(\begin{array}{cc|c}c_{11}&c_{12}&c_{13}\\c_{21}&c_{22}&c_{23}\\\hline c_{31}&c_{32}&c_{33}\end{array}\right)\right),
+\]
+with $\underline X_1=(X_1,X_2)^T$, $\underline X_2=X_3$, $\underline\mu_1=(\mu_1,\mu_2)^T$,
+$\underline\mu_2=\mu_3$, $C_{11}=\left(\begin{smallmatrix}c_{11}&c_{12}\\c_{21}&c_{22}\end{smallmatrix}\right)$,
+$C_{12}=\left(\begin{smallmatrix}c_{13}\\c_{23}\end{smallmatrix}\right)$,
+$C_{21}=(c_{31}\ c_{32})$ and $C_{22}=c_{33}$.
+
+\begin{corollary}[Independence by blocks]\label{cor:gv-blocks}
+Let $\underline X=(\underline X_1^T,\underline X_2^T)^T\sim\mathcal N_N(\underline\mu,C)$, split
+into blocks as above. Then
+\[
+  \underline X_1\indep\underline X_2\iff C_{12}=C_{21}^T=0 .
+\]
+\end{corollary}
+
+\begin{proof}
+Write $\underline t=(\underline t_1^T,\underline t_2^T)^T$ with $\underline t_i\in\mathbb R^{N_i}$.
+Reasoning as before,
+\[
+\begin{aligned}
+  \Phi_{\underline X}(\underline t)&=\exp\Big(i\sum_{j=1}^Nt_j\mu_j-\frac12\sum_{j,k=1}^Nc_{jk}t_jt_k\Big)\\
+  &=\exp\Big(i\underline t_1^T\underline\mu_1+i\underline t_2^T\underline\mu_2
+   -\frac12\underline t_1^TC_{11}\underline t_1-\frac12\underline t_2^TC_{22}\underline t_2
+   -\frac12\underline t_1^TC_{12}\underline t_2-\frac12\underline t_2^TC_{21}\underline t_1\Big)\\
+  &=\Phi_{\underline X_1}(\underline t_1)\,\Phi_{\underline X_2}(\underline t_2)\cdot
+   \exp\Big(-\frac12\underline t_1^TC_{12}\underline t_2-\frac12\underline t_2^TC_{21}\underline t_1\Big),
+\end{aligned}
+\]
+because $\underline X_i\sim\mathcal N_{N_i}(\underline\mu_i,C_{ii})$ (by \cref{thm:gv-affine}, with
+$B=(I_{N_1}\ 0)$ or $B=(0\ I_{N_2})$), so that
+$\Phi_{\underline X_i}(\underline t_i)=\exp\big(i\underline t_i^T\underline\mu_i-\frac12\underline t_i^TC_{ii}\underline t_i\big)$.
+Hence
+\[
+  \Phi_{\underline X}(\underline t)=\Phi_{\underline X_1}(\underline t_1)\,\Phi_{\underline X_2}(\underline t_2)
+  \quad\forall\underline t\in\mathbb R^N\iff C_{12}=C_{21}=0 .
+\]
+Indeed, $\underline t_2^TC_{21}\underline t_1=\underline t_1^TC_{12}\underline t_2$ (a real number
+equals its transpose, and $C_{21}^T=C_{12}$), so the factorisation holds if and only if
+$e^{-\underline t_1^TC_{12}\underline t_2}=1$, that is, $\underline t_1^TC_{12}\underline t_2=0$, for
+all $\underline t_1,\underline t_2$; taking $\underline t_1,\underline t_2$ among the vectors of the
+canonical bases, this means $C_{12}=0$.\footnote{This step is added to the handwritten notes.} By the
+independence criterion (\cref{thm:cf-independence-criterion}, in its version for two blocks, which
+has the same proof),\footnote{$\underline X_1\indep\underline X_2$ if and only if
+$\Phi_{\underline X}(\underline t)=\Phi_{\underline X_1}(\underline t_1)\Phi_{\underline X_2}(\underline t_2)$
+for every $\underline t$: replace $\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}$ by
+$\mathbb P_{\underline X_1}\otimes\mathbb P_{\underline X_2}$ on
+$\mathbb R^{N_1}\times\mathbb R^{N_2}$ in the proof of \cref{thm:cf-independence-criterion}. Added to
+the handwritten notes.}
+\[
+  \underline X_1\indep\underline X_2\iff C_{12}=C_{21}=0 .\qedhere
+\]
+\end{proof}
+
+From what we have just written we also obtain the following result.
+
+\begin{proposition}[Concatenation of independent Gaussian vectors]\label{prop:gv-concatenation}
+If $\underline X_1\sim\mathcal N_{N_1}(\underline\mu_1,C_{11})$,
+$\underline X_2\sim\mathcal N_{N_2}(\underline\mu_2,C_{22})$ and
+$\underline X_1\indep\underline X_2$, then
+$\underline X=\left(\begin{smallmatrix}\underline X_1\\\underline X_2\end{smallmatrix}\right)$ is a
+random vector with values in $\mathbb R^N$, $N=N_1+N_2$, and
+\[
+  \underline X\sim\mathcal N_N\left(\begin{pmatrix}\underline\mu_1\\\underline\mu_2\end{pmatrix},C\right),
+  \qquad\text{where}\quad C=\begin{pmatrix}C_{11}&0\\0&C_{22}\end{pmatrix}.
+\]
+\end{proposition}
+
+\begin{proof}
+By independence,\footnote{As in the footnote to the proof of \cref{prop:cf-independence}: the
+real and imaginary parts of $e^{i\underline t_1^T\underline X_1}$ and of
+$e^{i\underline t_2^T\underline X_2}$ are bounded and measurable with respect to
+$\sigma(\underline X_1)$ and $\sigma(\underline X_2)$. The notes leave this proof to the reader
+(``from what we have just written''); added here.}
+$\Phi_{\underline X}(\underline t)=\mathbb E\big[e^{i\underline t_1^T\underline X_1}e^{i\underline t_2^T\underline X_2}\big]
+=\Phi_{\underline X_1}(\underline t_1)\,\Phi_{\underline X_2}(\underline t_2)$, and the computation in
+the proof of \cref{cor:gv-blocks}, read with $C_{12}=C_{21}=0$, shows that this is
+$\exp\big(i\underline t^T\underline\mu-\frac12\underline t^TC\underline t\big)$. The matrix $C$ is
+symmetric and positive semidefinite, because $C_{11}$ and $C_{22}$ are
+($\underline a^TC\underline a=\underline a_1^TC_{11}\underline a_1+\underline a_2^TC_{22}\underline a_2$),
+so $\mathcal N_N(\underline\mu,C)$ exists (\cref{rem:gv-existence}) and has this characteristic
+function (\cref{prop:gv-characteristic}). By \cref{thm:cf-uniqueness},
+$\underline X\sim\mathcal N_N(\underline\mu,C)$.
+\end{proof}
+
+\begin{remark}[computational]\label{rem:gv-code-independence}
+The module \coderef{code/src/probnotes/gaussian.py} samples the pair $(X,ZX)$ of
+\cref{exa:gv-not-joint} (\texttt{sample\_random\_sign\_pair}), \texttt{random\_sign\_sum\_cdf} is the distribution function
+of $X+ZX$, and \texttt{ks\_distance} computes $\sup_x|F_n(x)-F(x)|$ for an empirical distribution
+function $F_n$, also when $F$ has atoms (\exref{ex:gv-random-sign}). \texttt{sample\_sign\_flip\_pair}
+gives another pair of uncorrelated, dependent standard Gaussian variables
+(\exref{ex:gv-sign-flip}). \texttt{cf\_factorisation\_defect} measures, on a sample of pairs, how far
+the empirical characteristic function is from the product form of
+\cref{thm:cf-independence-criterion}: it is of order $n^{-1/2}$ for the independent components of
+a Gaussian vector with diagonal $C$, and stays near $\frac12$ for $(X,ZX)$. \texttt{is\_diagonal},
+\texttt{blocks\_uncorrelated} and \texttt{concat\_independent} implement
+\cref{thm:gv-independence,cor:gv-blocks,prop:gv-concatenation}.
+\end{remark}
+
+\demo{13-gaussian-vectors.ipynb}{pairs of standard Gaussian variables that are not jointly
+Gaussian, with the law of their sum and a slider for the construction, and the whitening of a
+Gaussian sample.}
+
+\furtherreading
+\textcite{billingsley}, Section~29, defines the normal distributions on $\mathbb R^k$ through their
+characteristic functions (the notes construct them as $A\underline X+\underline\mu$ and
+derive the characteristic function), and uses them for the multivariate central limit theorem
+(\cref{ch:17-clt-delta}); \textcite{durrett}, Section~3.10, does the same. \textcite{ross-5},
+Chapters~6 and~7, treats the bivariate normal law and the joint law of the sample mean and the
+sample variance of a Gaussian sample at an elementary level (\exref{ex:gv-bivariate} and
+\exref{ex:gv-sample-mean}).

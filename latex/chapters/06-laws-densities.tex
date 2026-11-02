@@ -1,5 +1,788 @@
-\begin{planned}
-  \item $L^p$ spaces, H\"older's inequality, $L^\infty$
-  \item image measures, laws and expectations
-  \item absolutely continuous measures, Radon--Nikodym and densities
-\end{planned}
+% Chapter 6: L^p spaces, laws and densities.
+% Translation of Paola Siri's handwritten notes, PDF pages 78-94: the topics "Spazi di Lebesgue
+% (spazi L^p)", "Misura immagine" (with "Caso probabilistico" and discrete random variables) and
+% "Misure assolutamente continue" (with the Radon-Nikodym theorem, "Caso probabilistico: v.a.
+% assolutamente continue" and the dictionary table of p. 94).
+
+This chapter completes the theory of integration, and with it probability enters the notes.
+We first collect the functions whose $p$-th power is integrable into the spaces $L^p$. We
+then transport a measure along a measurable map: the image of a probability $\mathbb P$ under
+a random variable $X$ is the \emph{law} of $X$, and the integral of a function of $X$ is an
+integral against its law, the \emph{expectation}. Finally we compare two measures on the same
+space. A measure with a density with respect to another is absolutely continuous with respect
+to it, and for $\sigma$-finite measures the Radon--Nikodym theorem says that the converse holds.
+Random variables whose law
+has a density with respect to Lebesgue measure are the absolutely continuous ones, and their
+expectations are ordinary integrals $\int g(x)f_X(x)\,\dd x$.
+
+\section{Lebesgue spaces (\texorpdfstring{$L^p$}{Lp} spaces)}\label{sec:ld-Lp}
+
+Let $(X,\mathcal A,\mu)$ be a measure space and $f:X\to\overline{\mathbb R}$ a measurable
+function.
+
+\begin{definition}[$L^p$ spaces]\label{def:ld-Lp}
+Let $p\ge1$. We define
+\[
+  \|f\|_p=\Big(\int_X|f|^p\,\dd\mu\Big)^{1/p}\in[0,+\infty]
+\]
+(with $(+\infty)^{1/p}=+\infty$), and we denote by
+\[
+  \mathcal L^p(X,\mathcal A,\mu)=\big\{f:X\to\overline{\mathbb R}\text{ measurable}:\ \|f\|_p<+\infty\big\}.
+\]
+We consider the equivalence relation $f\sim g\iff f=g$ a.e.\ (\cref{def:mf-ae-equal}), and define
+\[
+  L^p(X,\mathcal A,\mu)=\mathcal L^p(X,\mathcal A,\mu)/\!\sim .
+\]
+\end{definition}
+
+On $L^p$, $\|\cdot\|_p$ is a norm, and $\big(L^p(X,\mathcal A,\mu),\|\cdot\|_p\big)$ is a
+\emph{Banach space}, that is, a complete normed vector space. In particular, if $p=2$, the
+space $L^2(X,\mathcal A,\mu)$ can be equipped with an inner product that induces the norm
+$\|\cdot\|_2$:
+\[
+  \langle f,g\rangle=\int_Xfg\,\dd\mu\qquad\forall f,g\in L^2(X,\mathcal A,\mu),
+\]
+and $\big(L^2(X,\mathcal A,\mu),\langle\cdot,\cdot\rangle\big)$ is a \emph{Hilbert space}.
+
+The quotient is needed for the same reason as for $p=1$ (\cref{rem:ig-L1}): by
+\cref{prop:in-ae}, $\|f\|_p=0$ if and only if $|f|^p=0$ a.e., that is, $f=0$ a.e., so on
+$\mathcal L^p$ the function $\|\cdot\|_p$ is only a seminorm; and functions that are equal
+a.e.\ have the same norm. A function of $\mathcal L^p$ is finite a.e., because $|f|^p$ is
+integrable, so the sum of two classes is well defined (add finite representatives), and it lies
+in $L^p$ because $|f+g|^p\le2^{p-1}(|f|^p+|g|^p)$ by the convexity of $t\mapsto t^p$. The inner
+product is finite by the Cauchy--Schwarz inequality below. The notes state the remaining facts
+without proof: the triangle inequality $\|f+g\|_p\le\|f\|_p+\|g\|_p$ is \emph{Minkowski's
+inequality} \citep[Theorem~3.5]{rudin-rca}, and completeness is the \emph{Riesz--Fischer
+theorem} (\citealp[Theorem~3.11]{rudin-rca}, for $1\le p\le\infty$; \citealp[Section~19]{billingsley}).
+
+\begin{theorem}[H\"older's inequality]\label{thm:ld-holder}
+Let $p,q>1$ be conjugate exponents, that is, $\frac1p+\frac1q=1$. Let
+$f\in L^p(X,\mathcal A,\mu)$ and $g\in L^q(X,\mathcal A,\mu)$. Then $fg\in L^1(X,\mathcal A,\mu)$
+and
+\[
+  \|fg\|_1\le\|f\|_p\,\|g\|_q .
+\]
+\end{theorem}
+
+The notes state H\"older's inequality without proof; see \citet[Theorem~3.5]{rudin-rca}, which
+proves $\int FG\,\dd\mu\le\|F\|_p\|G\|_q$ for measurable $F,G\ge0$, and apply it to $F=|f|$,
+$G=|g|$.
+
+\begin{remark}[Cauchy--Schwarz inequality]\label{cor:ld-cauchy-schwarz}
+In the particular case of $L^2(X,\mathcal A,\mu)$, that is, $p=q=2$: if
+$f,g\in L^2(X,\mathcal A,\mu)$, then $fg\in L^1(X,\mathcal A,\mu)$ and
+\[
+  |\langle f,g\rangle|=\Big|\int_Xfg\,\dd\mu\Big|\le\int_X|fg|\,\dd\mu=\|fg\|_1\le\|f\|_2\,\|g\|_2 .
+\]
+The first inequality is \cref{prop:ig-abs}, the second is \cref{thm:ld-holder}.
+\end{remark}
+
+\begin{example}[The spaces $\ell^p$]\label{exa:ld-ellp}
+Consider $(X,\mathcal A,\mu)=(\mathbb N,\mathcal P(\mathbb N),\mu)$, where $\mu$ is the
+counting measure. Every function $f:\mathbb N\to\mathbb R$ is measurable, and it is identified
+with the sequence of its values:
+\[
+  n\mapsto f(n)=a_n,\qquad f\longleftrightarrow(a_n)_{n\in\mathbb N}.
+\]
+By \cref{exa:ig-discrete-measure}, $f$ is integrable when $\sum_{n\in\mathbb N}|a_n|<+\infty$, and
+then
+\[
+  \int_Xf\,\dd\mu=\sum_{n\in\mathbb N}f(n)\,\mu(\{n\})=\sum_{n\in\mathbb N}a_n,
+\]
+because $\mu(\{n\})=1$ for every $n\in\mathbb N$. We can therefore define
+\[
+  \|f\|_p=\Big(\int_X|f|^p\,\dd\mu\Big)^{1/p}=\Big(\sum_{n\in\mathbb N}|a_n|^p\Big)^{1/p},
+\]
+and hence
+\[
+  \mathcal L^p(\mathbb N,\mathcal P(\mathbb N),\mu)=L^p(\mathbb N,\mathcal P(\mathbb N),\mu)
+  =\Big\{(a_n)_{n\in\mathbb N}:\ \sum_{n\in\mathbb N}|a_n|^p<+\infty\Big\}=\ell^p .
+\]
+The first equality holds because the only $\mu$-negligible set is $\emptyset$: two functions
+are equal a.e.\ only if they are equal, and the quotient changes nothing.
+\end{example}
+
+\subsection{The case \texorpdfstring{$p=\infty$}{p = infinity}}\label{sec:ld-Linfty}
+
+What happens if ``$p=\infty$''?
+
+\begin{definition}[Essential supremum]\label{def:ld-Linfty}
+Let $(X,\mathcal A,\mu)$ be a measure space and $f:X\to\overline{\mathbb R}$ a measurable
+function. The \emph{essential supremum} of $|f|$ is\footnote{The handwritten notes call this
+number the essential supremum of $f$ and write $\operatorname{Ess\,sup}f$. It is the essential
+supremum of $|f|$. For $f$ that is not non-negative, the essential supremum of $f$ itself,
+$\inf\{M\in\mathbb R:\mu(\{f>M\})=0\}$, can differ: if $\mu(X)>0$ and $f\equiv-1$, it is $-1$, while
+the quantity defined here is $1$. Corrected here.}
+\[
+  \|f\|_\infty=\operatorname*{ess\,sup}|f|=
+  \begin{cases}
+    \inf\big\{M>0:\ \mu(\{|f|>M\})=0\big\} & \text{if this set is non-empty},\\[2pt]
+    +\infty & \text{if it is empty}.
+  \end{cases}
+\]
+If $\|f\|_\infty<+\infty$, $f$ is called \emph{essentially bounded}, and $|f|\le\|f\|_\infty$ a.e.
+\end{definition}
+
+The convention for the empty set is the usual $\inf\emptyset=+\infty$ in $[0,+\infty]$; the set
+is empty exactly when $\mu(\{|f|>M\})>0$ for every $M>0$, for instance for $f(x)=x$ on
+$(\mathbb R,\mathcal B(\mathbb R),m)$, or if $|f|=+\infty$ on a set of positive measure. If
+$f=0$ a.e., every $M>0$ qualifies, and $\|f\|_\infty=0$. Requiring $M>0$ rather than $M\ge0$
+does not change the infimum.\footnote{This paragraph and the proof of $|f|\le\|f\|_\infty$ a.e.\
+are added to the handwritten notes.} The inequality $|f|\le\|f\|_\infty$ a.e.\ says that the
+infimum is attained: if $c=\|f\|_\infty<+\infty$, then for each $k\ge1$ some admissible $M$ is
+smaller than $c+\frac1k$, and $\{|f|>c+\frac1k\}\subseteq\{|f|>M\}$ is negligible; so
+\[
+  \mu(\{|f|>c\})=\mu\Big(\bigcup_{k\ge1}\{|f|>c+\tfrac1k\}\Big)\le\sum_{k\ge1}\mu(\{|f|>c+\tfrac1k\})=0 .
+\]
+In particular $\|f\|_\infty=0$ if and only if $f=0$ a.e.; and $\|f\|_\infty$ depends only on
+the class of $f$ modulo equality a.e., since $\{|f|>M\}$ and $\{|g|>M\}$ differ by a negligible
+set when $f=g$ a.e.\ (\exref{ex:ld-essup}).
+
+\begin{example}[An essentially bounded, unbounded function]\label{exa:ld-essup}
+On $([0,1],\mathcal B([0,1]),m)$ let
+\[
+  f(x)=\begin{cases}1&\text{if }x\ne\frac1n\text{ for every }n\in\mathbb N^*,\\[2pt]
+  n&\text{if }x=\frac1n,\ n\in\mathbb N^*.\end{cases}
+\]
+Then $\|f\|_\infty=1$: $f$ is essentially bounded, although $\sup f=+\infty$. Indeed, for
+$M\ge1$ the set $\{|f|>M\}=\{\frac1n:n>M\}$ is countable, hence negligible, while for $M<1$ it
+is all of $[0,1]$, of measure $1$. So the admissible $M$ form $[1,+\infty)$
+(\cref{fig:ld-ess-sup}, left).
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch06-ess-sup}
+  \caption{Left: the function of \cref{exa:ld-essup}, as drawn in the notes. The values $n$ at
+    the points $\frac1n$ sit on a negligible set, so $|f|\le1=\|f\|_\infty$ a.e.\ (shaded band).
+    Right: $p\mapsto\|f\|_p$ on $([0,1],\mathcal B([0,1]),m)$. For $f(x)=2x$ it increases to
+    $\|f\|_\infty=2$; for $f(x)=x^{-1/3}$ it is finite exactly for $p<3$, so $f$ lies in
+    $L^p$ for $p<3$ only; for the function on the left it equals $1$ for every $p$
+    (\exref{ex:ld-lp-limit}).}
+  \label{fig:ld-ess-sup}
+\end{figure}
+
+\begin{definition}[The space $L^\infty$]\label{def:ld-Linfty-space}
+We then define
+\[
+  \mathcal L^\infty(X,\mathcal A,\mu)=\big\{f\text{ measurable}:\ \|f\|_\infty<+\infty\big\},\qquad
+  L^\infty(X,\mathcal A,\mu)=\mathcal L^\infty(X,\mathcal A,\mu)/\!\sim .
+\]
+On $L^\infty(X,\mathcal A,\mu)$, $\|\cdot\|_\infty$ is a norm, and
+$\big(L^\infty(X,\mathcal A,\mu),\|\cdot\|_\infty\big)$ is a Banach space
+\citep[Theorem~3.11]{rudin-rca}.
+\end{definition}
+
+H\"older's inequality also holds for the pair of exponents $(\infty,1)$: if
+$f\in\mathcal L^\infty(X,\mathcal A,\mu)$ and $g\in L^1(X,\mathcal A,\mu)$, then
+$fg\in L^1(X,\mathcal A,\mu)$ and
+\begin{equation}\label{eq:ld-holder-infty}
+  \|fg\|_1\le\|f\|_\infty\,\|g\|_1 .
+\end{equation}
+Indeed $|fg|\le\|f\|_\infty|g|$ a.e., and the integral is monotone with respect to inequalities
+a.e.\ (\cref{prop:in-ae}).
+
+\begin{proposition}[Inclusions between the $L^p$ spaces]\label{prop:ld-inclusions}
+Let $\mu(X)<+\infty$. If $1\le p<q<\infty$, then
+\[
+  L^q(X,\mathcal A,\mu)\subseteq L^p(X,\mathcal A,\mu)\subseteq L^1(X,\mathcal A,\mu).
+\]
+Moreover $L^\infty(X,\mathcal A,\mu)\subseteq L^p(X,\mathcal A,\mu)$ for every $p\ge1$.
+\end{proposition}
+
+\begin{proof}
+\emph{Let $1\le p<q<\infty$} and $f\in L^q$ (short for $L^q(X,\mathcal A,\mu)$). Then
+$|f|^p\in L^{q/p}$, with $\frac qp>1$, because $\int_X(|f|^p)^{q/p}\,\dd\mu=\int_X|f|^q\,\dd\mu<+\infty$.
+We apply H\"older's inequality to $|f|^p\in L^{q/p}$ and $1\in L^r$, where $r$ is the
+conjugate exponent of $\frac qp$, that is, $\frac1r=1-\frac pq$. Here $1\in L^r$ \emph{because
+$\mu(X)<+\infty$}: $\|1\|_r=\big(\int_X1^r\,\dd\mu\big)^{1/r}=\mu(X)^{1/r}<+\infty$. So
+$|f|^p\cdot1\in L^1$, and
+\[
+  \int_X|f|^p\,\dd\mu=\big\||f|^p\cdot1\big\|_1\le\big\||f|^p\big\|_{q/p}\,\|1\|_r
+  =\Big(\int_X|f|^q\,\dd\mu\Big)^{p/q}\mu(X)^{1/r}<+\infty,
+\]
+since $f\in L^q$. Hence $\int_X|f|^p\,\dd\mu<+\infty$, that is, $f\in L^p$. Taking $p$-th roots,
+\begin{equation}\label{eq:ld-norm-comparison}
+  \|f\|_p\le\mu(X)^{\frac1p-\frac1q}\,\|f\|_q .
+\end{equation}
+The inclusion $L^p\subseteq L^1$ is the same statement for the exponents $1<p$ (and is trivial
+if $p=1$).
+
+\emph{Let $f\in L^\infty$.} Since $|f|\le\|f\|_\infty$ a.e.,
+\[
+  \int_X|f|^p\,\dd\mu\le\int_X\|f\|_\infty^p\,\dd\mu=\|f\|_\infty^p\int_X\dd\mu=\|f\|_\infty^p\,\mu(X),
+\]
+which is finite because $\|f\|_\infty<+\infty$ and $\mu(X)<+\infty$. So $f\in L^p$.
+\end{proof}
+
+The hypothesis $\mu(X)<+\infty$ is essential: on $((1,+\infty),\mathcal B,m)$ the function
+$x^{-1/2}$ is in $L^4$ but not in $L^2$, and the constant $1$ is in $L^\infty$ but in no $L^p$
+with $p<\infty$. On $(\mathbb N,\mathcal P(\mathbb N),\mu)$ of \cref{exa:ld-ellp} the inclusions
+even go the other way, $\ell^p\subseteq\ell^q$ for $p<q$ (\exref{ex:ld-powers}).
+
+\begin{remark}[Computational]\label{rem:ld-Lp-code}
+\coderef{code/src/probnotes/laws.py} computes $\|f\|_p$ and $\|f\|_\infty$ for a measure on a
+finite set given by its point masses: \texttt{lp\_norm} uses the convention $0\cdot\infty=0$, so
+that values on negligible points are ignored, and \texttt{ess\_sup\_by\_definition} follows
+\cref{def:ld-Linfty} literally. The tests check H\"older's inequality, \eqref{eq:ld-norm-comparison}
+and the limit $\|f\|_p\to\|f\|_\infty$ on random examples; \texttt{power\_lp\_norm} gives the
+norms of $x^{-a}$ used in \cref{fig:ld-ess-sup} and \exref{ex:ld-powers}.
+\end{remark}
+
+\demo{06-laws-densities.ipynb}{$p\mapsto\|f\|_p$ for functions on $[0,1]$ and on $(1,\infty)$,
+and the essential supremum.}
+
+\section{Image measure}\label{sec:ld-image}
+
+Let $(X,\mathcal A,\mu)$ be a measure space, $(Y,\mathcal E)$ a measurable space, and
+$\varphi:X\to Y$ a measurable function. We define the function
+$\mu_\varphi:\mathcal E\to[0,+\infty]$ by
+\begin{equation}\label{eq:ld-image}
+  \mu_\varphi(B)=\mu\big(\varphi^{-1}(B)\big)\qquad\forall B\in\mathcal E .
+\end{equation}
+
+\begin{proposition}\label{prop:ld-image-is-measure}
+$\mu_\varphi$ is a measure on $(Y,\mathcal E)$.
+\end{proposition}
+
+\begin{proof}
+\begin{itemize}
+  \item $\mu_\varphi$ is well defined, because $\varphi$ is measurable: $\varphi^{-1}(B)\in\mathcal A$
+    for every $B\in\mathcal E$.
+  \item $\mu_\varphi(\emptyset)=\mu(\varphi^{-1}(\emptyset))=\mu(\emptyset)=0$.
+  \item $\sigma$-additivity: let $B_n\in\mathcal E$, $n\ge1$, with $B_i\cap B_j=\emptyset$ for
+    $i\ne j$. Then
+    \[
+      \mu_\varphi\Big(\bigcup_{n\ge1}B_n\Big)=\mu\Big(\varphi^{-1}\Big(\bigcup_{n\ge1}B_n\Big)\Big)
+      =\mu\Big(\bigcup_{n\ge1}\varphi^{-1}(B_n)\Big)=\sum_{n\ge1}\mu\big(\varphi^{-1}(B_n)\big)
+      =\sum_{n\ge1}\mu_\varphi(B_n),
+    \]
+    where the third equality holds because $\mu$ is $\sigma$-additive and the sets
+    $\varphi^{-1}(B_n)$ are pairwise disjoint: if $B_i\cap B_j=\emptyset$, then
+    $\varphi^{-1}(B_i)\cap\varphi^{-1}(B_j)=\varphi^{-1}(B_i\cap B_j)=\emptyset$.
+\end{itemize}
+Hence $\mu_\varphi$ is a measure.
+\end{proof}
+
+\begin{definition}[Image measure]\label{def:ld-image-measure}
+The measure $\mu_\varphi$ of \eqref{eq:ld-image} is called the \emph{image measure of $\mu$
+under $\varphi$} (also the \emph{push-forward} of $\mu$ by $\varphi$, written
+$\mu\circ\varphi^{-1}$).
+\end{definition}
+
+\begin{remark}\label{rem:ld-image-probability}
+If $\mu$ is a probability measure ($\mu(X)=1$), then
+$\mu_\varphi(Y)=\mu(\varphi^{-1}(Y))=\mu(X)=1$: the image measure is a probability measure.
+\end{remark}
+
+In probabilistic terms: let $(\Omega,\mathcal F,\mathbb P)$ be a probability space, consider
+$(\mathbb R,\mathcal B(\mathbb R))$, and let $X:\Omega\to\mathbb R$ be a (real) random variable
+(\cref{def:mf-random-variable}).
+
+\begin{definition}[Law of a random variable]\label{def:ld-law}
+The image measure of $\mathbb P$ under $X$ is called the \emph{law} or \emph{distribution} of
+$X$, and is denoted by $\mathbb P_X$:
+\[
+  \mathbb P_X(B)=\mathbb P\big(X^{-1}(B)\big)=\mathbb P(X\in B)\qquad\forall B\in\mathcal B(\mathbb R).
+\]
+By \cref{rem:ld-image-probability}, $\mathbb P_X$ is a probability measure on
+$(\mathbb R,\mathcal B(\mathbb R))$.
+\end{definition}
+
+\begin{theorem}[Integration with respect to the image measure]\label{thm:ld-image-integral}
+Let $(X,\mathcal A,\mu)$ be a measure space, $(Y,\mathcal E)$ a measurable space,
+$\varphi:X\to Y$ a measurable function, and $\mu_\varphi$ the image measure of $\mu$ under
+$\varphi$, defined on $(Y,\mathcal E)$. Let $g:Y\to\overline{\mathbb R}$ be measurable. Then $g$
+is integrable ($g\in\mathcal L^1(Y,\mathcal E,\mu_\varphi)$) if and only if $g\circ\varphi$ is
+integrable ($g\circ\varphi\in\mathcal L^1(X,\mathcal A,\mu)$), and in that case
+\[
+  \int_Yg\,\dd\mu_\varphi=\int_X(g\circ\varphi)\,\dd\mu .
+\]
+\end{theorem}
+
+\begin{proof}
+The function $g\circ\varphi$ is measurable by \cref{prop:mf-composition}. We proceed in three
+steps.
+
+\emph{Step 1: $g\in\mathcal S^+(Y)$.} Write $g=\sum_{i=1}^nb_i\1_{B_i}$ with
+$b_1,\dots,b_n\in[0,+\infty]$ and $B_1,\dots,B_n\in\mathcal E$ a partition of $Y$. Then
+\[
+  g\circ\varphi=\sum_{i=1}^nb_i\,(\1_{B_i}\circ\varphi)=\sum_{i=1}^nb_i\,\1_{\varphi^{-1}(B_i)}\in\mathcal S^+(X),
+\]
+because for every $x\in X$
+\[
+  (\1_{B_i}\circ\varphi)(x)=\1_{B_i}(\varphi(x))=
+  \begin{cases}1&\text{if }\varphi(x)\in B_i\\0&\text{otherwise}\end{cases}
+  =\begin{cases}1&\text{if }x\in\varphi^{-1}(B_i)\\0&\text{otherwise}\end{cases}
+  =\1_{\varphi^{-1}(B_i)}(x),
+\]
+and the sets $\varphi^{-1}(B_i)\in\mathcal A$ form a partition of $X$. By
+\cref{def:in-simple-integral},
+\[
+  \int_Yg\,\dd\mu_\varphi=\sum_{i=1}^nb_i\,\mu_\varphi(B_i)=\sum_{i=1}^nb_i\,\mu\big(\varphi^{-1}(B_i)\big)
+  =\int_X(g\circ\varphi)\,\dd\mu .
+\]
+(Obviously, then, $g$ is integrable if and only if $g\circ\varphi$ is.)
+
+\emph{Step 2: $g\ge0$ measurable.} By \cref{thm:mf-approximation} there are $g_n\in\mathcal S^+(Y)$
+with $g_n\nearrow g$. Then $g_n\circ\varphi\in\mathcal S^+(X)$ by Step~1, and
+$g_n\circ\varphi\nearrow g\circ\varphi$. Hence
+\[
+  \int_Yg\,\dd\mu_\varphi=\lim_n\int_Yg_n\,\dd\mu_\varphi=\lim_n\int_X(g_n\circ\varphi)\,\dd\mu
+  =\int_X(g\circ\varphi)\,\dd\mu,
+\]
+where the first equality is the monotone convergence theorem (\cref{thm:in-monotone-convergence})
+on $(Y,\mathcal E,\mu_\varphi)$, the second is Step~1 ($g_n\in\mathcal S^+(Y)$), and the third is
+the monotone convergence theorem on $(X,\mathcal A,\mu)$. This is an identity in $[0,+\infty]$;
+obviously, $g$ is integrable if and only if $g\circ\varphi$ is.
+
+\emph{Step 3: $g$ measurable of arbitrary sign}, $g=g^+-g^-$. Observe that
+\[
+  (g\circ\varphi)^+=g^+\circ\varphi,\qquad(g\circ\varphi)^-=g^-\circ\varphi,
+\]
+since, for instance, $\max(g(\varphi(x)),0)=g^+(\varphi(x))$. By Step~2,
+\[
+  \int_Yg^+\,\dd\mu_\varphi=\int_X(g^+\circ\varphi)\,\dd\mu=\int_X(g\circ\varphi)^+\,\dd\mu,\qquad
+  \int_Yg^-\,\dd\mu_\varphi=\int_X(g^-\circ\varphi)\,\dd\mu=\int_X(g\circ\varphi)^-\,\dd\mu .
+\]
+So $g$ is integrable if and only if $g\circ\varphi$ is (\cref{def:ig-integrable}), and then
+\[
+  \int_Yg\,\dd\mu_\varphi=\int_Yg^+\,\dd\mu_\varphi-\int_Yg^-\,\dd\mu_\varphi
+  =\int_X(g\circ\varphi)^+\,\dd\mu-\int_X(g\circ\varphi)^-\,\dd\mu=\int_X(g\circ\varphi)\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Computational]\label{rem:ld-image-code}
+On a finite set, a measure is a list of point masses, and \texttt{image\_measure} in
+\coderef{code/src/probnotes/laws.py} adds up the masses of the points with the same image:
+$\mu_\varphi(\{y\})=\mu(\varphi^{-1}(\{y\}))$. For two fair dice and $\varphi$ the sum, it returns
+the masses $\frac1{36},\frac2{36},\dots,\frac6{36},\dots,\frac1{36}$ on $\{2,\dots,12\}$. The
+tests check \cref{thm:ld-image-integral}, $\sum_yg(y)\mu_\varphi(\{y\})=\sum_xg(\varphi(x))\mu(\{x\})$,
+and the composition rule $(\mu_\varphi)_\psi=\mu_{\psi\circ\varphi}$ on random finite spaces.
+\end{remark}
+
+\subsection{The probabilistic case}\label{sec:ld-probabilistic}
+
+Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space, $X:\Omega\to\mathbb R$ a random
+variable, and $g:\mathbb R\to\mathbb R$ a measurable function such that
+$g\circ X=g(X)\in L^1(\Omega,\mathcal F,\mathbb P)$; by \cref{thm:ld-image-integral}, this holds
+if and only if $g\in L^1(\mathbb R,\mathcal B(\mathbb R),\mathbb P_X)$.
+
+\begin{definition}[Expectation]\label{def:ld-expectation}
+We define
+\begin{equation}\label{eq:ld-expectation}
+  \mathbb E[g(X)]=\int_\Omega g(X)\,\dd\mathbb P=\int_{\mathbb R}g\,\dd\mathbb P_X=\int_{\mathbb R}g(x)\,\dd\mathbb P_X(x),
+\end{equation}
+where the second equality is \cref{thm:ld-image-integral} and the third is a notation. In
+particular, if $X\in L^1(\Omega,\mathcal F,\mathbb P)$,
+\[
+  \mathbb E[X]=\int_\Omega X\,\dd\mathbb P=\int_{\mathbb R}x\,\dd\mathbb P_X(x)
+\]
+is the \emph{expected value} (or \emph{expectation}, or \emph{mean}) of the random variable $X$.
+\end{definition}
+
+Properties such as linearity, monotonicity, etc.\ follow from the theory of Lebesgue
+integration (\cref{ch:05-integrable-functions}). For a measurable $g\ge0$, the same formula
+defines $\mathbb E[g(X)]\in[0,+\infty]$ even if $g(X)$ is not integrable (Step~2 of the proof of
+\cref{thm:ld-image-integral}).\footnote{Added to the handwritten notes.} Formula
+\eqref{eq:ld-expectation} says that $\mathbb E[g(X)]$ depends on $X$ only through its law.
+
+\subsubsection*{Special case: discrete random variables}
+
+\begin{definition}[Discrete random variable, discrete density]\label{def:ld-discrete}
+A random variable $X$ is \emph{discrete} if it takes values in a finite or countable set
+\[
+  X(\Omega)=\{x_i:i\in I\},\qquad I\text{ finite or countable},
+\]
+with the $x_i$ distinct. Its law $\mathbb P_X$ is then a discrete measure concentrated on
+$X(\Omega)$ (\cref{def:ms-concentrated,exa:ig-discrete-measure}):
+\[
+  \mathbb P_X\big((X(\Omega))^c\big)=\mathbb P\big(X^{-1}((X(\Omega))^c)\big)=\mathbb P\big(X\notin X(\Omega)\big)=0 .
+\]
+For every $x_i\in X(\Omega)$ we set
+\[
+  \mathbb P_X(\{x_i\})=\mathbb P\big(X^{-1}(\{x_i\})\big)=\mathbb P(X=x_i)=p_i=f_X(x_i);
+\]
+the function $f_X$ (also written $p_X$) is called the \emph{discrete density} of $X$. Then
+$0\le p_i\le1$ and $\sum_{i\in I}p_i=1$.
+\end{definition}
+
+($X(\Omega)$ is a Borel set, as a countable union of singletons.) The law of a discrete random
+variable is determined by its discrete density:
+\begin{itemize}
+  \item For every $A\in\mathcal B(\mathbb R)$, by $\sigma$-additivity,
+    \[
+      \mathbb P_X(A)=\mathbb P\big(X^{-1}(A)\big)=\mathbb P(X\in A)=\sum_{x_i\in A}p_i=\sum_{x_i\in A}f_X(x_i),
+    \]
+    since $A\cap X(\Omega)$ is the countable disjoint union of the $\{x_i\}$ with $x_i\in A$, and
+    $\mathbb P_X(A\setminus X(\Omega))=0$. In particular
+    $1=\mathbb P_X(\mathbb R)=\mathbb P(\Omega)=\sum_{i\in I}p_i$.
+  \item For every $x\in\mathbb R$, the distribution function of \cref{def:ld-cdf} below is
+    \[
+      F_X(x)=\mathbb P(X\le x)=\mathbb P_X((-\infty,x])=\sum_{x_i\le x}p_i=\sum_{x_i\le x}f_X(x_i).
+    \]
+  \item If $g:\mathbb R\to\mathbb R$ is measurable with $g(X)\in L^1$, that is, with
+    $\sum_{i\in I}|g(x_i)|\,f_X(x_i)<+\infty$ (\cref{exa:ig-discrete-measure}), then
+    \begin{equation}\label{eq:ld-discrete-expectation}
+      \mathbb E[g(X)]=\int_\Omega g(X)\,\dd\mathbb P=\int_{\mathbb R}g(x)\,\dd\mathbb P_X(x)
+      =\sum_{i\in I}g(x_i)\,\mathbb P_X(\{x_i\})=\sum_{i\in I}g(x_i)\,f_X(x_i).
+    \end{equation}
+\end{itemize}
+
+\begin{definition}[Distribution function]\label{def:ld-cdf}
+Let $X$ be a random variable. The function $F_X:\mathbb R\to[0,1]$,
+\[
+  F_X(x)=\mathbb P(X\le x)=\mathbb P\big(X^{-1}((-\infty,x])\big)=\mathbb P_X\big((-\infty,x]\big),
+\]
+is called the \emph{distribution function} (or \emph{cumulative distribution function}) of
+$X$.
+\end{definition}
+
+$F_X$ is non-decreasing and right-continuous, with limits $0$ at $-\infty$ and $1$ at
+$+\infty$. For a discrete random variable it is a pure-jump function, $F_X(x)=\sum_{x_i\le x}p_i$,
+which jumps by $p_i$ at $x_i$; it is a step function when the $x_i$ have no accumulation point,
+for instance when $X$ takes integer values (\cref{fig:ld-laws}, left), but not in general: if
+$\mathbb P(X=q_n)=2^{-n}$ for an enumeration $(q_n)_{n\ge1}$ of $\mathbb Q$, then $F_X$ is strictly
+increasing. These properties, and the fact that $F_X$ determines $\mathbb P_X$,
+are proved in \exref{ex:ld-cdf}.\footnote{Added to the handwritten notes.}
+
+\begin{remark}[Computational]\label{rem:ld-discrete-code}
+The class \texttt{DiscreteLaw} of \coderef{code/src/probnotes/laws.py} stores the points $x_i$ and
+the masses $p_i$; it evaluates $F_X$ and $F_X(x-)=\mathbb P(X<x)$, computes
+$\mathbb E[g(X)]$ by \eqref{eq:ld-discrete-expectation}, and samples by inverting $F_X$. A
+discrete law can also be built as an image measure, by merging repeated values. The function
+\texttt{ecdf} computes the \emph{empirical distribution function} $F_n(x)=\frac1n\#\{k:X_k\le x\}$
+of a sample, and \texttt{ks\_distance} the exact distance $\sup_x|F_n(x)-F_X(x)|$, which the
+Dvoretzky--Kiefer--Wolfowitz inequality controls uniformly in the law \citep{massart-dkw}
+(\exref{ex:ld-ecdf}).
+\end{remark}
+
+\demo{06-laws-densities.ipynb}{image measures on two dice, and the empirical distribution
+function of a sample against $F_X$.}
+
+\section{Absolutely continuous measures}\label{sec:ld-ac}
+
+Recall that a measure $\mu$ is concentrated on a set $E\in\mathcal A$ if $\mu(E^c)=0$
+(\cref{def:ms-concentrated}), that is, if
+\[
+  \mu(A)=\mu(A\cap E)+\mu(A\cap E^c)=\mu(A\cap E)\qquad\forall A\in\mathcal A,
+\]
+since $\mu(A\cap E^c)\le\mu(E^c)=0$ (conversely, take $A=E^c$).
+
+\begin{definition}[Singular, absolutely continuous and equivalent measures]\label{def:ld-ac}
+Let $\mu$ and $\nu$ be two measures on $(X,\mathcal A)$.
+\begin{itemize}
+  \item $\mu$ and $\nu$ are \emph{singular} ($\nu\perp\mu$) if they are concentrated on disjoint
+    sets.
+  \item $\nu$ is \emph{absolutely continuous with respect to $\mu$} ($\nu\ll\mu$) if, for
+    $A\in\mathcal A$, $\mu(A)=0\Rightarrow\nu(A)=0$.
+  \item If $\nu\ll\mu$ and also $\mu\ll\nu$, the two measures $\nu$ and $\mu$ are called
+    \emph{equivalent} ($\nu\sim\mu$).
+\end{itemize}
+\end{definition}
+
+$\sim$ is an equivalence relation: $\ll$ is reflexive and transitive, and $\sim$ is
+symmetric by definition. Two measures are equivalent exactly when they have the same
+negligible sets.
+
+Consider now a measure space $(X,\mathcal A,\mu)$, and define the function
+$\nu:\mathcal A\to[0,+\infty]$ by
+\begin{equation}\label{eq:ld-density-measure}
+  \nu(A)=\int_Af\,\dd\mu\qquad\forall A\in\mathcal A,
+\end{equation}
+where $f:X\to\mathbb R$ is a measurable function with $f\ge0$.
+
+\begin{proposition}\label{prop:ld-density-measure}
+The function $\nu$ defined by \eqref{eq:ld-density-measure} is a measure on $(X,\mathcal A)$,
+absolutely continuous with respect to $\mu$.
+\end{proposition}
+
+To prove it we need the following lemma.
+
+\begin{lemma}[Continuity from below gives $\sigma$-additivity]\label{lem:ld-continuity-sigma}
+Let $\mathcal A$ be a $\sigma$-algebra of subsets of $X$ and $\mu:\mathcal A\to[0,+\infty]$ an
+additive function (\cref{def:ms-additive}). If for every sequence $(B_n)_{n\ge1}$ of elements of
+$\mathcal A$ with $B_n\subseteq B_{n+1}$ for every $n\ge1$ we have
+\[
+  \mu\Big(\bigcup_{n\ge1}B_n\Big)=\lim_n\mu(B_n),
+\]
+then $\mu$ is $\sigma$-additive (hence it is a measure).
+\end{lemma}
+
+\begin{proof}
+Let $(A_n)_{n\ge1}$ be elements of $\mathcal A$ with $A_i\cap A_j=\emptyset$ for $i\ne j$. Set
+\[
+  B_1=A_1,\quad B_2=A_1\cup A_2,\quad\dots,\quad B_n=\bigcup_{i=1}^nA_i\in\mathcal A .
+\]
+Then $B_{n+1}=B_n\cup A_{n+1}\supseteq B_n$; moreover $\bigcup_nB_n=\bigcup_nA_n$. Hence
+\[
+  \mu\Big(\bigcup_{n\ge1}A_n\Big)=\mu\Big(\bigcup_{n\ge1}B_n\Big)=\lim_n\mu(B_n)
+  =\lim_n\mu\Big(\bigcup_{i=1}^nA_i\Big)=\lim_n\sum_{i=1}^n\mu(A_i)=\sum_{n\ge1}\mu(A_n),
+\]
+where the second equality is the hypothesis and the fourth is additivity.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:ld-density-measure}]
+Recall that $\int_Af\,\dd\mu=\int_Xf\1_A\,\dd\mu$.
+
+\emph{$\nu$ is additive.} $\nu(\emptyset)=\int_\emptyset f\,\dd\mu=0$. If $A,B\in\mathcal A$ and
+$A\cap B=\emptyset$, then $\1_{A\cup B}=\1_A+\1_B$, so by the additivity of the integral
+(\cref{prop:in-additivity})
+\[
+  \nu(A\cup B)=\int_Xf\1_{A\cup B}\,\dd\mu=\int_Xf\1_A\,\dd\mu+\int_Xf\1_B\,\dd\mu=\nu(A)+\nu(B),
+\]
+and by induction $\nu$ is additive.
+
+\emph{Continuity from below.} Let $(B_n)_{n\ge1}$ be a sequence of elements of $\mathcal A$ with
+$B_n\subseteq B_{n+1}$, and $B=\bigcup_nB_n$, so that $B_n\nearrow B$. Is
+$\nu(B_n)\nearrow\nu(B)$? Since $B_n\nearrow B$, $\1_{B_n}\nearrow\1_B$, and since $f\ge0$,
+$f\1_{B_n}\nearrow f\1_B$. By the monotone convergence theorem
+(\cref{thm:in-monotone-convergence}),
+\[
+  \nu(B)=\int_Bf\,\dd\mu=\int_Xf\1_B\,\dd\mu=\int_X\lim_n(f\1_{B_n})\,\dd\mu=\lim_n\int_Xf\1_{B_n}\,\dd\mu
+  =\lim_n\int_{B_n}f\,\dd\mu=\lim_n\nu(B_n).
+\]
+By \cref{lem:ld-continuity-sigma}, $\nu$ is a measure.
+
+Moreover, if $A\in\mathcal A$ and $\mu(A)=0$, then $\nu(A)=\int_Af\,\dd\mu=0$
+(\cref{prop:in-ae}). So $\nu\ll\mu$.
+\end{proof}
+
+\begin{remark}[Uniqueness of the density]\label{rem:ld-density-unique}
+Let $f_1,f_2\ge0$ be measurable, and for every $A\in\mathcal A$
+\[
+  \nu_1(A)=\int_Af_1\,\dd\mu,\qquad\nu_2(A)=\int_Af_2\,\dd\mu .
+\]
+If $f_1=f_2$ a.e., then $\nu_1=\nu_2$, that is, $\nu_1(A)=\nu_2(A)$ for every $A\in\mathcal A$;
+this follows from the properties of the integral (\cref{prop:in-ae}). Conversely, if $\nu_1=\nu_2$
+and $\mu$ is $\sigma$-finite (or $\nu_1$ is $\sigma$-finite), then $f_1=f_2$
+a.e.\footnote{The handwritten notes state the equivalence $\nu_1=\nu_2\iff f_1=f_2$ a.e.\ without
+hypotheses. The implication ``$\Rightarrow$'' fails without $\sigma$-finiteness: if
+$X=\{a\}$, $\mu(\{a\})=+\infty$, $f_1=1$ and $f_2=2$, then $\nu_1=\nu_2$ (both give $+\infty$ to
+$\{a\}$) but $\mu(\{f_1\ne f_2\})=+\infty$. Corrected here, and the proof of ``$\Rightarrow$'' is
+added; compare \citet[Section~16, ``Densities'']{billingsley}.} Indeed, let
+$X=\bigcup_nX_n$ with $X_n\in\mathcal A$ and $\mu(X_n)<+\infty$ (or $\nu_1(X_n)<+\infty$), and for
+$k,n\ge1$ let $A=\{f_1<f_2\}\cap\{f_1\le k\}\cap X_n\in\mathcal A$. Then
+$\int_Af_1\,\dd\mu\le k\mu(X_n)$ (or $\le\nu_1(X_n)$) is finite, and
+$f_2\1_A=f_1\1_A+(f_2-f_1)\1_A$, so by additivity
+\[
+  \int_A(f_2-f_1)\,\dd\mu=\nu_2(A)-\nu_1(A)=0 .
+\]
+Since $(f_2-f_1)\1_A\ge0$, it vanishes a.e.\ (\cref{prop:in-ae}); but it is $>0$ on $A$, so
+$\mu(A)=0$. The union over $k$ and $n$ of these sets is $\{f_1<f_2\}$, which is therefore
+negligible, and so is $\{f_2<f_1\}$ by symmetry.
+\end{remark}
+
+\subsection{The Radon--Nikodym theorem}\label{sec:ld-radon-nikodym}
+
+\Cref{prop:ld-density-measure} says that a measure with a density with respect to $\mu$ is
+absolutely continuous with respect to $\mu$. For $\sigma$-finite measures (\cref{def:ms-finite})
+the converse holds.
+
+\begin{theorem}[Radon--Nikodym]\label{thm:ld-radon-nikodym}
+Let $(X,\mathcal A)$ be a measurable space, and let $\mu$ and $\nu$ be two $\sigma$-finite
+measures with $\nu\ll\mu$. Then there exists a measurable function $f\ge0$, unique up to
+equality $\mu$-a.e.\ (and integrable if the measures are finite), such that
+\[
+  \nu(A)=\int_Af\,\dd\mu\qquad\forall A\in\mathcal A .
+\]
+The function $f$ is called the \emph{Radon--Nikodym derivative of $\nu$ with respect to $\mu$},
+and is denoted by
+\[
+  f=\frac{\dd\nu}{\dd\mu}.
+\]
+\end{theorem}
+
+The notes state this theorem without proof. It is \citet[Section~32]{billingsley}, in exactly
+this form; \citet[Theorem~6.10]{rudin-rca} proves it for a $\sigma$-finite $\mu$ and a finite
+$\nu$, from which the $\sigma$-finite case follows by applying it on each set of a countable
+partition of $X$ into sets of finite $\nu$-measure. Uniqueness is \cref{rem:ld-density-unique},
+and $f$ is integrable as soon as $\nu$ is finite, since $\int_Xf\,\dd\mu=\nu(X)$.
+
+\begin{proposition}[Integrals with respect to a measure with density]\label{prop:ld-density-integral}
+Let $(X,\mathcal A,\mu)$ be a measure space with $\mu$ $\sigma$-finite. Let $\nu\ll\mu$ be
+$\sigma$-finite, with Radon--Nikodym derivative $f=\frac{\dd\nu}{\dd\mu}$, and let $g:X\to\mathbb R$
+be measurable. Then $g\in L^1(\nu)$ if and only if $gf\in L^1(\mu)$, and in that case
+\[
+  \int_Xg\,\dd\nu=\int_Xgf\,\dd\mu=\int_Xg\,\frac{\dd\nu}{\dd\mu}\,\dd\mu .
+\]
+\end{proposition}
+
+\begin{proof}
+\emph{$g\in\mathcal S^+(X)$:} $g=\sum_{i=1}^nb_i\1_{B_i}$ with $b_1,\dots,b_n\in[0,+\infty]$ and
+$B_1,\dots,B_n\in\mathcal A$ a partition of $X$. Then
+\[
+  \int_Xg\,\dd\nu=\sum_{i=1}^nb_i\,\nu(B_i)=\sum_{i=1}^nb_i\int_{B_i}f\,\dd\mu
+  =\sum_{i=1}^nb_i\int_Xf\1_{B_i}\,\dd\mu=\int_Xf\Big(\sum_{i=1}^nb_i\1_{B_i}\Big)\dd\mu=\int_Xfg\,\dd\mu,
+\]
+by the homogeneity and additivity of the integral (\cref{prop:in-properties,prop:in-additivity}).%
+\footnote{For $b_i=+\infty$, $b_i\int_Xf\1_{B_i}\,\dd\mu=\int_Xb_if\1_{B_i}\,\dd\mu$ still holds with
+$0\cdot\infty=0$: both sides are $0$ if $f\1_{B_i}=0$ a.e., and $+\infty$ otherwise.}
+
+The notes leave the other two steps, \emph{$g\ge0$ measurable} and \emph{$g$ measurable}, as
+an exercise (\exref{ex:ld-density-integral}); they follow Steps~2 and~3 of the proof of
+\cref{thm:ld-image-integral}.
+\end{proof}
+
+\begin{corollary}\label{cor:ld-image-density}
+Let $(X,\mathcal A,\mu)$ and $(Y,\mathcal E,\lambda)$ be two measure spaces, with $\lambda$
+$\sigma$-finite. Let $\varphi:X\to Y$ be measurable, with image measure $\mu_\varphi$. Suppose that
+$\mu_\varphi\ll\lambda$, with Radon--Nikodym derivative $f_\varphi=\frac{\dd\mu_\varphi}{\dd\lambda}$,
+and let $g:Y\to\mathbb R$ be measurable. Then
+\[
+  g\circ\varphi\in L^1(X,\mathcal A,\mu)\iff g\in L^1(Y,\mathcal E,\mu_\varphi)\iff gf_\varphi\in L^1(Y,\mathcal E,\lambda),
+\]
+and in that case
+\[
+  \int_Xg\circ\varphi\,\dd\mu=\int_Yg\,\dd\mu_\varphi=\int_Ygf_\varphi\,\dd\lambda .
+\]
+\end{corollary}
+
+\begin{proof}
+The first equivalence and equality are \cref{thm:ld-image-integral}, the second ones
+\cref{prop:ld-density-integral} on $(Y,\mathcal E,\lambda)$ with $\nu=\mu_\varphi$. (Its proof
+uses only $\mu_\varphi(B)=\int_Bf_\varphi\,\dd\lambda$ for $B\in\mathcal E$, not the
+$\sigma$-finiteness of $\mu_\varphi$: \exref{ex:ld-density-integral}.)
+\end{proof}
+
+\begin{remark}[Computational]\label{rem:ld-rn-code}
+On a finite set, $\nu\ll\mu$ means that $\nu$ charges no point that $\mu$ does not charge, and
+then $\frac{\dd\nu}{\dd\mu}(x)=\nu(\{x\})/\mu(\{x\})$ wherever $\mu(\{x\})>0$; the value on the other
+points is arbitrary, as \cref{rem:ld-density-unique} allows. \texttt{radon\_nikodym} in
+\coderef{code/src/probnotes/laws.py} computes it, and refuses when $\nu\not\ll\mu$. For the
+binomial law $\nu=B(10,0.3)$ and the Poisson law $\mu=\mathcal P(3)$ on $\mathbb N$, $\nu\ll\mu$
+but $\mu\not\ll\nu$, and $\int g\,\dd\nu=\int g\frac{\dd\nu}{\dd\mu}\,\dd\mu$ is a reweighting of
+$\mu$: sampling from $\mu$ and weighting by $\frac{\dd\nu}{\dd\mu}$ estimates expectations under
+$\nu$ (\exref{ex:ld-rn-finite}).
+\end{remark}
+
+\subsection{The probabilistic case: absolutely continuous random
+variables}\label{sec:ld-ac-rv}
+
+\begin{definition}[Absolutely continuous random variable, density]\label{def:ld-ac-rv}
+A random variable $X:\Omega\to\mathbb R$ is \emph{absolutely continuous} if
+$\mathbb P_X\ll m$, where $m$ is Lebesgue measure on $\mathcal B(\mathbb R)$. The
+Radon--Nikodym derivative
+\[
+  f_X=\frac{\dd\mathbb P_X}{\dd m}
+\]
+is called the \emph{density} of $X$.
+\end{definition}
+
+($f_X$ exists by \cref{thm:ld-radon-nikodym}, since $\mathbb P_X$ is finite and $m$ is
+$\sigma$-finite.) So $f_X\ge0$, moreover $f_X\in L^1(\mathbb R,\mathcal B(\mathbb R),m)$, and:
+\begin{itemize}
+  \item for every $A\in\mathcal B(\mathbb R)$,
+    \[
+      \mathbb P(X\in A)=\mathbb P\big(X^{-1}(A)\big)=\mathbb P_X(A)=\int_Af_X\,\dd m=\int_Af_X(x)\,\dd x,
+    \]
+    where the last expression is an abuse of notation: it is the Lebesgue integral! In
+    particular
+    \[
+      \int_{\mathbb R}f_X\,\dd m=\int_{-\infty}^{+\infty}f_X(x)\,\dd x=\mathbb P_X(\mathbb R)=\mathbb P(\Omega)=1 .
+    \]
+  \item Since $\mathbb P_X\ll m$: if $x\in\mathbb R$, then $m(\{x\})=0$, so
+    $\mathbb P(X=x)=\mathbb P_X(\{x\})=0$.
+  \item The distribution function is
+    \begin{equation}\label{eq:ld-cdf-density}
+      F_X(x)=\mathbb P(X\le x)=\mathbb P_X\big((-\infty,x]\big)=\int_{(-\infty,x]}f_X\,\dd m=\int_{-\infty}^xf_X(t)\,\dd t .
+    \end{equation}
+\end{itemize}
+
+$F_X$ is continuous, because $\mathbb P(X=x)=F_X(x)-F_X(x^-)=0$, where
+$F_X(x^-)=\lim_{t\to x^-}F_X(t)=\mathbb P(X<x)$ by continuity from below
+(\cref{thm:ms-continuity-below}), and $F_X$ is right-continuous (\exref{ex:ld-cdf}).
+
+\begin{theorem}[A result due to Lebesgue]\label{thm:ld-lebesgue}
+Let $X$ be absolutely continuous with density $f_X$. Then $F_X$ is differentiable outside a set
+of Lebesgue measure zero, and $F_X'=f_X$ $m$-a.e.\footnote{The handwritten notes say that
+$F_X'=f_X$ at the points where $F_X$ is differentiable. Since $f_X$ is determined only up to a
+negligible set, the correct statement is that $F_X'(x)=f_X(x)$ for $m$-almost every $x$ (for
+instance at every Lebesgue point of $f_X$); corrected here.}
+\end{theorem}
+
+The notes state this result without proof; see \citet[Section~31, ``Derivatives of
+integrals'']{billingsley}, or \citet[Chapter~7]{rudin-rca}, where $F_X'(x)=f_X(x)$ is proved
+at every Lebesgue point $x$ of $f_X$, and almost every point is one.
+
+\begin{remark}[Continuous densities]\label{rem:ld-continuous-density}
+In this course we consider densities $f_X$ that are continuous $m$-a.e. We are then within
+the theory of Riemann integration (\cref{thm:ig-riemann,rem:ig-improper}), and
+$F_X(x)=\int_{-\infty}^xf_X(t)\,\dd t$ is a primitive of $f_X$.\footnote{Precisely: $F_X'(x)=f_X(x)$
+at every point $x$ where $f_X$ is continuous. Indeed, by \eqref{eq:ld-cdf-density},
+$\big|\frac{F_X(x+h)-F_X(x)}h-f_X(x)\big|\le\sup_{|t-x|\le|h|}|f_X(t)-f_X(x)|$, which tends to $0$
+as $h\to0$. At a jump of $f_X$, such as $x=0$ for $f_X(x)=e^{-x}\1_{(0,+\infty)}(x)$, $F_X$
+need not be differentiable (\cref{fig:ld-laws}).}
+\end{remark}
+
+Now let $g:\mathbb R\to\mathbb R$ be measurable with $g(X)\in L^1(\Omega,\mathcal F,\mathbb P)$;
+by \cref{cor:ld-image-density}, this is equivalent to
+$g\in L^1(\mathbb R,\mathcal B(\mathbb R),\mathbb P_X)$, and to
+$gf_X\in L^1(\mathbb R,\mathcal B(\mathbb R),m)$. Then
+\begin{equation}\label{eq:ld-ac-expectation}
+  \mathbb E[g(X)]=\int_\Omega g(X)\,\dd\mathbb P=\int_{\mathbb R}g\,\dd\mathbb P_X=\int_{\mathbb R}g(x)\,\dd\mathbb P_X(x)
+  =\int_{\mathbb R}gf_X\,\dd m=\int_{-\infty}^{+\infty}g(x)f_X(x)\,\dd x .
+\end{equation}
+In particular
+\[
+  \mathbb E[X]=\int_\Omega X\,\dd\mathbb P=\int_{\mathbb R}x\,\dd\mathbb P_X(x)=\int_{-\infty}^{+\infty}xf_X(x)\,\dd x .
+\]
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch06-laws}
+  \caption{Three laws on $\mathbb R$ (top) and their distribution functions (bottom). Left: the
+    Poisson law $\mathcal P(3)$, discrete; $F_X$ jumps by $p_i$ at each $x_i$ and is
+    right-continuous (filled dots). Centre: the exponential law, absolutely continuous; $F_X$ is
+    continuous, and $F_X'=f_X$ except at $0$, where $f_X$ jumps. Right: a law that is neither,
+    with atoms at $0$ and at $2.5$ and a density in between (the insurance payment of
+    \exref{ex:ld-insurance}, in thousands); the top panel draws the masses of the two atoms and
+    the density on the same axis, although they are different kinds of quantity.}
+  \label{fig:ld-laws}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:ld-mc-code}
+Formula \eqref{eq:ld-ac-expectation} can be checked by simulation. If
+$X_1,\dots,X_n$ are draws from the law of $X$, the average $\frac1n\sum_kg(X_k)$ approximates
+$\mathbb E[g(X)]$; \texttt{mc\_expectation} in \coderef{code/src/probnotes/laws.py} returns it
+with a standard error, and \texttt{expectation\_density} computes
+$\int g(x)f_X(x)\,\dd x$ by quadrature. Draws can be produced as an image measure: if $U$ is uniform
+on $(0,1)$, then $F_X^{-1}(U)$ has law $\mathbb P_X$ (\exref{ex:ld-cdf}), which is what
+\texttt{quantile} computes. The class \texttt{MixedLaw} handles laws with atoms and a density,
+as on the right of \cref{fig:ld-laws}.
+\end{remark}
+
+\demo{06-laws-densities.ipynb}{$\mathbb E[g(X)]$ by Monte Carlo against $\int g f_X$, and
+Radon--Nikodym derivatives between discrete laws.}
+
+\begin{remark}[Dictionary]\label{rem:ld-dictionary}
+The objects of this chapter in measure theory and in probability:
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}p{0.47\textwidth}p{0.49\textwidth}@{}}
+\toprule
+Measure theory & Probability\\
+\midrule
+$(X,\mathcal A,\mu)$, a measure space & $(\Omega,\mathcal F,\mathbb P)$, a probability space\\
+$f:X\to Y$, a measurable function & $X:\Omega\to\mathbb R$, a real random variable\\
+$\int_Xf\,\dd\mu$, the Lebesgue integral & $\mathbb E[X]=\int_\Omega X\,\dd\mathbb P$, the expected value\\
+$\mu_\varphi$, the image measure of $\mu$ under $\varphi$ & $\mathbb P_X$, the law of $X$\\
+$f_\varphi=\dfrac{\dd\mu_\varphi}{\dd\lambda}$, the Radon--Nikodym derivative,\newline when $\mu_\varphi\ll\lambda$
+  & $f_X=\dfrac{\dd\mathbb P_X}{\dd m}$, the density of $X$,\newline when $\mathbb P_X\ll m$\\
+$\displaystyle\int_Xg\circ\varphi\,\dd\mu=\int_Yg\,\dd\mu_\varphi=\int_Ygf_\varphi\,\dd\lambda$
+  & $\displaystyle\mathbb E[g(X)]=\int_\Omega g(X)\,\dd\mathbb P=\int_{\mathbb R}g\,\dd\mathbb P_X=\int_{\mathbb R}gf_X\,\dd m$,\newline
+    that is, $\displaystyle\int_{\mathbb R}g(x)\,\dd\mathbb P_X(x)=\int_{\mathbb R}g(x)f_X(x)\,\dd x$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{remark}
+
+\furtherreading
+\textcite{billingsley} treats image measures and densities in Section~16 (``Densities'' and
+``Change of variable''), the $L^p$ spaces in Section~19, laws, distribution functions and
+expected values in Sections~14, 20 and~21, and the differentiation of integrals and the
+Radon--Nikodym theorem in Sections~31--32. \textcite{rudin-rca}, Chapters~3, 6 and~7, covers
+the same analysis: $L^p$ spaces, the Lebesgue--Radon--Nikodym theorem, and differentiation.
+\textcite{williams}, Chapters~5--6, is a short probabilistic account of integration and
+expectation.

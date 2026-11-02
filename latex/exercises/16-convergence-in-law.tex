@@ -1,0 +1,213 @@
+% Exercises for Chapter 16 (convergence in law). Statements only: solutions are kept privately.
+% Throughout, F_X is the distribution function and Phi_X the characteristic function of X,
+% "->L" is convergence in law, and the notation is that of the notes.
+
+\begin{exercise}[Densities, and Scheff\'e's lemma]\label{ex:cl-densities}
+\medium This exercise completes the proof of part~(2) of \noteref{prop:cl-densities}, which the
+notes leave partly as an exercise, and shows how much more it gives. Let $X_n$ and $X$ be
+absolutely continuous, with densities $f_n=f_{X_n}$ and $f=f_X$, and $f_n\to f$ a.e. You may use
+the dominated convergence theorem.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $h\in C_b(\mathbb R)$, $\alpha=\|h\|_\infty$ and $h_2=\alpha-h$. Using
+    \noteref{eq:cl-fatou} with $i=2$ and $\limsup_na_n=-\liminf_n(-a_n)$, prove that
+    $\limsup_n\mathbb E[h(X_n)]\le\mathbb E[h(X)]$.
+  \item (\emph{Scheff\'e's lemma.}) Show that $\int_{\mathbb R}|f_n-f|\,\dd x\to0$. \emph{Hint:}
+    $\int(f-f_n)\,\dd x=0$, so $\int|f-f_n|\,\dd x=2\int(f-f_n)^+\,\dd x$, and
+    $0\le(f-f_n)^+\le f$. Deduce that
+    $\sup_{A\in\mathcal B(\mathbb R)}|\mathbb P_{X_n}(A)-\mathbb P_X(A)|\to0$: the convergence is
+    strong, in the sense of \noteref{rem:cl-not-strong}, which gives (a) again.
+  \item Let $X_n$ and $X$ take values in $\mathbb N$. Show that $X_n\xrightarrow{\mathcal L}X$ if
+    and only if $\sup_{A\in\mathcal B(\mathbb R)}|\mathbb P_{X_n}(A)-\mathbb P_X(A)|\to0$. Why does this
+    not contradict \noteref{rem:cl-not-strong}?
+  \item The converse of part~(2) is false. Let $f_n(x)=\big(1+\sin(2\pi nx)\big)\1_{(0,1)}(x)$.
+    Show that $f_n$ is a density, and that $X_n\xrightarrow{\mathcal L}X\sim U((0,1))$ if $X_n$
+    has density $f_n$. Compute $\int_{\mathbb R}|f_n-\1_{(0,1)}|\,\dd x$, and deduce from (b) that
+    $f_n$ does not converge a.e.\ to any density of $U((0,1))$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The Poisson approximation in numbers]\label{ex:cl-poisson-numerics}
+\medium This is a computational exercise; it includes part~b) of
+\noteref{exa:cl-binomial-poisson}, which the notes leave as an exercise. Let
+$X_n\sim B(n,\frac\lambda n)$ and $Y\sim\mathcal P(\lambda)$, and let $\pi_k=e^{-\lambda}\frac{\lambda^k}{k!}$.
+Use \texttt{scipy.stats}, or the module \texttt{probnotes.inlaw}.
+\begin{enumerate}[label=(\alph*)]
+  \item Estimate $\mathbb P(X_n\le2)$ for $n=10000$ and $\lambda=2$ by the Poisson approximation,
+    in closed form. Then compute it exactly, and give the error of the approximation.
+  \item For $\lambda=2$ and $n=10,10^2,10^3,10^4$, compute the total variation distance
+    $\sup_A|\mathbb P_{X_n}(A)-\mathbb P_Y(A)|=\frac12\sum_{k\ge0}|\mathbb P(X_n=k)-\pi_k|$ and the
+    Kolmogorov distance $\sup_x|F_{X_n}(x)-F_Y(x)|$. Show numerically that $n$ times each distance
+    has a limit, and compare with the bound $\frac{\lambda^2}n$ of \exref{ex:cl-le-cam}.
+  \item Show that, for fixed $k$,
+    \[
+      \frac{\mathbb P(X_n=k)}{\pi_k}=1-\frac{(k-\lambda)^2-k}{2n}+O\Big(\frac1{n^2}\Big),
+    \]
+    and, by induction on $k$, that $\sum_{j=0}^k\pi_j\big((j-\lambda)^2-j\big)=-\lambda(k-\lambda)\pi_k$.
+    Deduce that $F_{X_n}(k)-F_Y(k)=\frac{\lambda(k-\lambda)\pi_k}{2n}+O(\frac1{n^2})$. Use this to
+    explain the limits in (b) and why the error in (a) is so much smaller than the Kolmogorov
+    distance.
+  \item With seed $2026$, draw $10^5$ values of $X_{10000}$ for $\lambda=2$ and estimate
+    $\mathbb P(X_{10000}\le2)$. Is the estimate within three standard errors of the exact value?
+    Could a simulation of this size detect the error of the Poisson approximation?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[When the limit is not continuous at $0$]\label{ex:cl-levy-warning}
+\easy This exercise illustrates \noteref{rem:cl-levy-warning}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X_n\sim\mathcal N(0,n)$. Compute $\lim_n\Phi_{X_n}(t)$ for every $t$, and check that
+    the limit is not continuous at $0$. Show directly that $F_{X_n}(x)\to\frac12$ for every
+    $x\in\mathbb R$, and that $\mathbb P(|X_n|\le M)\to0$ for every $M>0$. Why can no random
+    variable $X$ satisfy $X_n\xrightarrow{\mathcal L}X$? Where does the mass go?
+  \item Do the same for $X_n\sim U((-n,n))$.
+  \item Let $X_n\sim\mathcal N(0,\frac1n)$. Compute $\lim_n\Phi_{X_n}(t)$, and deduce from
+    \noteref{thm:cl-levy} that $X_n\xrightarrow{\mathcal L}0$. Check this with
+    \noteref{thm:cl-cdf-criterion}: at which $x$ does $F_{X_n}(x)$ fail to converge to $F_0(x)$?
+    Deduce also that $X_n\xrightarrow{\mathbb P}0$, when the $X_n$ are defined on the same space.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sums, marginals and joint laws]\label{ex:cl-sums}
+\medium This is partly a computational exercise, on \noteref{exa:cl-sums}. The
+\emph{Dvoretzky--Kiefer--Wolfowitz inequality}, which you may use without proof, says that the
+empirical distribution function $\hat F_N$ of $N$ i.i.d.\ values with distribution function $F$
+satisfies $\mathbb P\big(\sup_x|\hat F_N(x)-F(x)|>\varepsilon\big)\le2e^{-2N\varepsilon^2}$.
+\begin{enumerate}[label=(\alph*)]
+  \item With seed $2026$, simulate $N=10^5$ values of $X_n+Y_n$ and of $X+Y$ as in the notes
+    (\texttt{sum\_counterexample} in \texttt{probnotes.inlaw}). Compute the Kolmogorov distance of
+    the empirical distribution function of $X_n+Y_n$ to the distribution function of
+    $\mathcal N(0,2)$ and to that of the point mass at $0$, the law of $X+Y$. Find the
+    $\varepsilon$ for which the DKW bound equals $0.01$, and compare.
+  \item Let now $(X_n,Y_n)$ be a Gaussian vector with $\mathcal N(0,1)$ marginals and
+    correlation $\rho_n\in[-1,1]$. Show that $X_n+Y_n\xrightarrow{\mathcal L}X+Y=0$ if and only
+    if $\rho_n\to-1$. Conclude that whether $X_n+Y_n$ converges in law to $X+Y$ depends on the
+    joint laws of $(X_n,Y_n)$ and $(X,Y)$, about which the hypotheses $X_n\xrightarrow{\mathcal
+    L}X$ and $Y_n\xrightarrow{\mathcal L}Y$ say nothing.
+  \item Let $(X_n,Y_n)$ and $(X,Y)$ be random vectors with
+    $\Phi_{(X_n,Y_n)}(s,t)\to\Phi_{(X,Y)}(s,t)$ for every $(s,t)\in\mathbb R^2$. Show that
+    $X_n+Y_n\xrightarrow{\mathcal L}X+Y$, and explain why \noteref{prop:cl-sums} is a special case.
+  \item Simulate (b) with $\rho_n=-1+\frac1n$, $n=1,10,10^2,10^3$, with $N=10^5$ draws and seed
+    $2026$. The Kolmogorov distance of the empirical distribution function to the point mass
+    at $0$ stays close to $\frac12$: why, if $X_n+Y_n\xrightarrow{\mathcal L}0$? Estimate instead
+    $\mathbb E\big[\min(|X_n+Y_n|,1)\big]$, compare it with its exact value, and explain why this
+    quantity does tend to $0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How fast does $n(1-Y_n)$ approach $\mathrm{Exp}(1)$?]\label{ex:cl-maximum-rate}
+\hard This is partly a computational exercise, on \noteref{exa:cl-maximum}. Let $F_n$ be the
+distribution function of $Z_n=n(1-Y_n)$, and
+$d_n=\sup_{x\in\mathbb R}|F_n(x)-(1-e^{-x})|$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that, for $0\le x\le n$,
+    \[
+      0\le e^{-x}-\Big(1-\frac xn\Big)^n\le\frac{x^2}{2n}\,e^{-x(n-1)/n} .
+    \]
+    \emph{Hint:} $a^n-b^n\le na^{n-1}(a-b)$ for $0\le b\le a$; take $a=e^{-x/n}$ and
+    $b=1-\frac xn$, and use $e^{-u}-1+u\le\frac{u^2}2$ for $u\ge0$.
+  \item Deduce that $d_n\le\frac{2e^{-2}\,n}{(n-1)^2}$ for $n\ge2$, and that
+    $\lim_nn\,d_n=2e^{-2}\approx0.2707$. \emph{Hint for the lower bound:} look at $x=2$.
+  \item Compute $d_n$ exactly for $n=10,10^2,10^3$ (\texttt{scaled\_max\_kolmogorov}), and
+    compare with (b).
+  \item You want a simulation to \emph{show} that $Z_n$ is not exactly $\mathrm{Exp}(1)$: you draw
+    $N$ values of $Z_n$ and compute the Kolmogorov distance $D_N$ of their empirical distribution
+    function to $1-e^{-x}$. Using the triangle inequality and the DKW inequality of
+    \exref{ex:cl-sums}, find $N$ such that, with probability at least $0.99$, $D_N\ge\frac{d_n}2$
+    while the sampling error $\sup_x|\hat F_N(x)-F_n(x)|$ is below $\frac{d_n}2$; give it for
+    $n=10,10^2,10^3$.
+  \item With seed $2026$, draw $N=2\cdot10^4$ values of $Z_{10}$ (\texttt{sample\_scaled\_max}) and
+    compute their Kolmogorov distances to $1-e^{-x}$ and to $F_{10}$. Repeat by taking the maximum
+    of $10$ uniforms directly (\texttt{direct=True}). Use your numbers to explain the right
+    panel of \noteref{fig:cl-maximum}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Slutsky's theorem]\label{ex:cl-slutsky}
+\hard This exercise proves \noteref{thm:cl-slutsky}, which the notes state without
+proof. Let $X_n\xrightarrow{\mathcal L}X$ and $Y_n\xrightarrow{\mathbb P}a\in\mathbb R$, with $X_n$
+and $Y_n$ on the same space for every $n$. You may use \noteref{thm:cl-cdf-criterion}, and that a
+distribution function has at most countably many discontinuity points.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove part~(1). \emph{Hint:} for $\varepsilon>0$,
+    \[
+      F_{X_n}(x-a-\varepsilon)-\mathbb P(|Y_n-a|>\varepsilon)\le\mathbb P(X_n+Y_n\le x)
+      \le F_{X_n}(x-a+\varepsilon)+\mathbb P(|Y_n-a|>\varepsilon);
+    \]
+    choose $\varepsilon$ so that $x-a\pm\varepsilon$ are continuity points of $F_X$.
+  \item Deduce that if $X_n\xrightarrow{\mathcal L}X$ and $X_n-Z_n\xrightarrow{\mathbb P}0$, then
+    $Z_n\xrightarrow{\mathcal L}X$.
+  \item Show that $(X_n)_n$ is \emph{tight}: for every $\eta>0$ there is $M$ with
+    $\mathbb P(|X_n|>M)\le\eta$ for every $n$. Deduce that $(Y_n-a)X_n\xrightarrow{\mathbb P}0$, and
+    then part~(2) from (b) and \noteref{prop:cl-continuous-mapping}.
+  \item Let $a\ne0$, and let $X_n/Y_n$ be $0$ on $\{Y_n=0\}$. Show that $1/Y_n\xrightarrow{\mathbb
+    P}1/a$ (with the same convention), and deduce part~(3).
+  \item Show by an example that part~(1) fails if $Y_n\xrightarrow{\mathcal L}Y$ with $Y$ not
+    constant, even when $X_n\xrightarrow{\mathcal L}X$ and $X$, $Y$ are defined on the same space.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The matching problem (in the style of Ross, Ch.~4)]\label{ex:cl-matching}
+\medium At a party, $n$ guests leave their hats in a cloakroom; at the end the hats are handed
+back in a uniformly random order (all $n!$ permutations equally likely). Let $M_n$ be the number
+of guests who get their own hat back.
+\begin{enumerate}[label=(\alph*)]
+  \item Write $M_n=\sum_{i=1}^n\1_{A_i}$, with $A_i$ the event that guest $i$ gets his or her hat,
+    and show that $\mathbb E[M_n]=1$ and, for $n\ge2$, $\Var(M_n)=1$. Are the $\1_{A_i}$
+    independent?
+  \item Show, by the inclusion--exclusion formula, that
+    $\mathbb P(M_n=0)=\sum_{j=0}^n\frac{(-1)^j}{j!}$, and deduce that
+    \[
+      \mathbb P(M_n=k)=\frac1{k!}\sum_{j=0}^{n-k}\frac{(-1)^j}{j!},\qquad k=0,\dots,n .
+    \]
+    \emph{Hint:} choose the $k$ guests who get their hats, and count the permutations of the
+    others with no fixed point.
+  \item Deduce that $M_n\xrightarrow{\mathcal L}\mathcal P(1)$.
+  \item Compute the total variation distance between the law of $M_n$ and $\mathcal P(1)$ for
+    $n=5,10,20$ (\texttt{matching\_pmf} in \texttt{probnotes.inlaw}), and compare it with the
+    distance between $B(n,\frac1n)$ and $\mathcal P(1)$. Which is closer to the Poisson law: the
+    number of fixed points, which is a sum of dependent indicators, or the binomial law, a sum of
+    independent ones with the same mean?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Poisson approximation with an error bound (in the style of Ross, Ch.~8)]\label{ex:cl-le-cam}
+\hard This is partly a computational exercise.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $0\le p\le1$ and $U\sim U((0,1))$. Let $I=\1_{\{U\ge1-p\}}$, and let $N=k$ when
+    $\sum_{j<k}e^{-p}\frac{p^j}{j!}\le U<\sum_{j\le k}e^{-p}\frac{p^j}{j!}$. Show that $I\sim b(p)$,
+    $N\sim\mathcal P(p)$ and $\mathbb P(I\ne N)=p(1-e^{-p})\le p^2$. (This is
+    \texttt{bernoulli\_poisson\_coupling} in \texttt{probnotes.inlaw}.)
+  \item Let $S=I_1+\dots+I_n$, with $I_1,\dots,I_n$ independent and $I_i\sim b(p_i)$, and let
+    $\lambda=\sum_ip_i$ and $N\sim\mathcal P(\lambda)$. Show that, for every
+    $A\in\mathcal B(\mathbb R)$, $|\mathbb P(S\in A)-\mathbb P(N\in A)|\le\sum_ip_i^2$. \emph{Hint:}
+    couple each $I_i$ with an $N_i\sim\mathcal P(p_i)$ as in (a), independently for different
+    $i$, and use \noteref{prop:rv-notable-discrete}.
+  \item Deduce that the total variation distance between $B(n,\frac\lambda n)$ and
+    $\mathcal P(\lambda)$ is at most $\frac{\lambda^2}n$, which proves again the convergence of
+    \noteref{exa:cl-binomial-poisson}, in a stronger sense.
+  \item A proofreader checks a report of $250$ pages; page $i$ contains a typo with probability
+    $p_i=\frac i{50000}$ (the later pages were typed in a hurry), independently of the others.
+    Compute exactly the probability that the report has at least two typos
+    (\texttt{poisson\_binomial\_pmf}), and its Poisson approximation. Compare the error with the
+    bound of (b), and with the exact total variation distance.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Laws of large numbers for dependent variables (in the style of Ross, Ch.~8)]\label{ex:cl-relaxed}
+\medium This is partly a computational exercise, on \noteref{exa:cl-relaxed-lln}.
+\begin{enumerate}[label=(\alph*)]
+  \item Write $T_n$ in terms of $\bar X_{n+1}=\frac1{n+1}\sum_{i=1}^{n+1}X_i$, $X_1$ and $X_{n+1}$,
+    and deduce from \noteref{thm:ll-strong-lln} that $T_n\to2p$ almost surely.
+  \item Let $(Z_n)_{n\ge1}$ be random variables in $L^2$ with $\mathbb E[Z_n]=\mu$ for every $n$,
+    and suppose that $|\Cov(Z_i,Z_j)|\le c(|i-j|)$, where $c(k)\to0$ as $k\to\infty$. Show that
+    $\bar Z_n=\frac1n\sum_{i=1}^nZ_i\to\mu$ in $L^2$, hence in probability. \emph{Hint:}
+    $\Var(\bar Z_n)\le\frac2n\sum_{k=0}^{n-1}c(k)$.
+  \item Let $(\xi_i)_{i\ge1}$ be i.i.d.\ in $L^2$ with mean $\mu$ and variance $\sigma^2$, let $m\ge1$
+    and $Z_i=\frac1m(\xi_i+\dots+\xi_{i+m-1})$ (a moving average). Compute $\Cov(Z_i,Z_j)$, and
+    check that (b) applies. Which choice of $m$ and of the $\xi_i$ gives back $\frac12T_n$?
+  \item With $p=0.3$ and seed $2026$, draw $10^5$ values of $T_n$ for $n=10,10^2,10^3$ with the
+    function \texttt{sample\_relaxed\_mean}. Compare the sample variance with $\frac{4n-2}{n^2}p(1-p)$,
+    and the frequency of $|T_n-2p|>0.05$ with Chebyshev's bound. For which $n$ is the bound
+    informative?
+\end{enumerate}
+\end{exercise}

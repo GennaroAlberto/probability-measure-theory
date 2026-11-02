@@ -1,5 +1,784 @@
-\begin{planned}
-  \item the central limit theorem
-  \item the normal approximation
-  \item the delta method
-\end{planned}
+% Chapter 17: The central limit theorem and the delta method.
+% Translation of Paola Siri's handwritten notes, PDF pages 261-278: the topics "TEOREMA LIMITE
+% CENTRALE" (pp. 261-267, with the typed exercise on an election poll and the binomial histograms
+% of p. 267), "METODO DELTA" (pp. 268-276, with four typed exercises) and "TEMA D'ESAME -
+% 01/02/2017" (pp. 277-278).
+
+The laws of large numbers say that the sample mean $\bar X_n$ of independent, identically
+distributed square-integrable random variables converges to their mean $\mu$. The central limit
+theorem describes the fluctuations of $\bar X_n$ around $\mu$: they are of order
+$\frac1{\sqrt n}$, and, once magnified by $\sqrt n$, they are Gaussian, whatever the law of the
+variables. We prove it with characteristic functions and Lévy's theorem, state its vector
+version, and use it to approximate binomial probabilities, which leads to the continuity
+correction. The delta method then transfers the asymptotic normality of a sequence to its images
+under differentiable functions, at first and at second order; it gives the
+variance-stabilising transformations. Worked exercises, and a problem from the exam of
+1 February 2017, close the chapter and the notes.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space, and convergence in law is
+written $\xrightarrow{\mathcal L}$ (\cref{def:cl-in-law}). We write $\Phi$, without a subscript,
+for the distribution function of the standard Gaussian law, $\Phi(x)=\mathbb P(N\le x)$ for
+$N\sim\mathcal N(0,1)$, as the notes do in the exercises; characteristic functions always carry a
+subscript, as in $\Phi_X$.
+
+\section{The central limit theorem}\label{sec:ct-clt}
+
+\begin{theorem}[Central limit theorem, real version]\label{thm:ct-clt}
+Let $(X_n)_{n\ge1}$ be a sequence of real i.i.d.\ random variables, with
+$X_n\in L^2(\Omega,\mathcal F,\mathbb P)$. Let $\mu$ and $\sigma^2$ be the mean and the variance of
+$X_n$, and suppose that $\sigma^2>0$.\footnote{The handwritten notes do not require $\sigma^2>0$,
+which is needed for $S_n^*$ to be defined; if $\sigma^2=0$, then $X_n=\mu$ a.s.\ and
+$S_n=n\mu$ a.s. Corrected here.} Let
+\[
+  S_n=\sum_{i=1}^nX_i\qquad\text{and}\qquad S_n^*=\frac{S_n-n\mu}{\sqrt{n\sigma^2}}
+\]
+be its \emph{standardisation} (it has mean $0$ and variance $1$). Then
+\[
+  S_n^*\xrightarrow{\mathcal L}N,\qquad\text{where }N\sim\mathcal N(0,1).
+\]
+\end{theorem}
+
+\begin{remark}[Distribution functions]\label{rem:ct-cdf}
+Let $F_N(x)=\mathbb P(N\le x)=\Phi(x)$, $x\in\mathbb R$. Then $F_N$ is continuous on the
+\emph{whole} of $\mathbb R$, and so, by \cref{thm:cl-cdf-criterion},
+\[
+  S_n^*\xrightarrow{\mathcal L}N\iff\forall x\in\mathbb R\quad F_{S_n^*}(x)\xrightarrow[n\to\infty]{}F_N(x)
+  \iff\mathbb P(S_n^*\le x)\xrightarrow[n\to\infty]{}\mathbb P(N\le x)\quad\forall x\in\mathbb R .
+\]
+\end{remark}
+
+\begin{remark}[Equivalent forms]\label{rem:ct-equivalent-forms}
+By continuity (\cref{prop:cl-continuous-mapping}, with $f(x)=cx$), if
+$X_n\xrightarrow{\mathcal L}X$, then $cX_n\xrightarrow{\mathcal L}cX$ for every $c\in\mathbb R$.
+Then, applying this with $c=\sigma$ and with $c=\frac1\sigma$,
+\[
+  S_n^*\xrightarrow{\mathcal L}N\iff\sigma S_n^*\xrightarrow{\mathcal L}\sigma N=N' ,
+\]
+and $N'\sim\mathcal N(0,\sigma^2)$ (\cref{prop:tr-affine-gaussian}). Since
+$\sigma S_n^*=\sigma\frac{S_n-n\mu}{\sqrt{n\sigma^2}}=(S_n-n\mu)\frac1{\sqrt n}$,
+\[
+  S_n^*\xrightarrow{\mathcal L}N\iff\frac1{\sqrt n}(S_n-n\mu)\xrightarrow{\mathcal L}N'\quad\text{with }
+  N'\sim\mathcal N(0,\sigma^2).
+\]
+Finally, with the sample mean $\bar X_n=\frac{S_n}n$,
+$\frac1{\sqrt n}(S_n-n\mu)=\sqrt n\big(\frac{S_n}n-\mu\big)=\sqrt n(\bar X_n-\mu)$, and so
+\begin{equation}\label{eq:ct-clt-mean}
+  S_n^*\xrightarrow{\mathcal L}N\iff\sqrt n(\bar X_n-\mu)\xrightarrow{\mathcal L}N'\quad\text{with }
+  N'\sim\mathcal N(0,\sigma^2).
+\end{equation}
+\end{remark}
+
+The central limit theorem also holds for random vectors.
+
+\begin{theorem}[Central limit theorem, vector version]\label{thm:ct-clt-vector}
+Let $(\underline X_n)_{n\ge1}$ be a sequence of i.i.d.\ random vectors with values in
+$\mathbb R^K$, with mean vector $\underline\mu$ and (finite) variance--covariance matrix $C$. Let
+$\underline S_n=\sum_{i=1}^n\underline X_i$ (component by component). Then
+\[
+  (\underline S_n-n\underline\mu)\frac1{\sqrt n}\xrightarrow{\mathcal L}\underline N,\qquad
+  \text{with }\underline N\sim\mathcal N_K(\underline0,C).
+\]
+\end{theorem}
+
+The notes state this theorem without proof. Convergence in law of random vectors is defined as
+for real random variables (\cref{def:cl-in-law}), with bounded continuous functions on
+$\mathbb R^K$ in place of those on $\mathbb R$, and Lévy's theorem holds in $\mathbb R^K$ as well;
+the theorem is then proved like \cref{thm:ct-clt}, or deduced from it with the Cramér--Wold
+device; see \citet[Section~29]{billingsley} and \citet[Section~3.10]{durrett}, and
+\exref{ex:ct-delta-vector}. Here $C$ may be singular, and then $\mathcal N_K(\underline0,C)$ is
+degenerate (\cref{rem:gv-degenerate}).
+
+\begin{remark}[The normal approximation]\label{rem:ct-approximation}
+Since $S_n^*\xrightarrow{\mathcal L}N\sim\mathcal N(0,1)$, for $n$ sufficiently large we have
+\[
+  S_n^*\approx\mathcal N(0,1),\qquad\text{that is,}\qquad S_n\approx\mathcal N(n\mu,n\sigma^2),
+  \qquad\bar X_n\approx\mathcal N\Big(\mu,\frac{\sigma^2}n\Big),
+\]
+where ``$\approx$'' reads ``has approximately the law''. Precisely,
+$\mathbb P(S_n\le x)=\mathbb P\big(S_n^*\le\frac{x-n\mu}{\sqrt{n\sigma^2}}\big)\approx
+\Phi\big(\frac{x-n\mu}{\sqrt{n\sigma^2}}\big)$, by \cref{rem:ct-cdf}. How large must $n$ be? The
+notes say that $n\ge30$ may already be enough.\footnote{This is a rule of thumb. How large $n$
+must be depends on the law of $X_1$. With $\varphi(0)=\frac1{\sqrt{2\pi}}$, the error
+$\sup_x|F_{S_n^*}(x)-\Phi(x)|$ contains, for an integer-valued law, a half-jump term of about
+$\frac{\varphi(0)}{2\sigma\sqrt n}$ and, for a skewed law, a term of about
+$\frac{|\gamma|\varphi(0)}{6\sqrt n}$, where $\gamma=\mathbb E[(X_1-\mu)^3]/\sigma^3$ is the skewness;
+a law with both, such as $b(0.1)$, needs the largest $n$ (\cref{fig:ct-clt}, \exref{ex:ct-kolmogorov};
+for the binomial law, see \cref{rem:ct-normal-approximation}). Added to the handwritten notes.}
+\end{remark}
+
+\begin{remark}[The fluctuations of the sample mean]\label{rem:ct-fluctuations}
+Let $\bar X_n=\frac1n\sum_{i=1}^nX_i$. Then $\mathbb E[\bar X_n]=\mu$ and
+$\operatorname{var}(\bar X_n)=\frac{\sigma^2}n$.
+\begin{enumerate}[label=\arabic*)]
+  \item We have seen that, by the law of large numbers (\cref{thm:ll-strong-lln}),
+    $\bar X_n\to\mu$ almost surely, in $L^2$ and in probability, so that
+    $|\bar X_n-\mu|\to0$ in each of these three modes. Is there an $\alpha>0$ such that
+    \[
+      n^\alpha|\bar X_n-\mu|\longrightarrow c\neq0\ ?
+    \]
+    The answer is negative if we speak of convergence almost surely, in $L^2$ or in probability
+    (\exref{ex:ct-rate}). However, by the central limit theorem,
+    $\sqrt n(\bar X_n-\mu)\xrightarrow{\mathcal L}N\sim\mathcal N(0,\sigma^2)$, by
+    \eqref{eq:ct-clt-mean}: so ``in some sense'' $\alpha=\frac12$, and $\bar X_n\to\mu$ with a speed
+    equal to $\frac1{\sqrt n}$.
+  \item $\bar X_n$ oscillates around $\mu$: $\mathbb E[\bar X_n]=\mu$ and
+    $\operatorname{var}(\bar X_n)=\frac{\sigma^2}n$, so the oscillations decrease as $n$ grows. By
+    the law of large numbers $\bar X_n\to\mu$ a.s., and the oscillations disappear in the limit.
+    If we change scale and look at the microscopic behaviour, with a magnifying glass of power
+    $\sqrt n$, then
+    \[
+      \sqrt n(\bar X_n-\mu)\xrightarrow{\mathcal L}N\sim\mathcal N(0,\sigma^2)
+    \]
+    by the central limit theorem: the (\emph{microscopic}!) oscillations reappear, and they are
+    random, with a Gaussian law.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}[Proof of \cref{thm:ct-clt}]
+Let $X_n$ be i.i.d., $\mu=\mathbb E[X_n]$ and $\sigma^2=\operatorname{var}(X_n)$, and let
+\[
+  Y_n=\frac{X_n-\mu}\sigma .
+\]
+Then $\mathbb E[Y_n]=0$ and $\operatorname{var}(Y_n)=1$, and the $Y_n$ are i.i.d.\ (functions of
+independent random variables are independent, \cref{prop:rv-functions-independent}). Moreover
+\[
+  S_n^*=\frac{\sum_{i=1}^nX_i-n\mu}{\sqrt{n\sigma^2}}=\frac{\sum_{i=1}^n\frac{X_i-\mu}\sigma}{\sqrt n}
+  =\frac{\sum_{i=1}^nY_i}{\sqrt n} .
+\]
+Let $\Phi_Y$ be the characteristic function of $Y_n$, the same for every $n$ because the $Y_n$
+have the same law. By \cref{prop:cf-affine,prop:cf-independence} (the latter applied $n-1$ times,
+since $Y_n\indep Y_1+\dots+Y_{n-1}$), the characteristic function of $S_n^*$ is
+\[
+  \Phi_{S_n^*}(t)=\mathbb E\big[e^{itS_n^*}\big]=\Phi_{\frac1{\sqrt n}\sum_{i=1}^nY_i}(t)
+  =\Phi_{\sum_{i=1}^nY_i}\Big(\frac t{\sqrt n}\Big)
+  =\prod_{i=1}^n\Phi_{Y_i}\Big(\frac t{\sqrt n}\Big)=\Big(\Phi_Y\Big(\frac t{\sqrt n}\Big)\Big)^n .
+\]
+Observe that $Y_n\in L^2$, so that, by \cref{thm:cf-moments} and \eqref{eq:cf-moments},
+$\Phi_Y\in C^2(\mathbb R)$ and
+\[
+  \Phi_Y(0)=1,\qquad\Phi_Y'(0)=i\,\mathbb E[Y_n]=0,\qquad
+  \Phi_Y''(0)=i^2\,\mathbb E[Y_n^2]=-\operatorname{var}(Y_n)=-1 .
+\]
+Consider the Taylor expansion of $\Phi_Y$ centred at $0$ (Taylor's formula with Peano's
+remainder, applied to the real and to the imaginary part of $\Phi_Y$):
+\[
+  \Phi_Y(x)=\Phi_Y(0)+\Phi_Y'(0)\,x+\frac{\Phi_Y''(0)}2\,x^2+o(x^2)=1-\frac{x^2}2+o(x^2)
+  \qquad(x\to0).
+\]
+Fix $t\in\mathbb R$. Then
+\[
+  \Phi_{S_n^*}(t)=\Big(\Phi_Y\Big(\frac t{\sqrt n}\Big)\Big)^n
+  =\Big(1-\frac{t^2}{2n}+o\Big(\frac{t^2}n\Big)\Big)^n\qquad(n\to\infty),
+\]
+and so
+\[
+  \lim_{n\to\infty}\Phi_{S_n^*}(t)
+  =\lim_{n\to\infty}\exp\Big[n\log\Big(1-\frac{t^2}{2n}+o\Big(\frac{t^2}n\Big)\Big)\Big]
+  =\lim_{n\to\infty}\exp\Big[n\Big(-\frac{t^2}{2n}+o\Big(\frac{t^2}n\Big)\Big)\Big]=e^{-\frac{t^2}2},
+\]
+where we used $\log(1+w)\sim w$ as $w\to0$, also for complex $w$. In detail:\footnote{The
+handwritten notes use $\log(1+w)\sim w$ also for complex $w$ (``anche in $\mathbb C$'') without
+justification; the details of this step
+are added.} let $w_n=\Phi_Y(\frac t{\sqrt n})-1=-\frac{t^2}{2n}+o(\frac1n)$, so that $w_n\to0$ and
+$nw_n\to-\frac{t^2}2$. For $|w|\le\frac12$ let
+$\operatorname{Log}(1+w)=\sum_{k\ge1}\frac{(-1)^{k+1}}kw^k$ (the principal logarithm), which
+satisfies $\exp(\operatorname{Log}(1+w))=1+w$ and
+\[
+  \big|\operatorname{Log}(1+w)-w\big|\le\sum_{k\ge2}\frac{|w|^k}k\le\frac{|w|^2}2\cdot\frac1{1-|w|}\le|w|^2 .
+\]
+For $n$ so large that $|w_n|\le\frac12$ we then have
+$\Phi_{S_n^*}(t)=(1+w_n)^n=\exp\big(n\operatorname{Log}(1+w_n)\big)$, with
+$\big|n\operatorname{Log}(1+w_n)-nw_n\big|\le n|w_n|^2\to0$; hence
+$n\operatorname{Log}(1+w_n)\to-\frac{t^2}2$ and, $\exp$ being continuous,
+$\Phi_{S_n^*}(t)\to e^{-t^2/2}$.
+
+The limit $e^{-t^2/2}=\Phi_N(t)$ is the characteristic function of $N\sim\mathcal N(0,1)$
+(\cref{exa:cf-gaussian}). Since $\Phi_{S_n^*}(t)\to\Phi_N(t)$ for every $t\in\mathbb R$, and
+$\Phi_N$ is continuous at $0$, Paul Lévy's theorem (\cref{thm:cl-levy}) gives
+$S_n^*\xrightarrow{\mathcal L}N$.
+\end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch17-clt}
+  \caption{The central limit theorem at work. Left: the distribution function of $S_n^*$ for
+    i.i.d.\ $\mathrm{Exp}(1)$ summands ($S_n\sim\Gamma(n,1)$, so it is computed exactly), for
+    $n=1,4,32$, against $\Phi$. Right: the Kolmogorov distance
+    $\sup_x|F_{S_n^*}(x)-\Phi(x)|$, computed exactly, for $\mathrm{Exp}(1)$, $b(\frac12)$ and
+    $b(0.1)$ summands, against $\frac1{\sqrt n}$ (dotted). All three decrease like
+    $\frac1{\sqrt n}$. The continuous, skewed $\mathrm{Exp}(1)$ has the smallest distance; the
+    symmetric $b(\frac12)$ pays for the jumps of its distribution function; $b(0.1)$, which has
+    both jumps and skewness, needs the largest $n$.}
+  \label{fig:ct-clt}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ct-code-clt}
+\sloppy
+\coderef{code/src/probnotes/clt.py} computes the distribution function of $S_n^*$ exactly when
+the law of $S_n$ is known (Bernoulli, Poisson, Gamma summands), and the Kolmogorov distance
+$\sup_x|F_{S_n^*}(x)-\Phi(x)|$ of \cref{fig:ct-clt} (\texttt{standardised\_cdf},
+\texttt{kolmogorov\_distance}); for lattice laws the supremum is reached at an atom $x_k$, by
+$F(x_k)$ or by the left limit $F(x_k-)$, so it is computed exactly. The distance decreases like
+$\frac1{\sqrt n}$; the Berry--Esseen theorem bounds it by a constant times $\frac1{\sqrt n}$
+\citep[Section~3.4]{durrett} (\exref{ex:ct-kolmogorov}). The function
+\texttt{standardised\_cf} evaluates $\Phi_Y(\frac t{\sqrt n})^n$, the characteristic function of the
+proof.
+\end{remark}
+
+\demo{17-clt-delta.ipynb}{the law of $S_n^*$ for several laws of $X_1$ against the Gaussian, with
+sliders for $n$, and the characteristic functions $\Phi_Y(\frac t{\sqrt n})^n$ of the proof.}
+
+\begin{example}[Worked exercise: an election poll]\label{exa:ct-poll}
+Two weeks before the elections, $60\%$ of the voters have decided to vote for party A, while
+$40\%$ will vote for party B. We choose a sample of $100$ voters. What is the probability that the
+majority of them vote for B?
+
+\emph{Solution.} Let $X_1,\dots,X_{100}$ be i.i.d., $X_i\sim b(p)$ with $p=0.4$, where
+\[
+  X_i=\begin{cases}1&\text{if voter $i$ votes for B},\\0&\text{if voter $i$ votes for A}.\end{cases}
+\]
+Let $Y$ be the number of interviewed voters who vote for B; then $Y\sim B(n,p)$ with $n=100$ and
+$p=0.4$, and
+\[
+  \mathbb P(Y\ge51)=\sum_{k=51}^{100}\mathbb P(Y=k)=1-\sum_{k=0}^{50}\mathbb P(Y=k)=\cdots
+\]
+(too many computations!). But $Y=\sum_{i=1}^{100}X_i$, with $X_i\sim b(p)$ i.i.d., $\mathbb E[X_i]=p=0.4$ and
+$\operatorname{var}(X_i)=p(1-p)=0.24$. So $Y=S_{100}$, and
+$S_{100}^*=\frac{S_{100}-100p}{\sqrt{100p(1-p)}}\xrightarrow{\mathcal L}N$ by the central limit
+theorem; that is, $S_{100}=Y\approx\mathcal N(100p,100p(1-p))$, or $S_{100}^*\approx\mathcal N(0,1)$.
+Hence
+\[
+  \mathbb P(Y\ge51)=\mathbb P\bigg(\frac{Y-100p}{\sqrt{100p(1-p)}}\ge\frac{51-40}{\sqrt{24}}\bigg)
+  \approx\mathbb P(N\ge2.24)=1-\Phi(2.24)=0.0125,
+\]
+where $\Phi$ is the distribution function of $N\sim\mathcal N(0,1)$.\footnote{The notes read $\Phi$
+from a table, at $\frac{11}{\sqrt{24}}=2.2454\ldots$ cut to two decimals; without rounding,
+$1-\Phi(2.2454)=0.0124$. The exact value is $\mathbb P(Y\ge51)=0.0168$ (\exref{ex:ct-continuity}).
+Added to the handwritten notes.}
+\end{example}
+
+\begin{remark}[Normal approximation of the binomial; continuity correction]\label{rem:ct-normal-approximation}
+\leavevmode
+\begin{enumerate}[label=\arabic*)]
+  \item A binomial law $B(n,p)$ is well approximated by $\mathcal N(np,np(1-p))$ if
+    \[
+      np\ge10\qquad\text{and}\qquad n(1-p)\ge10
+    \]
+    ($\ge5$ is also accepted). In \cref{exa:ct-poll}, $np=100\cdot0.4=40$ and
+    $n(1-p)=100\cdot0.6=60$, so the approximation is legitimate. \Cref{fig:ct-binomial}, redrawn
+    from the histograms pasted into the notes, shows it for several $n$ and $p$.
+  \item The binomial law is discrete, so $\mathbb P(Y\ge51)=\mathbb P(Y>50)$, and
+    \[
+      \mathbb P(Y>50)=\mathbb P\bigg(\frac{Y-100p}{\sqrt{100p(1-p)}}>\frac{50-40}{\sqrt{24}}\bigg)
+      \approx\mathbb P(N>2.04)=1-\Phi(2.04)=0.0207 .
+    \]
+    But also $\mathbb P(Y\ge51)=\mathbb P(Y>50.5)=\mathbb P\big(S_{100}^*>\frac{10.5}{\sqrt{24}}\big)
+    \approx1-\Phi(2.14)=0.0162$. All the results obtained from
+    \[
+      \mathbb P(Y>50+\varepsilon),\qquad\varepsilon\in[0,1),
+    \]
+    are acceptable, since $\mathbb P(Y\ge51)=\mathbb P(Y>50+\varepsilon)$ for every such
+    $\varepsilon$; the best approximation is the one obtained with $\varepsilon=\frac12$. This is
+    the \emph{continuity correction}.\footnote{Like $0.0125$ in \cref{exa:ct-poll} (which amounts to
+    $\varepsilon=1$), the values $0.0207$ ($\varepsilon=0$) and $0.0162$ ($\varepsilon=\frac12$) use
+    $z$ cut to two decimals; without rounding they are $0.0124$, $0.0206$ and $0.0160$. The exact
+    value is $\mathbb P(Y\ge51)=0.0168$, so the unrounded approximations have errors $-0.0044$,
+    $+0.0039$ and $-0.0007$. The choice $\varepsilon=\frac12$ is a rule, not an optimum: here
+    $\varepsilon=0.414$ would give the exact value. In general, for an integer $k$,
+    $\mathbb P(Y\le k)\approx\Phi\big(\frac{k+\frac12-np}{\sqrt{np(1-p)}}\big)$; for $p=\frac12$ the
+    correction makes the error of order $\frac1n$ instead of $\frac1{\sqrt n}$
+    (\exref{ex:ct-continuity}). Added to the handwritten notes.} In \cref{fig:ct-binomial}
+    (bottom left), $X\sim B(20,\frac12)$ and $\mathbb P(X\ge12)=\mathbb P(X>11)=\mathbb P(X>11.5)$:
+    of the three areas under the Gaussian density, the one beyond $11.5$ ($0.2512$) is the closest
+    to the total area of the bars from $12$ on ($0.2517$).\footnote{The notes shade the three areas;
+    this comparison is added.}
+\end{enumerate}
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch17-binomial}
+  \caption{The histograms of $B(n,p)$ for $p=0.1$ (top) and $p=\frac12$ (bottom), $n=20,50,100$,
+    with the density of $\mathcal N(np,np(1-p))$, as on p.~267 of the handwritten notes; $np$ and
+    $n(1-p)$ are in red when the rule $np\ge10$, $n(1-p)\ge10$ fails. Bottom left: the three
+    normal areas that approximate $\mathbb P(X\ge12)=0.252$ for $X\sim B(20,\frac12)$, beyond $11$,
+    $11.5$ (shaded) and $12$.}
+  \label{fig:ct-binomial}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ct-code-normal}
+\sloppy
+In \coderef{code/src/probnotes/clt.py}, \texttt{normal\_tail} is the approximation
+$1-\Phi\big(\frac{k+\varepsilon-np}{\sqrt{np(1-p)}}\big)$ of $\mathbb P(Y>k)$,
+\texttt{poll\_numbers} reproduces the numbers of \cref{exa:ct-poll}, \texttt{matching\_shift}
+finds the $\varepsilon$ that makes the approximation exact, and \texttt{max\_cdf\_error} measures
+the largest error over $k$, with and without the continuity correction
+(\exref{ex:ct-continuity}).
+\end{remark}
+
+\demo{17-clt-delta.ipynb}{the histogram of $B(n,p)$ against the Gaussian density, with sliders
+for $n$, $p$, the threshold $k$ and the shift $\varepsilon$.}
+
+\section{The delta method}\label{sec:ct-delta}
+
+\begin{definition}[Asymptotic normality]\label{def:ct-asymptotically-normal}
+A sequence $(X_n)_{n\ge1}$ of real random variables is called \emph{asymptotically normal} if
+\[
+  \sqrt n(X_n-\theta)\xrightarrow{\mathcal L}N\sim\mathcal N\big(0,\sigma^2(\theta)\big),
+\]
+for some $\theta\in\mathbb R$ and $\sigma^2(\theta)\ge0$.
+\end{definition}
+
+The notation $\sigma^2(\theta)$ stresses that the variance of the limit may depend on $\theta$. By
+the central limit theorem, in the form \eqref{eq:ct-clt-mean}, the sample mean $\bar X_n$ of
+i.i.d.\ random variables in $L^2$ is asymptotically normal, with $\theta=\mu$ and
+$\sigma^2(\theta)=\sigma^2$.
+
+\begin{theorem}[Delta method]\label{thm:ct-delta}
+Let $(X_n)_{n\ge1}$ be an asymptotically normal sequence,
+\[
+  \sqrt n(X_n-\theta)\xrightarrow{\mathcal L}\mathcal N\big(0,\sigma^2(\theta)\big),
+\]
+and let $g:\mathbb R\to\mathbb R$ be continuous (measurable is enough) and such that $g'(\theta)$
+exists and $g'(\theta)\neq0$. Then
+\[
+  \sqrt n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\mathcal N\big(0,(g'(\theta))^2\sigma^2(\theta)\big).
+\]
+In particular, $(g(X_n))_n$ is also asymptotically normal.
+\end{theorem}
+
+\begin{proof}
+Consider the Taylor expansion of $g$ centred at $\theta$:
+\[
+  g(x)=g(\theta)+(x-\theta)g'(\theta)+(x-\theta)\,\omega(x-\theta),\qquad\text{with }
+  \omega(x-\theta)\xrightarrow[x\to\theta]{}0 .
+\]
+Precisely, $\omega(h)=\frac{g(\theta+h)-g(\theta)}h-g'(\theta)$ for $h\neq0$ and $\omega(0)=0$:
+the identity holds for every $x\in\mathbb R$, $\omega$ is continuous at $0$ because $g$ is
+differentiable at $\theta$, and $\omega$ is Borel because $g$ is.\footnote{This precise form of
+the remainder is added to the handwritten notes; it makes $\omega(X_n-\theta)$ a random variable.}
+Hence
+\[
+  g(X_n)=g(\theta)+(X_n-\theta)g'(\theta)+(X_n-\theta)\,\omega(X_n-\theta),
+\]
+\[
+  \sqrt n\big(g(X_n)-g(\theta)\big)=\sqrt n(X_n-\theta)\big(g'(\theta)+\omega(X_n-\theta)\big).
+\]
+We observe that the hypothesis of asymptotic normality implies $X_n\xrightarrow{\mathbb P}\theta$.
+Indeed,
+\[
+  Y_n=\sqrt n(X_n-\theta)\xrightarrow{\mathcal L}N\sim\mathcal N\big(0,\sigma^2(\theta)\big)
+  \qquad\text{and}\qquad\frac1{\sqrt n}\xrightarrow{\mathbb P}0
+\]
+(a sequence of constants), so that, by Slutsky's theorem (\cref{thm:cl-slutsky}, first for the
+product, then for the sum with the constant $\theta$),
+\[
+  X_n=\frac1{\sqrt n}Y_n+\theta\xrightarrow{\mathcal L}0\cdot N+\theta=\theta ;
+\]
+and $X_n\xrightarrow{\mathcal L}\theta$ implies $X_n\xrightarrow{\mathbb P}\theta$, because the
+limit is a constant (\cref{prop:cl-constant}). (One can also prove directly, with distribution
+functions, that if $a_n\to a$ and $b_n\to b$ are real numbers and $Y_n\xrightarrow{\mathcal L}Y$,
+then $a_nY_n+b_n\xrightarrow{\mathcal L}aY+b$; see \exref{ex:ct-affine}.)
+
+Now, since $\omega(x-\theta)\to0$ as $x\to\theta$, for every $\varepsilon>0$ there is a
+$\delta>0$ such that $|x-\theta|\le\delta\Rightarrow|\omega(x-\theta)|\le\varepsilon$. Then
+\[
+\begin{gathered}
+  \big(|X_n-\theta|\le\delta\big)\subseteq\big(|\omega(X_n-\theta)|\le\varepsilon\big)
+  \quad\Longrightarrow\quad
+  \mathbb P\big(|X_n-\theta|\le\delta\big)\le\mathbb P\big(|\omega(X_n-\theta)|\le\varepsilon\big)\\
+  \Longrightarrow\quad\mathbb P\big(|\omega(X_n-\theta)|>\varepsilon\big)\le\mathbb P\big(|X_n-\theta|>\delta\big)
+  \xrightarrow[n\to\infty]{}0,
+\end{gathered}
+\]
+because $X_n\xrightarrow{\mathbb P}\theta$. So $\omega(X_n-\theta)\xrightarrow{\mathbb P}0$, and
+$g'(\theta)+\omega(X_n-\theta)\xrightarrow{\mathbb P}g'(\theta)$. Then, in
+\[
+  \sqrt n\big(g(X_n)-g(\theta)\big)=\underbrace{\sqrt n(X_n-\theta)}_{\xrightarrow{\mathcal L}N}\,
+  \underbrace{\big(g'(\theta)+\omega(X_n-\theta)\big)}_{\xrightarrow{\mathbb P}g'(\theta)},
+\]
+Slutsky's theorem (\cref{thm:cl-slutsky}) gives
+\[
+  \sqrt n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}N\,g'(\theta)
+  \sim\mathcal N\big(0,(g'(\theta))^2\sigma^2(\theta)\big)
+\]
+(\cref{prop:tr-affine-gaussian}).
+\end{proof}
+
+The proof does not use $g'(\theta)\ne0$: if $g'(\theta)=0$, it gives
+$\sqrt n(g(X_n)-g(\theta))\xrightarrow{\mathcal L}0$, a degenerate limit, and the second-order
+delta method below finds the right scale.\footnote{This sentence is added to the handwritten
+notes.}
+
+\begin{theorem}[Vector delta method]\label{thm:ct-delta-multivariate}
+Let $(\underline X_n)_{n\ge1}$ be a sequence of random vectors with values in $\mathbb R^K$ which
+is asymptotically normal:
+\[
+  \sqrt n(\underline X_n-\underline\theta)\xrightarrow{\mathcal L}\mathcal N_K\big(\underline0,C(\underline\theta)\big).
+\]
+Let $g:\mathbb R^K\to\mathbb R$ have continuous partial derivatives, with
+$\nabla g(\underline\theta)^TC(\underline\theta)\,\nabla g(\underline\theta)>0$. Then
+\[
+  \sqrt n\big(g(\underline X_n)-g(\underline\theta)\big)\xrightarrow{\mathcal L}
+  \mathcal N\big(0,\nabla g(\underline\theta)^TC(\underline\theta)\,\nabla g(\underline\theta)\big).
+\]
+\end{theorem}
+
+The notes state this theorem without proof. It holds as soon as $g$ is differentiable at
+$\underline\theta$, and the condition $\nabla g(\underline\theta)^TC(\underline\theta)\nabla
+g(\underline\theta)>0$ only excludes a degenerate limit; see \citet[Theorem~3.1]{vandervaart-asymptotic}.
+The proof is that of \cref{thm:ct-delta}, with the vector versions of Slutsky's theorem and of the
+continuous mapping theorem (\exref{ex:ct-delta-vector}).
+
+\begin{remark}[What if $g'(\theta)=0$?]\label{rem:ct-second-order}
+If $g'(\theta)=0$ and $g''(\theta)\ne0$, we can use the Taylor expansion of the second order:
+\[
+  g(x)=g(\theta)+\underbrace{(x-\theta)g'(\theta)}_{=0}+\frac{(x-\theta)^2}2\,g''(\theta)
+  +(x-\theta)^2\,\omega_2(x-\theta),\qquad\omega_2(x-\theta)\xrightarrow[x\to\theta]{}0 ,
+\]
+\[
+  \Longrightarrow\quad n\big(g(X_n)-g(\theta)\big)=n(X_n-\theta)^2\cdot
+  \Big(\frac{g''(\theta)}2+\omega_2(X_n-\theta)\Big).
+\]
+How does $n(X_n-\theta)^2$ behave? We observe that
+\[
+  \sqrt n(X_n-\theta)\xrightarrow{\mathcal L}\mathcal N\big(0,\sigma^2(\theta)\big),\qquad\text{that is,}\qquad
+  \sqrt n(X_n-\theta)\xrightarrow{\mathcal L}\sigma(\theta)N\quad\text{with }N\sim\mathcal N(0,1).
+\]
+Then, by continuity (\cref{prop:cl-continuous-mapping}, with $f(x)=x^2$),
+\[
+  n(X_n-\theta)^2\xrightarrow{\mathcal L}\big(\sigma(\theta)N\big)^2=\sigma^2(\theta)\,N^2,
+  \qquad\text{where }N^2\sim\chi^2(1)
+\]
+(\cref{exa:tr-chi-square-end}). Reasoning as before, one proves that
+\[
+  n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\chi^2(1)\cdot\sigma^2(\theta)\,\frac{g''(\theta)}2 ,
+\]
+which is the following theorem.
+\end{remark}
+
+\begin{theorem}[Second-order delta method]\label{thm:ct-delta-second-order}
+Let $(X_n)_{n\ge1}$ be an asymptotically normal sequence,
+\[
+  \sqrt n(X_n-\theta)\xrightarrow{\mathcal L}\mathcal N\big(0,\sigma^2(\theta)\big),
+\]
+and let $g:\mathbb R\to\mathbb R$ be measurable and such that $g'(\theta)=0$ and $g''(\theta)$
+exists, $g''(\theta)\ne0$. Then
+\[
+  n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\sigma^2(\theta)\,\frac{g''(\theta)}2\cdot\chi^2(1),
+\]
+that is, $n(g(X_n)-g(\theta))$ converges in law to $\sigma^2(\theta)\frac{g''(\theta)}2W$, where
+$W\sim\chi^2(1)$.
+\end{theorem}
+
+\begin{proof}
+We complete the reasoning of \cref{rem:ct-second-order}, as in the proof of
+\cref{thm:ct-delta}.\footnote{The handwritten notes say ``reasoning as before''; the details are
+added.} Since $g''(\theta)$ exists, $g$ is differentiable near $\theta$, and Taylor's formula with
+Peano's remainder gives $g(\theta+h)=g(\theta)+\frac{g''(\theta)}2h^2+o(h^2)$ as $h\to0$
+(recall $g'(\theta)=0$). Let $\omega_2(h)=\frac{g(\theta+h)-g(\theta)}{h^2}-\frac{g''(\theta)}2$ for
+$h\ne0$ and $\omega_2(0)=0$: it is Borel, continuous at $0$, and
+\[
+  n\big(g(X_n)-g(\theta)\big)=n(X_n-\theta)^2\Big(\frac{g''(\theta)}2+\omega_2(X_n-\theta)\Big)
+\]
+everywhere on $\Omega$. As in the proof of \cref{thm:ct-delta}, $X_n\xrightarrow{\mathbb P}\theta$,
+and so $\omega_2(X_n-\theta)\xrightarrow{\mathbb P}0$. By \cref{rem:ct-second-order},
+$n(X_n-\theta)^2\xrightarrow{\mathcal L}\sigma^2(\theta)N^2$ with $N\sim\mathcal N(0,1)$. By Slutsky's
+theorem (\cref{thm:cl-slutsky}),
+\[
+  n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\sigma^2(\theta)N^2\,\frac{g''(\theta)}2,
+\]
+and $N^2\sim\chi^2(1)$.
+\end{proof}
+
+\begin{remark}[The limit is a Gamma law]\label{rem:ct-gamma}
+$\chi^2(1)=\Gamma(\frac12,\frac12)$ (\cref{exa:tr-chi-square-end}). Hence, if $g''(\theta)>0$ (and
+$\sigma^2(\theta)>0$, which \cref{def:ct-asymptotically-normal} does not require),
+\[
+  n\big(g(X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\Gamma\Big(\frac12,\frac1{\sigma^2(\theta)\,g''(\theta)}\Big),
+\]
+because $cW\sim\Gamma(\alpha,\frac\lambda c)$ if $W\sim\Gamma(\alpha,\lambda)$ and $c>0$ (by
+\cref{thm:tr-density} with $h(x)=cx$), and here $c=\sigma^2(\theta)\frac{g''(\theta)}2$,
+$\lambda=\frac12$. If $g''(\theta)<0$, the limit is the law of $-W'$ with
+$W'\sim\Gamma\big(\frac12,\frac1{\sigma^2(\theta)|g''(\theta)|}\big)$.\footnote{The hypothesis $\sigma^2(\theta)>0$ and the case
+$g''(\theta)<0$ are added to the handwritten notes. If $\sigma^2(\theta)=0$, the limit is $0$.}
+\end{remark}
+
+\begin{example}[Worked exercise: the square root of a Poisson sample mean]\label{exa:ct-sqrt-poisson}
+Consider a sequence $(X_n)_{n\ge1}$ of i.i.d.\ random variables $X_n\sim\mathcal P(\lambda)$, with
+$\lambda>0$. Study the asymptotic behaviour of $\sqrt{\bar X_n}$.
+
+\emph{Solution.} $X_n\sim\mathcal P(\lambda)$ i.i.d., $\lambda>0$. By the central limit theorem,
+$\sqrt n(\bar X_n-\mu)\xrightarrow{\mathcal L}\mathcal N(0,\sigma^2)$, and here
+$\mathbb E[X_n]=\lambda=\mu$ and $\operatorname{var}(X_n)=\lambda=\sigma^2$. Hence
+\[
+  \sqrt n(\bar X_n-\lambda)\xrightarrow{\mathcal L}\mathcal N(0,\lambda),
+\]
+so $(\bar X_n)_n$ is asymptotically normal, with $\theta=\lambda$ and $\sigma^2(\theta)=\lambda$,
+$\lambda>0$. We use the delta method (\cref{thm:ct-delta}) with $g(x)=\sqrt x$:\footnote{To have
+$g:\mathbb R\to\mathbb R$, set for instance $g(x)=0$ for $x<0$; this does not matter, since
+$\bar X_n\ge0$. Added to the handwritten notes.}
+\[
+  \sqrt n\big(g(\bar X_n)-g(\theta)\big)\xrightarrow{\mathcal L}\mathcal N\big(0,\sigma^2(\theta)(g'(\theta))^2\big).
+\]
+Since $g(x)=\sqrt x$ has $g'(x)=\frac1{2\sqrt x}\ne0$ for $x>0$,
+\[
+  \sqrt n\big(\sqrt{\bar X_n}-\sqrt\lambda\big)\xrightarrow{\mathcal L}
+  \mathcal N\Big(0,\lambda\cdot\Big(\frac1{2\sqrt\lambda}\Big)^2\Big)=\mathcal N\Big(0,\frac14\Big).
+\]
+\emph{Note.} Since $\bar X_n\xrightarrow{\text{a.s.}}\lambda$ by the law of large numbers, by continuity also
+$\sqrt{\bar X_n}\xrightarrow{\text{a.s.}}\sqrt\lambda$ (\cref{prop:ll-continuous-mapping}).
+
+\emph{Note.} The limit variance does not depend on $\lambda$: it is $\frac14$. We say that the
+transformation $g$ \emph{stabilises the asymptotic variance} (\cref{fig:ct-delta}).
+\end{example}
+
+\begin{example}[Worked exercise: variance-stabilising transformations]\label{exa:ct-stabilising}
+Consider a sequence $(X_n)_{n\ge1}$ of asymptotically normal random variables. Suppose, specifically,
+that $\sqrt n(X_n-\vartheta)\xrightarrow{\mathcal L}\mathcal N(0,\sigma^2(\vartheta))$, with
+$\vartheta$ a fixed parameter. Find a suitable transformation $g:\mathbb R\to\mathbb R$ that
+\emph{stabilises the variance asymptotically}. In particular, study the cases
+\begin{enumerate}[label=\alph*)]
+  \item $X_n=\bar Y_n$ for every $n\ge1$, with $Y_n\sim\mathcal P(\lambda)$ i.i.d., $\lambda>0$;
+  \item $X_n=\bar Y_n$ for every $n\ge1$, with $Y_n\sim b(p)$ i.i.d., $p\in(0,1)$.
+\end{enumerate}
+
+\emph{Solution.} a) $Y_n\sim\mathcal P(\lambda)$ i.i.d.; $\bar Y_n$ is asymptotically normal by the
+central limit theorem:
+\[
+  \sqrt n(\bar Y_n-\lambda)\xrightarrow{\mathcal L}\mathcal N(0,\lambda),\qquad\lambda>0;
+\]
+here $\theta=\lambda$ and $\sigma^2(\theta)=\lambda$. By the delta method, if $g:\mathbb R\to\mathbb R$
+is such that $g'(\theta)$ exists and $g'(\theta)\ne0$, then
+\[
+  \sqrt n\big(g(\bar Y_n)-g(\theta)\big)\xrightarrow{\mathcal L}\mathcal N\big(0,\sigma^2(\theta)(g'(\theta))^2\big).
+\]
+We look for a transformation $g$ such that $(g'(\theta))^2\sigma^2(\theta)=K$, a constant, for every
+$\theta$:
+\[
+  g'(\theta)=\frac{\sqrt K}{\sigma(\theta)}\quad\Longrightarrow\quad
+  g(\theta)=\int\frac{\sqrt K}{\sigma(\theta)}\,\dd\theta\ \propto\ \int\frac1{\sigma(\theta)}\,\dd\theta .
+\]
+If we can compute the integral, we are done. In our case $\theta=\lambda$ and
+$\sigma^2(\theta)=\lambda$:
+\[
+  g(\lambda)\propto\int\frac1{\sqrt\lambda}\,\dd\lambda=2\sqrt\lambda+c\ \propto\ \sqrt\lambda ,
+\]
+so $g(x)=\sqrt x$ is a function with the required property, and
+$\sqrt n(\sqrt{\bar Y_n}-\sqrt\lambda)\xrightarrow{\mathcal L}\mathcal N(0,\frac14)$, as in
+\cref{exa:ct-sqrt-poisson}.
+
+b) In the integral, make the substitution $p=\sin^2x$. The notes leave this case as an exercise:
+\exref{ex:ct-stabilising}.
+\end{example}
+
+\begin{example}[Worked exercise: a limit computed with the central limit theorem]\label{exa:ct-poisson-sum}
+Prove that
+\[
+  \lim_{n\to+\infty}e^{-n}\sum_{k=0}^n\frac{n^k}{k!}=\frac12 .
+\]
+
+\emph{Solution.} We have
+\[
+  e^{-n}\sum_{k=0}^n\frac{n^k}{k!}=\sum_{k=0}^ne^{-n}\frac{n^k}{k!}=\sum_{k=0}^n\mathbb P(S_n=k)
+  =\mathbb P(S_n\le n)\qquad(\ast)
+\]
+with $S_n\sim\mathcal P(n)$. But we can take $S_n=\sum_{i=1}^nX_i$ with $X_i\sim\mathcal P(1)$
+i.i.d.\ (\cref{prop:rv-notable-discrete}), and $X_i\in L^2$, with $\mathbb E[X_i]=1=\mu$ and
+$\operatorname{var}(X_i)=1=\sigma^2$. By the central limit theorem,
+\[
+  S_n^*=\frac{S_n-n\mu}{\sqrt{n\sigma^2}}=\frac{S_n-n}{\sqrt n}\xrightarrow{\mathcal L}N\sim\mathcal N(0,1),
+\]
+and so, by \cref{rem:ct-cdf},
+\[
+  (\ast)=\mathbb P\Big(\frac{S_n-n}{\sqrt n}\le0\Big)=F_{S_n^*}(0)\xrightarrow[n\to\infty]{}F_N(0)=\Phi(0)=\frac12 .
+\]
+(The convergence is slow: the difference is about $\frac{0.266}{\sqrt n}$, \exref{ex:ct-continuity}.)
+\end{example}
+
+\begin{example}[Worked exercise: convergence in law without convergence of the variances]\label{exa:ct-variances}
+Let $(Y_n)_{n\ge1}$ be a sequence of random variables with law $Y_n\sim b(\frac1n)$.
+\begin{enumerate}[label=\alph*)]
+  \item Prove that $(Y_n)_{n\ge1}$ converges to $0$ in probability.
+  \item Construct a sequence $(Z_n)_{n\ge1}$ of square-integrable random variables that converges
+    in law to a random variable $Z\sim\mathcal N(0,1)$, but whose sequence of variances does not
+    tend to $1$.
+\end{enumerate}
+
+\emph{Solution.} a) $Y_n\xrightarrow{\mathbb P}0$: if $0<\varepsilon<1$, then
+\[
+  \mathbb P(|Y_n|>\varepsilon)=\mathbb P(Y_n=1)=\frac1n\xrightarrow[n\to\infty]{}0 ;
+\]
+if $\varepsilon\ge1$, then $\mathbb P(|Y_n|>\varepsilon)=0$.
+
+b) We look for $Z_n\in L^2$ such that $Z_n\xrightarrow{\mathcal L}Z\sim\mathcal N(0,1)$ but
+$\operatorname{var}(Z_n)\not\to1$.
+\begin{itemize}
+  \item Let $U_n\sim b(p)$ i.i.d.\ and $V_n=\sum_{i=1}^nU_i\sim B(n,p)$. Then
+    \[
+      X_n=\frac{V_n-np}{\sqrt{np(1-p)}}\xrightarrow{\mathcal L}Z\sim\mathcal N(0,1)
+    \]
+    by the central limit theorem; but $\operatorname{var}(X_n)=1$, so $X_n$ does not do.
+  \item Since $Y_n\sim b(\frac1n)$ and $Y_n\xrightarrow{\mathbb P}0$, we choose $Y_n$ such that
+    $Y_n\indep X_n$ (for instance $Y_n$ and $U_1,\dots,U_n$ independent), and consider $Y_n+X_n$.
+    By Slutsky's theorem (\cref{thm:cl-slutsky}), with $Y_n\xrightarrow{\mathbb P}0$ and
+    $X_n\xrightarrow{\mathcal L}Z$,
+    \[
+      Y_n+X_n\xrightarrow{\mathcal L}Z .
+    \]
+    But, since $Y_n\indep X_n$,
+    \[
+      \operatorname{var}(Y_n+X_n)=\operatorname{var}(Y_n)+\operatorname{var}(X_n)
+      =\frac1n\Big(1-\frac1n\Big)+1\xrightarrow[n\to\infty]{}1 ,
+    \]
+    so $Y_n+X_n$ does not do either!
+  \item Does $Z_n=\sqrt n\,Y_n+X_n$ do? We have
+    \[
+      \operatorname{var}(Z_n)=\operatorname{var}(\sqrt nY_n)+\operatorname{var}(X_n)=n\operatorname{var}(Y_n)+\operatorname{var}(X_n)
+      =n\cdot\frac1n\Big(1-\frac1n\Big)+1=2-\frac1n\xrightarrow[n\to\infty]{}2 .
+    \]
+    Let $\varepsilon>0$. For every $n>\varepsilon^2$, that is, $0<\frac\varepsilon{\sqrt n}<1$,
+    \[
+      \mathbb P\big(|\sqrt nY_n|>\varepsilon\big)=\mathbb P\Big(Y_n>\frac\varepsilon{\sqrt n}\Big)
+      =\mathbb P(Y_n=1)=\frac1n ,
+    \]
+    so $\lim_n\mathbb P(|\sqrt nY_n|>\varepsilon)=\lim_n\frac1n=0$. Hence
+    $\sqrt nY_n\xrightarrow{\mathbb P}0$, and $Z_n\xrightarrow{\mathcal L}Z$ by Slutsky's theorem, as
+    before. So $Z_n=\sqrt nY_n+X_n$ does.
+\end{itemize}
+\emph{Note.} $\sqrt nY_n\xrightarrow{\mathbb P}0$, but $\sqrt nY_n\not\to0$ in $L^2$. The notes leave
+the proof as an exercise, with the properties of convergence in $L^2$ (\cref{prop:ll-Lp}) and with the
+definition: \exref{ex:ct-variances}.
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch17-delta}
+  \caption{The delta method, with exact laws. Left and centre: Poisson sample means, $n=2000$,
+    for $\lambda=0.5$ and $\lambda=4$. The fluctuations $\sqrt n(\bar X_n-\lambda)$ have variance
+    $\lambda$; after the transformation $g(x)=\sqrt x$ of \cref{exa:ct-sqrt-poisson}, both are close to
+    $\mathcal N(0,\frac14)$ (dashed). The histograms group the atoms of $\bar X_n$ in blocks.
+    Right: the second-order delta method for $g(x)=x(1-x)$ at $\theta=\frac12$, with $b(\frac12)$
+    summands: here $g'(\frac12)=0$, $g''(\frac12)=-2$ and $\sigma^2=\frac14$, so
+    $n(g(\bar X_n)-\frac14)\xrightarrow{\mathcal L}-\frac14\chi^2(1)$; distribution functions for
+    $n=10$ and $n=100$, and of the limit (dashed).}
+  \label{fig:ct-delta}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ct-code-delta}
+\sloppy
+In \coderef{code/src/probnotes/clt.py}, \texttt{delta\_sample} and \texttt{second\_order\_sample}
+simulate $\sqrt n(g(\bar X_n)-g(\theta))$ and $n(g(\bar X_n)-g(\theta))$, \texttt{delta\_variance}
+and \texttt{second\_order\_cdf} give the limits of \cref{thm:ct-delta,thm:ct-delta-second-order},
+\texttt{STABILISERS} lists the variance-stabilising transforms of \cref{exa:ct-stabilising} and
+\exref{ex:ct-stabilising}, and \texttt{stabilising\_transform}
+computes $\int\frac{\dd\theta}{\sigma(\theta)}$ numerically for any $\sigma$.
+\texttt{poisson\_partial\_sum} computes $e^{-n}\sum_{k\le n}\frac{n^k}{k!}$ of
+\cref{exa:ct-poisson-sum}, and \texttt{variance\_counterexample\_sample} simulates the $Z_n$ of
+\cref{exa:ct-variances} (\exref{ex:ct-delta-numerics}).
+\end{remark}
+
+\demo{17-clt-delta.ipynb}{the delta method and the variance-stabilising transforms, for several
+laws and functions $g$, with sliders for $n$ and the parameter; the second-order case; and the
+sequence of \cref{exa:ct-variances}.}
+
+\section{An exam problem (1 February 2017)}\label{sec:ct-exam}
+
+The notes end with an exercise from the exam of 1 February 2017 (Exercise~4, worth $8$ points).
+
+\begin{example}[Worked exercise: exam of 1 February 2017]\label{exa:ct-exam}
+Let $(\alpha_n)_{n\ge0}$ be a sequence of real numbers such that $\lim_n\alpha_n=0$, and let
+$(Z_n)_{n\ge0}$ be a sequence of random variables such that
+$\mathbb P(Z_n=\alpha_n)=\mathbb P(Z_n=0)=\frac12$.\footnote{The statement implicitly assumes
+$\alpha_n\ne0$, so that $Z_n$ takes the two values $\alpha_n$ and $0$. If $\alpha_n=0$, one reads
+$Z_n=0$; then $X_n=0$, and everything below remains true. Added to the handwritten notes.} Let
+moreover $Y$ be a standard normal random variable, independent of $(Z_n)_{n\ge0}$, and define
+\[
+  X_n=YZ_n,\qquad\forall n\ge0 .
+\]
+\begin{enumerate}[label=\arabic*.]
+  \item Compute the characteristic function of $X_n$ and study the convergence in law of the
+    sequence $(X_n)_{n\ge0}$.
+
+    \emph{Answer:} $\Phi_{X_n}(t)=\frac12\big(e^{-\frac12\alpha_n^2t^2}+1\big)$;
+    $X_n\xrightarrow{\mathcal L}0$.
+  \item Discuss the convergence in probability, almost sure and in $L^p$, with $p\ge1$, of the
+    sequence $(X_n)_{n\ge0}$.
+
+    \emph{Answer:} $X_n\to0$ almost surely, in $L^p$ for every $p\ge1$, and in probability.
+\end{enumerate}
+
+\emph{Solution.} We have $\alpha_n\in\mathbb R$, $\lim_n\alpha_n=0$; $Z_n$ are real random
+variables with $\mathbb P(Z_n=\alpha_n)=\mathbb P(Z_n=0)=\frac12$; $Y\sim\mathcal N(0,1)$ and
+$Z_n\indep Y$. Then
+\[
+  X_n=YZ_n=\alpha_nY\,\1_{(Z_n=\alpha_n)}+0\cdot\1_{(Z_n=0)}\qquad\text{(a mixture)}:
+\]
+the law of $X_n$ is $\frac12\mathcal N(0,\alpha_n^2)+\frac12\delta_0$.
+
+1. $\Phi_{X_n}$? $X_n\xrightarrow{\mathcal L}$? We have
+\[
+\begin{aligned}
+  \Phi_{X_n}(t)&=\mathbb E\big[e^{itX_n}\big]
+  =\mathbb E\Big[e^{it\alpha_nY}\1_{(Z_n=\alpha_n)}+e^{it0}\1_{(Z_n=0)}\Big]
+  =\mathbb E\Big[e^{it\alpha_nY}\1_{(Z_n=\alpha_n)}\Big]+\mathbb E\big[\1_{(Z_n=0)}\big]\\
+  &\overset{(\ast)}{=}\mathbb E\big[e^{it\alpha_nY}\big]\,\mathbb P(Z_n=\alpha_n)+\mathbb P(Z_n=0)
+  =\Phi_{\alpha_nY}(t)\,\mathbb P(Z_n=\alpha_n)+\Phi_0(t)\,\mathbb P(Z_n=0)\\
+  &=\Phi_Y(\alpha_nt)\cdot\frac12+\frac12
+  =\frac12\Big(e^{-\frac{\alpha_n^2t^2}2}+1\Big)\xrightarrow[n\to\infty]{}1\qquad\forall t\in\mathbb R,
+\end{aligned}
+\]
+where $(\ast)$ holds because $Z_n\indep Y$ (\cref{thm:pm-expectation-product}, applied to the real
+and imaginary parts of $e^{it\alpha_nY}$), $\Phi_0\equiv1$ is the characteristic function of the
+constant $0$, and $\Phi_Y(s)=e^{-s^2/2}$ (\cref{exa:cf-gaussian}). The limit $1$ is the
+characteristic function of the constant $0$, so, by Lévy's theorem (\cref{thm:cl-levy}),
+\[
+  X_n\xrightarrow{\mathcal L}0 .
+\]
+
+2. Does $X_n$ converge almost surely, in $L^p$, in probability?
+\begin{itemize}
+  \item $X_n\xrightarrow{\mathcal L}0$, and the limit is a constant, so $X_n\xrightarrow{\mathbb P}0$
+    (\cref{prop:cl-constant}).
+  \item $X_n\to0$ almost surely? Recall that $X_n=\alpha_nY\1_{(Z_n=\alpha_n)}$. For every
+    $\omega\in\Omega$,\footnote{Precisely, for every $\omega$ outside the null set
+    $\bigcup_{n\ge0}\{Z_n\notin\{\alpha_n,0\}\}$, a countable union of events of probability
+    $0$: the identity $X_n=\alpha_nY\1_{(Z_n=\alpha_n)}$, and the bound $|Z_n|\le|\alpha_n|$, hold
+    only there. The handwritten notes say ``for every $\omega$''; corrected here. So $X_n\to0$
+    almost surely, which is what is claimed.}
+    \[
+      X_n(\omega)=\alpha_nY(\omega)\,\1_{(Z_n(\omega)=\alpha_n)}
+      \quad\Longrightarrow\quad|X_n(\omega)|\le|\alpha_nY(\omega)|=|\alpha_n|\cdot|Y(\omega)|
+      \xrightarrow[n\to\infty]{}0,
+    \]
+    since $\alpha_n\to0$ and $|Y(\omega)|$ is a constant (with respect to $n$). So
+    $X_n(\omega)\to0$ for (almost) every $\omega\in\Omega$, and $X_n\xrightarrow{\text{a.s.}}0$.
+  \item $X_n\to0$ in $L^p$? We show that $X_n\in L^p$ for every $p\ge1$, and that
+    \[
+      \mathbb E\big[|X_n|^p\big]=\mathbb E\Big[\big|\alpha_nY\1_{(Z_n=\alpha_n)}\big|^p\Big]
+      \le\mathbb E\big[|\alpha_n|^p|Y|^p\big]=|\alpha_n|^p\,\mathbb E\big[|Y|^p\big]\xrightarrow[n\to\infty]{}0,
+    \]
+    since $\alpha_n\to0$ and $\mathbb E[|Y|^p]<+\infty$ is a constant (a Gaussian random variable
+    has moments of every order). So $X_n\xrightarrow{L^p}0$ for every $p\ge1$.\footnote{In fact
+    $\mathbb E[|X_n|^p]=\frac12|\alpha_n|^p\,\mathbb E[|Y|^p]$, by the independence of $Y$ and $Z_n$;
+    the bound suffices. Added to the handwritten notes.}
+\end{itemize}
+\end{example}
+
+\begin{remark}[computational]\label{rem:ct-code-exam}
+\sloppy
+\texttt{exam\_cf}, \texttt{exam\_sample} and \texttt{exam\_abs\_moment} in
+\coderef{code/src/probnotes/clt.py} compute the characteristic function, samples and the moments
+$\mathbb E[|X_n|^p]=\frac12|\alpha_n|^p\,2^{p/2}\Gamma(\frac{p+1}2)/\sqrt\pi$ of the exam problem;
+the tests compare them with each other.
+\end{remark}
+
+\furtherreading
+\textcite{billingsley}, Sections~27 and~29, proves the central limit theorem (also under
+Lindeberg's condition) and its version in $\mathbb R^k$; \textcite{durrett}, Section~3.4, proves it
+with characteristic functions, as here, discusses the rate of convergence (the Berry--Esseen
+theorem), and Section~3.10 treats $\mathbb R^d$. \textcite{williams}, Chapter~18, proves the central
+limit theorem with characteristic functions too. \textcite{vandervaart-asymptotic}, Chapter~3, treats
+the delta method and variance-stabilising transformations from the point of view of statistics.
+\textcite{ross-5}, Chapters~5 and~8, has many applications of the normal approximation to the
+binomial and of the central limit theorem.

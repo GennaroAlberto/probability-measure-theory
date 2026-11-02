@@ -1,5 +1,704 @@
-\begin{planned}
-  \item convergence in law and its criteria
-  \item L\'evy's continuity theorem
-  \item Slutsky's theorem; worked exercises
-\end{planned}
+% Chapter 16: Convergence in law.
+% Translation of Paola Siri's handwritten notes, PDF pages 246-260: the topic "CONVERGENZA IN
+% LEGGE" (pp. 246-248), with "Criteri di convergenza in legge" (pp. 248-252), "Proprieta'
+% (operazioni con la convergenza in legge)" (pp. 252-254) and three typed exercises with
+% handwritten solutions (pp. 255-260).
+
+The three modes of convergence of \cref{ch:15-laws-large-numbers} compare the values
+$X_n(\omega)$ and $X(\omega)$, so they need all the random variables to live on the same
+probability space. Convergence in law compares only the laws: it asks that
+$\mathbb E[f(X_n)]\to\mathbb E[f(X)]$ for every bounded continuous function $f$. This chapter
+defines it, relates it to convergence in probability, and gives three criteria to recognise it:
+through distribution functions, through discrete densities or densities, and through
+characteristic functions (the theorem of Paul L\'evy). It then studies which operations
+preserve it: continuous functions do, sums in general do not, but sums of independent
+variables do, and so do the sums and products of Slutsky's theorem. Three worked exercises end
+the chapter; the third one, the convergence of the binomial law $B(n,\frac\lambda n)$ to the
+Poisson law $\mathcal P(\lambda)$, is proved in three ways. Convergence in law is the mode of
+convergence of the central limit theorem, in \cref{ch:17-clt-delta}.
+
+\section{Convergence in law}\label{sec:cl-definition}
+
+Let $C_b(\mathbb R)$ denote the set of the functions $f:\mathbb R\to\mathbb R$ that are
+continuous and bounded, and let $\|f\|_\infty=\sup_{x\in\mathbb R}|f(x)|$. A function
+$f\in C_b(\mathbb R)$ is Borel (\cref{prop:mf-continuous}) and bounded, so it is integrable with
+respect to every finite measure $\mu$ on $(\mathbb R,\mathcal B(\mathbb R))$, with
+$\big|\int_{\mathbb R}f\,\dd\mu\big|\le\|f\|_\infty\,\mu(\mathbb R)$.
+
+\begin{definition}[Weak convergence]\label{def:cl-weak-convergence}
+Let $(\mu_n)_{n\ge1}$ and $\mu$ be finite measures on $(\mathbb R,\mathcal B(\mathbb R))$. We
+say that $(\mu_n)_n$ \emph{converges weakly} to $\mu$ if, for every $f\in C_b(\mathbb R)$
+(continuous and bounded),
+\[
+  \int_{\mathbb R}f\,\dd\mu_n\xrightarrow[n\to\infty]{}\int_{\mathbb R}f\,\dd\mu .
+\]
+We write $\mu_n\to\mu$, or $\mu_n\xrightarrow{w}\mu$.
+\end{definition}
+
+\begin{definition}[Convergence in law]\label{def:cl-in-law}
+Let $(X_n)_{n\ge1}$ and $X$ be real random variables defined on $(\Omega_n,\mathcal F_n,\mathbb P_n)$
+and $(\Omega,\mathcal F,\mathbb P)$ respectively. We say that $(X_n)_n$ \emph{converges in law}
+to $X$ if $(\mathbb P_{X_n})_n$ converges weakly to $\mathbb P_X$, where
+$\mathbb P_{X_n}=\mathbb P_n\circ X_n^{-1}$ and $\mathbb P_X=\mathbb P\circ X^{-1}$ are the laws of
+$X_n$ and $X$ (\cref{def:ld-law}). We write $X_n\xrightarrow{\mathcal L}X$. That is, for every
+$f\in C_b(\mathbb R)$,
+\[
+\begin{aligned}
+  &\int_{\mathbb R}f\,\dd\mathbb P_{X_n}\xrightarrow[n\to\infty]{}\int_{\mathbb R}f\,\dd\mathbb P_X\\
+  \iff{}&\int_{\Omega_n}f(X_n)\,\dd\mathbb P_n\xrightarrow[n\to\infty]{}\int_\Omega f(X)\,\dd\mathbb P\\
+  \iff{}&\mathbb E_n\big[f(X_n)\big]\xrightarrow[n\to\infty]{}\mathbb E\big[f(X)\big],
+\end{aligned}
+\]
+where $\mathbb E_n$ is the expectation with respect to $\mathbb P_n$.
+\end{definition}
+
+The integrals on the left and in the middle are equal, term by term, by the integration
+formula for image measures (\cref{thm:ld-image-integral}). Convergence in law is also called
+\emph{convergence in distribution}. When the limit is a constant $a$, that is, when
+$\mathbb P_X=\delta_a$, we write $X_n\xrightarrow{\mathcal L}a$; and when only the limit law
+$\nu$ matters we also write $X_n\xrightarrow{\mathcal L}\nu$, for instance
+$X_n\xrightarrow{\mathcal L}\mathcal N(0,1)$.\footnote{These two notations are used later in the
+notes; the sentence is added to the handwritten notes.}
+
+\begin{remark}[Only the law matters]\label{rem:cl-law-only}
+It does not matter on which space the random variables are defined: what counts is their
+law. In particular, this type of convergence cannot be compared with the others, which need
+$X_n$ and $X$ on the same space (the event $\{|X_n-X|>\varepsilon\}$ must make sense).
+\emph{However}, if the random variables are all defined on the same space
+$(\Omega,\mathcal F,\mathbb P)$, then convergence in law is the weakest convergence, by the
+following proposition.
+\end{remark}
+
+\begin{proposition}[Convergence in probability implies convergence in law]\label{prop:cl-P-implies-law}
+Let $(X_n)_{n\ge1}$ and $X$ be real random variables defined on $(\Omega,\mathcal F,\mathbb P)$.
+Then
+\[
+  X_n\xrightarrow{\mathbb P}X\quad\Longrightarrow\quad X_n\xrightarrow{\mathcal L}X .
+\]
+\end{proposition}
+
+\begin{proof}
+Let $f\in C_b(\mathbb R)$. Since $f$ is continuous,
+\[
+  X_n\xrightarrow{\mathbb P}X\quad\Longrightarrow\quad f(X_n)\xrightarrow{\mathbb P}f(X)
+\]
+(\cref{prop:ll-continuous-mapping}), where $|f(X_n)|\le\|f\|_\infty$, because $f$ is bounded.
+The sequence $(f(X_n))_n$ is therefore dominated by a constant, and by
+\cref{prop:ll-dominated}
+\[
+  f(X_n)\xrightarrow{L^1}f(X)\qquad(\text{indeed in }L^p\text{ for every }p\ge1).
+\]
+Hence $\mathbb E[f(X_n)]\to\mathbb E[f(X)]$ (\cref{prop:ll-Lp}~(2)). This holds for every
+$f\in C_b(\mathbb R)$, so $X_n\xrightarrow{\mathcal L}X$.
+\end{proof}
+
+By \cref{thm:ll-implications}, convergence almost surely and convergence in $L^p$ imply
+convergence in law as well. The converse of the proposition is not true.
+
+\begin{example}[Convergence in law without convergence in probability]\label{exa:cl-bernoulli}
+Let $\Omega=\{0,1\}$, $\mathcal F=\mathcal P(\Omega)$ and $\mathbb P(\{0\})=\mathbb P(\{1\})=\frac12$,
+and let
+\[
+  \begin{cases}X_n(0)=0,\\ X_n(1)=1,\end{cases}\quad\forall n\ge1,\qquad\qquad
+  \begin{cases}X(0)=1,\\ X(1)=0.\end{cases}
+\]
+Then $X_n\xrightarrow{\mathcal L}X$: they are all Bernoulli random variables of parameter
+$\frac12$! Indeed, for every $f\in C_b(\mathbb R)$,
+\[
+  \mathbb E[f(X_n)]=f(0)\,\mathbb P(X_n=0)+f(1)\,\mathbb P(X_n=1)
+  =f(0)\cdot\frac12+f(1)\cdot\frac12=\mathbb E[f(X)] .
+\]
+But $X_n\not\to X$ in probability: $|X_n-X|=1$ on $\Omega$, so, if $0<\varepsilon<1$,
+\[
+  \mathbb P(|X_n-X|>\varepsilon)=\mathbb P(1>\varepsilon)=1\not\to0 .
+\]
+\end{example}
+
+The converse holds, however, with some restrictions.
+
+\begin{proposition}[Convergence in law to a constant]\label{prop:cl-constant}
+Let $(X_n)_{n\ge1}$ be a sequence of real random variables defined on
+$(\Omega,\mathcal F,\mathbb P)$, and let $a\in\mathbb R$. Then
+\[
+  X_n\xrightarrow{\mathcal L}a\quad\Longrightarrow\quad X_n\xrightarrow{\mathbb P}a .
+\]
+The same holds with a random variable $X$ in place of $a$, if $X=a$ a.s.
+\end{proposition}
+
+\begin{proof}
+Let $X$ be a random variable with $X=a$ a.s.\ (for instance the constant $a$). The function
+\[
+  f(x)=\frac{|x-a|}{|x-a|+1}
+\]
+is continuous, with values in $[0,1)$, so $f\in C_b(\mathbb R)$. Then, since $X=a$ a.s.,
+\[
+  \mathbb E\bigg[\frac{|X_n-X|}{|X_n-X|+1}\bigg]=\mathbb E\bigg[\frac{|X_n-a|}{|X_n-a|+1}\bigg]
+  =\mathbb E[f(X_n)]\xrightarrow[n\to\infty]{}\mathbb E[f(X)]=\mathbb E[f(a)]=0,
+\]
+where the limit is the convergence in law, and $\mathbb E[f(X)]=f(a)=0$ because $X=a$ a.s. By
+\cref{prop:ll-metric}, $X_n\xrightarrow{\mathbb P}a$ (and $X_n\xrightarrow{\mathbb P}X$).
+\end{proof}
+
+Together with \cref{prop:cl-P-implies-law}: $X_n\xrightarrow{\mathcal L}a$ if and only if
+$X_n\xrightarrow{\mathbb P}a$. (The proof works verbatim when each $X_n$ is defined on its own
+space $(\Omega_n,\mathcal F_n,\mathbb P_n)$, with $\mathbb P_n(|X_n-a|>\varepsilon)\to0$ as the
+meaning of $X_n\xrightarrow{\mathbb P}a$.)\footnote{This paragraph is added to the handwritten
+notes, which use the equivalence in \cref{thm:cl-slutsky}.}
+
+\section{Criteria for convergence in law}\label{sec:cl-criteria}
+
+\begin{theorem}[Criterion 1: distribution functions]\label{thm:cl-cdf-criterion}
+Let $(X_n)_{n\ge1}$ and $X$ be random variables with distribution functions $(F_n)_n$ and $F$
+respectively (\cref{def:ld-cdf}). Then
+\[
+  X_n\xrightarrow{\mathcal L}X\iff\lim_nF_n(x)=F(x)\quad\text{for every continuity point }x\text{ of }F .
+\]
+\end{theorem}
+
+The notes state this theorem without proof. \citet[Section~25]{billingsley} defines weak
+convergence by the condition on the right, and proves its equivalence with
+\cref{def:cl-in-law} in the subsection ``Fundamental Theorems''; see also
+\citet[Section~3.2]{durrett}. What happens at the discontinuity points of $F$ is not important,
+as the following example shows.
+
+\begin{example}[Discontinuity points do not count]\label{exa:cl-one-over-n}
+Let $X_n=\frac1n$ for every $n\in\mathbb N^*$. Then $X_n\to0$ (almost surely, in probability and
+in law). The distribution functions are (\cref{fig:cl-one-over-n})
+\[
+  F_n(x)=\begin{cases}0&\text{if }x<\frac1n,\\ 1&\text{if }x\ge\frac1n,\end{cases}\qquad\qquad
+  F(x)=\begin{cases}0&\text{if }x<0,\\ 1&\text{if }x\ge0.\end{cases}
+\]
+But $\lim_nF_n(x)=G(x)$ for every $x\in\mathbb R$, where
+\[
+  G(x)=\begin{cases}0&\text{if }x\le0,\\ 1&\text{if }x>0:\end{cases}
+\]
+if $x\le0$, then $F_n(x)=0$ for every $n$; if $x>0$, then $F_n(x)=1$ as soon as $\frac1n\le x$. So
+$F_n(0)=0\not\to F(0)=1$. The limit $G$ is not even a distribution function (it is not
+right-continuous at $0$), and it differs from $F$ only at $0$, the only discontinuity point of
+$F$: there \cref{thm:cl-cdf-criterion} asks nothing.\footnote{These two sentences are added to
+the handwritten notes, which draw the three graphs and write $F_n(0)\not\to F(0)$.}
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch16-one-over-n}
+  \caption{The distribution functions of \cref{exa:cl-one-over-n}, drawn as in the notes. Left:
+    $F_n$, the distribution function of the constant $\frac1n$ (here $n=4$). Centre: $F$, the
+    distribution function of the limit $0$. Right: the pointwise limit $G=\lim_nF_n$, which
+    differs from $F$ at $0$ only.}
+  \label{fig:cl-one-over-n}
+\end{figure}
+
+\begin{remark}[Convergence in law is not strong convergence]\label{rem:cl-not-strong}
+It is \emph{not} true that
+\[
+  X_n\xrightarrow{\mathcal L}X\quad\Longrightarrow\quad\mathbb P_{X_n}(A)\xrightarrow[n\to\infty]{}\mathbb P_X(A)
+  \quad\forall A\in\mathcal B(\mathbb R),
+\]
+which would be the \emph{strong convergence} of the sequence $(\mathbb P_{X_n})_n$ to
+$\mathbb P_X$. In \cref{exa:cl-one-over-n}, if $A=\{0\}$,
+\[
+  \mathbb P_{X_n}(\{0\})=\mathbb P(X_n=0)=0\not\to\mathbb P_X(\{0\})=\mathbb P(X=0)=1,
+\]
+and these are the discrete densities $f_{X_n}(0)$ and $f_X(0)$ (\cref{def:ld-discrete}).
+\end{remark}
+
+\begin{theorem}[Criterion 2: discrete densities and densities]\label{prop:cl-densities}
+\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item Let $(X_n)_{n\ge1}$ and $X$ be discrete random variables with values in $\mathbb N$, with
+    discrete densities $f_{X_n}$ and $f_X$. Then
+    \[
+      X_n\xrightarrow{\mathcal L}X\iff f_{X_n}(k)\xrightarrow[n\to\infty]{}f_X(k)\quad\forall k\in\mathbb N .
+    \]
+  \item Let $(X_n)_{n\ge1}$ and $X$ be absolutely continuous random variables, with densities
+    $f_{X_n}$ and $f_X$ (\cref{def:ld-ac-rv}). Then
+    \[
+      f_{X_n}\to f_X\ \text{a.e.}\quad\Longrightarrow\quad X_n\xrightarrow{\mathcal L}X .
+    \]
+    The converse implication is false (\exref{ex:cl-densities}).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) ``$\Rightarrow$''. Let $X_n\xrightarrow{\mathcal L}X$. Since $X$ takes values in $\mathbb N$,
+$F(x)=\sum_{j\in\mathbb N,\,j\le x}f_X(j)$ is constant on $(-\infty,0)$ and on every interval
+$[k,k+1)$, $k\in\mathbb N$, so $F$ is continuous at every $x\notin\mathbb N$, and by
+\cref{thm:cl-cdf-criterion}
+\[
+  F_n(x)\to F(x)\qquad\forall x\notin\mathbb N .
+\]
+Let $k\in\mathbb N$. Since $X_n$ takes integer values, $X_n=k$ if and only if
+$k-\frac12<X_n\le k+\frac12$, so
+\[
+  f_{X_n}(k)=\mathbb P(X_n=k)=F_n\Big(k+\frac12\Big)-F_n\Big(k-\frac12\Big)
+  \xrightarrow[n\to\infty]{}F\Big(k+\frac12\Big)-F\Big(k-\frac12\Big)=\mathbb P(X=k)=f_X(k),
+\]
+because $k\pm\frac12\notin\mathbb N$.
+
+``$\Leftarrow$''. Conversely, let $f_{X_n}(k)\to f_X(k)$ for every $k\in\mathbb N$. If $x<0$, then
+$F_n(x)=0=F(x)$. If $x\ge0$, then, with $\lfloor x\rfloor$ the integer part of $x$,
+\[
+\begin{aligned}
+  \lim_nF_n(x)&=\lim_n\mathbb P(X_n\le x)=\lim_n\sum_{k=0}^{\lfloor x\rfloor}\mathbb P(X_n=k)
+  =\lim_n\sum_{k=0}^{\lfloor x\rfloor}f_{X_n}(k)\\
+  &=\sum_{k=0}^{\lfloor x\rfloor}\lim_nf_{X_n}(k)=\sum_{k=0}^{\lfloor x\rfloor}f_X(k)
+  =\mathbb P(X\le x)=F_X(x),
+\end{aligned}
+\]
+where the limit and the sum can be exchanged because the sum is finite. This holds for every
+$x\in\mathbb R$, so $X_n\xrightarrow{\mathcal L}X$ by \cref{thm:cl-cdf-criterion}.
+
+(2) Let $f_{X_n}\to f_X$ a.e.\ (with respect to Lebesgue measure $m$), and let
+$h\in C_b(\mathbb R)$. Let $\alpha=\|h\|_\infty=\sup_x|h(x)|$, and define
+\[
+  h_1=h+\alpha\ge0,\qquad h_2=\alpha-h\ge0 .
+\]
+Then $h_if_{X_n}\ge0$ and $h_if_X\ge0$, and $h_if_{X_n}\to h_if_X$ a.e., for $i=1,2$. By
+\cref{thm:ld-image-integral,prop:ld-density-integral}, and then by Fatou's lemma
+(\cref{lem:in-fatou}),
+\begin{equation}\label{eq:cl-fatou}
+\begin{aligned}
+  \mathbb E[h_i(X)]&=\int_{\mathbb R}h_i(x)f_X(x)\,\dd x=\int_{\mathbb R}\lim_n\big(h_i(x)f_{X_n}(x)\big)\,\dd x\\
+  &\le\liminf_n\int_{\mathbb R}h_i(x)f_{X_n}(x)\,\dd x=\liminf_n\mathbb E[h_i(X_n)] ,
+\end{aligned}
+\end{equation}
+where the limit inside the integral exists a.e.\ and changing the integrand on a negligible
+set does not change the integral (\cref{prop:in-ae}). Since $h=h_1-\alpha$, \eqref{eq:cl-fatou}
+with $i=1$ gives
+\[
+\begin{aligned}
+  \mathbb E[h(X)]&=\mathbb E[h_1(X)-\alpha]=\mathbb E[h_1(X)]-\alpha
+  \le\liminf_n\mathbb E[h_1(X_n)]-\alpha=\liminf_n\mathbb E[h(X_n)]\\
+  &\le\limsup_n\mathbb E[h(X_n)]\le\dots\le\mathbb E[h(X)] .
+\end{aligned}
+\]
+The notes leave the last inequality, $\limsup_n\mathbb E[h(X_n)]\le\mathbb E[h(X)]$, as an
+exercise, to be proved in the same way using $h_2$ and the fact that
+$\limsup_na_n=-\liminf_n(-a_n)$ (\exref{ex:cl-densities}). Hence the limit
+$\lim_n\mathbb E[h(X_n)]$ exists and equals $\mathbb E[h(X)]$, for every $h\in C_b(\mathbb R)$:
+$X_n\xrightarrow{\mathcal L}X$.
+\end{proof}
+
+\begin{theorem}[Criterion 3: the theorem of Paul L\'evy]\label{thm:cl-levy}
+Let $(X_n)_{n\ge1}$ be a sequence of real random variables, with characteristic functions
+$\Phi_n$ (\cref{def:cf-characteristic}).
+\begin{enumerate}[label=(\arabic*)]
+  \item If $X_n\xrightarrow{\mathcal L}X$, with $X$ a real random variable, then
+    \[
+      \lim_n\Phi_n(t)=\Phi(t)\qquad\forall t\in\mathbb R,
+    \]
+    where $\Phi$ is the characteristic function of $X$.
+  \item If $\lim_n\Phi_n(t)=\varphi(t)$ for every $t\in\mathbb R$, and $\varphi$ is a function
+    continuous at $0$, then there exists a random variable $X$ that has $\varphi$ as its
+    characteristic function, and $X_n\xrightarrow{\mathcal L}X$.
+\end{enumerate}
+\end{theorem}
+
+The notes state this theorem without proof. It is \emph{L\'evy's continuity theorem}:
+\citet[Section~26, ``The Continuity Theorem'']{billingsley}, where part~(2) is a corollary of the
+main theorem, and \citet[Section~3.3]{durrett}.\footnote{Part~(1) follows at once from
+\cref{def:cl-in-law}: $\Phi_n(t)=\mathbb E[\cos(tX_n)]+i\,\mathbb E[\sin(tX_n)]$, and
+$x\mapsto\cos(tx)$ and $x\mapsto\sin(tx)$ belong to $C_b(\mathbb R)$. The proof of part~(2)
+shows that continuity at $0$ prevents mass from escaping to infinity. Added to the handwritten
+notes.}
+
+\begin{remark}[Warning]\label{rem:cl-levy-warning}
+If $\Phi_n(t)\to\varphi(t)$ for every $t\in\mathbb R$, and $\varphi$ is \emph{not} continuous at
+$0$, then $\varphi$ cannot be a characteristic function, since characteristic functions are
+continuous (\cref{prop:cf-continuity}). Then $(X_n)_n$ does not converge in law: if
+$X_n\xrightarrow{\mathcal L}X$, then $\Phi_n(t)\to\Phi_X(t)$ for every $t\in\mathbb R$ by part~(1),
+so $\varphi=\Phi_X$ would be continuous, which is absurd. For an example, see
+\exref{ex:cl-levy-warning}.
+\end{remark}
+
+\section{Operations with convergence in law}\label{sec:cl-operations}
+
+\begin{proposition}[Continuity]\label{prop:cl-continuous-mapping}
+Let $f:\mathbb R\to\mathbb R$ be a continuous function. Then
+\[
+  X_n\xrightarrow{\mathcal L}X\quad\Longrightarrow\quad f(X_n)\xrightarrow{\mathcal L}f(X) .
+\]
+\end{proposition}
+
+\begin{proof}
+The $f(X_n)$ and $f(X)$ are random variables (\cref{prop:mf-continuous,prop:mf-composition}).
+Let $g\in C_b(\mathbb R)$. Then $g\circ f$ is continuous, and bounded because $g$ is, so
+$g\circ f\in C_b(\mathbb R)$, and
+\[
+  \mathbb E\big[g(f(X_n))\big]=\mathbb E\big[(g\circ f)(X_n)\big]\xrightarrow[n\to\infty]{}
+  \mathbb E\big[(g\circ f)(X)\big]=\mathbb E\big[g(f(X))\big] .\qedhere
+\]
+\end{proof}
+
+For convergence almost surely, in $L^p$ with $p\ge1$, and in probability one proves, using the
+definition, that
+\[
+  \left.\begin{aligned}X_n&\to X\\ Y_n&\to Y\end{aligned}\right\}
+  \quad\Longrightarrow\quad X_n+Y_n\to X+Y .
+\]
+Almost surely: $X_n(\omega)+Y_n(\omega)\to X(\omega)+Y(\omega)$ outside the union of two
+negligible sets. In $L^p$: by Minkowski's inequality,
+$\|X_n+Y_n-X-Y\|_p\le\|X_n-X\|_p+\|Y_n-Y\|_p\to0$. In probability: for $\varepsilon>0$,
+$\{|X_n+Y_n-X-Y|>\varepsilon\}\subseteq\{|X_n-X|>\frac\varepsilon2\}\cup\{|Y_n-Y|>\frac\varepsilon2\}$,
+so $\mathbb P(|X_n+Y_n-X-Y|>\varepsilon)\le\mathbb P(|X_n-X|>\frac\varepsilon2)+\mathbb
+P(|Y_n-Y|>\frac\varepsilon2)\to0$.\footnote{The three one-line proofs are added to the
+handwritten notes.} This is not always true when we speak of convergence in law.
+
+\begin{example}[Sums do not converge in general]\label{exa:cl-sums}
+Let $X_n,Y_n,X\sim\mathcal N(0,1)$, with $X_n\indep Y_n$ for every $n$, and let
+$Y=-X\sim\mathcal N(0,1)$. The laws of $X_n$ and $X$ are the same for every $n$, and so are
+those of $Y_n$ and $Y$; hence
+\[
+  X_n\xrightarrow{\mathcal L}X,\qquad Y_n\xrightarrow{\mathcal L}Y .
+\]
+But $X_n+Y_n\sim\mathcal N(0,2)$ (\cref{prop:rv-notable-sums}), while $X+Y=0$, so
+\[
+  X_n+Y_n\not\to X+Y\ \text{in law}.
+\]
+Indeed, with $f(x)=\min(|x|,1)\in C_b(\mathbb R)$ and $Z\sim\mathcal N(0,2)$, we have
+$\mathbb E[f(X_n+Y_n)]=\mathbb E[f(Z)]>0=f(0)=\mathbb E[f(X+Y)]$ for every $n$.\footnote{This
+check is added to the handwritten notes. Note that $X_n+Y_n$ does converge in law, to
+$\mathcal N(0,2)$: the law of a sum is not determined by the laws of the two summands, and
+convergence in law of $(X_n)_n$ and of $(Y_n)_n$ says nothing about the joint laws
+(\exref{ex:cl-sums}).}
+\end{example}
+
+There are situations in which it is true.
+\begin{enumerate}[label=(\Alph*)]
+  \item If $X_n\xrightarrow{\mathcal L}X$ but also in probability (in $L^p$, a.s.), and
+    $Y_n\xrightarrow{\mathcal L}Y$ but also in probability (in $L^p$, a.s.), then
+    $X_n+Y_n\to X+Y$ in probability (in $L^p$, a.s.), and therefore also in law
+    (\cref{prop:cl-P-implies-law,thm:ll-implications}).
+  \item Independent summands: \cref{prop:cl-sums}.
+  \item Slutsky's theorem: \cref{thm:cl-slutsky}.
+\end{enumerate}
+
+\begin{proposition}[Sums of independent random variables]\label{prop:cl-sums}
+For every $n$, let $X_n$ and $Y_n$ be real random variables defined on the same probability
+space, and let $X$ and $Y$ be real random variables defined on the same probability space. If
+$X_n\indep Y_n$ for every $n\ge1$ and $X\indep Y$, then
+\[
+  \left.\begin{aligned}X_n&\xrightarrow{\mathcal L}X\\ Y_n&\xrightarrow{\mathcal L}Y\end{aligned}\right\}
+  \quad\Longrightarrow\quad X_n+Y_n\xrightarrow{\mathcal L}X+Y .
+\]
+\end{proposition}
+
+\begin{proof}
+For every $t\in\mathbb R$,
+\[
+  \Phi_{X_n+Y_n}(t)=\Phi_{X_n}(t)\,\Phi_{Y_n}(t)\xrightarrow[n\to\infty]{}\Phi_X(t)\,\Phi_Y(t)=\Phi_{X+Y}(t),
+\]
+where the two equalities hold because $X_n\indep Y_n$ and $X\indep Y$
+(\cref{prop:cf-independence}), and the limit by the hypothesis and part~(1) of L\'evy's
+theorem (\cref{thm:cl-levy}). Hence $X_n+Y_n\xrightarrow{\mathcal L}X+Y$, by part~(2) of
+L\'evy's theorem. In detail: $\Phi_{X+Y}$ is continuous (\cref{prop:cf-continuity}), so there
+is a random variable $Z$ with characteristic function $\Phi_{X+Y}$ such that
+$X_n+Y_n\xrightarrow{\mathcal L}Z$; by the uniqueness theorem (\cref{thm:cf-uniqueness}) $Z$
+and $X+Y$ have the same law, and convergence in law depends only on the law of the limit.
+\end{proof}
+
+\begin{theorem}[Slutsky's theorem]\label{thm:cl-slutsky}
+For every $n$, let $X_n$ and $Y_n$ be real random variables defined on the same probability
+space, and let $a\in\mathbb R$. If
+\[
+  X_n\xrightarrow{\mathcal L}X\qquad\text{and}\qquad Y_n\xrightarrow{\mathcal L}a\qquad
+  \big(\iff Y_n\xrightarrow{\mathbb P}a\big),
+\]
+then
+\begin{enumerate}[label=(\arabic*)]
+  \item $X_n+Y_n\xrightarrow{\mathcal L}X+a$;
+  \item $X_nY_n\xrightarrow{\mathcal L}aX$;
+  \item $X_n/Y_n\xrightarrow{\mathcal L}X/a$, if $a\neq0$.\footnote{The handwritten notes say
+    ``when well defined''. Precisely: $a\neq0$, and $X_n/Y_n$ is given an arbitrary value, say
+    $0$, on the event $\{Y_n=0\}$, whose probability tends to $0$.}
+\end{enumerate}
+\end{theorem}
+
+The equivalence in brackets is \cref{prop:cl-constant} together with
+\cref{prop:cl-P-implies-law}. The notes state the theorem without proof. For part~(1) see
+\citet[Section~25, ``Convergence in Probability'']{billingsley}; for parts~(1) and~(2) see
+\citet[Section~3.2]{durrett}, where part~(1) is the ``converging together lemma'' and part~(2)
+the exercise that follows it. \exref{ex:cl-slutsky} proves all three parts
+from \cref{thm:cl-cdf-criterion}. Unlike in \cref{exa:cl-sums}, here $X$ and $a$ need not be
+defined on a common space with anything: the limits $X+a$, $aX$ and $X/a$ are functions of $X$
+alone.\footnote{The last two sentences are added to the handwritten notes.}
+
+\section{Worked exercises}\label{sec:cl-worked}
+
+The notes end the topic with three exercises, whose statements are typed.
+
+\begin{example}[Worked exercise: a relaxed law of large numbers]\label{exa:cl-relaxed-lln}
+Let $(X_n)_{n\ge1}$ be a sequence of i.i.d.\ random variables such that $X_n\sim b(p)$ for every
+$n\ge1$, with $p\in(0,1)$ fixed. Let $Y_n=X_n+X_{n+1}$ for every $n\ge1$.
+\begin{enumerate}[label=\alph*)]
+  \item Determine the law of $Y_n$, and compute $\mathbb E[Y_n]$ and $\Var(Y_n)$, as $n\ge1$
+    varies.
+  \item Let $T_n=\frac1n\sum_{i=1}^nY_i$. Compute $\mathbb E[T_n]$ and $\Var(T_n)$, as $n\ge1$
+    varies.
+  \item Prove that the sequence $(T_n)_{n\ge1}$ converges in probability to the constant $2p$.
+\end{enumerate}
+
+\emph{Solution.} a) $X_n$ and $X_{n+1}$ are independent with law $b(p)=B(1,p)$, so
+(\cref{prop:rv-notable-discrete})
+\[
+  Y_n=X_n+X_{n+1}\sim B(2,p)\quad\Longrightarrow\quad\mathbb E[Y_n]=2p,\qquad\Var(Y_n)=2p(1-p).
+\]
+
+b) The $Y_i$ are not all independent: $Y_i$ and $Y_{i+1}$ both contain $X_{i+1}$. Still,
+\begin{itemize}
+  \item $\displaystyle\mathbb E[T_n]=\frac1n\sum_{i=1}^n\mathbb E[Y_i]=\frac1n\cdot n\cdot2p=2p$;
+  \item for the variance we write $T_n$ in terms of the independent $X_i$:
+    \[
+    \begin{aligned}
+      \Var(T_n)&=\Var\Big(\frac1n\sum_{i=1}^nY_i\Big)=\Var\Big(\frac1n\sum_{i=1}^n(X_i+X_{i+1})\Big)\\
+      &=\Var\Big(\frac1n\Big(X_1+2\sum_{i=2}^nX_i+X_{n+1}\Big)\Big)\\
+      &=\frac1{n^2}\Big(\Var(X_1)+4\sum_{i=2}^n\Var(X_i)+\Var(X_{n+1})\Big)\\
+      &=\frac1{n^2}\big(2+4(n-1)\big)p(1-p)=\frac{4n-2}{n^2}\,p(1-p)\\
+      &=\frac{n+(n-1)}{n^2}\,2p(1-p)=\frac{2p(1-p)}n+\frac{n-1}{n^2}\,2p(1-p),
+    \end{aligned}
+    \]
+    where the third line uses the independence of $X_1,\dots,X_{n+1}$ (for $n=1$ the sum
+    $\sum_{i=2}^n$ is empty). If the $Y_i$ were independent, the variance of $T_n$ would be
+    the first term, $\frac{2p(1-p)}n$; the second one comes from the $n-1$ covariances
+    $\Cov(Y_i,Y_{i+1})=\Var(X_{i+1})=p(1-p)$, each counted twice.\footnote{This explanation of
+    the second term is added to the handwritten notes.}
+\end{itemize}
+
+c) We prove that $T_n\xrightarrow{\mathbb P}2p$. This is a ``relaxed'' law of large numbers:
+the $Y_i$ are identically distributed, but not independent. We use Chebyshev's inequality, as
+in the proof of the weak law (\cref{thm:ll-weak-lln}): if $X\in L^2$, then
+\[
+  \mathbb P\big(|X-\mathbb E[X]|>\varepsilon\big)\le\frac{\Var(X)}{\varepsilon^2}\qquad\forall\varepsilon>0 .
+\]
+We know that $\mathbb E[T_n]=2p$ and $\Var(T_n)=\frac{4n-2}{n^2}p(1-p)$; therefore, for every
+$\varepsilon>0$,
+\[
+  \mathbb P(|T_n-2p|>\varepsilon)=\mathbb P\big(|T_n-\mathbb E[T_n]|>\varepsilon\big)
+  \le\frac{\Var(T_n)}{\varepsilon^2}=\frac{4n-2}{n^2}\cdot\frac{p(1-p)}{\varepsilon^2}
+  \xrightarrow[n\to\infty]{}0 ,
+\]
+that is, $T_n\xrightarrow{\mathbb P}2p$.
+
+\emph{Note.} It is also true that $T_n\xrightarrow{L^2}2p$, since
+\[
+  \mathbb E[T_n]=2p\to2p\qquad\text{and}\qquad\Var(T_n)=\frac{4n-2}{n^2}\,p(1-p)\to0
+\]
+(\cref{prop:ll-Lp}~(4)). In fact $T_n\to2p$ almost surely as well
+(\exref{ex:cl-relaxed}).\footnote{This last sentence is added to the handwritten notes.}
+\end{example}
+
+\begin{example}[Worked exercise: the maximum of uniform random variables]\label{exa:cl-maximum}
+Let $(X_n)_{n\ge1}$ be a sequence of i.i.d.\ random variables such that $X_n\sim U((0,1))$ for
+every $n\ge1$, and let $Y_n=\max_{1\le i\le n}X_i$ for every $n\ge1$.
+\begin{enumerate}[label=\alph*)]
+  \item Prove that the sequence $(Y_n)_{n\ge1}$ converges in probability to the constant $1$.
+  \item Prove that the sequence $(Z_n)_{n\ge1}$, where $Z_n=n(1-Y_n)$, converges in law to a
+    random variable $Z$ with exponential law of parameter $1$.
+\end{enumerate}
+
+\emph{Solution.} Let $F(x)=\mathbb P(X_i\le x)$ be the common distribution function of the
+$X_i$:
+\[
+  F(x)=x\,\1_{(0,1)}(x)+\1_{[1,+\infty)}(x).
+\]
+It is continuous, so also $\mathbb P(X_i<x)=F(x)$.\footnote{The handwritten notes write this
+formula in part~b); it is recalled there.}
+
+a) Let $\varepsilon>0$. Then
+\[
+  \mathbb P(|Y_n-1|>\varepsilon)=\mathbb P(Y_n>1+\varepsilon)+\mathbb P(Y_n<1-\varepsilon)
+  \overset{(\ast)}{=}\mathbb P(Y_n<1-\varepsilon),
+\]
+since $\mathbb P(Y_n>1+\varepsilon)=0$: $Y_n$ takes values in $(0,1)$ (almost surely).
+\begin{itemize}
+  \item If $\varepsilon\ge1$, then $\mathbb P(Y_n<1-\varepsilon)=0$.
+  \item If $0<\varepsilon<1$, then, by the independence of the $X_i$,
+    \[
+    \begin{aligned}
+      \mathbb P(Y_n<1-\varepsilon)&=\mathbb P\Big(\max_{1\le i\le n}X_i<1-\varepsilon\Big)
+      =\mathbb P\Big(\bigcap_{i=1}^n\{X_i<1-\varepsilon\}\Big)
+      =\prod_{i=1}^n\mathbb P(X_i<1-\varepsilon)\\
+      &=\prod_{i=1}^nF(1-\varepsilon)=\prod_{i=1}^n(1-\varepsilon)=(1-\varepsilon)^n\xrightarrow[n\to\infty]{}0,
+    \end{aligned}
+    \]
+    because $F(x)=x$ for $x\in(0,1)$.
+\end{itemize}
+Hence $Y_n\xrightarrow{\mathbb P}1$.
+
+b) Let $F_n$ be the distribution function of $Z_n=n(1-Y_n)$. For $x\in\mathbb R$, by the
+independence of the $X_i$ as in a),
+\[
+\begin{aligned}
+  F_n(x)&=\mathbb P(Z_n\le x)=\mathbb P\big(n(1-Y_n)\le x\big)=\mathbb P\Big(1-Y_n\le\frac xn\Big)\\
+  &=\mathbb P\Big(Y_n\ge1-\frac xn\Big)=1-\mathbb P\Big(Y_n<1-\frac xn\Big)
+  =1-\mathbb P\Big(\bigcap_{i=1}^n\Big\{X_i<1-\frac xn\Big\}\Big)\\
+  &=1-\prod_{i=1}^nF\Big(1-\frac xn\Big)=1-\Big(F\Big(1-\frac xn\Big)\Big)^n .
+\end{aligned}
+\]
+Observe that $F(x)=\mathbb P(X_i\le x)=x\,\1_{(0,1)}(x)+\1_{[1,+\infty)}(x)$, as at the
+beginning of the solution, so that
+\[
+  F\Big(1-\frac xn\Big)=\Big(1-\frac xn\Big)\1_{(0,1)}\Big(1-\frac xn\Big)+\1_{[1,+\infty)}\Big(1-\frac xn\Big)
+  =\Big(1-\frac xn\Big)\1_{(0,n)}(x)+\1_{(-\infty,0]}(x),
+\]
+and so
+\[
+  \Big(F\Big(1-\frac xn\Big)\Big)^n=\Big(1-\frac xn\Big)^n\1_{(0,n)}(x)+\1_{(-\infty,0]}(x),
+\]
+where $(1-\frac xn)^n\to e^{-x}$ and $\1_{(0,n)}(x)\to\1_{(0,+\infty)}(x)$ as $n\to\infty$. Hence,
+for every $x\in\mathbb R$,
+\[
+\begin{aligned}
+  \lim_{n\to\infty}F_n(x)&=\lim_{n\to\infty}\Big(1-\Big(F\Big(1-\frac xn\Big)\Big)^n\Big)
+  =\lim_{n\to\infty}\Big(1-\Big(1-\frac xn\Big)^n\1_{(0,n)}(x)-\1_{(-\infty,0]}(x)\Big)\\
+  &=1-e^{-x}\1_{(0,+\infty)}(x)-\1_{(-\infty,0]}(x)=\big(1-e^{-x}\big)\1_{(0,+\infty)}(x),
+\end{aligned}
+\]
+which is the distribution function $F_Z$ of $Z\sim\mathrm{Exp}(1)$. By
+\cref{thm:cl-cdf-criterion}, $Z_n\xrightarrow{\mathcal L}Z\sim\mathrm{Exp}(1)$.
+\end{example}
+
+Part~a) says that the largest of $n$ uniform numbers approaches $1$; part~b) says how fast: the
+gap $1-Y_n$ is of order $\frac1n$, and $n$ times the gap has approximately the law
+$\mathrm{Exp}(1)$. \Cref{fig:cl-maximum} shows the distribution functions $F_n$; the distance
+$\sup_x|F_n(x)-(1-e^{-x})|$ is of order $\frac1n$ too (\exref{ex:cl-maximum-rate}).\footnote{This
+paragraph and the figure that follows are added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch16-maximum}
+  \caption{\Cref{exa:cl-maximum}. Left: the distribution functions $F_n(x)=1-(1-\frac xn)^n$ of
+    $Z_n=n(1-\max_{i\le n}X_i)$ on $[0,n]$, for $n=1,2,5$, against $1-e^{-x}$ (dashed). Right:
+    the Kolmogorov distance $\sup_x|F_n(x)-(1-e^{-x})|$, computed exactly (line), which behaves
+    like $2e^{-2}/n$ (dotted); and the distance $\sup_x|\hat F(x)-(1-e^{-x})|$ of the empirical
+    distribution function $\hat F$ of $10^4$ simulated values of $Z_n$ (dots, seed $2026$),
+    which cannot go below the sampling error, of order $10^{-2}$.}
+  \label{fig:cl-maximum}
+\end{figure}
+
+\begin{example}[Worked exercise: from the binomial to the Poisson law]\label{exa:cl-binomial-poisson}
+Let $\lambda>0$ be fixed, and let $(X_n)_{n\ge\lambda}$ be a sequence of random variables such
+that $X_n\sim B(n,\frac\lambda n)$ for every integer $n\ge\lambda$.\footnote{The handwritten
+notes write $(X_n)_{n\ge1}$ and ``for every $n\ge1$''; the parameter $\frac\lambda n$ must be at
+most $1$, so $X_n$ is defined only for $n\ge\lambda$. Only large $n$ matter here. Corrected
+here.}
+\begin{enumerate}[label=\alph*)]
+  \item Study the convergence in law of $(X_n)_n$.
+  \item Estimate $\mathbb P(X_n\le2)$ with $n=10000$ and $\lambda=2$.
+\end{enumerate}
+
+\emph{Solution.} a) \emph{First method: discrete densities.} Fix $n\ge\lambda$, and let
+\[
+\begin{aligned}
+  f_n(k)=\mathbb P(X_n=k)&=\binom nk\Big(\frac\lambda n\Big)^k\Big(1-\frac\lambda n\Big)^{n-k}\qquad\forall\,0\le k\le n\\
+  &=\frac{n!}{k!\,(n-k)!}\cdot\frac{\lambda^k}{n^k}\Big(1-\frac\lambda n\Big)^n\Big(1-\frac\lambda n\Big)^{-k}\\
+  &=\frac{\lambda^k}{k!}\cdot\underbrace{\frac{n(n-1)\cdots(n-k+1)}{n^k}}_{\to\,1}
+  \cdot\underbrace{\Big(1-\frac\lambda n\Big)^n}_{\to\,e^{-\lambda}}
+  \cdot\underbrace{\Big(1-\frac\lambda n\Big)^{-k}}_{\to\,1}.
+\end{aligned}
+\]
+For fixed $k$ (and $n\ge k$), the first fraction is a product of $k$ factors $\frac{n-j}n\to1$.
+So, for every $k\in\mathbb N$,
+\[
+  f_n(k)\xrightarrow[n\to\infty]{}e^{-\lambda}\frac{\lambda^k}{k!}=\mathbb P(Y=k)=f_Y(k),
+  \qquad\text{with }Y\sim\mathcal P(\lambda),
+\]
+and, by part~(1) of \cref{prop:cl-densities}, $X_n\xrightarrow{\mathcal L}Y$.
+
+\emph{Second method: distribution functions.} Let $F_n(x)=\mathbb P(X_n\le x)$ for every
+$x\in\mathbb R$. Then $F_n(x)=0$ if $x<0$, and if $x\ge0$
+\[
+  F_n(x)=\sum_{k=0}^{\lfloor x\rfloor}f_n(k)=\sum_{k=0}^{n\wedge\lfloor x\rfloor}\binom nk\Big(\frac\lambda n\Big)^k\Big(1-\frac\lambda n\Big)^{n-k}.
+\]
+Since $x$ is fixed, eventually $n>\lfloor x\rfloor$, and
+\[
+\begin{aligned}
+  \lim_{n\to\infty}F_n(x)&=\lim_{n\to\infty}\sum_{k=0}^{\lfloor x\rfloor}\binom nk\Big(\frac\lambda n\Big)^k\Big(1-\frac\lambda n\Big)^{n-k}
+  =\sum_{k=0}^{\lfloor x\rfloor}\lim_{n\to\infty}\binom nk\Big(\frac\lambda n\Big)^k\Big(1-\frac\lambda n\Big)^{n-k}\\
+  &=\sum_{k=0}^{\lfloor x\rfloor}e^{-\lambda}\frac{\lambda^k}{k!}=\mathbb P(Y\le x)=F_Y(x),
+\end{aligned}
+\]
+with $Y\sim\mathcal P(\lambda)$, where the limits are computed as in the first method. By \cref{thm:cl-cdf-criterion},
+$X_n\xrightarrow{\mathcal L}Y$.
+
+\emph{Third method: characteristic functions.} Let $\Phi_n(t)=\mathbb E[e^{itX_n}]$,
+$t\in\mathbb R$. The characteristic function of $B(n,p)$ is $(1-p+pe^{it})^n$, and that of
+$\mathcal P(\lambda)$ is $e^{\lambda(e^{it}-1)}$ (\exref{ex:cf-standard}). Hence
+\[
+  \Phi_n(t)=\Big(1-\frac\lambda n+\frac\lambda ne^{it}\Big)^n
+  =\exp\Big[n\log\Big(1-\frac\lambda n+\frac\lambda ne^{it}\Big)\Big]\qquad\forall t\in\mathbb R,\ n\ge4\lambda,
+\]
+and, since $\log(1+z)\sim z$ as $z\to0$ (also in $\mathbb C$),
+\[
+\begin{aligned}
+  \lim_{n\to\infty}\Phi_n(t)&=\lim_{n\to\infty}\exp\Big[n\log\Big(1+\frac\lambda n\big(e^{it}-1\big)\Big)\Big]
+  =\lim_{n\to\infty}\exp\Big[n\Big(\frac\lambda n\big(e^{it}-1\big)\Big)\Big]\\
+  &=\exp\big(\lambda(e^{it}-1)\big)=\Phi_Y(t),
+\end{aligned}
+\]
+with $Y\sim\mathcal P(\lambda)$. In detail:\footnote{The handwritten notes write only
+``$\log(1+x)\sim x$ as $x\to0$, also in $\mathbb C$''; the details are added here.} here $\log$
+is the principal logarithm, defined on the disc $|w|<1$ by
+$\log(1+w)=\sum_{k\ge1}\frac{(-1)^{k+1}}kw^k$, so that $e^{\log(1+w)}=1+w$ and
+$|\log(1+w)-w|\le\sum_{k\ge2}|w|^k\le|w|^2/(1-|w|)\le2|w|^2$ for $|w|\le\frac12$. With
+$w_n=\frac\lambda n(e^{it}-1)$, we have $|w_n|\le\frac{2\lambda}n\le\frac12$ for $n\ge4\lambda$,
+so $\Phi_n(t)=(1+w_n)^n=e^{n\log(1+w_n)}$ and
+$|n\log(1+w_n)-\lambda(e^{it}-1)|\le2n|w_n|^2\le\frac{8\lambda^2}n\to0$. The limit
+$\Phi_Y$ is continuous at $0$, so by L\'evy's theorem (\cref{thm:cl-levy}) and the uniqueness
+theorem (\cref{thm:cf-uniqueness}), as in the proof of \cref{prop:cl-sums},
+$X_n\xrightarrow{\mathcal L}Y$.
+
+b) The notes leave this part as an exercise (\exref{ex:cl-poisson-numerics}). By a),
+$\mathbb P(X_n\le2)\approx\mathbb P(Y\le2)$ with $Y\sim\mathcal P(2)$.\footnote{This hint is
+added to the handwritten notes.}
+\end{example}
+
+This is the \emph{law of rare events}: the number of successes in many independent trials, each
+with a small probability of success, has approximately a Poisson law. The approximation is good
+also in a stronger sense than convergence in law. Since the laws live on $\mathbb N$, part~(1) of
+\cref{prop:cl-densities} and Scheff\'e's argument of \exref{ex:cl-densities} give
+$\sup_{A\in\mathcal B(\mathbb R)}|\mathbb P_{X_n}(A)-\mathbb P_Y(A)|\to0$; this \emph{total variation
+distance} is at most $\frac{\lambda^2}n$ (\exref{ex:cl-le-cam}). \Cref{fig:cl-binomial-poisson}
+shows the discrete densities and the two distances.\footnote{This paragraph, the figure and
+the remark that follow are added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch16-binomial-poisson}
+  \caption{\Cref{exa:cl-binomial-poisson} with $\lambda=2$. Left: the discrete densities of
+    $B(n,\frac2n)$ for $n=3,6,20$ and of the Poisson law $\mathcal P(2)$ (bars). Right: the
+    total variation distance $\sup_A|\mathbb P_{X_n}(A)-\mathbb P_Y(A)|$ and the Kolmogorov
+    distance $\sup_x|F_n(x)-F_Y(x)|$, computed exactly, against Le Cam's bound $\frac{\lambda^2}n$
+    (dashed). Both distances decrease like $\frac1n$.}
+  \label{fig:cl-binomial-poisson}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:cl-code}
+\coderef{code/src/probnotes/inlaw.py} makes the objects of this chapter computable. The
+function \texttt{ecdf} is the empirical distribution function of a sample, and
+\texttt{kolmogorov\_distance\_sample} its exact distance $\sup_x|\hat F(x)-F(x)|$ to a
+distribution function, also with atoms; \texttt{total\_variation\_pmf} and
+\texttt{kolmogorov\_distance\_pmf} compare two laws on $\mathbb N$. For the worked exercises,
+\texttt{binomial\_poisson\_distances} computes the two distances of
+\cref{fig:cl-binomial-poisson} exactly (\exref{ex:cl-poisson-numerics}),
+\texttt{scaled\_max\_cdf} and \texttt{scaled\_max\_kolmogorov} give the distribution function of
+$Z_n$ and its exact distance to $\mathrm{Exp}(1)$ (\exref{ex:cl-maximum-rate}),
+\texttt{sample\_relaxed\_mean} simulates $T_n$ exactly, and \texttt{sum\_counterexample} simulates
+\cref{exa:cl-sums} (\exref{ex:cl-sums}).
+\end{remark}
+
+\demo{16-convergence-in-law.ipynb}{distribution functions converging, or not, for the examples
+of the chapter; the binomial and the Poisson law, with their distances and characteristic
+functions; and the counterexample for sums, with sliders for $n$, $\lambda$ and the correlation.}
+
+\furtherreading
+\textcite{billingsley}, Section~25, treats weak convergence on $\mathbb R$ through distribution
+functions, with the relations to convergence in probability, Skorohod's representation and
+Helly's theorem; Section~26 proves L\'evy's continuity theorem.
+\textcite{durrett}, Sections~3.2--3.3, covers the same ground with many examples, including
+the Poisson convergence of Section~3.6. \textcite{williams}, Chapters~16--18, treats
+characteristic functions, weak convergence and the central limit theorem briefly.
+\textcite{ross-5}, Chapter~4,
+introduces the Poisson approximation to the binomial law with many applications, and
+Chapter~8 treats limit theorems.

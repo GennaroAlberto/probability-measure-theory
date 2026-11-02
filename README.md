@@ -4,8 +4,8 @@ Lecture notes on probability theory with measure theory, with proofs, exercises 
 Python demos, by [Alberto Gennaro](https://gennaroalberto.github.io/).
 
 These notes are an English translation, rearrangement and digitisation of the handwritten lecture
-notes of **Paola Siri**'s course in probability theory: the structure, definitions, theorems, proofs
-and examples are hers. I added the exercises (some computational, some adapted from Sheldon Ross,
+notes of **Paola Siri**'s course *Probability and Statistics* at the Politecnico di Torino: the
+structure, definitions, theorems, proofs and examples are hers. I added the exercises (some computational, some adapted from Sheldon Ross,
 *A First Course in Probability*), the Python demos and references for results stated without proof.
 I learnt probability with these notes, and to this day they are still among my favourite notes to read.
 
@@ -17,7 +17,7 @@ The PDFs are rebuilt from the LaTeX sources on every push, after the code tests 
 
 ## Contents
 
-Generated from [`latex/toc.tex`](latex/toc.tex). Chapters marked *in preparation* appear in the PDFs with their planned outline.
+Generated from [`latex/toc.tex`](latex/toc.tex).
 
 **Measure theory**
 
@@ -31,40 +31,40 @@ Generated from [`latex/toc.tex`](latex/toc.tex). Chapters marked *in preparation
 
 | | Chapter | Notes | Exercises | Demos |
 |---|---|---|---|---|
-| 4 | The integral of non-negative functions | in preparation | – | – |
-| 5 | Integrable functions and dominated convergence | in preparation | – | – |
-| 6 | Lᵖ spaces, laws and densities | in preparation | – | – |
-| 7 | Product measures and random vectors | in preparation | – | – |
+| 4 | The integral of non-negative functions | ✓ | ✓ | [04-integral.ipynb](code/notebooks/04-integral.ipynb) |
+| 5 | Integrable functions and dominated convergence | ✓ | ✓ | [05-integrable-functions.ipynb](code/notebooks/05-integrable-functions.ipynb) |
+| 6 | Lᵖ spaces, laws and densities | ✓ | ✓ | [06-laws-densities.ipynb](code/notebooks/06-laws-densities.ipynb) |
+| 7 | Product measures and random vectors | ✓ | ✓ | [07-product-measures.ipynb](code/notebooks/07-product-measures.ipynb) |
 
 **Random variables and their laws**
 
 | | Chapter | Notes | Exercises | Demos |
 |---|---|---|---|---|
-| 8 | Multinomial and Gamma laws; transformations of random variables | in preparation | – | – |
-| 9 | Transformations of random vectors | in preparation | – | – |
-| 10 | Characteristic functions | in preparation | – | – |
+| 8 | Multinomial and Gamma laws; transformations of random variables | ✓ | ✓ | [08-transformations.ipynb](code/notebooks/08-transformations.ipynb) |
+| 9 | Transformations of random vectors | ✓ | ✓ | [09-random-vectors.ipynb](code/notebooks/09-random-vectors.ipynb) |
+| 10 | Characteristic functions | ✓ | ✓ | [10-characteristic-functions.ipynb](code/notebooks/10-characteristic-functions.ipynb) |
 
 **Conditioning**
 
 | | Chapter | Notes | Exercises | Demos |
 |---|---|---|---|---|
-| 11 | Conditioning and conditional expectation | in preparation | – | – |
-| 12 | Properties of conditional expectation | in preparation | – | – |
+| 11 | Conditioning and conditional expectation | ✓ | ✓ | [11-conditional-expectation.ipynb](code/notebooks/11-conditional-expectation.ipynb) |
+| 12 | Properties of conditional expectation | ✓ | ✓ | [12-conditional-properties.ipynb](code/notebooks/12-conditional-properties.ipynb) |
 
 **Gaussian vectors**
 
 | | Chapter | Notes | Exercises | Demos |
 |---|---|---|---|---|
-| 13 | Gaussian vectors | in preparation | – | – |
-| 14 | Gaussian conditioning | in preparation | – | – |
+| 13 | Gaussian vectors | ✓ | ✓ | [13-gaussian-vectors.ipynb](code/notebooks/13-gaussian-vectors.ipynb) |
+| 14 | Gaussian conditioning | ✓ | ✓ | [14-gaussian-conditioning.ipynb](code/notebooks/14-gaussian-conditioning.ipynb) |
 
 **Limit theorems**
 
 | | Chapter | Notes | Exercises | Demos |
 |---|---|---|---|---|
-| 15 | Convergence of random variables and the laws of large numbers | in preparation | – | – |
-| 16 | Convergence in law | in preparation | – | – |
-| 17 | The central limit theorem and the delta method | in preparation | – | – |
+| 15 | Convergence of random variables and the laws of large numbers | ✓ | ✓ | [15-laws-large-numbers.ipynb](code/notebooks/15-laws-large-numbers.ipynb) |
+| 16 | Convergence in law | ✓ | ✓ | [16-convergence-in-law.ipynb](code/notebooks/16-convergence-in-law.ipynb) |
+| 17 | The central limit theorem and the delta method | ✓ | ✓ | [17-clt-delta.ipynb](code/notebooks/17-clt-delta.ipynb) |
 
 ## Layout
 

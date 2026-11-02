@@ -1,5 +1,774 @@
-\begin{planned}
-  \item conditioning a Gaussian vector: the bivariate case
-  \item the general block formulas
-  \item worked exercises
-\end{planned}
+% Chapter 14: Gaussian conditioning.
+% Translation of Paola Siri's handwritten notes, PDF pages 219 ("Condizionamento") to 232: the law of
+% one component of a Gaussian pair conditioned on the other (pp. 219-222; the derivation begins at the
+% end of a lecture, pp. 219-220, and is repeated and completed at the start of the next one under the
+% heading "VETTORI GAUSSIANI - CONDIZIONAMENTO", p. 221: one derivation here), the signal example, the
+% block formulas (pp. 222-223, "dimostrazione analoga": the proof is written out here), and four typed
+% worked exercises with handwritten solutions (pp. 224-232), with a remark on scaled Gamma laws among
+% them (p. 226).
+
+If $(X,Y)$ is a Gaussian vector, the law of $X$ conditioned on the event $(Y=y)$ is again Gaussian;
+its mean is an affine function of $y$, and its variance does not depend on $y$. The proof rests on
+one idea: subtract from $X$ the multiple of $Y$ that makes the difference uncorrelated with $Y$. For
+Gaussian vectors, uncorrelated components are independent (\cref{thm:gv-independence}), and
+conditioning on $Y$ then only shifts the independent part. The same idea gives the conditional law
+of a block of components of a Gaussian vector given another block (the block formulas), and from
+them the meaning of the zeros of the inverse of the covariance matrix: they mark the pairs of
+components that are conditionally independent given all the others.
+
+The notes treat the whole topic under a single heading; the three section titles below are
+added. We use the notation of \cref{ch:13-gaussian-vectors} for Gaussian vectors,
+$\underline X\sim\mathcal N_N(\underline\mu,C)$, and the conditional densities and expectations of
+\cref{ch:11-conditional-expectation}; vectors are columns, underlined as in the handwritten notes, and
+$A^T$ is the transpose of $A$.
+
+\section{The bivariate case}\label{sec:gc-bivariate}
+
+Consider a Gaussian vector $(X,Y)$ with values in $\mathbb R^2$:
+\begin{equation}\label{eq:gc-pair}
+  \begin{pmatrix}X\\Y\end{pmatrix}\sim\mathcal N_2\left(\begin{pmatrix}\mu_X\\\mu_Y\end{pmatrix},
+  \begin{pmatrix}\sigma_X^2&c_{XY}\\c_{XY}&\sigma_Y^2\end{pmatrix}\right),\qquad
+  \begin{pmatrix}\sigma_X^2&c_{XY}\\c_{XY}&\sigma_Y^2\end{pmatrix}
+  =\begin{pmatrix}\sigma_X^2&\rho\,\sigma_X\sigma_Y\\\rho\,\sigma_X\sigma_Y&\sigma_Y^2\end{pmatrix},
+\end{equation}
+where $c_{XY}=\operatorname{cov}(X,Y)$ and $\rho=\rho(X,Y)$ is the correlation
+coefficient.\footnote{Recall that $\rho(X,Y)=\operatorname{cov}(X,Y)/\sqrt{\operatorname{var}(X)\operatorname{var}(Y)}$
+when $\sigma_X,\sigma_Y>0$, and that $|\rho|\le1$ by the Cauchy--Schwarz inequality
+(\cref{cor:ld-cauchy-schwarz}) applied to $X-\mu_X$ and $Y-\mu_Y$. Added to the handwritten notes.}
+We determine the law of $X$ conditioned on $(Y=y)$. Throughout, $\sigma_Y>0$.\footnote{The handwritten
+notes assume this tacitly, since they divide by $\sigma_Y^2$. If $\sigma_Y=0$, then $Y=\mu_Y$ a.s.,
+and conditioning on $Y$ gives no information on $X$.}
+
+We look for a constant $a\in\mathbb R$ such that $Z=X-aY$ is independent of $Y$.
+\begin{itemize}
+  \item $(X,Y)$ is a Gaussian vector, and
+    \[
+      \begin{pmatrix}Z\\Y\end{pmatrix}=\begin{pmatrix}X-aY\\Y\end{pmatrix}
+      =\begin{pmatrix}1&-a\\0&1\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix};
+    \]
+    hence $(Z,Y)$ is a Gaussian vector (\cref{thm:gv-affine}).
+  \item Hence $Z\indep Y\iff\operatorname{cov}(Z,Y)=0$ (\cref{thm:gv-independence}).
+\end{itemize}
+Now
+\[
+  0=\operatorname{cov}(Z,Y)=\operatorname{cov}(X-aY,Y)=\operatorname{cov}(X,Y)-a\operatorname{var}(Y)
+  =c_{XY}-a\sigma_Y^2
+\]
+if and only if
+\begin{equation}\label{eq:gc-a}
+  a=\frac{c_{XY}}{\sigma_Y^2}=\rho\,\frac{\sigma_X\sigma_Y}{\sigma_Y^2}=\rho\,\frac{\sigma_X}{\sigma_Y}.
+\end{equation}
+We can then write
+\[
+  X=(X-aY)+aY=Z+aY,\qquad\text{with }Z\indep Y .
+\]
+Conditioning on $(Y=y)$ fixes the value of $Y$ and leaves the independent variable $Z$ alone:
+\[
+  (Z+aY)\mid Y=y\ \sim\ Z+ay .
+\]
+This is intuitive, and it is left as an exercise (\exref{ex:gc-shift}): given $Z\indep Y$ with
+densities $f_Z$ and $f_Y$, compute $f_{(Z+aY,Y)}$, then $f_{Z+aY\mid Y=y}$, and check that it
+coincides with $f_{Z+ay}$. Since $Z+ay$ is a Gaussian random variable (\cref{thm:gv-affine},
+\cref{prop:tr-affine-gaussian}), \emph{the law of $X$ conditioned on $(Y=y)$ is Gaussian!} It remains
+to compute its mean and its variance.
+
+\begin{theorem}[Conditioning in a Gaussian pair]\label{thm:gc-bivariate}
+Let $(X,Y)$ be as in \eqref{eq:gc-pair}, with $\sigma_Y>0$, let $a=c_{XY}/\sigma_Y^2$ and
+$Z=X-aY$. Then $Z\indep Y$ and $Z\sim\mathcal N(\mu_X-a\mu_Y,\sigma^2)$. If moreover $\sigma_X>0$
+and $|\rho|<1$, that is, if the covariance matrix is invertible, then for every $y\in\mathbb R$
+\[
+  X\mid Y=y\ \sim\ \mathcal N\big(m(y),\sigma^2\big),
+\]
+that is, the density of $X$ conditioned on $(Y=y)$ (\cref{thm:ce-density}) is the density of
+$\mathcal N(m(y),\sigma^2)$, where
+\begin{align}
+  m(y)&=\mathbb E[X\mid Y=y]=\mu_X-\frac{c_{XY}}{\sigma_Y^2}\,(\mu_Y-y)
+       =\mu_X-\rho\,\frac{\sigma_X}{\sigma_Y}\,(\mu_Y-y),\label{eq:gc-mean}\\
+  \sigma^2&=\operatorname{var}(X\mid Y=y)=\sigma_X^2-\frac{c_{XY}^2}{\sigma_Y^2}=\sigma_X^2\big(1-\rho^2\big).\label{eq:gc-variance}
+\end{align}
+Here $\operatorname{var}(X\mid Y=y)=\int_{\mathbb R}(x-m(y))^2f_{X\mid Y=y}(x)\,\dd x$ is the variance of
+the conditional law.\footnote{The handwritten notes state the result without hypotheses, and write
+the conditional law as $\mathcal N_2(m,\sigma^2)$ (it is one-dimensional). We need $\sigma_Y>0$ to
+define $a$, and an invertible covariance matrix for the conditional density to exist: then $(X,Y)$
+is absolutely continuous (\cref{thm:gv-density}) and $\sigma^2>0$. If $\sigma_X=0$ or $|\rho|=1$, then
+$\sigma^2=0$, $Z$ is a.s.\ constant, and $X=m(Y)$ a.s.\ (if $\sigma_X=0$, then $c_{XY}=0$ and
+$X=\mu_X=m(Y)$ a.s.); the conditional law is then the Dirac mass at $m(y)$, the degenerate law
+$\mathcal N(m(y),0)$ (\exref{ex:gc-shift}). Corrected here.}
+\end{theorem}
+
+\begin{proof}
+We have shown that $Z\indep Y$, and $Z=(1,\,-a)\,(X,Y)^T$ is Gaussian (\cref{thm:gv-affine}) with
+mean $\mu_X-a\mu_Y$; its variance is computed below. Let the covariance matrix be invertible. Then
+$\operatorname{var}(Z)=\sigma^2>0$ by the computation below, so $Z$ and $Y$ have densities, and by the
+exercise the density of $X=Z+aY$ conditioned on $(Y=y)$ is the density of $Z+ay$, which is Gaussian.
+Its mean is
+\[
+\begin{aligned}
+  m&=\mathbb E[X\mid Y=y]=\mathbb E[Z+ay]=\mathbb E[Z]+ay=\mathbb E[X-aY]+ay=\mathbb E[X]-a\,\mathbb E[Y]+ay\\
+  &=\mu_X-a(\mu_Y-y)=\mu_X-\frac{c_{XY}}{\sigma_Y^2}\,(\mu_Y-y)=\mu_X-\rho\,\frac{\sigma_X}{\sigma_Y}\,(\mu_Y-y),
+\end{aligned}
+\]
+a function $m(y)$ of $y$. Its variance is a constant:
+\[
+\begin{aligned}
+  \sigma^2&=\operatorname{var}(X\mid Y=y)=\operatorname{var}(Z+ay)=\operatorname{var}(Z)=\operatorname{var}(X-aY)\\
+  &=\operatorname{var}(X)+a^2\operatorname{var}(Y)-2a\operatorname{cov}(X,Y)\\
+  &=\sigma_X^2+\frac{c_{XY}^2}{\sigma_Y^4}\,\sigma_Y^2-2\,\frac{c_{XY}}{\sigma_Y^2}\,c_{XY}
+  =\sigma_X^2-\frac{c_{XY}^2}{\sigma_Y^2}
+  =\sigma_X^2-\frac{\rho^2\sigma_X^2\sigma_Y^2}{\sigma_Y^2}=\sigma_X^2\big(1-\rho^2\big).\qedhere
+\end{aligned}
+\]
+\end{proof}
+
+\begin{remark}\label{rem:gc-uncorrelated}
+If $c_{XY}=0=\rho$, then
+\[
+  m(y)=\mathbb E[X\mid Y=y]=\mu_X,\qquad\sigma^2=\operatorname{var}(X\mid Y=y)=\sigma_X^2,
+  \qquad\text{so}\qquad X\mid Y=y\ \sim\ X:
+\]
+conditioning on $Y$ does not change the law of $X$. This agrees with 5) of
+\cref{rem:ce-density-remarks}, since then $X\indep Y$ (\cref{thm:gv-independence}).
+\end{remark}
+
+Consequently,\footnote{By \cref{thm:ce-density}, $\mathbb E[X\mid Y]=h(Y)$ with
+$h(y)=\int x\,f_{X\mid Y=y}(x)\,\dd x=m(y)$. For the conditional variance
+(\cref{def:cp-conditional-variance}): $X-m(Y)=Z-\mathbb E[Z]$ is independent of $Y$, so
+$\mathbb E[(X-\mathbb E[X\mid Y])^2\mid Y]=\mathbb E[(Z-\mathbb E[Z])^2]=\sigma^2$
+(\cref{rem:cp-independence}). Both identities hold also when the covariance matrix is singular
+(\exref{ex:gc-shift}). Added to the handwritten notes.}
+\begin{align*}
+  \mathbb E[X\mid Y]&=m(Y)=\mu_X-\frac{c_{XY}}{\sigma_Y^2}\,(\mu_Y-Y)=\mu_X-\rho\,\frac{\sigma_X}{\sigma_Y}\,(\mu_Y-Y),\\
+  \operatorname{var}(X\mid Y)&=\sigma^2=\sigma_X^2-\frac{c_{XY}^2}{\sigma_Y^2}=\sigma_X^2\big(1-\rho^2\big).
+\end{align*}
+We can say that
+\[
+  X\mid Y\ \sim\ \mathcal N\big(m(Y),\sigma^2\big),
+\]
+a short way of writing that $X\mid Y=y\sim\mathcal N(m(y),\sigma^2)$ for every $y$.\footnote{The
+handwritten notes write $X\sim\mathcal N_2(m(Y),\sigma^2)$, and similarly ``$Y\sim\mathcal N(2X,4)$''
+and ``$Y_1\sim\mathcal N(\frac12Y_2,\frac12)$'' in the worked exercises below. We keep the conditioning
+in the notation: $X\mid Y\sim\dots$.} Two features of the Gaussian case stand out: the conditional
+expectation $\mathbb E[X\mid Y]$ is an \emph{affine} function of $Y$, and the conditional variance
+does not depend on the observed value of $Y$: observing $Y$ multiplies the variance of $X$ by the
+same factor $1-\rho^2$, whatever the value observed (\exref{ex:gc-ross-heights}).\footnote{This
+sentence is added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch14-bivariate}
+  \caption{The signal example (\cref{exa:gc-signal}): $(X,Y)\sim\mathcal N_2\big(0,\big(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\big)\big)$,
+    so that $X\mid Y=y\sim\mathcal N(\frac y2,\frac12)$. Left: $2500$ draws of $(Y,X)$, the line
+    $m(y)=\frac y2$ and the band $m(y)\pm2\sigma$, $\sigma=\frac1{\sqrt2}$; the coloured bands are the
+    slabs $|Y-y|<0.05$ for $y=-2,0,2$. Right: histograms of $X$ over the draws that fall in each slab,
+    out of $10^6$ draws (seed $2026$), against the densities of $\mathcal N(\frac y2,\frac12)$, and the
+    density of the law $\mathcal N(0,1)$ of $X$ (dotted). The three conditional laws have the same
+    variance, half that of $X$.}
+  \label{fig:gc-bivariate}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:gc-code-bivariate}
+Since $\mathbb P(Y=y)=0$, a simulation cannot condition on $\{Y=y\}$ by counting. It can condition
+on a thin slab $\{|Y-y|<h\}$ instead, as in \cref{rem:ce-code-binning}: in
+\coderef{code/src/probnotes/gaussian_conditioning.py}, \texttt{slab\_moments} returns the mean and
+the covariance of the other components over the draws in a slab, with standard errors, and
+\texttt{bivariate\_conditional} returns $m(y)$ and $\sigma^2$ of \cref{thm:gc-bivariate}. In
+\cref{fig:gc-bivariate} the slab histograms match $\mathcal N(m(y),\sigma^2)$. The average of $X$
+over a slab estimates $\mathbb E[X\mid|Y-y|<h]$, which equals $m\big(\mathbb E[Y\mid|Y-y|<h]\big)$
+exactly, because $m$ is affine (property 2) of \cref{def:ce-conditional-expectation} with
+$A=\{|Y-y|<h\}$). Comparing the slab average of $X$ with $m$ at the slab average of $Y$, rather than
+at $y$, removes the bias of the slab (\exref{ex:gc-partial-sums-bridge}).
+\end{remark}
+
+\demo{14-gaussian-conditioning.ipynb}{the law of $X$ given $Y=y$ for a Gaussian pair, with sliders
+for $\rho$, $\sigma_X$, $\sigma_Y$, $y$ and the width of the slab.}
+
+\begin{example}[A transmitted signal]\label{exa:gc-signal}
+Let $X$ be the transmitted signal and $Y$ the received signal, with
+\[
+  \begin{pmatrix}X\\Y\end{pmatrix}\sim\mathcal N_2\left(\begin{pmatrix}0\\0\end{pmatrix},
+  \begin{pmatrix}1&1\\1&2\end{pmatrix}\right).
+\]
+At reception the value $y$ is observed. What was the transmitted signal? The best possible estimate
+is $\mathbb E[X\mid Y=y]$.\footnote{In the sense of \cref{thm:cp-projection}: among all the random
+variables $h(Y)$ with $h(Y)\in L^2$, $\mathbb E[X\mid Y]$ minimises $\mathbb E[(X-h(Y))^2]$.} By
+\eqref{eq:gc-mean},
+\[
+  \mathbb E[X\mid Y=y]=m(y)=\mu_X-\frac{c_{XY}}{\sigma_Y^2}\,(\mu_Y-y)=0-\frac12\,(0-y)=\frac y2 .
+\]
+By \eqref{eq:gc-variance} the error of this estimate has variance $\sigma^2=1-\frac12=\frac12$, and
+$X\mid Y=y\sim\mathcal N(\frac y2,\frac12)$.\footnote{The variance and the conditional law are added
+to the handwritten notes. This law of $(X,Y)$ arises when $Y=X+W$, with a noise $W\sim\mathcal N(0,1)$
+independent of $X\sim\mathcal N(0,1)$: $(X,W)$ is a Gaussian vector (\cref{prop:gv-concatenation}),
+and $(X,Y)$ is its image under a linear map (\cref{thm:gv-affine}); the estimate
+$\frac y2$ halves the observation because signal and noise have the same variance
+(\exref{ex:gc-ross-signal}).}
+\end{example}
+
+\section{Conditioning by blocks}\label{sec:gc-blocks}
+
+The conditioning can be done ``by blocks''. Let
+\[
+  \underline X=\begin{pmatrix}\underline X_1\\\underline X_2\end{pmatrix}\sim\mathcal N_N(\underline\mu,C),
+\]
+with $\underline X_1$ a random vector with values in $\mathbb R^{N_1}$ and $\underline X_2$ a random vector with values in
+$\mathbb R^{N_2}$, where $N_1+N_2=N$. Then
+\[
+  \underline\mu=\begin{pmatrix}\underline\mu_1\\\underline\mu_2\end{pmatrix},\qquad
+  C=\begin{pmatrix}C_{11}&C_{12}\\C_{21}&C_{22}\end{pmatrix},\qquad C_{12}=C_{21}^T,
+\]
+where $\underline\mu_i$ is the vector of the means of $\underline X_i$, $C_{ii}$ is the covariance matrix of $\underline X_i$, and
+$C_{12}$ contains the covariances between the components of $\underline X_1$ and those of $\underline X_2$
+(\cref{cor:gv-blocks}).
+
+\begin{theorem}[Block formulas]\label{thm:gc-block}
+Let $\underline X=(\underline X_1,\underline X_2)\sim\mathcal N_N(\underline\mu,C)$ be split into blocks as above.
+\begin{itemize}
+  \item If $C_{22}$ is invertible,
+    \[
+      \underline X_1\mid\underline X_2=\underline x_2\ \sim\ \mathcal N_{N_1}(\underline m_1,\Sigma_1),\qquad\text{where}\quad
+      \begin{cases}
+        \underline m_1=\underline\mu_1-C_{12}C_{22}^{-1}(\underline\mu_2-\underline x_2),\\
+        \Sigma_1=C_{11}-C_{12}C_{22}^{-1}C_{21}.
+      \end{cases}
+    \]
+  \item If $C_{11}$ is invertible,
+    \[
+      \underline X_2\mid\underline X_1=\underline x_1\ \sim\ \mathcal N_{N_2}(\underline m_2,\Sigma_2),\qquad\text{where}\quad
+      \begin{cases}
+        \underline m_2=\underline\mu_2-C_{21}C_{11}^{-1}(\underline\mu_1-\underline x_1),\\
+        \Sigma_2=C_{22}-C_{21}C_{11}^{-1}C_{12}.
+      \end{cases}
+    \]
+\end{itemize}
+When $C$ is invertible, this means that the conditional density
+$f_{\underline X_1\mid\underline X_2=\underline x_2}(\underline x_1)=f_{(\underline X_1,\underline X_2)}(\underline x_1,\underline x_2)/f_{\underline X_2}(\underline x_2)$, defined as in \cref{thm:ce-density},
+is the density of $\mathcal N_{N_1}(\underline m_1,\Sigma_1)$ for every $\underline x_2\in\mathbb R^{N_2}$, and similarly for
+the second bullet.\footnote{Added to the handwritten notes. \Cref{thm:ce-density} is stated for real
+random variables; for random vectors the definitions and the proof are the same, with Lebesgue measure
+on $\mathbb R^{N_1}\times\mathbb R^{N_2}$. If $C_{22}$ is invertible but $C$ is not, then $\Sigma_1$ is
+singular (see the proof), $(\underline X_1,\underline X_2)$ has no density, and the statement means, as in the bivariate
+case, that $\underline X_1=\underline Z+C_{12}C_{22}^{-1}\underline X_2$ with $\underline Z\sim\mathcal N_{N_1}(\underline\mu_1-C_{12}C_{22}^{-1}\underline\mu_2,\Sigma_1)$
+independent of $\underline X_2$ (\exref{ex:gc-shift}).}
+\end{theorem}
+
+The notes present the block formulas as a remark, and say that the proof is analogous to the
+two-dimensional case; we state them as a theorem and write the proof out. The matrix $\Sigma_1$ is
+called the \emph{Schur complement} of $C_{22}$ in $C$ (\exref{ex:gc-schur} collects its
+properties).\footnote{The name is added to the handwritten notes.}
+
+\begin{proof}
+The second bullet follows from the first by exchanging the roles of the two blocks, that is, by
+applying the first bullet to $(\underline X_2,\underline X_1)$, which is a Gaussian vector by \cref{thm:gv-affine} (a
+permutation of the components is a linear map). We prove the first bullet.
+
+As in \cref{sec:gc-bivariate}, we look for a matrix $A\in\mathcal M_{N_1\times N_2}(\mathbb R)$ such
+that $\underline Z=\underline X_1-A\underline X_2$ is independent of $\underline X_2$. Since
+\[
+  \begin{pmatrix}\underline Z\\\underline X_2\end{pmatrix}=\begin{pmatrix}I_{N_1}&-A\\0&I_{N_2}\end{pmatrix}
+  \begin{pmatrix}\underline X_1\\\underline X_2\end{pmatrix}=M\underline X,
+\]
+$(\underline Z,\underline X_2)$ is a Gaussian vector (\cref{thm:gv-affine}), with mean $(\underline\mu_1-A\underline\mu_2,\underline\mu_2)$ and covariance
+matrix
+\[
+  MCM^T=\begin{pmatrix}C_{11}-AC_{21}-C_{12}A^T+AC_{22}A^T&C_{12}-AC_{22}\\
+  C_{21}-C_{22}A^T&C_{22}\end{pmatrix}.
+\]
+By \cref{cor:gv-blocks}, $\underline Z\indep\underline X_2$ if and only if the off-diagonal blocks vanish:
+$C_{12}-AC_{22}=0$ (the other block is its transpose, since $C_{22}$ is symmetric and
+$C_{21}=C_{12}^T$). Since $C_{22}$ is invertible, this holds for
+\[
+  A=C_{12}C_{22}^{-1},
+\]
+the analogue of \eqref{eq:gc-a}. Then $AC_{22}A^T=C_{12}A^T=C_{12}C_{22}^{-1}C_{21}=AC_{21}$, and the
+first block of $MCM^T$ is $C_{11}-C_{12}C_{22}^{-1}C_{21}=\Sigma_1$. So
+\[
+  \underline X_1=\underline Z+A\underline X_2,\qquad \underline Z\indep\underline X_2,\qquad \underline Z\sim\mathcal N_{N_1}\big(\underline\mu_1-A\underline\mu_2,\,\Sigma_1\big).
+\]
+As in the bivariate case, $(\underline Z+A\underline X_2)\mid\underline X_2=\underline x_2\sim\underline Z+A\underline x_2$, and
+$\underline Z+A\underline x_2\sim\mathcal N_{N_1}(\underline\mu_1-A\underline\mu_2+A\underline x_2,\Sigma_1)=\mathcal N_{N_1}(\underline m_1,\Sigma_1)$ by
+\cref{thm:gv-affine}, since $\underline\mu_1-A\underline\mu_2+A\underline x_2=\underline\mu_1-C_{12}C_{22}^{-1}(\underline\mu_2-\underline x_2)=\underline m_1$.
+
+In detail, let $C$ be invertible. Since $\det M=1$,
+\[
+  \det C=\det\big(MCM^T\big)=\det\Sigma_1\cdot\det C_{22},
+\]
+so $\Sigma_1$ is invertible, and $\underline Z$, $\underline X_2$ and $(\underline Z,\underline X_2)$ are absolutely continuous
+(\cref{thm:gv-density}), with $f_{(\underline Z,\underline X_2)}(\underline z,\underline x_2)=f_{\underline Z}(\underline z)f_{\underline X_2}(\underline x_2)$ because $\underline Z\indep\underline X_2$
+(\cref{thm:pm-density-independence}, whose proof is the same for random vectors). The vector
+$(\underline X_1,\underline X_2)=M^{-1}(\underline Z,\underline X_2)$ is a linear image of $(\underline Z,\underline X_2)$, with
+$M^{-1}(\underline z,\underline x_2)=(\underline z+A\underline x_2,\underline x_2)$ and $\det M^{-1}=1$; by the change of variables formula
+(\cref{cor:rv-linear}, in $\mathbb R^N$ as in the proof of \cref{thm:gv-density}),
+\[
+  f_{(\underline X_1,\underline X_2)}(\underline x_1,\underline x_2)=f_{(\underline Z,\underline X_2)}(\underline x_1-A\underline x_2,\,\underline x_2)=f_{\underline Z}(\underline x_1-A\underline x_2)\,f_{\underline X_2}(\underline x_2).
+\]
+Since $f_{\underline X_2}(\underline x_2)>0$ for every $\underline x_2$,
+\[
+  f_{\underline X_1\mid\underline X_2=\underline x_2}(\underline x_1)=\frac{f_{(\underline X_1,\underline X_2)}(\underline x_1,\underline x_2)}{f_{\underline X_2}(\underline x_2)}=f_{\underline Z}(\underline x_1-A\underline x_2),
+\]
+which is the density of $\underline Z+A\underline x_2$, that is, of $\mathcal N_{N_1}(\underline m_1,\Sigma_1)$ (\cref{cor:rv-linear}
+for a translation).
+\end{proof}
+
+For $N_1=N_2=1$, $\underline X_1=X$ and $\underline X_2=Y$, the first bullet is \cref{thm:gc-bivariate}:
+$C_{12}C_{22}^{-1}=c_{XY}/\sigma_Y^2=a$ and $\Sigma_1=\sigma_X^2-c_{XY}^2/\sigma_Y^2$. As there,
+$\mathbb E[\underline X_1\mid\underline X_2]=\underline m_1(\underline X_2)$, componentwise, is an affine function
+of $\underline X_2$, and the conditional covariance matrix $\Sigma_1$ does not depend on the value of
+$\underline X_2$.\footnote{Added to the handwritten notes. Indeed
+$\underline X_1-\underline m_1(\underline X_2)=\underline Z-\mathbb E[\underline Z]$ is independent of
+$\underline X_2$ and has mean $\underline 0$, so each of its components has conditional expectation $0$
+given $\underline X_2$ (\cref{rem:cp-independence}), while $\underline m_1(\underline X_2)$ is
+$\sigma(\underline X_2)$-measurable.}
+
+\begin{remark}[computational]\label{rem:gc-code-blocks}
+\emergencystretch=3em
+The block formulas are implemented, for any choice of the conditioning components and for one or
+many values $\underline x_2$ at once, by the function \texttt{conditional\_law} of the module
+\coderef{code/src/probnotes/gaussian_conditioning.py}; the functions \texttt{regression\_matrix} and
+\texttt{schur\_complement} return $C_{12}C_{22}^{-1}$ and $\Sigma_1$. The decomposition $\underline X_1=\underline Z+A\underline X_2$ says that a Gaussian vector \emph{is} a linear regression
+model: a least-squares regression of $\underline X_1$ on $\underline X_2$ over simulated draws (\texttt{regression\_fit})
+estimates $A$, $\underline\mu_1-A\underline\mu_2$ and $\Sigma_1$, much more efficiently than averaging over a slab
+(\exref{ex:gc-regression}).
+\end{remark}
+
+\section{Worked exercises}\label{sec:gc-worked}
+
+The notes end the topic with four exercises, whose statements are typed.
+
+\begin{example}[Worked exercise: correlations in a Gaussian pair]\label{exa:gc-correlations}
+Let
+\[
+  \begin{pmatrix}X\\Y\end{pmatrix}\sim\mathcal N_2\left(\begin{pmatrix}0\\0\end{pmatrix},
+  \begin{pmatrix}1&1\\1&4\end{pmatrix}\right),
+\]
+and let $Z=Y-\alpha X$, with $\alpha\in\mathbb R$.
+\begin{enumerate}[label=\alph*)]
+  \item Compute $\mathbb P(Z<1)$ for $\alpha=1$.
+  \item Determine $\alpha$ so that $Z$ is independent of $X$.
+  \item Compute the linear correlation coefficient of $X$ and $Y$.
+  \item Compute the linear correlation coefficient of $X^2$ and $Y^2$.
+\end{enumerate}
+
+\emph{Solution.} a) We have
+\[
+  \begin{pmatrix}Z\\X\end{pmatrix}=\begin{pmatrix}Y-\alpha X\\X\end{pmatrix}
+  =\begin{pmatrix}-\alpha&1\\1&0\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix},
+\]
+so $(Z,X)\sim\mathcal N_2(m,\Sigma)$ for some $m$ and $\Sigma$ (\cref{thm:gv-affine}); hence $Z$ is a
+Gaussian random variable, $Z\sim\mathcal N(\mu_Z,\sigma_Z^2)$, with
+\[
+\begin{aligned}
+  \mu_Z&=\mathbb E[Z]=\mathbb E[Y-\alpha X]=\mathbb E[Y]-\alpha\,\mathbb E[X]=0,\\
+  \sigma_Z^2&=\operatorname{var}(Z)=\operatorname{var}(Y-\alpha X)
+  =\operatorname{var}(Y)+\alpha^2\operatorname{var}(X)-2\alpha\operatorname{cov}(X,Y)\\
+  &=4+\alpha^2-2\alpha=\alpha^2-2\alpha+4>0 .
+\end{aligned}
+\]
+If $\alpha=1$, then $Z\sim\mathcal N(0,3)$ and, with $N=Z/\sqrt3\sim\mathcal N(0,1)$
+(\cref{prop:tr-affine-gaussian}) and $\Phi$ the distribution function of
+$\mathcal N(0,1)$,\footnote{The handwritten notes round $\frac1{\sqrt3}=0.5774$ to $0.58$ and read
+$\Phi(0.58)=0.7190$ from the table of the standard normal distribution; to four decimals,
+$\Phi(\frac1{\sqrt3})=0.7181$. Corrected here.}
+\[
+  \mathbb P(Z<1)=\mathbb P\Big(N<\frac{1-0}{\sqrt3}\Big)=\Phi\Big(\frac1{\sqrt3}\Big)\approx0.7181 .
+\]
+
+b) By a), $(Z,X)$ is a Gaussian vector, so (\cref{thm:gv-independence})
+\[
+\begin{aligned}
+  Z\indep X&\iff\operatorname{cov}(Z,X)=0\iff0=\operatorname{cov}(Y-\alpha X,X)=\operatorname{cov}(Y,X)-\alpha\operatorname{var}(X)\\
+  &\iff\alpha=\frac{\operatorname{cov}(Y,X)}{\operatorname{var}(X)}=1 .
+\end{aligned}
+\]
+Hence $Y-X\indep X$. (This is the coefficient $a$ of \eqref{eq:gc-a}, with the roles of $X$ and $Y$
+exchanged; this comparison is added to the handwritten notes.)
+
+c) $\displaystyle\rho(X,Y)=\frac{\operatorname{cov}(X,Y)}{\sqrt{\operatorname{var}(X)\operatorname{var}(Y)}}
+=\frac1{\sqrt{1\cdot4}}=\frac12$.
+
+d) $\displaystyle\rho(X^2,Y^2)=\frac{\operatorname{cov}(X^2,Y^2)}{\sqrt{\operatorname{var}(X^2)\operatorname{var}(Y^2)}}$.
+Writing $Y=(Y-X)+X$ and using the bilinearity of the covariance,
+\[
+\begin{aligned}
+  \operatorname{cov}(X^2,Y^2)&=\operatorname{cov}\big(X^2,(Y-X+X)^2\big)
+  =\operatorname{cov}\big(X^2,(Y-X)^2+X^2+2X(Y-X)\big)\\
+  &=\underbrace{\operatorname{cov}\big(X^2,(Y-X)^2\big)}_{=\,0}+\operatorname{cov}(X^2,X^2)+2\operatorname{cov}\big(X^2,X(Y-X)\big)\\
+  &=\operatorname{var}(X^2)+2\Big(\mathbb E\big[X^3(Y-X)\big]-\mathbb E[X^2]\,\mathbb E\big[X(Y-X)\big]\Big)\\
+  &=\operatorname{var}(X^2)+2\Big(\mathbb E[X^3]\underbrace{\mathbb E[Y-X]}_{=\,0}-\mathbb E[X^2]\,\mathbb E[X]\underbrace{\mathbb E[Y-X]}_{=\,0}\Big)
+  =\operatorname{var}(X^2).
+\end{aligned}
+\]
+The first covariance vanishes because $X\indep Y-X$ by b), so $X^2\indep(Y-X)^2$
+(\cref{prop:rv-functions-independent}) and \cref{thm:pm-expectation-product} applies. In the last line
+we used $X\indep Y-X$ and $X^3\indep Y-X$, with \cref{thm:pm-expectation-product} again; all these
+variables have moments of every order. We can compute $\operatorname{var}(X^2)$ directly, or observe
+that
+\[
+  X\sim\mathcal N(0,1)\implies X^2\sim\chi^2(1)=\Gamma\big(\tfrac12,\tfrac12\big)
+  \implies
+  \begin{cases}
+    \mathbb E[X^2]=\frac{1/2}{1/2}=1,\\[0.5ex]
+    \operatorname{var}(X^2)=\frac{1/2}{1/4}=2
+  \end{cases}
+\]
+(\cref{exa:tr-chi-square-end}, \cref{prop:tr-gamma-moments}). Instead, $Y\sim\mathcal N(0,4)$, so
+$\frac Y2\sim\mathcal N(0,1)$ (\cref{prop:tr-affine-gaussian}) and
+\[
+  \frac{Y^2}4\sim\Gamma\big(\tfrac12,\tfrac12\big)\implies
+  \mathbb E\Big[\frac{Y^2}4\Big]=1\quad\text{and}\quad\operatorname{var}\Big(\frac{Y^2}4\Big)=2
+  \implies\mathbb E[Y^2]=4\quad\text{and}\quad\operatorname{var}(Y^2)=32 .
+\]
+Hence\footnote{Added to the handwritten notes: the result is $\frac14=\rho(X,Y)^2$. For every
+Gaussian pair with zero means, $\rho(X^2,Y^2)=\rho(X,Y)^2$ (\exref{ex:gc-squares}).}
+\[
+  \rho(X^2,Y^2)=\frac{\operatorname{cov}(X^2,Y^2)}{\sqrt{\operatorname{var}(X^2)\operatorname{var}(Y^2)}}
+  =\frac2{\sqrt{2\cdot32}}=\frac14 .
+\]
+\end{example}
+
+\begin{remark}[Scaling a Gamma law]\label{rem:gc-gamma-scaling}
+If $X\sim\Gamma(\alpha,\lambda)$ and $c>0$, then
+\[
+  cX\sim\Gamma\Big(\alpha,\frac\lambda c\Big).
+\]
+Indeed, by \cref{thm:tr-density} with $g(x)=cx$, for every $x\in\mathbb R$
+\[
+\begin{aligned}
+  f_{cX}(x)&=\frac1{|c|}\,f_X\Big(\frac xc\Big)
+  \overset{c>0}{=}\frac1c\cdot\frac{\lambda^\alpha}{\Gamma(\alpha)}\Big(\frac xc\Big)^{\alpha-1}e^{-\lambda\frac xc}\,\1_{(0,+\infty)}\Big(\frac xc\Big)\\
+  &=\frac{(\lambda/c)^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\frac\lambda cx}\,\1_{(0,+\infty)}(x),
+\end{aligned}
+\]
+the density of $\Gamma(\alpha,\frac\lambda c)$ (\cref{def:tr-gamma}). In our case,
+$Y\sim\mathcal N(0,4)$, so $\frac Y2\sim\mathcal N(0,1)$, hence
+$\frac{Y^2}4\sim\Gamma(\frac12,\frac12)$ and
+\[
+  Y^2=4\Big(\frac{Y^2}4\Big)\sim\Gamma\Big(\frac12,\frac18\Big),
+\]
+which gives again $\mathbb E[Y^2]=\frac{1/2}{1/8}=4$ and $\operatorname{var}(Y^2)=\frac{1/2}{1/64}=32$
+(\cref{prop:tr-gamma-moments}).\footnote{This last check is added to the handwritten notes.}
+\end{remark}
+
+\begin{example}[Worked exercise: two linear combinations]\label{exa:gc-two-combinations}
+Let
+\[
+  \begin{pmatrix}X\\Y\end{pmatrix}\sim\mathcal N_2\left(\mu,C\right),\qquad
+  \mu=\begin{pmatrix}0\\0\end{pmatrix},\quad C=\begin{pmatrix}1&2\\2&8\end{pmatrix},
+\]
+and let $W=X-3Y$ and $Z=Y-\alpha X$, with $\alpha\in\mathbb R$.
+\begin{enumerate}[label=\alph*)]
+  \item Compute the mean and the variance of $W$, and determine its density.
+  \item Determine the value of $\alpha$ for which $W$ and $Z$ are independent.
+  \item Determine the value of $\alpha$ for which $X$ and $Z$ are independent.
+  \item Determine the law of $Y$ conditioned on $(X=x)$, and deduce $\mathbb E[Y\mid X]$ and
+    $\operatorname{var}(Y\mid X)$.
+\end{enumerate}
+
+\emph{Solution.} a) The vector
+\[
+  \begin{pmatrix}W\\Z\end{pmatrix}=\underbrace{\begin{pmatrix}1&-3\\-\alpha&1\end{pmatrix}}_{A}\begin{pmatrix}X\\Y\end{pmatrix}
+\]
+is a Gaussian vector, $(W,Z)\sim\mathcal N_2(A\mu,ACA^T)$ (\cref{thm:gv-affine}), with $A\mu=0$ and
+\[
+\begin{aligned}
+  ACA^T&=\begin{pmatrix}1&-3\\-\alpha&1\end{pmatrix}\begin{pmatrix}1&2\\2&8\end{pmatrix}\begin{pmatrix}1&-\alpha\\-3&1\end{pmatrix}
+  =\begin{pmatrix}1&-3\\-\alpha&1\end{pmatrix}\begin{pmatrix}-5&2-\alpha\\-22&8-2\alpha\end{pmatrix}\\
+  &=\begin{pmatrix}61&(2-\alpha)-3(8-2\alpha)\\5\alpha-22&-\alpha(2-\alpha)+(8-2\alpha)\end{pmatrix}
+  =\begin{pmatrix}61&5\alpha-22\\5\alpha-22&\alpha^2-4\alpha+8\end{pmatrix}.
+\end{aligned}
+\]
+Hence $W\sim\mathcal N(0,61)$: $\mathbb E[W]=0$, $\operatorname{var}(W)=61$, and
+$f_W(w)=\frac1{\sqrt{122\pi}}\,e^{-w^2/122}$ for $w\in\mathbb R$.\footnote{The handwritten notes stop
+at $W\sim\mathcal N(0,61)$; the density is added here.}
+
+b) Since $(W,Z)$ is a Gaussian vector, $W\indep Z\iff\operatorname{cov}(W,Z)=0\iff5\alpha-22=0\iff\alpha=\frac{22}5$
+(\cref{thm:gv-independence}).
+
+c) Similarly,
+\[
+  \begin{pmatrix}X\\Z\end{pmatrix}=\begin{pmatrix}X\\Y-\alpha X\end{pmatrix}
+  =\underbrace{\begin{pmatrix}1&0\\-\alpha&1\end{pmatrix}}_{B}\begin{pmatrix}X\\Y\end{pmatrix}
+\]
+is a Gaussian vector, $(X,Z)\sim\mathcal N_2(B\mu,BCB^T)$. We could compute $BCB^T$ as before, or
+argue directly:
+\[
+\begin{aligned}
+  X\indep Z&\iff\operatorname{cov}(X,Z)=0\iff\operatorname{cov}(X,Y-\alpha X)=0\\
+  &\iff\operatorname{cov}(X,Y)-\alpha\operatorname{var}(X)=0\iff2-\alpha=0\iff\alpha=2 .
+\end{aligned}
+\]
+
+d) By \cref{thm:gc-bivariate}, with the roles of $X$ and $Y$ exchanged ($\sigma_X=1>0$ and
+$\det C=4\ne0$), $Y\mid X=x\sim\mathcal N(m,\sigma^2)$ with
+\[
+  m=\mu_Y-\frac{c_{XY}}{\sigma_X^2}\,(\mu_X-x)=0-\frac21\,(0-x)=2x,\qquad
+  \sigma^2=\sigma_Y^2-\frac{c_{XY}^2}{\sigma_X^2}=8-\frac41=4 .
+\]
+So
+\[
+  Y\mid X=x\ \sim\ \mathcal N(2x,4),\qquad\text{that is,}\qquad Y\mid X\ \sim\ \mathcal N(2X,4),
+\]
+and therefore
+\[
+  \mathbb E[Y\mid X]=2X,\qquad\operatorname{var}(Y\mid X)=4 .
+\]
+In agreement with c), $Y-2X$ is independent of $X$.\footnote{This last observation is added to the
+handwritten notes.}
+\end{example}
+
+\begin{example}[Worked exercise: conditional independence and the inverse covariance matrix]\label{prop:gc-precision}
+Let $\underline X\sim\mathcal N_N(\underline\mu,C)$ be non-degenerate, that is, with $C$ invertible. Fix $i,j\in\{1,\dots,N\}$,
+$i\ne j$, and consider the vector $(X_i,X_j)$ and the vector of the remaining components, denoted by
+$\underline X(-(i,j))$. Prove that $X_i$ and $X_j$ are conditionally independent given $\underline X(-(i,j))$
+(\cref{def:cp-conditional-independence}) if and only if $(C^{-1})_{ij}=0$.\footnote{For $N=2$ there
+are no remaining components, and the statement reads: $X_1\indep X_2$ if and only if
+$(C^{-1})_{12}=-c_{12}/\det C=0$, which is \cref{thm:gv-independence}. Below, $N\ge3$. Conditional
+independence given a random vector is defined as in \cref{def:cp-conditional-independence}, with
+$\sigma(\underline X(-(i,j)))$ as the conditioning $\sigma$-algebra.}
+
+\emph{Solution.} For simplicity we consider
+\[
+  \underline U=\begin{pmatrix}X_1\\X_2\end{pmatrix}\qquad\text{and}\qquad
+  \underline V=\begin{pmatrix}X_3\\\vdots\\X_N\end{pmatrix}=\underline X(-(1,2)),
+\]
+that is, $i=1$ and $j=2$.\footnote{Added to the handwritten notes: the general case reduces to this
+one. Let $P$ be the matrix of a permutation of the components that moves $X_i$ and $X_j$ to the
+first two places. Then $P\underline X\sim\mathcal N_N(P\underline\mu,PCP^T)$ (\cref{thm:gv-affine}), the conditioning
+vector is the same up to the order of its components (which does not change the $\sigma$-algebra it
+generates), and $(PCP^T)^{-1}=PC^{-1}P^T$, since $P^{-1}=P^T$; the $(1,2)$ entry of $PC^{-1}P^T$ is
+$(C^{-1})_{ij}$.} Write $\underline\mu=(\underline\mu_{(1)},\underline\mu_{(2)})$ with
+$\underline\mu_{(1)}=(\mu_1,\mu_2)^T$ and $\underline\mu_{(2)}=(\mu_3,\dots,\mu_N)^T$, and split $C=(c_{kl})_{k,l=1,\dots,N}$ into blocks:
+\[
+  C=\left(\begin{array}{cc|ccc}
+    c_{11}&c_{12}&c_{13}&\cdots&c_{1N}\\
+    c_{21}&c_{22}&c_{23}&\cdots&c_{2N}\\\hline
+    c_{31}&c_{32}&c_{33}&\cdots&c_{3N}\\
+    \vdots&\vdots&\vdots&&\vdots\\
+    c_{N1}&c_{N2}&c_{N3}&\cdots&c_{NN}
+  \end{array}\right)
+  =\begin{pmatrix}C_{11}&C_{12}\\C_{21}&C_{22}\end{pmatrix},
+\]
+that is,
+\[
+  C_{11}=\begin{pmatrix}c_{11}&c_{12}\\c_{21}&c_{22}\end{pmatrix},\qquad
+  C_{12}=\begin{pmatrix}c_{13}&\cdots&c_{1N}\\c_{23}&\cdots&c_{2N}\end{pmatrix}=C_{21}^T,\qquad
+  C_{22}=\begin{pmatrix}c_{33}&\cdots&c_{3N}\\\vdots&&\vdots\\c_{N3}&\cdots&c_{NN}\end{pmatrix}.
+\]
+Since $C$ is invertible and positive semi-definite (\cref{lem:gv-covariance-psd}), it is positive
+definite, and so is $C_{22}$ (for $\underline w\ne\underline 0$, $\underline w^TC_{22}\underline w=(\underline 0,\underline w)^TC(\underline 0,\underline w)>0$): $C_{22}$ is
+invertible.\footnote{This justification is added to the handwritten notes.} By \cref{thm:gc-block},
+the law of $\underline U$ conditioned on $(\underline V=\underline v)$ is
+\[
+  \mathcal N_2\big(\underline\mu_{(1)}-C_{12}C_{22}^{-1}(\underline\mu_{(2)}-\underline v),\ \Sigma\big),\qquad\Sigma=C_{11}-C_{12}C_{22}^{-1}C_{21}.
+\]
+One can prove (we do it below) that
+\begin{equation}\label{eq:gc-star}
+  \text{the block $11$ of $C^{-1}$ is }\big(C_{11}-C_{12}C_{22}^{-1}C_{21}\big)^{-1}=\Sigma^{-1}.\tag{$*$}
+\end{equation}
+Then
+\[
+  X_1\cindep{\underline V}X_2\iff\Sigma\text{ is diagonal},
+\]
+because $\Sigma$ is the $2\times2$ covariance matrix of the law of $(X_1,X_2)$ conditioned on
+$(\underline V=\underline v)$, which is Gaussian;\footnote{In more detail (added to the handwritten notes): by
+\cref{prop:cp-conditional-independence-densities} (stated there for a real $Y_3$; the statement and
+its proof are the same for a random vector), $X_1$ and $X_2$ are conditionally independent given
+$\underline V$ if and only if
+$f_{\underline U\mid\underline V=\underline v}(x_1,x_2)=f_{X_1\mid\underline V=\underline v}(x_1)\,f_{X_2\mid\underline V=\underline v}(x_2)$
+for a.e.\ $(x_1,x_2)$, for $\mathbb P_{\underline V}$-a.e.\ $\underline v$. Here
+$f_{\underline U\mid\underline V=\underline v}$ is the density of $\mathcal N_2(\underline m(\underline v),\Sigma)$,
+and integrating out $x_2$ shows that $f_{X_1\mid\underline V=\underline v}$ and
+$f_{X_2\mid\underline V=\underline v}$ are its marginal
+densities. A density of $\mathcal N_2(\underline m,\Sigma)$ is the product of its marginal densities if and only
+if a vector with this law has independent components (\cref{thm:pm-density-independence}), that is,
+if and only if $\Sigma$ is diagonal (\cref{thm:gv-independence}). Since $\Sigma$ does not depend on
+$\underline v$, the condition holds for every $\underline v$ or for none.} and
+\[
+\begin{aligned}
+  \Sigma\text{ diagonal}&\iff\Sigma^{-1}\text{ diagonal}\overset{(*)}{\iff}\text{the block $11$ of $C^{-1}$ is diagonal}\\
+  &\iff(C^{-1})_{12}=(C^{-1})_{21}=0,
+\end{aligned}
+\]
+which is what we wanted to prove. For the first equivalence: $\Sigma$ is invertible (it has the
+inverse given by $(*)$), and
+$\Sigma^{-1}=\frac1{\det\Sigma}\big(\begin{smallmatrix}\Sigma_{22}&-\Sigma_{12}\\-\Sigma_{12}&\Sigma_{11}\end{smallmatrix}\big)$,
+whose off-diagonal entry vanishes if and only if $\Sigma_{12}=0$.
+
+We now prove $(*)$. Write $C^{-1}$ in blocks of the same sizes:
+\[
+  C^{-1}=\begin{pmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{pmatrix}.
+\]
+We are interested in $A_{11}$. Since $CC^{-1}=I$,
+\[
+  \begin{pmatrix}C_{11}&C_{12}\\C_{21}&C_{22}\end{pmatrix}\begin{pmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{pmatrix}
+  =\begin{pmatrix}C_{11}A_{11}+C_{12}A_{21}&C_{11}A_{12}+C_{12}A_{22}\\C_{21}A_{11}+C_{22}A_{21}&C_{21}A_{12}+C_{22}A_{22}\end{pmatrix}
+  =\begin{pmatrix}I&0\\0&I\end{pmatrix},
+\]
+so it must be that
+\begin{align}
+  C_{11}A_{11}+C_{12}A_{21}&=I,\tag{1}\\
+  C_{21}A_{11}+C_{22}A_{21}&=0.\tag{2}
+\end{align}
+Since $C_{22}$ is invertible, (2) gives $A_{21}=-C_{22}^{-1}C_{21}A_{11}$, and substituting in (1),
+\[
+  C_{11}A_{11}-C_{12}C_{22}^{-1}C_{21}A_{11}=I,\qquad\text{that is,}\qquad
+  \big(C_{11}-C_{12}C_{22}^{-1}C_{21}\big)A_{11}=\Sigma A_{11}=I .
+\]
+Since $\Sigma$ and $A_{11}$ are square matrices, $\Sigma$ is invertible and
+\[
+  A_{11}=\big(C_{11}-C_{12}C_{22}^{-1}C_{21}\big)^{-1}=\Sigma^{-1},
+\]
+as claimed.\footnote{The handwritten notes solve (1) for $A_{21}$, writing
+$A_{21}=C_{12}^{-1}(I-C_{11}A_{11})$, substitute in (2), and invert $C_{12}$ and $A_{11}$ along the
+way. This needs $C_{12}$ to be invertible, while $C_{12}$ is a $2\times(N-2)$ matrix, square only for
+$N=4$ and not invertible in general. Corrected here: we solve (2), using the invertibility of
+$C_{22}$.}
+\end{example}
+
+The zeros of the inverse covariance matrix $C^{-1}$, also called the \emph{precision} or
+\emph{concentration} matrix, thus mark the pairs of components that are conditionally independent
+given all the others. They are usually drawn as a graph, with an edge between $i$ and $j$ when
+$(C^{-1})_{ij}\ne0$: the \emph{Gaussian graphical model} of $X$. A zero of $C^{-1}$ says nothing
+about the corresponding entry of $C$, as the next exercise shows.\footnote{This paragraph is added to
+the handwritten notes; see \citet[Chapter~5]{lauritzen-graphical}.}
+
+\begin{example}[Worked exercise: partial sums of Gaussian variables]\label{exa:gc-partial-sums}
+Let $X_1,X_2,X_3$ be independent random variables with standard Gaussian law, and let
+\[
+  Y_1=X_1,\qquad Y_2=Y_1+X_2,\qquad Y_3=Y_2+X_3 .
+\]
+\begin{enumerate}[label=\alph*)]
+  \item Determine the law of $(Y_1,Y_2)$ conditioned on $Y_3$.
+  \item Determine the law of $Y_1$ conditioned on $(Y_2,Y_3)$.
+\end{enumerate}
+
+\emph{Solution.} We have $\underline X=(X_1,X_2,X_3)^T\sim\mathcal N_3(\underline 0,I_3)$ (\cref{def:gv-standard}), and
+\[
+\begin{cases}
+  Y_1=X_1\\
+  Y_2=Y_1+X_2=X_1+X_2\\
+  Y_3=Y_2+X_3=X_1+X_2+X_3
+\end{cases}
+\implies
+\underline Y=\begin{pmatrix}Y_1\\Y_2\\Y_3\end{pmatrix}=\underbrace{\begin{pmatrix}1&0&0\\1&1&0\\1&1&1\end{pmatrix}}_{A}\begin{pmatrix}X_1\\X_2\\X_3\end{pmatrix},
+\]
+so $\underline Y\sim\mathcal N_3(A\underline\mu,AI_3A^T)$ (\cref{thm:gv-affine}), with $\underline m=A\underline\mu=\underline 0$ and
+\[
+  \Sigma=AI_3A^T=AA^T=\begin{pmatrix}1&0&0\\1&1&0\\1&1&1\end{pmatrix}\begin{pmatrix}1&1&1\\0&1&1\\0&0&1\end{pmatrix}
+  =\begin{pmatrix}1&1&1\\1&2&2\\1&2&3\end{pmatrix}.
+\]
+
+a) We divide into blocks, $(Y_1,Y_2)$ and $Y_3$:
+\[
+  \begin{pmatrix}Y_1\\Y_2\\\hline Y_3\end{pmatrix}\sim\mathcal N_3\left(\left(\begin{array}{c}0\\0\\\hline0\end{array}\right),
+  \left(\begin{array}{cc|c}1&1&1\\1&2&2\\\hline1&2&3\end{array}\right)\right),
+\]
+where
+\[
+  \underline m_1=\begin{pmatrix}0\\0\end{pmatrix},\quad \underline m_2=0,\quad\Sigma_{11}=\begin{pmatrix}1&1\\1&2\end{pmatrix},\quad
+  \Sigma_{12}=\begin{pmatrix}1\\2\end{pmatrix}=\Sigma_{21}^T,\quad\Sigma_{22}=3 .
+\]
+By \cref{thm:gc-block},
+\[
+  (Y_1,Y_2)\mid Y_3=y_3\ \sim\ \mathcal N_2\big(\underline m_1-\Sigma_{12}\Sigma_{22}^{-1}(\underline m_2-y_3),\ \Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\big),
+\]
+where
+\[
+\begin{aligned}
+  \Sigma_{12}\Sigma_{22}^{-1}&=\begin{pmatrix}1\\2\end{pmatrix}\cdot\frac13=\begin{pmatrix}1/3\\2/3\end{pmatrix},\\
+  \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}&=\begin{pmatrix}1/3\\2/3\end{pmatrix}\begin{pmatrix}1&2\end{pmatrix}
+  =\begin{pmatrix}1/3&2/3\\2/3&4/3\end{pmatrix},\\
+  \Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}&=\begin{pmatrix}1&1\\1&2\end{pmatrix}-\begin{pmatrix}1/3&2/3\\2/3&4/3\end{pmatrix}
+  =\begin{pmatrix}2/3&1/3\\1/3&2/3\end{pmatrix}.
+\end{aligned}
+\]
+Hence
+\[
+  (Y_1,Y_2)\mid Y_3=y_3\ \sim\ \mathcal N_2\left(\begin{pmatrix}y_3/3\\2y_3/3\end{pmatrix},\begin{pmatrix}2/3&1/3\\1/3&2/3\end{pmatrix}\right),
+\]
+that is,
+\[
+  (Y_1,Y_2)\mid Y_3\ \sim\ \mathcal N_2\left(\begin{pmatrix}Y_3/3\\2Y_3/3\end{pmatrix},\begin{pmatrix}2/3&1/3\\1/3&2/3\end{pmatrix}\right).
+\]
+
+b) We divide into blocks, $Y_1$ and $(Y_2,Y_3)$:
+\[
+  \begin{pmatrix}Y_1\\\hline Y_2\\Y_3\end{pmatrix}\sim\mathcal N_3\left(\left(\begin{array}{c}0\\\hline0\\0\end{array}\right),
+  \left(\begin{array}{c|cc}1&1&1\\\hline1&2&2\\1&2&3\end{array}\right)\right),
+\]
+where
+\[
+  \underline m_1=0,\quad \underline m_2=\begin{pmatrix}0\\0\end{pmatrix},\quad\Sigma_{11}=1,\quad
+  \Sigma_{12}=\begin{pmatrix}1&1\end{pmatrix}=\Sigma_{21}^T,\quad\Sigma_{22}=\begin{pmatrix}2&2\\2&3\end{pmatrix}.
+\]
+By \cref{thm:gc-block},
+\[
+  Y_1\mid(Y_2,Y_3)=(y_2,y_3)\ \sim\ \mathcal N_1\left(\underline m_1-\Sigma_{12}\Sigma_{22}^{-1}\left(\underline m_2-\begin{pmatrix}y_2\\y_3\end{pmatrix}\right),\
+  \Sigma_{11}-\Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}\right).
+\]
+In this case
+\[
+  \Sigma_{12}\Sigma_{22}^{-1}=\begin{pmatrix}1&1\end{pmatrix}\begin{pmatrix}2&2\\2&3\end{pmatrix}^{-1}
+  =\begin{pmatrix}1&1\end{pmatrix}\begin{pmatrix}3&-2\\-2&2\end{pmatrix}\cdot\frac12=\frac12\begin{pmatrix}1&0\end{pmatrix}
+  =\begin{pmatrix}\frac12&0\end{pmatrix},
+\]
+\[
+  \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}=\begin{pmatrix}\frac12&0\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix}=\frac12,
+\]
+and therefore
+\[
+  Y_1\mid(Y_2,Y_3)=(y_2,y_3)\ \sim\ \mathcal N\Big(\frac12y_2,\frac12\Big),\qquad\text{that is,}\qquad
+  Y_1\mid(Y_2,Y_3)\ \sim\ \mathcal N\Big(\frac12Y_2,\frac12\Big).
+\]
+\end{example}
+
+The answer to b) does not depend on $y_3$: once $Y_2$ is known, $Y_3=Y_2+X_3$ adds only the noise
+$X_3$, which is independent of $Y_1$. In the language of \cref{prop:gc-precision}, $Y_1$ and $Y_3$ are
+conditionally independent given $Y_2$, and indeed
+\[
+  \Sigma^{-1}=\begin{pmatrix}2&-1&0\\-1&2&-1\\0&-1&1\end{pmatrix}
+\]
+has $(\Sigma^{-1})_{13}=0$, although $\operatorname{cov}(Y_1,Y_3)=1\ne0$. The same holds for the partial
+sums of any number of independent $\mathcal N(0,1)$ variables, a discrete version of Brownian motion:
+the inverse covariance matrix is tridiagonal (\cref{fig:gc-precision},
+\exref{ex:gc-partial-sums-bridge}).\footnote{This paragraph and \cref{fig:gc-precision} are added to the
+handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch14-precision}
+  \caption{Partial sums $Y_k=X_1+\dots+X_k$ of independent $\mathcal N(0,1)$ variables. Left and centre:
+    for $N=6$, the covariance matrix $C=(\min(k,l))_{k,l}$ has no zero entry, while $C^{-1}$ is
+    tridiagonal: $Y_k$ and $Y_l$ are conditionally independent given the others when $|k-l|\ge2$.
+    Right: $10^6$ draws of $(Y_1,Y_2,Y_3)$ (seed $2026$); the pairs $(Y_1,Y_3)$ (grey, a sample of
+    $1500$) have correlation $\frac1{\sqrt3}\approx0.577$, while the $22057$ draws with $|Y_2-1|<0.05$
+    (blue, a sample of $1500$) have sample correlation $-0.003$.}
+  \label{fig:gc-precision}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:gc-code-precision}
+\emergencystretch=3em
+Given an invertible covariance matrix $C$, the function \texttt{precision\_matrix} computes $C^{-1}$,
+the function \texttt{pair\_conditional\_cov} computes the conditional covariance matrix $\Sigma$ of
+$(X_i,X_j)$ given the other components, and the function \texttt{partial\_correlations} computes the
+conditional correlations of all the pairs,
+\[
+  \frac{\Sigma_{12}}{\sqrt{\Sigma_{11}\Sigma_{22}}}=-\frac{(C^{-1})_{ij}}{\sqrt{(C^{-1})_{ii}(C^{-1})_{jj}}}
+  \qquad\text{(by $(*)$)}.
+\]
+The function \texttt{conditional\_independence\_graph} lists the edges of the Gaussian graphical
+model, and the functions \texttt{partial\_sums\_cov} and \texttt{partial\_sums\_precision} give the
+matrices of \cref{fig:gc-precision}. All of them are in the module
+\coderef{code/src/probnotes/gaussian_conditioning.py}. The tests check every number of the worked exercises,
+and \exref{ex:gc-graphical} recovers a graph from simulated data.
+\end{remark}
+
+\demo{14-gaussian-conditioning.ipynb}{the conditional law of partial sums given some of them (a
+discrete Brownian bridge), and a Gaussian graphical model read off from $C^{-1}$, estimated from
+simulated data.}
+
+\furtherreading
+\textcite{anderson-multivariate}, Section~2.5, derives the conditional laws of a multivariate Gaussian
+vector and the block formulas, with the multiple and partial correlation coefficients.
+\textcite{lauritzen-graphical}, Chapter~5, develops the Gaussian graphical models built on the zeros of
+the inverse covariance matrix. \textcite{ross-5}, Chapters~6 and~7, computes conditional laws and
+conditional expectations for the bivariate normal law, with many exercises.

@@ -1,5 +1,893 @@
-\begin{planned}
-  \item the multinomial law
-  \item the Gamma law and the Poisson process
-  \item transformations of a random variable
-\end{planned}
+% Chapter 8: Multinomial and Gamma laws; transformations of random variables.
+% Translation of Paola Siri's handwritten notes, PDF pages 107 (from "V.A. MULTINOMIALE") to 124:
+% the multinomial random variable and an urn exercise, the Gamma random variable (Euler's Gamma
+% function, moments, the Erlang law and the Poisson process), two worked exercises on joint laws
+% (typed statements, pp. 115-118), and transformations of a random variable (discrete and
+% absolutely continuous case, chi-square law, affine maps of a Gaussian).
+
+With the product measures of \cref{ch:07-product-measures} in hand, the notes turn to
+probability proper. This chapter introduces two families of laws that are used throughout the
+rest of the course: the multinomial law, the law of a random vector that counts the outcomes of
+repeated trials with more than two possible results, and the Gamma law, which contains the
+exponential law and describes the waiting times of a Poisson process. Two worked exercises then
+practise joint and marginal densities, independence and correlation. The last section answers a
+basic question: if $X$ is a random variable with a known law and $g$ is a function, what is the law
+of $Y=g(X)$? For discrete $X$ the answer is a sum; for absolutely continuous $X$ and a smooth $g$
+it is an explicit formula for the density of $Y$, which shows, for instance, that the square of a
+standard Gaussian variable has a Gamma law.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space and, as in
+\cref{ch:07-product-measures}, random vectors are underlined.
+
+\section{The multinomial random variable}\label{sec:tr-multinomial}
+
+The multinomial random variable is the vector version of the binomial random variable. Recall
+that $X\sim B(n,p)$ if $X$ is the number of successes in $n$ repeated and independent trials,
+each with two possible outcomes (\emph{success} and \emph{failure}) that occur with probabilities
+$p$ and $1-p$. Then $X(\Omega)=\{0,\dots,n\}$ and
+\[
+  f_X(k)=\mathbb P(X=k)=\binom nk\,p^k(1-p)^{n-k}\qquad\forall k\in X(\Omega):
+\]
+$\binom nk$ is the number of ways of placing $k$ successes among the $n$ trials, and each such
+arrangement has probability $p^k(1-p)^{n-k}$, since it consists of $k$ successes and $n-k$
+failures in independent trials.
+
+Suppose now that we perform $n$ repeated and independent trials whose possible outcomes are
+$N+1$, of types $1,\dots,N+1$, occurring with probabilities
+\[
+  p_1,\ \dots,\ p_N,\qquad p_{N+1}=1-\sum_{i=1}^Np_i ,
+\]
+where $p_i\ge0$ and $\sum_{i=1}^Np_i\le1$. Denote by $X_i$ the number of outcomes of type $i$
+($i=1,\dots,N+1$). Then $X_{N+1}=n-\sum_{i=1}^NX_i$, so the last count is determined by the
+others.
+
+\begin{definition}[Multinomial random variable]\label{def:tr-multinomial}
+The random vector $\underline X=(X_1,\dots,X_N)$ is called a \emph{multinomial random variable}
+with parameters $n,p_1,\dots,p_N$, and we write
+\[
+  \underline X\sim\mathrm{Multinomial}(n,p_1,\dots,p_N).
+\]
+\end{definition}
+
+Its set of values is
+$\underline X(\Omega)=\{(n_1,\dots,n_N)\in\{0,\dots,n\}^N:\ \sum_{i=1}^Nn_i\le n\}$, and for every
+$(n_1,\dots,n_N)\in\underline X(\Omega)$
+\begin{equation}\label{eq:tr-multinomial}
+\begin{aligned}
+  \mathbb P\big(\underline X=(n_1,\dots,n_N)\big)
+  &=\mathbb P(X_1=n_1,\dots,X_N=n_N)\\
+  &=\frac{n!}{n_1!\cdots n_N!\,\big(n-\sum_{i=1}^Nn_i\big)!}\;
+    p_1^{n_1}p_2^{n_2}\cdots p_N^{n_N}\Big(1-\sum_{i=1}^Np_i\Big)^{n-\sum_{i=1}^Nn_i}.
+\end{aligned}
+\end{equation}
+Here $p_1^{n_1}\cdots p_N^{n_N}(1-\sum_ip_i)^{n_{N+1}}$, with $n_{N+1}=n-\sum_{i=1}^Nn_i$ the
+number of outcomes of type $N+1$, is the probability of any one sequence of $n$ trials with $n_1$
+outcomes of type $1$, \dots, $n_N$ outcomes of type $N$ and $n_{N+1}$ outcomes of type $N+1$
+(by independence; we use the convention $0^0=1$). The factor in front, the
+\emph{multinomial coefficient}, is the number of such sequences, that is, the number of ways of
+obtaining $n_1$ outcomes of type $1$, \dots, $n_N$ outcomes of type $N$. Indeed, we choose the
+$n_1$ trials with an outcome of type $1$ among the $n$ available trials, then the $n_2$ trials
+with an outcome of type $2$ among the $n-n_1$ remaining ones, and so on; the trials left at the
+end have outcomes of type $N+1$, in one way:
+\[
+\begin{aligned}
+  &\binom n{n_1}\binom{n-n_1}{n_2}\binom{n-n_1-n_2}{n_3}\cdots\binom{n-\sum_{i=1}^{N-1}n_i}{n_N}\cdot1\\
+  &\qquad=\frac{n!}{n_1!\,(n-n_1)!}\cdot\frac{(n-n_1)!}{n_2!\,(n-n_1-n_2)!}\cdots
+    \frac{\big(n-\sum_{i=1}^{N-1}n_i\big)!}{n_N!\,\big(n-\sum_{i=1}^{N-1}n_i-n_N\big)!}\\
+  &\qquad=\frac{n!}{n_1!\,n_2!\cdots n_N!\,\big(n-\sum_{i=1}^Nn_i\big)!},
+\end{aligned}
+\]
+since the product telescopes. For $N=1$, \eqref{eq:tr-multinomial} is the binomial density:
+$\mathrm{Multinomial}(n,p)=B(n,p)$.
+
+\begin{remark}[The marginals are binomial]\label{rem:tr-multinomial-marginals}
+To compute the marginal densities (\cref{prop:pm-discrete-independence}) we sum the joint density
+over all the coordinates except the $i$-th:
+\[
+  \mathbb P(X_i=n_i)=f_{X_i}(n_i)=\sum_{n_j:\ j\ne i}f_{\underline X}(n_1,\dots,n_i,\dots,n_N)
+  =\frac{n!}{n_i!\,(n-n_i)!}\,p_i^{n_i}(1-p_i)^{n-n_i},
+\]
+where $n_i$ is fixed and we do not sum over it. Hence
+\[
+  X_i\sim B(n,p_i),\qquad i=1,\dots,N .
+\]
+The computation is not easy.\footnote{The handwritten notes give only the result; the computation
+is added here.} Write $n_{N+1}=n-\sum_{j=1}^Nn_j$ and fix $n_i$. In
+\eqref{eq:tr-multinomial} we can take out the factor $\frac{n!}{n_i!\,(n-n_i)!}p_i^{n_i}$, and what
+remains is
+\[
+  \sum\frac{(n-n_i)!}{\prod_{j\ne i}n_j!}\prod_{j\ne i}p_j^{n_j}=\Big(\sum_{j\ne i}p_j\Big)^{n-n_i}=(1-p_i)^{n-n_i},
+\]
+the sum and the products running over the $N$ indices $j\in\{1,\dots,N+1\}\setminus\{i\}$ and the sum over
+all $(n_j)_{j\ne i}\in\mathbb N^N$ with $\sum_{j\ne i}n_j=n-n_i$. The first equality is the
+\emph{multinomial theorem},
+$(a_1+\dots+a_k)^m=\sum_{m_1+\dots+m_k=m}\frac{m!}{m_1!\cdots m_k!}a_1^{m_1}\cdots a_k^{m_k}$, which
+is proved by expanding the product of the $m$ factors $(a_1+\dots+a_k)$ and counting, as above,
+the terms in which each $a_j$ is chosen $m_j$ times. The result is also clear intuitively: each
+trial gives an outcome of type $i$ with probability $p_i$, and of another type with probability
+$1-p_i$, independently of the other trials, so $X_i$ counts the successes in $n$ Bernoulli trials.
+\end{remark}
+
+\begin{example}[Worked exercise: an urn]\label{exa:tr-urn}
+An urn contains $100$ balls: $50$ black, $20$ red, $20$ white and $10$ green. We draw $10$ balls
+with replacement.
+\begin{enumerate}[label=\alph*)]
+  \item What is the probability of drawing $5$ black balls, $3$ red ones and $1$ white one?
+  \item What is the probability of drawing $5$ black balls and $3$ red ones?
+  \item What is the probability of drawing $5$ black balls?
+\end{enumerate}
+\emph{Solution.} a) Let $\underline X=(X_1,X_2,X_3)\sim\mathrm{Multinomial}(n,p_1,p_2,p_3)$, where
+$X_1$, $X_2$, $X_3$ are the numbers of black, red and white balls drawn (and
+$X_4=n-(X_1+X_2+X_3)$ is the number of green balls drawn). Here $n=10$ and
+\[
+  p_1=\tfrac{50}{100}=0.5,\quad p_2=\tfrac{20}{100}=0.2,\quad p_3=\tfrac{20}{100}=0.2,\quad
+  \big(p_4=1-(p_1+p_2+p_3)=1-0.9=0.1\big).
+\]
+By \eqref{eq:tr-multinomial}, where $1!$ in the denominator accounts for the green ball,
+\[
+  \mathbb P\big(\underline X=(5,3,1)\big)=\frac{10!}{5!\,3!\,1!\,1!}\,(0.5)^5(0.2)^3(0.2)^1(0.1)^1
+  =5040\cdot0.03125\cdot0.008\cdot0.2\cdot0.1=0.0252 .
+\]
+b) The event is the disjoint union of $\{\underline X=(5,3,k)\}$, $k=0,1,2$, so the probability is
+\[
+  \mathbb P\big(\underline X=(5,3,0)\big)+\mathbb P\big(\underline X=(5,3,1)\big)+\mathbb P\big(\underline X=(5,3,2)\big)=\dots
+\]
+a computation left to the reader (\exref{ex:tr-multinomial}). \emph{Alternatively}, we consider
+another multinomial random variable, obtained by merging white and green balls into a single
+type: $\underline X'=(X_1,X_2)\sim\mathrm{Multinomial}(10,p_1,p_2)$, with $X_3'=X_3+X_4$ and
+$p_3'=1-(p_1+p_2)=p_3+p_4=0.3=\frac{30}{100}$. Then, with $2!$ for the white and green balls,
+\[
+  \mathbb P\big(\underline X'=(5,3)\big)=\frac{10!}{5!\,3!\,2!}\,(0.5)^5(0.2)^3(0.3)^2
+  =2520\cdot0.03125\cdot0.008\cdot0.09=0.0567 .
+\]
+c) We consider the marginal $X_1\sim B(10,0.5)$ (\cref{rem:tr-multinomial-marginals}); with $5!$
+for the balls that are not black,
+\[
+  \mathbb P(X_1=5)=\frac{10!}{5!\,5!}\,(0.5)^5(0.5)^5=\frac{252}{1024}\approx0.2461 .
+\]
+\end{example}
+
+\begin{remark}[computational]\label{rem:tr-multinomial-code}
+\texttt{multinomial\_pmf} in \coderef{code/src/probnotes/transforms.py} evaluates
+\eqref{eq:tr-multinomial} on whole arrays of points, \texttt{multinomial\_coefficient} computes
+the multinomial coefficient exactly as the product of binomial coefficients above, and
+\texttt{multinomial\_marginal} performs the sum of \cref{rem:tr-multinomial-marginals} by brute
+force; the tests check the three numbers of \cref{exa:tr-urn}, both ways of computing b), and the
+binomial marginals. \texttt{sample\_multinomial} draws the urn experiment many times
+(\exref{ex:tr-multinomial}).
+\end{remark}
+
+\demo{08-transformations.ipynb}{the joint density of the numbers of black and red balls, with
+sliders for $n$ and the composition of the urn, against the frequencies of simulated draws.}
+
+\section{The Gamma random variable}\label{sec:tr-gamma}
+
+\begin{definition}[Gamma law]\label{def:tr-gamma}
+A \emph{Gamma random variable} with parameters $\alpha>0$ and $\lambda>0$ is an absolutely
+continuous random variable (\cref{def:ld-ac-rv}) with density
+\[
+  f_X(x)=c\,x^{\alpha-1}e^{-\lambda x}\,\1_{(0,+\infty)}(x),
+\]
+where $c$ is the constant that makes $\int_{\mathbb R}f_X\,\dd m=1$. We write $X\sim\Gamma(\alpha,\lambda)$.
+\end{definition}
+
+Let us find $c$. Since $f_X\ge0$, we need $c\ge0$, and, with the substitution $y=\lambda x$,
+\[
+\begin{aligned}
+  1&=\int_{-\infty}^{+\infty}f_X(x)\,\dd x=\int_0^{+\infty}c\,x^{\alpha-1}e^{-\lambda x}\,\dd x
+  =\int_0^{+\infty}c\Big(\frac y\lambda\Big)^{\alpha-1}e^{-y}\,\frac{\dd y}\lambda\\
+  &=\frac c{\lambda^\alpha}\int_0^{+\infty}y^{\alpha-1}e^{-y}\,\dd y=\frac{c\,\Gamma(\alpha)}{\lambda^\alpha},
+\end{aligned}
+\]
+so that
+\[
+  c=\frac{\lambda^\alpha}{\Gamma(\alpha)},\qquad\text{that is,}\qquad
+  f_X(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\lambda x}\,\1_{(0,+\infty)}(x),
+\]
+where $\Gamma$ is the following function.
+
+\begin{definition}[Euler's Gamma function]\label{def:tr-gamma-function}
+The function $\Gamma:(0,+\infty)\to(0,+\infty)$,
+\[
+  \Gamma(\alpha)=\int_0^{+\infty}y^{\alpha-1}e^{-y}\,\dd y ,
+\]
+is called \emph{Euler's Gamma function}.
+\end{definition}
+
+($\Gamma(\alpha)$ is finite: $y^{\alpha-1}e^{-y}\le y^{\alpha-1}$ is integrable on $(0,1]$ because
+$\alpha>0$, and $y^{\alpha-1}e^{-y}\le C_\alpha e^{-y/2}$ on $[1,+\infty)$ for a constant
+$C_\alpha$. It is positive because the integrand is positive.)\footnote{Added to the
+handwritten notes.}
+
+\begin{proposition}[Properties of the Gamma function]\label{prop:tr-gamma-function}
+\begin{enumerate}[label=\arabic*)]
+  \item $\Gamma(1)=1$;
+  \item $\Gamma(\alpha+1)=\alpha\,\Gamma(\alpha)$ for every $\alpha>0$;
+  \item $\Gamma(n)=(n-1)!$ for every $n\in\mathbb N^*$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+1) $\Gamma(1)=\int_0^{+\infty}y^0e^{-y}\,\dd y=\int_0^{+\infty}e^{-y}\,\dd y=1$, since $e^{-y}$ is
+the density of $\mathrm{Exp}(1)$ on $(0,+\infty)$.
+
+2) Integrating by parts,
+\[
+\begin{aligned}
+  \Gamma(\alpha+1)&=\int_0^{+\infty}y^\alpha e^{-y}\,\dd y
+  =\Big[y^\alpha\big(-e^{-y}\big)\Big]_0^{+\infty}+\int_0^{+\infty}\alpha\,y^{\alpha-1}e^{-y}\,\dd y\\
+  &=\alpha\int_0^{+\infty}y^{\alpha-1}e^{-y}\,\dd y=\alpha\,\Gamma(\alpha),
+\end{aligned}
+\]
+because the bracket vanishes at both ends ($\alpha>0$).
+
+3) By 2), applied $n-1$ times, and 1),
+\[
+  \Gamma(n)=(n-1)\Gamma(n-1)=(n-1)(n-2)\Gamma(n-2)=\dots=(n-1)\cdots1\cdot\Gamma(1)=(n-1)! .\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Special cases; the parameters]\label{rem:tr-gamma-special}
+Some special cases, and the names of the parameters:
+\begin{itemize}
+  \item $\Gamma(1,\lambda)=\mathrm{Exp}(\lambda)$, the \emph{exponential} law, with density
+    $\lambda e^{-\lambda x}\1_{(0,+\infty)}(x)$.
+  \item $\Gamma(n,\lambda)$, $n\in\mathbb N^*$, is called the \emph{Erlang} law.
+  \item $\alpha$ is called the \emph{shape parameter} and $\lambda$ the \emph{rate
+    parameter}.\footnote{The handwritten notes call $\lambda$ the ``parametro di scala'' (scale
+    parameter). It is a rate, the inverse of a scale: if $Z\sim\Gamma(\alpha,1)$, then
+    $Z/\lambda\sim\Gamma(\alpha,\lambda)$, so $\frac1\lambda$ is the scale parameter, and the mean
+    is $\frac\alpha\lambda$ (\cref{prop:tr-gamma-moments}, \exref{ex:tr-gamma-scale}); corrected
+    here. Software often uses the scale: \texttt{scipy.stats.gamma(a, scale=1/lam)}.}
+\end{itemize}
+The shape of the density near $0$ depends on $\alpha$ (\cref{fig:tr-gamma}, left, as in the
+picture of the notes). For $0<\alpha<1$, $f_X(x)\to+\infty$ as $x\to0^+$; for $\alpha=1$ the
+density starts at $f_X(0^+)=\lambda$; for $1<\alpha\le2$ it leaves $0$ with a cusp, and for
+$\alpha>2$ it leaves $0$ smoothly.\footnote{More precisely: for $1<\alpha<2$ the graph has a
+vertical tangent from the right at $0$ (the notes' ``cuspide''), since $f_X'(x)\to+\infty$ as
+$x\to0^+$; for $\alpha=2$ the right derivative at $0$ is $f_X'(0^+)=\lambda^2>0$, so the graph has
+a corner, not a vertical tangent; for $\alpha>2$, $f_X'(0^+)=0$ and $f_X$ is $C^1$ on $\mathbb R$.
+The handwritten notes group $\alpha=2$ with $1<\alpha<2$; corrected here.} For $\alpha>1$ the
+density has its maximum at $\frac{\alpha-1}\lambda$.\footnote{Added to the handwritten notes; see
+\exref{ex:tr-gamma-scale}.}
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch08-gamma}
+  \caption{Left: the densities of $\Gamma(\alpha,1)$ for $\alpha=\frac12$ (unbounded at $0$),
+    $\alpha=1$ (the exponential law, starting at $\lambda=1$), $\alpha=\frac32$ (a vertical tangent at $0$) and
+    $\alpha=3$ (smooth at $0$). Right: their hazard rates $f_X(x)/\mathbb P(X>x)$, decreasing for
+    $\alpha<1$, constant for $\alpha=1$ and increasing for $\alpha>1$, all with limit $\lambda=1$
+    (\cref{rem:tr-ageing}, \exref{ex:tr-ageing}).}
+  \label{fig:tr-gamma}
+\end{figure}
+
+\begin{proposition}[Mean and variance]\label{prop:tr-gamma-moments}
+If $X\sim\Gamma(\alpha,\lambda)$, then
+\[
+  \mathbb E[X]=\frac\alpha\lambda,\qquad \mathbb E[X^2]=\frac{(\alpha+1)\alpha}{\lambda^2},\qquad
+  \operatorname{var}(X)=\frac\alpha{\lambda^2}.
+\]
+\end{proposition}
+
+\begin{proof}
+By \eqref{eq:ld-ac-expectation}, and recognising in the integrand the density of
+$\Gamma(\alpha+1,\lambda)$, whose integral is $1$,
+\[
+\begin{aligned}
+  \mathbb E[X]&=\int_{-\infty}^{+\infty}x\,f_X(x)\,\dd x=\int_0^{+\infty}x\,\frac{\lambda^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\lambda x}\,\dd x\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)}\,\frac{\Gamma(\alpha+1)}{\lambda^{\alpha+1}}
+   \underbrace{\int_0^{+\infty}\frac{\lambda^{\alpha+1}}{\Gamma(\alpha+1)}\,x^{\alpha}e^{-\lambda x}\,\dd x}_{=\,1}\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)}\cdot\frac{\Gamma(\alpha+1)}{\lambda^{\alpha+1}}
+   =\frac{\alpha\,\Gamma(\alpha)}{\Gamma(\alpha)\,\lambda}=\frac\alpha\lambda ,
+\end{aligned}
+\]
+by \cref{prop:tr-gamma-function}. In the same way, with the density of $\Gamma(\alpha+2,\lambda)$,
+\[
+\begin{aligned}
+  \mathbb E[X^2]&=\int_{-\infty}^{+\infty}x^2f_X(x)\,\dd x=\int_0^{+\infty}x^2\,\frac{\lambda^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\lambda x}\,\dd x\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)}\,\frac{\Gamma(\alpha+2)}{\lambda^{\alpha+2}}
+   \underbrace{\int_0^{+\infty}\frac{\lambda^{\alpha+2}}{\Gamma(\alpha+2)}\,x^{\alpha+1}e^{-\lambda x}\,\dd x}_{=\,1}\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)}\cdot\frac{\Gamma(\alpha+2)}{\lambda^{\alpha+2}}
+   =\frac{(\alpha+1)\alpha\,\Gamma(\alpha)}{\Gamma(\alpha)\,\lambda^2}=\frac{(\alpha+1)\alpha}{\lambda^2}.
+\end{aligned}
+\]
+Hence $X\in L^2$ and
+\[
+  \operatorname{var}(X)=\mathbb E[X^2]-\mathbb E[X]^2=\frac{(\alpha+1)\alpha}{\lambda^2}-\Big(\frac\alpha\lambda\Big)^2
+  =\frac{\alpha^2+\alpha-\alpha^2}{\lambda^2}=\frac\alpha{\lambda^2}.\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Ageing]\label{rem:tr-ageing}
+Think of $X\sim\Gamma(\alpha,\lambda)$ as the lifetime of a component. For all $s,t>0$:
+\[
+\begin{array}{lll}
+  \alpha=1: & \mathbb P(X>s+t\mid X>s)=\mathbb P(X>t) & \text{no wear (the exponential law)};\\[2pt]
+  \alpha>1: & \mathbb P(X>s+t\mid X>s)<\mathbb P(X>t) & \text{wear};\\[2pt]
+  \alpha<1: & \mathbb P(X>s+t\mid X>s)>\mathbb P(X>t) & \text{rejuvenation}.
+\end{array}
+\]
+For $\alpha=1$ this is the lack of memory of the exponential law:
+$\mathbb P(X>s+t\mid X>s)=e^{-\lambda(s+t)}/e^{-\lambda s}=e^{-\lambda t}$. The notes state the
+other two cases without proof. They follow from the monotonicity of the \emph{hazard rate}
+$f_X(x)/\mathbb P(X>x)$ (\cref{fig:tr-gamma}, right), which is proved in \exref{ex:tr-ageing};
+hazard rates are discussed in \citet[Chapter~5]{ross-5}.
+\end{remark}
+
+We now compute the distribution function of an Erlang random variable ($\alpha=n\in\mathbb N^*$).
+
+\begin{proposition}[The Erlang distribution function]\label{prop:tr-erlang}
+Let $T_n\sim\Gamma(n,\lambda)$, $n\in\mathbb N^*$. Then, for every $t>0$,
+\[
+  F_n(t)=\mathbb P(T_n\le t)=1-\sum_{k=0}^{n-1}\frac{(\lambda t)^k}{k!}\,e^{-\lambda t}
+  =1-\sum_{k=0}^{n-1}\mathbb P(N_t=k)=1-\mathbb P(N_t\le n-1)=\mathbb P(N_t\ge n),
+\]
+where $N_t\sim\mathcal P(\lambda t)$ is a Poisson random variable with parameter $\lambda t$.
+Equivalently, the \emph{survival function} of $T_n$ is
+\[
+  \overline F_n(t)=S_n(t)=\mathbb P(T_n>t)=\mathbb P(N_t<n).
+\]
+(For $t\le0$, $F_n(t)=0$.)
+\end{proposition}
+
+\begin{proof}
+Since $\Gamma(n)=(n-1)!$ (\cref{prop:tr-gamma-function}), for $n\ge2$ an integration by parts
+gives
+\[
+\begin{aligned}
+  F_n(t)&=\int_0^t\frac{\lambda^n}{(n-1)!}\,x^{n-1}e^{-\lambda x}\,\dd x\\
+  &=\Big[\frac{\lambda^n}{(n-1)!}\,x^{n-1}\Big(-\frac1\lambda e^{-\lambda x}\Big)\Big]_0^t
+   +\int_0^t\frac{\lambda^n}{(n-1)!}\cdot\frac1\lambda\,e^{-\lambda x}(n-1)x^{n-2}\,\dd x\\
+  &=-\frac{\lambda^{n-1}}{(n-1)!}\,t^{n-1}e^{-\lambda t}
+   +\int_0^t\frac{\lambda^{n-1}}{(n-2)!}\,x^{n-2}e^{-\lambda x}\,\dd x
+  =-\frac{(\lambda t)^{n-1}}{(n-1)!}\,e^{-\lambda t}+F_{n-1}(t),
+\end{aligned}
+\]
+since the last integrand is the density of $\Gamma(n-1,\lambda)$. Iterating the integration by
+parts,
+\[
+\begin{aligned}
+  F_n(t)&=-\frac{\lambda^{n-1}}{(n-1)!}\,t^{n-1}e^{-\lambda t}-\frac{\lambda^{n-2}}{(n-2)!}\,t^{n-2}e^{-\lambda t}
+   -\dots-\frac{\lambda}{1!}\,t^1e^{-\lambda t}+\int_0^t\frac{\lambda}{0!}\,x^0e^{-\lambda x}\,\dd x\\
+  &=-\sum_{k=1}^{n-1}\frac{(\lambda t)^k}{k!}\,e^{-\lambda t}+\big(1-e^{-\lambda t}\big)
+   =1-\sum_{k=0}^{n-1}\frac{(\lambda t)^k}{k!}\,e^{-\lambda t},
+\end{aligned}
+\]
+where $\int_0^t\lambda e^{-\lambda x}\,\dd x=1-e^{-\lambda t}$ is the distribution function of
+$\Gamma(1,\lambda)=\mathrm{Exp}(\lambda)$, which also gives the case $n=1$. The other equalities
+hold because $\mathbb P(N_t=k)=\frac{(\lambda t)^k}{k!}e^{-\lambda t}$ for $N_t\sim\mathcal P(\lambda t)$.
+\end{proof}
+
+For $n=1$: if $T_1\sim\mathrm{Exp}(\lambda)$, then $\overline F_1(t)=\mathbb P(T_1>t)=\mathbb P(N_t<1)=\mathbb P(N_t=0)$.
+
+\begin{remark}[The Poisson process]\label{rem:tr-poisson-process}
+The identity $\mathbb P(T_n\le t)=\mathbb P(N_t\ge n)$ has the following meaning
+(\cref{fig:tr-poisson}, left). Events (arrivals of customers, calls, decays) occur at random
+times on $[0,+\infty)$; $T_n$ is the instant at which the $n$-th event occurs, and
+\[
+  U_1=T_1,\quad U_2=T_2-T_1,\quad U_3=T_3-T_2,\quad\dots
+\]
+are the inter-arrival times between an event and the next, assumed i.i.d.\ with law
+$\mathrm{Exp}(\lambda)$. Then $\lambda$ is the mean number of events in $[0,1]$, and $N_1\sim\mathcal P(\lambda)$
+is the number of events in $[0,1]$; $\lambda t$ is the mean number of events in $[0,t]$, and
+$N_t\sim\mathcal P(\lambda t)$ is the number of events in $[0,t]$. The $n$-th event occurs by time
+$t$ if and only if at least $n$ events occur in $[0,t]$: $\{T_n\le t\}=\{N_t\ge n\}$. The family
+of random variables $(N_t)_{t\ge0}$ is called the \emph{Poisson process}; it is an example of a
+\emph{stochastic process}.\footnote{Added to the handwritten notes. The notes present this picture
+informally. It can be made precise as follows: let $U_1,U_2,\dots$ be i.i.d.\ $\mathrm{Exp}(\lambda)$,
+$T_n=U_1+\dots+U_n$ and $N_t=\#\{n\ge1:T_n\le t\}$. Then $\{N_t\ge n\}=\{T_n\le t\}$, because
+$T_1<T_2<\cdots$ a.s., and $T_n\sim\Gamma(n,\lambda)$ (the sum of independent Gamma variables with the same
+$\lambda$, \cref{prop:rv-notable-sums}); so \cref{prop:tr-erlang} gives $\mathbb P(N_t\ge n)=\mathbb
+P(N_t'\ge n)$ for every $n$, with $N_t'\sim\mathcal P(\lambda t)$, that is, $N_t\sim\mathcal
+P(\lambda t)$ (\exref{ex:tr-poisson-process}). This identifies only the law of each $N_t$. That
+the process has \emph{independent increments}, that is, for $0\le t_1<\dots<t_k$ the increments
+$N_{t_1},N_{t_2}-N_{t_1},\dots,N_{t_k}-N_{t_{k-1}}$ are independent with laws
+$\mathcal P(\lambda t_1),\mathcal P(\lambda(t_2-t_1)),\dots$, is proved in
+\citet[Section~23]{billingsley}; see also \citet[Section~3.7]{durrett}.}
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch08-poisson}
+  \caption{Left: one path of a Poisson process with rate $\lambda=2$ on $[0,5]$; $N_t$ jumps by
+    $1$ at each arrival time $T_k$, and $T_3\le t$ exactly when $N_t\ge3$. Right: the third
+    arrival time of $10^5$ simulated paths, $T_3=U_1+U_2+U_3$ with $U_i$ i.i.d.\ $\mathrm{Exp}(2)$,
+    against the Erlang density of $\Gamma(3,2)$.}
+  \label{fig:tr-poisson}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:tr-gamma-code}
+\coderef{code/src/probnotes/transforms.py} has the density, the distribution function and the
+moments of $\Gamma(\alpha,\lambda)$ (\texttt{gamma\_pdf}, \texttt{gamma\_cdf}, \texttt{gamma\_moments}),
+with $\lambda$ a rate, and the hazard rate and conditional survival function of
+\cref{rem:tr-ageing}. \texttt{erlang\_cdf} is the finite sum of \cref{prop:tr-erlang}; the tests
+check it against the incomplete Gamma function and against the recursion
+$F_n=F_{n-1}-\frac{(\lambda t)^{n-1}}{(n-1)!}e^{-\lambda t}$ of the proof.
+\texttt{poisson\_arrivals} simulates $T_n$ as cumulative sums of exponential inter-arrival times
+and \texttt{poisson\_counts} the counts $N_t$; \exref{ex:tr-poisson-process} checks by simulation
+that $T_n$ is Erlang and $N_t$ Poisson.
+\end{remark}
+
+\demo{08-transformations.ipynb}{the Gamma density and hazard rate with sliders for $\alpha$ and
+$\lambda$; paths of a Poisson process and the laws of $T_n$ and $N_t$.}
+
+\section{Two worked exercises on joint laws}\label{sec:tr-exercises}
+
+The notes continue with two typed exercise statements and their handwritten
+solutions.\footnote{The handwritten notes give these two exercises without a heading; the title of
+this section is added here.}
+
+\begin{example}[Worked exercise: a joint discrete density on $\mathbb N^2$]\label{exa:tr-poisson-joint}
+Let $X$ and $Y$ be discrete random variables with values in $\mathbb N$ and joint density
+\[
+  f_{(X,Y)}(n,m)=p_{X,Y}(n,m)=c\,\frac{\nu^n\mu^m}{n!\,m!}\,\alpha^{nm},\qquad n,m\in\mathbb N,
+\]
+where $\nu,\mu>0$, $0<\alpha\le1$, and $c$ is the normalisation constant.
+\begin{enumerate}[label=\alph*)]
+  \item Compute the marginal densities of $X$ and $Y$.
+  \item Compute the conditional probabilities $\mathbb P(X=n\mid Y=m)$.
+  \item Prove that if $\alpha=1$, the random variables $X$ and $Y$ are independent.
+\end{enumerate}
+\emph{Solution.} a) By \cref{prop:pm-discrete-independence}, for every $n\in\mathbb N$,
+\[
+\begin{aligned}
+  f_X(n)&=\mathbb P_X(\{n\})=\mathbb P(X=n)=\sum_{m=0}^{\infty}f_{(X,Y)}(n,m)
+  =\sum_{m=0}^{\infty}c\,\frac{\nu^n\mu^m}{n!\,m!}\,\alpha^{nm}
+  =c\,\frac{\nu^n}{n!}\sum_{m=0}^{\infty}\frac{(\mu\alpha^n)^m}{m!}\\
+  &=c\,\frac{\nu^n}{n!}\,e^{\mu\alpha^n}\qquad\forall n\in\mathbb N .
+\end{aligned}
+\]
+Analogously, $f_Y(m)=c\,\frac{\mu^m}{m!}\,e^{\nu\alpha^m}$ for every $m\in\mathbb N$.\footnote{Added
+to the handwritten notes: the constant exists. Summing $f_X$ over $n$, the condition on $c$ is
+$c^{-1}=\sum_{n\ge0}\frac{\nu^n}{n!}e^{\mu\alpha^n}$, a series with positive terms bounded by
+$\frac{\nu^n}{n!}e^\mu$ (because $\alpha^n\le1$), hence convergent, with sum between $e^\nu$ and
+$e^{\nu+\mu}$.}
+
+b) Let $n,m\in\mathbb N$. Since $f_Y(m)>0$,
+\[
+\begin{aligned}
+  \mathbb P(X=n\mid Y=m)&=\frac{\mathbb P(X=n,\,Y=m)}{\mathbb P(Y=m)}=\frac{f_{(X,Y)}(n,m)}{f_Y(m)}
+  =\frac{c\,\frac{\nu^n\mu^m}{n!\,m!}\,\alpha^{nm}}{c\,\frac{\mu^m}{m!}\,e^{\nu\alpha^m}}\\
+  &=\frac{\nu^n}{n!}\,\alpha^{nm}e^{-\nu\alpha^m}=\frac{(\nu\alpha^m)^n}{n!}\,e^{-(\nu\alpha^m)} :
+\end{aligned}
+\]
+given $Y=m$, $X$ has the Poisson law $\mathcal P(\nu\alpha^m)$.
+
+c) If $\alpha=1$,
+\[
+  f_{(X,Y)}(n,m)=c\,\frac{\nu^n}{n!}\cdot\frac{\mu^m}{m!}\qquad\forall n,m\in\mathbb N,
+\]
+so $X\indep Y$, because $f_{(X,Y)}(n,m)=f_1(n)f_2(m)$ is a product of a function of $n$ and a
+function of $m$ (the discrete analogue of \cref{rem:pm-factorisation}). Let us confirm it with
+\cref{prop:pm-discrete-independence}: for $\alpha=1$,
+\[
+  f_X(n)=c\,\frac{\nu^n}{n!}\,e^{\mu}\quad\forall n\in\mathbb N,\qquad
+  f_Y(m)=c\,\frac{\mu^m}{m!}\,e^{\nu}\quad\forall m\in\mathbb N,\qquad
+  f_X(n)f_Y(m)=c^2e^{\mu+\nu}\,\frac{\nu^n\mu^m}{n!\,m!},
+\]
+which has the same form as $f_{(X,Y)}$. The constant is uniquely determined: from
+$f_{(X,Y)}=f_Xf_Y$ we get $c=c^2e^{\mu+\nu}$, that is, since $c\ne0$, $1=c\,e^{\mu+\nu}$ and
+\[
+  c=e^{-(\nu+\mu)}
+\]
+(as the normalisation $\sum_{n,m}c\frac{\nu^n\mu^m}{n!\,m!}=c\,e^\nu e^\mu=1$ also shows).
+Observe that then
+\[
+\begin{aligned}
+  f_X(n)&=e^{-\nu-\mu}\,\frac{\nu^n}{n!}\,e^{\mu}=e^{-\nu}\frac{\nu^n}{n!}\ \Longrightarrow\ X\sim\mathcal P(\nu),\\
+  f_Y(m)&=e^{-\nu-\mu}\,\frac{\mu^m}{m!}\,e^{\nu}=e^{-\mu}\frac{\mu^m}{m!}\ \Longrightarrow\ Y\sim\mathcal P(\mu).
+\end{aligned}
+\]
+\end{example}
+
+\begin{example}[Worked exercise: the uniform law on an annulus]\label{exa:tr-annulus}
+Let $(X,Y)$ be a random vector uniformly distributed on the set
+$D=\{(x,y)\in\mathbb R^2:1\le x^2+y^2\le9\}$.
+\begin{enumerate}[label=\alph*)]
+  \item Write the joint density explicitly.
+  \item Determine the marginal densities.
+  \item Are $X$ and $Y$ independent? Are they uncorrelated?
+\end{enumerate}
+\emph{Solution.} a) ``Uniformly distributed on $D$'' means that the joint density is constant on
+$D$ and zero outside:
+\[
+  f_{(X,Y)}(x,y)=\begin{cases}\text{const}&\text{if }(x,y)\in D,\\ 0&\text{if }(x,y)\notin D,\end{cases}
+  \qquad\text{that is,}\qquad f_{(X,Y)}=\text{const}\cdot\1_D .
+\]
+Then
+\[
+  1=\int_{\mathbb R^2}f_{(X,Y)}(x,y)\,\dd x\,\dd y=\int_D\text{const}\,\dd x\,\dd y=\text{const}\cdot\operatorname{area}D
+  \ \Longrightarrow\ \text{const}=\frac1{\operatorname{area}D},
+\]
+and, since $\operatorname{area}D=\pi R^2-\pi r^2=9\pi-\pi=8\pi$ (with $R=3$, $r=1$),
+\[
+  f_{(X,Y)}(x,y)=\frac1{\operatorname{area}D}\,\1_D(x,y)=\frac1{8\pi}\,\1_D(x,y).
+\]
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{ch08-annulus}
+  \caption{Left: the annulus $D$ (blue) inside the square $Q=[-3,3]^2$, with $400$ points drawn
+    uniformly on $D$; on $Q\setminus D$ (gold, the four corners and the inner disc) the joint density
+    vanishes, while $f_X(x)f_Y(y)>0$. Right: the marginal density $f_X$ of \cref{exa:tr-annulus}
+    against the histogram of $10^5$ samples, drawn by rejection from $Q$
+    (\texttt{sample\_annulus} in \coderef{code/src/probnotes/transforms.py}).}
+  \label{fig:tr-annulus}
+\end{figure}
+
+b) By \cref{prop:pm-marginal-density}, $f_X(x)=\int_{-\infty}^{+\infty}f_{(X,Y)}(x,y)\,\dd y$ for
+$x\in\mathbb R$: $8\pi f_X(x)$ is the length of the section of $D$ above $x$
+(\cref{fig:tr-annulus}).
+\begin{itemize}
+  \item If $x<-3$ or $x>3$, the section is empty and $f_X(x)=0$.
+  \item If $-3\le x<-1$ or $1<x\le3$, the section is the segment
+    $\{|y|\le\sqrt{9-x^2}\}$, and
+    \[
+      f_X(x)=\int_{-\sqrt{9-x^2}}^{+\sqrt{9-x^2}}\frac1{8\pi}\,\dd y=\frac1{8\pi}\Big[\sqrt{9-x^2}+\sqrt{9-x^2}\Big]
+      =\frac1{4\pi}\sqrt{9-x^2}.
+    \]
+  \item If $-1\le x\le1$, the section consists of two segments, and
+    \[
+    \begin{aligned}
+      f_X(x)&=\int_{-\sqrt{9-x^2}}^{-\sqrt{1-x^2}}\frac1{8\pi}\,\dd y+\int_{+\sqrt{1-x^2}}^{+\sqrt{9-x^2}}\frac1{8\pi}\,\dd y\\
+      &=\frac1{8\pi}\Big[-\sqrt{1-x^2}+\sqrt{9-x^2}\Big]+\frac1{8\pi}\Big[\sqrt{9-x^2}-\sqrt{1-x^2}\Big]\\
+      &=\frac1{4\pi}\Big[\sqrt{9-x^2}-\sqrt{1-x^2}\Big].
+    \end{aligned}
+    \]
+\end{itemize}
+By symmetry ($D$ is invariant under $(x,y)\mapsto(y,x)$), $f_Y=f_X$:
+\[
+  f_X(x)=f_Y(x)=\begin{cases}
+    \frac1{4\pi}\big[\sqrt{9-x^2}-\sqrt{1-x^2}\big]&\text{if }-1\le x\le1,\\[3pt]
+    \frac1{4\pi}\sqrt{9-x^2}&\text{if }-3\le x<-1\text{ or }1<x\le3,\\[3pt]
+    0&\text{if }x<-3\text{ or }x>3.
+  \end{cases}
+\]
+
+c) $f_X\ne0$ and $f_Y\ne0$ on $[-3,3]$ (except at $\pm3$), so $f_X(x)f_Y(y)\ne f_{(X,Y)}(x,y)$
+on a set of positive measure. Indeed, let $Q=[-3,3]^2$. Then $f_X(x)f_Y(y)\ne0$ (a.e.) on $Q$,
+while on $Q\setminus D$
+\[
+  f_X(x)f_Y(y)\ne0\ \text{(a.e.)},\qquad f_{(X,Y)}(x,y)=0,
+\]
+and $Q\setminus D$ does not have measure zero: its area is $36-8\pi>0$. Hence $X$ and $Y$ are not
+independent, $X\not\!\indep Y$ (\cref{thm:pm-density-independence}).
+
+Are they uncorrelated, $\operatorname{cov}(X,Y)=0$? Note that $X,Y\in L^p$ for every $p\ge1$,
+since $|X|,|Y|\le3$ a.s.\ (they are bounded). Then
+\[
+\begin{gathered}
+  \mathbb E[X]=\int_{-\infty}^{+\infty}x\,f_X(x)\,\dd x=0,\qquad
+  \mathbb E[Y]=\int_{-\infty}^{+\infty}y\,f_Y(y)\,\dd y=0,\\
+  \mathbb E[XY]=\iint_{\mathbb R^2}xy\,f_{(X,Y)}(x,y)\,\dd x\,\dd y=\iint_Dxy\,\frac1{8\pi}\,\dd x\,\dd y=0,
+\end{gathered}
+\]
+so that $\operatorname{cov}(X,Y)=\mathbb E[XY]-\mathbb E[X]\,\mathbb E[Y]=0$: $X$ and $Y$ are
+\emph{uncorrelated}. The three integrals vanish by symmetry ($f_X$ and $f_Y$ are even, and $D$ is
+invariant under $(x,y)\mapsto(-x,y)$, which changes the sign of $xy$); the explicit computations
+are left to the reader (\exref{ex:tr-annulus}).
+\end{example}
+
+\section{Transformations of random variables}\label{sec:tr-transformations}
+
+\begin{proposition}[The law of a function of a random variable]\label{prop:tr-law-image}
+Let $X$ be a real random variable and $g:\mathbb R\to\mathbb R$ a measurable function. Then
+$Y=g(X)$ is a real random variable, and its law is given by
+\begin{equation}\label{eq:tr-law-image}
+  \mathbb P_Y(A)=\mathbb P_X\big(g^{-1}(A)\big)\qquad\forall A\in\mathcal B(\mathbb R).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+$Y=g\circ X$ is measurable as a composition of measurable functions (\cref{prop:mf-composition}).
+For $A\in\mathcal B(\mathbb R)$,
+\[
+  \mathbb P_Y(A)=\mathbb P\big(Y^{-1}(A)\big)=\mathbb P\big((g\circ X)^{-1}(A)\big)
+  =\mathbb P\big(X^{-1}(g^{-1}(A))\big)=\mathbb P_X\big(g^{-1}(A)\big).\qedhere
+\]
+\end{proof}
+
+In other words, $\mathbb P_Y=(\mathbb P_X)_g$ is the image measure of $\mathbb P_X$ under $g$
+(\cref{def:ld-image-measure}). What does this give more concretely?
+
+\subsection{The discrete case}\label{sec:tr-discrete-case}
+
+\begin{proposition}[Discrete case]\label{thm:tr-discrete}
+If $X$ is a discrete random variable (\cref{def:ld-discrete}) and $g:\mathbb R\to\mathbb R$ is
+measurable, then $Y=g(X)$ is a discrete random variable, $Y(\Omega)=g(X(\Omega))$, and
+\[
+  f_Y(y)=\sum_{x\in g^{-1}(\{y\})\cap X(\Omega)}f_X(x)\qquad\forall y\in Y(\Omega).
+\]
+\end{proposition}
+
+\begin{proof}
+$Y(\Omega)=g(X(\Omega))$ is the image of a finite or countable set, hence finite or countable.
+For every $y\in Y(\Omega)$, by \eqref{eq:tr-law-image} and $\sigma$-additivity,
+\[
+\begin{aligned}
+  f_Y(y)&=\mathbb P(Y=y)=\mathbb P_Y(\{y\})=\mathbb P_X\big(g^{-1}(\{y\})\big)=\mathbb P\big(X\in g^{-1}(\{y\})\big)\\
+  &=\sum_{x\in g^{-1}(\{y\})\cap X(\Omega)}\mathbb P_X(\{x\})=\sum_{x\in g^{-1}(\{y\})\cap X(\Omega)}f_X(x).
+\end{aligned}\qedhere
+\]
+\end{proof}
+
+\begin{example}\label{exa:tr-discrete-square}
+Let $X\sim U(\{-2,-1,0,1\})$, uniform on four points, and $g(x)=x^2$, $Y=g(X)=X^2$. Then
+$\mathbb P_X(\{x\})=\frac14$ for every $x\in X(\Omega)=\{-2,-1,0,1\}$, and
+$Y(\Omega)=g(X(\Omega))=\{0,1,4\}$, with
+\[
+  f_Y(0)=f_X(0)=\tfrac14,\qquad f_Y(1)=f_X(1)+f_X(-1)=\tfrac12,\qquad f_Y(4)=f_X(-2)=\tfrac14 .
+\]
+\end{example}
+
+\subsection{The absolutely continuous case}\label{sec:tr-ac-case}
+
+Let $X$ be a random variable with density $f_X$ (\cref{def:ld-ac-rv}), $g:\mathbb R\to\mathbb R$
+measurable, and $Y=g(X)$. By \eqref{eq:tr-law-image}, and since $\mathbb P_X\ll m$,
+\begin{equation}\label{eq:tr-cdf-image}
+  F_Y(y)=\mathbb P(Y\le y)=\mathbb P_Y\big((-\infty,y]\big)=\mathbb P_X\big(g^{-1}((-\infty,y])\big)
+  =\int_{g^{-1}((-\infty,y])}f_X(x)\,\dd x .
+\end{equation}
+
+\begin{proposition}[Density of $g(X)$]\label{thm:tr-density}
+Let $X$ be an absolutely continuous random variable with density $f_X$ continuous (a.e.), so that
+$F_X$ is differentiable (a.e.).\footnote{Added to the handwritten notes: the continuity of $f_X$ is
+not needed for the conclusion, and the proof below does not use it. It is what allows one to
+differentiate $F_Y$ directly, as in \cref{rem:tr-square-direct}.} Let $g:\mathbb R\to\mathbb R$ be
+of class $C^1(\mathbb R)$, with $g'(x)\ne0$ for every $x\in\mathbb R$ (so $g$ is strictly monotone,
+hence invertible) and $g^{-1}$ of class $C^1$. Then $Y=g(X)$ is an absolutely continuous random
+variable with density
+\[
+  f_Y(y)=f_X\big(g^{-1}(y)\big)\,\Big|\frac{\dd}{\dd y}g^{-1}(y)\Big|\,\1_{g(\mathbb R)}(y),
+  \qquad\text{where}\qquad \Big|\frac{\dd}{\dd y}g^{-1}(y)\Big|=\frac1{|g'(g^{-1}(y))|}
+\]
+(and $f_Y(y)=0$ for $y\notin g(\mathbb R)$).
+\end{proposition}
+
+\begin{proof}
+We give two methods.\footnote{The handwritten notes give only the heading of the proof, ``dim
+(metodi)'' (proof: methods); the proof is added here. Both methods rest on the change of
+variables formula \eqref{eq:tr-change-of-variables}, which the notes use as known from calculus.
+For the Lebesgue integral it is proved, in $\mathbb R^k$, in \citet[Section~17]{billingsley} and in
+\citet[Chapter~7, on differentiable transformations]{rudin-rca}; \cref{thm:rv-jacobi} recalls it in
+several variables.} Since $g'$ is continuous and never zero, it has constant sign on $\mathbb R$ (by
+the intermediate value theorem), so $g$ is strictly increasing or strictly decreasing, and
+$g(\mathbb R)=(a,b)$ is an open interval, $-\infty\le a<b\le+\infty$. The inverse
+$g^{-1}:(a,b)\to\mathbb R$ is $C^1$ with $(g^{-1})'(y)=1/g'(g^{-1}(y))\ne0$, and for every
+measurable $h:\mathbb R\to[0,+\infty]$ the substitution $x=g^{-1}(y)$ gives
+\begin{equation}\label{eq:tr-change-of-variables}
+  \int_{\mathbb R}h(x)\,\dd x=\int_a^bh\big(g^{-1}(y)\big)\,\big|(g^{-1})'(y)\big|\,\dd y .
+\end{equation}
+
+\emph{Method 1: the distribution function.} Let $g$ be increasing. If $y\le a$, then
+$\{Y\le y\}=\emptyset$ and $F_Y(y)=0$; if $y\ge b$, then $\{Y\le y\}=\Omega$ and $F_Y(y)=1$. If
+$a<y<b$, then $\{g(X)\le y\}=\{X\le g^{-1}(y)\}$, and by \eqref{eq:tr-change-of-variables} with
+$h=f_X\1_{(-\infty,g^{-1}(y)]}$,
+\[
+  F_Y(y)=F_X\big(g^{-1}(y)\big)=\int_{-\infty}^{g^{-1}(y)}f_X(x)\,\dd x
+  =\int_a^yf_X\big(g^{-1}(u)\big)\,(g^{-1})'(u)\,\dd u=\int_{-\infty}^yf_Y(u)\,\dd u .
+\]
+If $g$ is decreasing, then $\{g(X)\le y\}=\{X\ge g^{-1}(y)\}$ for $a<y<b$, and in the same way, with
+$h=f_X\1_{[g^{-1}(y),+\infty)}$,
+$F_Y(y)=\int_{g^{-1}(y)}^{+\infty}f_X(x)\,\dd x=\int_a^yf_X(g^{-1}(u))\,|(g^{-1})'(u)|\,\dd u$.
+In both cases $F_Y(y)=\int_{-\infty}^yf_Y(u)\,\dd u$ for every $y\in\mathbb R$ (for $y\ge b$, apply
+\eqref{eq:tr-change-of-variables} to $h=f_X$). So $\mathbb P_Y$ and the probability with density
+$f_Y$ have the same distribution function, and therefore coincide
+(\exref{ex:ld-cdf}): $f_Y$ is a density of $Y$. Where $f_X$ is continuous at $g^{-1}(y)$, the chain
+rule applied to $F_Y(y)=F_X(g^{-1}(y))$ (or $1-F_X(g^{-1}(y))$) gives the formula for $f_Y(y)$
+directly, as $F_Y'(y)$.
+
+\emph{Method 2: change of variables in $\mathbb P(Y\in B)$.} For $B\in\mathcal B(\mathbb R)$,
+\eqref{eq:tr-change-of-variables} applied to $h=\1_{g^{-1}(B)}f_X$, for which
+$h(g^{-1}(y))=\1_B(y)f_X(g^{-1}(y))$, gives
+\[
+\begin{aligned}
+  \mathbb P(Y\in B)&=\mathbb P\big(X\in g^{-1}(B)\big)=\int_{\mathbb R}\1_B\big(g(x)\big)f_X(x)\,\dd x\\
+  &=\int_a^b\1_B(y)\,f_X\big(g^{-1}(y)\big)\,\big|(g^{-1})'(y)\big|\,\dd y=\int_Bf_Y\,\dd m .
+\end{aligned}\qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Piecewise monotone transformations]\label{cor:tr-piecewise}
+Let $X$ be a random variable with density $f_X$ continuous (a.e.), so that $F_X$ is
+differentiable (a.e.). Let $A\in\mathcal B(\mathbb R)$ be such that $\mathbb P_X(A)=\mathbb
+P(X\in A)=1$ (the law of $X$ is concentrated on $A$), and let $g:A\to\mathbb R$ be \emph{piecewise
+of class $C^1$ and strictly monotone} (hence invertible on each piece), that is: there exists an
+\emph{almost sure partition} $I_1,\dots,I_m$ of $A$, where the $I_i$ are open sets, such that $g$
+is of class $C^1$ and strictly monotone on each $I_i$, $i=1,\dots,m$. (\emph{Almost sure partition}
+means: there is $I_0$ with $m(I_0)=0$ such that $I_0,I_1,\dots,I_m$ is a partition of $A$.) Let
+$g_i=g|_{I_i}$, and let $g_i^{-1}$ be of class $C^1$ for every $i=1,\dots,m$. Let
+$Y=g(X)$.\footnote{Added to the handwritten notes: $g(X)$ is defined on the event $\{X\in A\}$,
+of probability $1$; on its complement, an event of probability $0$, $Y$ can be given any
+constant value without changing its law.} Then $Y$ is an absolutely continuous random variable
+with density
+\[
+  f_Y(y)=\sum_{i=1}^mf_X\big(g_i^{-1}(y)\big)\,\Big|\frac{\dd}{\dd y}g_i^{-1}(y)\Big|\,\1_{g(I_i)}(y),
+  \qquad\text{where}\qquad\Big|\frac{\dd}{\dd y}g_i^{-1}(y)\Big|=\frac1{|g'(g_i^{-1}(y))|}.
+\]
+\end{corollary}
+
+\begin{proof}
+The proof is analogous to that of the previous proposition; we give it with Method
+2.\footnote{The handwritten notes say only that the proof is analogous to that of the previous
+proposition; the proof is added here.} Each $g_i$
+is a continuous, strictly monotone bijection of the open set $I_i$ onto $g(I_i)$, which is open
+(each interval of $I_i$ is mapped onto an open interval), with $C^1$ inverse, so
+\eqref{eq:tr-change-of-variables} holds with $\mathbb R$, $g$ and $(a,b)$ replaced by $I_i$, $g_i$
+and $g(I_i)$. Since $\mathbb P(X\in I_0)=0$ (because $m(I_0)=0$ and $\mathbb P_X\ll m$), for
+$B\in\mathcal B(\mathbb R)$
+\[
+\begin{aligned}
+  \mathbb P(Y\in B)&=\sum_{i=1}^m\mathbb P\big(X\in I_i,\ g_i(X)\in B\big)
+  =\sum_{i=1}^m\int_{I_i}\1_B\big(g_i(x)\big)f_X(x)\,\dd x\\
+  &=\sum_{i=1}^m\int_{g(I_i)}\1_B(y)\,f_X\big(g_i^{-1}(y)\big)\,\big|(g_i^{-1})'(y)\big|\,\dd y
+  =\int_Bf_Y\,\dd m .
+\end{aligned}\qedhere
+\]
+\end{proof}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.55\textwidth]{ch08-branches}
+  \caption{The two branches of $g(x)=x^2$, as in the picture of the notes: $g_1=g|_{I_1}$ on
+    $I_1=(-\infty,0)$ and $g_2=g|_{I_2}$ on $I_2=(0,+\infty)$. A level $y>0$ is reached once on
+    each piece, at $g_1^{-1}(y)=-\sqrt y$ and at $g_2^{-1}(y)=\sqrt y$, so both points contribute to
+    $f_Y(y)$ in \eqref{eq:tr-square}; the point $0$, where $g'=0$, is negligible.}
+  \label{fig:tr-branches}
+\end{figure}
+
+\begin{example}[Worked exercise: the square of a standard Gaussian]\label{exa:tr-chi-square}
+Let $X\sim\mathcal N(0,1)$ and $Y=X^2$. In this case $A=\mathbb R$, and $g:\mathbb R\to\mathbb R$,
+$g(x)=x^2$, is of class $C^1$ and invertible with $C^1$ inverse \emph{piecewise}, on
+\[
+  I_1=(-\infty,0),\qquad I_2=(0,+\infty);
+\]
+this is an almost sure partition, $\mathbb R=(-\infty,0)\cup\{0\}\cup(0,+\infty)$, with $\{0\}$
+negligible. Then
+\[
+\begin{aligned}
+  g_1&=g|_{I_1}:(-\infty,0)\to\mathbb R,\quad g_1(x)=x^2\ \Longrightarrow\ g_1^{-1}(y)=-\sqrt y\ \Longrightarrow\ \frac{\dd}{\dd y}g_1^{-1}(y)=-\frac1{2\sqrt y},\\
+  g_2&=g|_{I_2}:(0,+\infty)\to\mathbb R,\quad g_2(x)=x^2\ \Longrightarrow\ g_2^{-1}(y)=+\sqrt y\ \Longrightarrow\ \frac{\dd}{\dd y}g_2^{-1}(y)=+\frac1{2\sqrt y},
+\end{aligned}
+\]
+with $g(I_1)=g(I_2)=(0,+\infty)$; the $g_i$ are $C^1$ and invertible with $C^1$ inverses,
+$i=1,2$ (\cref{fig:tr-branches}). By \cref{cor:tr-piecewise}:
+\begin{itemize}
+  \item if $y\le0$, then $f_Y(y)=0$;
+  \item if $y>0$,
+  \begin{equation}\label{eq:tr-square}
+  \begin{aligned}
+    f_Y(y)&=f_X\big(g_1^{-1}(y)\big)\Big|\frac{\dd}{\dd y}g_1^{-1}(y)\Big|+f_X\big(g_2^{-1}(y)\big)\Big|\frac{\dd}{\dd y}g_2^{-1}(y)\Big|\\
+    &=f_X(-\sqrt y)\Big|-\frac1{2\sqrt y}\Big|+f_X(+\sqrt y)\Big|+\frac1{2\sqrt y}\Big|\\
+    &=\frac1{2\sqrt y}\Big(f_X(\sqrt y)+f_X(-\sqrt y)\Big).
+  \end{aligned}
+  \end{equation}
+\end{itemize}
+Formula \eqref{eq:tr-square} gives the density of $Y=X^2$ for every $X$ with a density that is
+continuous (a.e.), not only for a Gaussian $X$.
+\end{example}
+
+\begin{remark}[The same formula, directly]\label{rem:tr-square-direct}
+Formula \eqref{eq:tr-square} can be obtained directly. For $y\in\mathbb R$,
+$F_Y(y)=\mathbb P(Y\le y)=\mathbb P(X^2\le y)$.
+\begin{itemize}
+  \item If $y\le0$, then $F_Y(y)=0$ (for $y=0$ because $\mathbb P(X=0)=0$), so $f_Y(y)=0$.
+  \item If $y>0$, then, since $X$ is absolutely continuous,
+    \[
+      F_Y(y)=\mathbb P(X^2\le y)=\mathbb P(-\sqrt y\le X\le\sqrt y)=F_X(\sqrt y)-F_X(-\sqrt y).
+    \]
+    At every $y>0$ such that $f_X$ is continuous at $\sqrt y$ and at $-\sqrt y$ (for
+    $X\sim\mathcal N(0,1)$, every $y>0$), $F_X$ is differentiable at $\pm\sqrt y$ with derivative
+    $f_X(\pm\sqrt y)$ (\cref{rem:ld-continuous-density}), and the chain rule
+    gives\footnote{The handwritten notes say ``at the points of differentiability (here all of
+    $\mathbb R$)''. Differentiability of $F_X$ at a point does not give $F_X'=f_X$ there, since
+    $f_X$ is determined only up to a.e.\ equality; this holds where $f_X$ is continuous, or at the
+    Lebesgue points of $f_X$ (\cref{thm:ld-lebesgue}); corrected here. Moreover (an addition),
+    that the derivative of $F_Y$ found in this way is a density of $Y$ is guaranteed by
+    \cref{cor:tr-piecewise}. A distribution
+    function that is differentiable a.e.\ need not be the integral of its derivative: the Cantor
+    function of \exref{ex:mf-cantor-nonborel} is continuous and goes from $0$ to $1$, but it is
+    constant on each interval of the complement of the Cantor set, so its derivative is $0$ a.e.}
+    \[
+      f_Y(y)=\frac{\dd}{\dd y}F_Y(y)=f_X(\sqrt y)\cdot\frac1{2\sqrt y}-f_X(-\sqrt y)\cdot\Big(-\frac1{2\sqrt y}\Big)
+      =\frac1{2\sqrt y}\Big[f_X(\sqrt y)+f_X(-\sqrt y)\Big].
+    \]
+\end{itemize}
+\end{remark}
+
+\begin{example}[Worked exercise, continued: the law $\chi^2(1)$]\label{exa:tr-chi-square-end}
+Let us finish \cref{exa:tr-chi-square}. Since $X\sim\mathcal N(0,1)$,
+$f_X(x)=\frac1{\sqrt{2\pi}}e^{-x^2/2}$ for every $x\in\mathbb R$. If $y>0$, by \eqref{eq:tr-square},
+\[
+\begin{aligned}
+  f_Y(y)&=\frac1{2\sqrt y}\Big[\frac1{\sqrt{2\pi}}e^{-(\sqrt y)^2/2}+\frac1{\sqrt{2\pi}}e^{-(-\sqrt y)^2/2}\Big]\\
+  &=\frac1{2\sqrt y}\Big[\frac1{\sqrt{2\pi}}e^{-y/2}+\frac1{\sqrt{2\pi}}e^{-y/2}\Big]
+  =\frac1{\sqrt y}\cdot\frac1{\sqrt{2\pi}}e^{-y/2},
+\end{aligned}
+\]
+so that
+\[
+  f_Y(y)=\frac1{\sqrt{2\pi}}\cdot\frac1{\sqrt y}\,e^{-y/2}\,\1_{(0,+\infty)}(y)
+  =\frac1{\sqrt{2\pi}}\,y^{\frac12-1}e^{-\frac12y}\,\1_{(0,+\infty)}(y).
+\]
+This is, up to the constant, the density of a Gamma law with $\alpha=\frac12$ and $\lambda=\frac12$
+(\cref{def:tr-gamma}). Since both functions are probability densities, the constants coincide, and
+\[
+  Y\sim\Gamma\big(\tfrac12,\tfrac12\big)=\chi^2(1),
+\]
+the \emph{chi-square law with parameter $1$} (\emph{with $1$ degree of freedom}). The constant is
+uniquely determined:
+\[
+  \frac1{\sqrt{2\pi}}=\frac{\lambda^\alpha}{\Gamma(\alpha)}=\frac{(1/2)^{1/2}}{\Gamma(\frac12)}
+  =\frac1{\sqrt2}\cdot\frac1{\Gamma(\frac12)}\ \Longrightarrow\ \Gamma\big(\tfrac12\big)=\sqrt\pi ,
+\]
+and then, by \cref{prop:tr-gamma-function},
+\[
+  \Gamma\big(\tfrac32\big)=\Gamma\big(\tfrac12+1\big)=\tfrac12\,\Gamma\big(\tfrac12\big)=\tfrac12\sqrt\pi,\qquad
+  \Gamma\big(\tfrac52\big)=\Gamma\big(\tfrac32+1\big)=\tfrac32\,\Gamma\big(\tfrac32\big)=\tfrac32\cdot\tfrac12\sqrt\pi=\tfrac34\sqrt\pi,
+  \qquad\dots
+\]
+\end{example}
+
+\begin{example}[Worked exercise: affine maps of a Gaussian]\label{prop:tr-affine-gaussian}
+Let $X\sim\mathcal N(0,1)$ and $Y=\sigma X+\mu$, with $\sigma\ne0$ and $\mu\in\mathbb R$. Then
+$Y\sim\mathcal N(\mu,\sigma^2)$.
+
+\emph{Solution.} The function $g(x)=\sigma x+\mu$ is $C^1$, with $g'=\sigma\ne0$, invertible, with
+$g^{-1}$ again $C^1$, and $g(\mathbb R)=\mathbb R$. By \cref{thm:tr-density},
+\[
+  f_Y(y)=f_X\big(g^{-1}(y)\big)\Big|\frac{\dd}{\dd y}g^{-1}(y)\Big|\qquad\forall y\in\mathbb R .
+\]
+Here $g^{-1}(y)=\frac{y-\mu}\sigma$, so $\frac{\dd}{\dd y}g^{-1}(y)=\frac1\sigma$, and
+\[
+  f_Y(y)=\frac1{|\sigma|}\,f_X\Big(\frac{y-\mu}\sigma\Big)\qquad\forall y\in\mathbb R ,
+\]
+for any absolutely continuous $X$. As an exercise, do the direct computation,
+$F_Y(y)=\mathbb P(\sigma X+\mu\le y)=\mathbb P(\sigma X\le y-\mu)$, distinguishing $\sigma>0$ and
+$\sigma<0$ (\exref{ex:tr-chi-square}). Since $X\sim\mathcal N(0,1)$,
+$f_X(x)=\frac1{\sqrt{2\pi}}e^{-x^2/2}$ for every $x\in\mathbb R$, and for every $y\in\mathbb R$
+\[
+  f_Y(y)=\frac1{|\sigma|}\cdot\frac1{\sqrt{2\pi}}\,e^{-\left(\frac{y-\mu}\sigma\right)^2/2}
+  =\frac1{\sqrt{2\pi\sigma^2}}\,e^{-\frac{(y-\mu)^2}{2\sigma^2}}
+  \ \Longrightarrow\ Y\sim\mathcal N(\mu,\sigma^2).
+\]
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch08-transform}
+  \caption{Left: $2\cdot10^5$ samples of $Y=X^2$, $X\sim\mathcal N(0,1)$, against the density of
+    $\Gamma(\frac12,\frac12)=\chi^2(1)$ (\cref{exa:tr-chi-square-end}). Right: $X$ uniform on
+    $(-1,2)$ and $Y=X^2$. The two terms of \cref{cor:tr-piecewise}, for the branches
+    $I_1=(-1,0)$ and $I_2=(0,2)$, live on $g(I_1)=(0,1)$ and $g(I_2)=(0,4)$; their sum is $f_Y$,
+    which jumps at $y=1$ (\exref{ex:tr-piecewise}).}
+  \label{fig:tr-transform}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:tr-transform-code}
+In \coderef{code/src/probnotes/transforms.py}, \texttt{discrete\_image\_law} computes the law of
+$g(X)$ for a discrete $X$ as in \cref{thm:tr-discrete}, adding the masses of the points with the
+same image (\cref{exa:tr-discrete-square}). \texttt{transformed\_density} evaluates the formula of
+\cref{cor:tr-piecewise} from a list of branches, each given by $g_i^{-1}$, its derivative and the
+interval $g(I_i)$: in closed form (\texttt{square\_branches}, \texttt{affine\_branch}) or by
+numerical inversion of $g$ on each piece (\texttt{monotone\_branch}). \texttt{ks\_distance}
+computes $\sup_y|F_n(y)-F_Y(y)|$ between the empirical distribution function of a sample and
+$F_Y$, and \texttt{histogram\_check} compares a histogram with the bin averages of the density,
+which is what a histogram estimates even where the density is unbounded, as near $0$ in
+\cref{fig:tr-transform}. \exref{ex:tr-chi-square}, \exref{ex:tr-piecewise} and
+\exref{ex:tr-cauchy} use them.
+\end{remark}
+
+\demo{08-transformations.ipynb}{the density of $g(X)$ from \cref{cor:tr-piecewise} against a
+histogram, for several laws of $X$ and functions $g$, among them $X^2$, $\sigma X+\mu$, $\sin X$
+and $\tan X$.}
+
+\furtherreading
+\textcite{ross-5}, Chapters~5 and~6, treats the Gamma and exponential laws, hazard rates, the
+density of a function of a random variable and the multinomial law at an elementary level, with
+many examples. \textcite{billingsley}, Section~20, treats random variables, their distributions
+and the transformation of laws, Section~17 the change of variables formula for Lebesgue integrals,
+and Section~23 the Poisson process; \textcite{durrett}, Section~3.7, constructs the Poisson process
+from exponential inter-arrival times.

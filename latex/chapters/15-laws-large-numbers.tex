@@ -1,5 +1,603 @@
-\begin{planned}
-  \item almost sure convergence, convergence in probability and in $L^p$
-  \item relations between modes of convergence; counterexamples
-  \item the weak and strong laws of large numbers
-\end{planned}
+% Chapter 15: Convergence of random variables and the laws of large numbers.
+% Translation of Paola Siri's handwritten notes, PDF pages 233-245: the topics "CONVERGENZE DI
+% VARIABILI ALEATORIE" (pp. 233-241) and "LGN (LEGGE DEI GRANDI NUMERI)" (pp. 242-243), with
+% "LEGGE FORTE DEI GRANDI NUMERI" (pp. 244-245).
+
+A sequence of random variables can converge in several ways. It can converge at almost every
+$\omega$; the probability that it is far from its limit can tend to zero; or the mean of a
+power of its distance from the limit can tend to zero. This chapter defines these three modes
+of convergence (almost surely, in probability, in $L^p$), shows that convergence in probability
+is the weakest of them, and shows with two counterexamples that no other implication holds in
+general, although partial converses do. It then proves the laws of large numbers: the sample
+mean of independent, identically distributed square-integrable random variables converges to
+their common mean in probability (the weak law) and almost surely and in $L^2$ (the strong
+law). The proof of the strong law uses only second moments, the theorem of Beppo Levi and a
+clever choice of a subsequence. Convergence in law, the fourth mode of convergence, is the
+subject of \cref{ch:16-convergence-in-law}.
+
+\section{Convergence of random variables}\label{sec:ll-convergence}
+
+Let $(\Omega,\mathcal F,\mathbb P)$ be a \emph{complete} probability space
+(\cref{def:mf-complete}),\footnote{Completeness guarantees, for instance, that an almost sure
+limit of random variables is a random variable, which fails without it
+(\cref{rem:mf-ae}). Added to the handwritten notes.} and let $(X_n)_{n\ge1}$ and $X$ be random
+variables with values in $\mathbb R^N$. We work with $N=1$.
+
+\begin{definition}[Modes of convergence]\label{def:ll-convergence}
+Let $X_n$, $n\ge1$, and $X$ be real random variables defined on $(\Omega,\mathcal F,\mathbb P)$.
+\begin{enumerate}[label=(\arabic*)]
+  \item We say that $(X_n)_n$ \emph{converges almost everywhere} (or \emph{almost surely}) to the
+    random variable $X$ if
+    \[
+      \mathbb P\big(\{\omega\in\Omega:\lim_nX_n(\omega)=X(\omega)\}\big)=1,
+    \]
+    which we abbreviate as $\mathbb P(X_n\to X)=1$; that is, $\lim_nX_n=X$ a.e.
+    (\cref{def:mf-ae-convergence}), or equivalently
+    $\mathbb P\big(\{\omega\in\Omega:X_n(\omega)\not\to X(\omega)\}\big)=0$. We write
+    $X_n\to X$ a.e., or $X_n\xrightarrow{\text{a.s.}}X$.
+  \item We say that $(X_n)_n$ \emph{converges in probability} (or \emph{in measure}) to the random
+    variable $X$ if
+    \[
+      \forall\varepsilon>0\qquad
+      \mathbb P\big(\{\omega\in\Omega:|X_n(\omega)-X(\omega)|>\varepsilon\}\big)
+      =\mathbb P(|X_n-X|>\varepsilon)\xrightarrow[n\to\infty]{}0 .
+    \]
+    We write $X_n\xrightarrow{\mathbb P}X$.
+  \item Let $p\ge1$. We say that $(X_n)_n$ \emph{converges to $X$ in $L^p$} (or \emph{in $p$-th
+    norm}, or \emph{in mean of order $p$}) if $X_n,X\in L^p(\Omega,\mathcal F,\mathbb P)$ and
+    \[
+      \|X_n-X\|_{L^p}\xrightarrow[n\to\infty]{}0,\qquad\text{that is,}\qquad
+      \mathbb E\big[|X_n-X|^p\big]\xrightarrow[n\to\infty]{}0 .
+    \]
+    We write $X_n\xrightarrow{L^p}X$. For $p=2$ we speak of \emph{convergence in mean square}.
+\end{enumerate}
+\end{definition}
+
+The set in (1) is an event, since it equals
+$\bigcap_{k\ge1}\bigcup_{m\ge1}\bigcap_{n\ge m}\{|X_n-X|<\frac1k\}$.\footnote{Added to the
+handwritten notes, which number the three modes Definitions~1, 2 and~3.}
+
+\begin{proposition}[Convergence in $L^p$]\label{prop:ll-Lp}
+\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item Let $1\le q\le p$. If $X_n\xrightarrow{L^p}X$, then $X_n\xrightarrow{L^q}X$.
+  \item If $X_n\xrightarrow{L^1}X$, then $\mathbb E[X_n]\to\mathbb E[X]$ and
+    $\mathbb E\big[|X_n|\big]\to\mathbb E\big[|X|\big]$.
+  \item More generally, if $X_n\xrightarrow{L^p}X$, then
+    $\mathbb E\big[|X_n|^p\big]\to\mathbb E\big[|X|^p\big]$.
+
+    \emph{Consequence:} if $X_n\xrightarrow{L^2}X$, then $\mathbb E[X_n^2]\to\mathbb E[X^2]$ (by
+    (3)) and $\mathbb E[X_n]\to\mathbb E[X]$ (by (1) and (2)), so that $\Var(X_n)\to\Var(X)$;
+    \emph{but not conversely}.\footnote{For instance, if $X\sim\mathcal N(0,1)$ and $X_n=-X$ for
+    every $n$, all the moments of $X_n$ are those of $X$, but
+    $\mathbb E\big[|X_n-X|^2\big]=4\,\mathbb E[X^2]=4$ for every $n$. See also
+    \exref{ex:ll-moments}. Added to the handwritten notes.}
+  \item Let $X_n\in L^2$ for every $n$, and $a\in\mathbb R$. Then
+    \[
+      X_n\xrightarrow{L^2}a\iff\mathbb E[X_n]\to a\ \text{ and }\ \Var(X_n)\to0 .
+    \]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) When we proved that $X\in L^p$ implies $X\in L^q$ for $1\le q\le p$
+(\cref{prop:ld-inclusions}), we saw that
+\[
+  \mathbb E\big[|X|^q\big]\le\mathbb E\big[|X|^p\big]^{q/p}
+\]
+(this is \eqref{eq:ld-norm-comparison} with $\mu(\Omega)=1$, raised to the power $q$; for $q=p$
+it is an equality). If $X_n\xrightarrow{L^p}X$, then $\mathbb E\big[|X_n-X|^p\big]\to0$, and so
+\[
+  \mathbb E\big[|X_n-X|^q\big]\le\mathbb E\big[|X_n-X|^p\big]^{q/p}\xrightarrow[n\to\infty]{}0
+  \quad\Longrightarrow\quad X_n\xrightarrow{L^q}X
+\]
+(and, obviously, $X_n,X\in L^p$ implies $X_n,X\in L^q$).
+
+(2) Let $X_n\xrightarrow{L^1}X$. By linearity and \cref{prop:ig-abs},
+\[
+  \big|\mathbb E[X_n]-\mathbb E[X]\big|=\big|\mathbb E[X_n-X]\big|\le\mathbb E\big[|X_n-X|\big]\xrightarrow[n\to\infty]{}0,
+\]
+hence $\mathbb E[X_n]\to\mathbb E[X]$. The fact that $\mathbb E\big[|X_n|\big]\to\mathbb E\big[|X|\big]$
+follows from (3) with $p=1$.
+
+(3) Let $X_n\xrightarrow{L^p}X$. From the triangle inequality of the norm (Minkowski's inequality,
+\cref{sec:ld-Lp}),
+\[
+  \|x+y\|\le\|x\|+\|y\|\quad\Longrightarrow\quad\big|\|x\|-\|y\|\big|\le\|x-y\| ,
+\]
+and so
+\[
+  \big|\|X_n\|_{L^p}-\|X\|_{L^p}\big|\le\|X_n-X\|_{L^p}\xrightarrow[n\to\infty]{}0
+  \quad\Longrightarrow\quad\|X_n\|_{L^p}\to\|X\|_{L^p},
+\]
+that is, $\mathbb E\big[|X_n|^p\big]\to\mathbb E\big[|X|^p\big]$, since $t\mapsto t^p$ is
+continuous.
+
+(4) Since $\Var(Y+c)=\Var(Y)$ for every constant $c$,
+\[
+  \mathbb E\big[|X_n-a|^2\big]=\Var(X_n-a)+\mathbb E[X_n-a]^2=\Var(X_n)+\big(\mathbb E[X_n]-a\big)^2 .
+\]
+Both terms on the right are non-negative, so the left-hand side tends to $0$ if and only if
+$\Var(X_n)\to0$ and $\mathbb E[X_n]\to a$.
+\end{proof}
+
+\begin{proposition}[Characterisation of convergence in probability]\label{prop:ll-metric}
+\[
+  X_n\xrightarrow{\mathbb P}X\iff\lim_{n\to\infty}\mathbb E\bigg[\frac{|X_n-X|}{|X_n-X|+1}\bigg]=0 .
+\]
+\end{proposition}
+
+The expectations exist, because the random variables inside take values in $[0,1)$.
+
+\begin{proof}
+We may assume $X=0$; otherwise we consider the sequence $Y_n=X_n-X$, which converges to $0$ in
+probability if and only if $X_n\xrightarrow{\mathbb P}X$, by the definition.
+
+``$\Rightarrow$''. Let $X_n\xrightarrow{\mathbb P}X$, that is,
+$\mathbb P(|X_n|>\varepsilon)\to0$ for every $\varepsilon>0$. Fix $\varepsilon>0$ and observe that
+\[
+\begin{aligned}
+  0\le\frac{|X_n|}{|X_n|+1}
+  &=\frac{|X_n|}{|X_n|+1}\1_{\{|X_n|>\varepsilon\}}+\frac{|X_n|}{|X_n|+1}\1_{\{|X_n|\le\varepsilon\}}\\
+  &\le\1_{\{|X_n|>\varepsilon\}}+\varepsilon\1_{\{|X_n|\le\varepsilon\}}
+  \le\1_{\{|X_n|>\varepsilon\}}+\varepsilon ,
+\end{aligned}
+\]
+because $\frac{|X_n|}{|X_n|+1}\le1$, and, if $|X_n|\le\varepsilon$, then
+$\frac{|X_n|}{|X_n|+1}\le|X_n|\le\varepsilon$. Then
+\[
+  0\le\mathbb E\bigg[\frac{|X_n|}{1+|X_n|}\bigg]\le\mathbb P(|X_n|>\varepsilon)+\varepsilon ,
+\]
+where $\mathbb P(|X_n|>\varepsilon)\to0$ as $n\to\infty$. Hence
+$\limsup_n\mathbb E\big[\frac{|X_n|}{1+|X_n|}\big]\le\varepsilon$, and, $\varepsilon>0$ being
+arbitrary, $\lim_n\mathbb E\big[\frac{|X_n|}{1+|X_n|}\big]$ exists and equals $0$.
+
+``$\Leftarrow$''. Observe that the function $f(x)=\frac x{x+1}$, $x\ge0$, is strictly increasing,
+since $f'(x)=\frac{x+1-x}{(x+1)^2}=\frac1{(x+1)^2}>0$. Then, for $\varepsilon>0$,
+\[
+\begin{aligned}
+  \frac{|X_n|}{|X_n|+1}
+  &=\frac{|X_n|}{|X_n|+1}\1_{\{|X_n|>\varepsilon\}}+\frac{|X_n|}{|X_n|+1}\1_{\{|X_n|\le\varepsilon\}}\\
+  &\ge\frac{|X_n|}{|X_n|+1}\1_{\{|X_n|>\varepsilon\}}
+  \ge\frac{\varepsilon}{1+\varepsilon}\1_{\{|X_n|>\varepsilon\}},
+\end{aligned}
+\]
+where the last inequality holds because $f$ is increasing. Taking expectations,
+\[
+  \mathbb E\bigg[\frac{|X_n|}{|X_n|+1}\bigg]\ge\frac{\varepsilon}{1+\varepsilon}\,\mathbb P(|X_n|>\varepsilon)\ge0 .
+\]
+The left-hand side tends to $0$ as $n\to\infty$, so $\lim_n\mathbb P(|X_n|>\varepsilon)$ exists and
+equals $0$, for every $\varepsilon>0$: $X_n\xrightarrow{\mathbb P}X$.
+\end{proof}
+
+In fact $d(X,Y)=\mathbb E\big[\frac{|X-Y|}{1+|X-Y|}\big]$ is a metric on the random variables
+modulo equality a.s., and the proposition says that convergence in probability is convergence
+in this metric (\exref{ex:ll-criterion}).\footnote{This sentence is added to the handwritten
+notes.}
+
+\begin{theorem}[Relations between the modes of convergence]\label{thm:ll-implications}
+\leavevmode
+\begin{enumerate}[label=(\arabic*)]
+  \item If $X_n\xrightarrow{L^p}X$ for some $p\ge1$, then $X_n\xrightarrow{\mathbb P}X$.
+  \item If $X_n\xrightarrow{\text{a.s.}}X$, then $X_n\xrightarrow{\mathbb P}X$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) Let $\varepsilon>0$. If $|X_n-X|>\varepsilon$, then $\big|\frac{X_n-X}\varepsilon\big|^p>1$;
+hence
+\[
+\begin{aligned}
+  0\le\mathbb P(|X_n-X|>\varepsilon)&=\mathbb E\big[\1_{\{|X_n-X|>\varepsilon\}}\big]
+  \le\mathbb E\bigg[\Big|\frac{X_n-X}{\varepsilon}\Big|^p\1_{\{|X_n-X|>\varepsilon\}}\bigg]\\
+  &=\frac1{\varepsilon^p}\,\mathbb E\big[|X_n-X|^p\1_{\{|X_n-X|>\varepsilon\}}\big]
+  \le\frac1{\varepsilon^p}\,\mathbb E\big[|X_n-X|^p\big]\xrightarrow[n\to\infty]{}0
+\end{aligned}
+\]
+by hypothesis. So $\lim_n\mathbb P(|X_n-X|>\varepsilon)$ exists and equals $0$, that is,
+$X_n\xrightarrow{\mathbb P}X$.
+
+(2) We have
+\[
+  0\le\frac{|X_n-X|}{|X_n-X|+1}\le1,
+\]
+and $X_n\to X$ a.s.\ implies $\frac{|X_n-X|}{|X_n-X|+1}\to0$ a.s. By the dominated convergence
+theorem (\cref{thm:ig-dominated-convergence}), with the constant $1$ as dominating function,
+which is integrable because $\mathbb P(\Omega)=1$,
+\[
+  \lim_n\mathbb E\bigg[\frac{|X_n-X|}{|X_n-X|+1}\bigg]
+  =\mathbb E\bigg[\lim_n\frac{|X_n-X|}{|X_n-X|+1}\bigg]=0 ,
+\]
+and so $X_n\xrightarrow{\mathbb P}X$ by \cref{prop:ll-metric}.
+\end{proof}
+
+The bound in the proof of (1) is \emph{Markov's inequality} for $|X_n-X|^p$: for a random
+variable $Y$, $\varepsilon>0$ and $p\ge1$,
+\begin{equation}\label{eq:ll-markov}
+  \mathbb P(|Y|>\varepsilon)\le\frac{\mathbb E\big[|Y|^p\big]}{\varepsilon^p} ;
+\end{equation}
+with $p=2$ and $Y-\mathbb E[Y]$ in place of $Y$, for $Y\in L^2$, it is \emph{Chebyshev's
+inequality}, $\mathbb P\big(|Y-\mathbb E[Y]|>\varepsilon\big)\le\Var(Y)/\varepsilon^2$. The notes
+take both inequalities as known from an elementary course (see also
+\citealp[Section~1.6.1]{durrett}).\footnote{This paragraph is added to the handwritten notes.}
+
+\begin{remark}[Convergence in probability is the weakest]\label{rem:ll-weakest}
+The theorem gives the implications
+\[
+  \text{almost sure convergence}\ \Longrightarrow\ \text{convergence in probability}
+  \ \Longleftarrow\ \text{convergence in }L^p .
+\]
+No other implication between the three modes holds in general: the notes draw the diagram with
+the four missing arrows crossed out, and the two counterexamples below show that they fail.
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+implication that fails & counterexample\\
+\midrule
+in probability $\Rightarrow$ almost surely & \Cref{exa:ll-typewriter}\\
+in $L^p$ $\Rightarrow$ almost surely & \Cref{exa:ll-typewriter}\\
+in probability $\Rightarrow$ in $L^p$ & \Cref{exa:ll-spike}\\
+almost surely $\Rightarrow$ in $L^p$ & \Cref{exa:ll-spike}\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{remark}
+
+\begin{example}[Counterexample 1: the typewriter sequence]\label{exa:ll-typewriter}
+Let $\Omega=[0,1]$, $\mathcal F=\mathcal B([0,1])$ and $\mathbb P=m$, Lebesgue
+measure.\footnote{This probability space is not complete (\cref{rem:mf-cantor}). Nothing in the
+two counterexamples uses completeness, and one may take the Lebesgue $\sigma$-algebra of $[0,1]$
+instead. Added to the handwritten notes.} For every fixed $k\ge1$, we partition the interval $[0,1]$ into $k$ parts of width
+$\frac1k$, and for $j=1,\dots,k$ we let
+\[
+  Y_{k,j}=\1_{[\frac{j-1}k,\frac jk]} .
+\]
+We then list these indicators block after block (\cref{fig:ll-counterexamples}, left):
+\[
+  X_1=Y_{1,1},\quad X_2=Y_{2,1},\quad X_3=Y_{2,2},\quad X_4=Y_{3,1},\quad X_5=Y_{3,2},\quad
+  X_6=Y_{3,3},\quad\dots
+\]
+In general $X_n=\1_{A_n}$, with $\mathbb P(A_n)=m(A_n)=a_n$. Precisely, $X_n=Y_{k,j}$ when
+$n=\frac{k(k-1)}2+j$ with $1\le j\le k$, so that $A_n=[\frac{j-1}k,\frac jk]$ and $a_n=\frac1k$;
+since the first $k$ blocks contain $\frac{k(k+1)}2$ terms, $k\to\infty$ as $n\to\infty$, and
+$a_n\to0$.
+\begin{itemize}
+  \item Let $0<\varepsilon<1$. Then
+    \[
+      \mathbb P(|X_n|>\varepsilon)=\mathbb P(X_n=1)=\mathbb P(A_n)=a_n\xrightarrow[n\to\infty]{}0
+    \]
+    (if $\varepsilon\ge1$, then $\mathbb P(|X_n|>\varepsilon)=0$). Hence $X_n\xrightarrow{\mathbb P}0$.
+  \item Moreover, for every $p\ge1$,
+    \[
+      \mathbb E\big[|X_n|^p\big]=1^p\,\mathbb P(X_n=1)+0^p\,\mathbb P(X_n=0)=\mathbb P(X_n=1)=a_n
+      \xrightarrow[n\to\infty]{}0 ,
+    \]
+    hence $X_n\xrightarrow{L^p}0$.
+  \item Does $X_n\xrightarrow{\text{a.s.}}0$? For every $\omega\in[0,1]$ and every $k\ge1$ there is
+    $j\in\{1,\dots,k\}$ such that $Y_{k,j}(\omega)=1$; and for $k\ge3$ there is also $j'$ with
+    $Y_{k,j'}(\omega)=0$, because $\omega$ lies in at most two of the $k$ intervals. So
+    $X_n(\omega)=1$ for infinitely many $n$, and $X_n(\omega)=0$ for infinitely many $n$:
+    \[
+      \liminf_nX_n(\omega)=0,\quad\limsup_nX_n(\omega)=1
+      \quad\Longrightarrow\quad\nexists\lim_nX_n(\omega)
+      \quad\Longrightarrow\quad X_n\not\to0\text{ a.s.}
+    \]
+    In fact $(X_n(\omega))_n$ converges at no $\omega$, so $(X_n)_n$ does not converge almost
+    surely to any random variable.
+\end{itemize}
+\end{example}
+
+\begin{example}[Counterexample 2]\label{exa:ll-spike}
+Consider again $\Omega=[0,1]$, $\mathcal F=\mathcal B([0,1])$ and $\mathbb P=m$, and let
+\[
+  X_n=2^n\1_{(0,\frac1n)}\qquad\forall n\ge1
+\]
+(\cref{fig:ll-counterexamples}, right).
+\begin{itemize}
+  \item For every $\omega\in[0,1]$ we have $X_n(\omega)=0$ eventually: always if $\omega=0$, and
+    as soon as $n\ge\frac1\omega$ if $\omega>0$. So $X_n(\omega)\to0$ for every $\omega$, and
+    $X_n\xrightarrow{\text{a.s.}}0$.
+  \item Hence $X_n\xrightarrow{\mathbb P}0$, by \cref{thm:ll-implications}. One can also prove it
+    directly: for every $\varepsilon>0$,
+    \[
+      \mathbb P(|X_n|>\varepsilon)=\mathbb P(X_n=2^n)=\mathbb P\big((0,\tfrac1n)\big)=\frac1n
+      \xrightarrow[n\to\infty]{}0 ,
+    \]
+    where the first equality holds at least from some $n$ on (as soon as $2^n>\varepsilon$).
+  \item But if we consider, for $p\ge1$,
+    \[
+      \mathbb E\big[|X_n|^p\big]=2^{np}\,\mathbb P(X_n=2^n)=2^{np}\cdot\frac1n\xrightarrow[n\to\infty]{}+\infty ,
+    \]
+    we find that $X_n\not\to0$ in $L^p$. Nor does $(X_n)_n$ converge in $L^p$ to another
+    limit, although every $X_n$ is in $L^p$: a limit in $L^p$ would also be a limit in
+    probability (\cref{thm:ll-implications}), hence equal to $0$ a.s.\footnote{Limits in
+    probability are unique a.s.: if $X_n\xrightarrow{\mathbb P}X$ and $X_n\xrightarrow{\mathbb
+    P}X'$, then $\mathbb P(|X-X'|>2\varepsilon)\le\mathbb P(|X_n-X|>\varepsilon)+\mathbb
+    P(|X_n-X'|>\varepsilon)\to0$ for every $\varepsilon>0$, so $\mathbb P(X\ne X')=\lim_k\mathbb
+    P(|X-X'|>\frac1k)=0$ (\cref{thm:ms-continuity-below}). This argument is added to the
+    handwritten notes.}
+\end{itemize}
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch15-counterexamples}
+  \caption{The two counterexamples, drawn as in the notes. Left: the typewriter sequence
+    $X_1,\dots,X_{10}$ of \cref{exa:ll-typewriter}; each row shows the interval $A_n$ where
+    $X_n=1$. The vertical line at $\omega=0.3$ meets an interval in every block, so
+    $X_n(\omega)=1$ infinitely often. Right: the support $(0,\frac1n)$ of
+    $X_n=2^n\1_{(0,\frac1n)}$ of \cref{exa:ll-spike}, with the height $2^n$ written on the right;
+    the vertical line at $\omega=0.3$ leaves the supports for good from $n=4$ on.}
+  \label{fig:ll-counterexamples}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ll-code-counterexamples}
+\coderef{code/src/probnotes/convergence.py} evaluates both sequences. The function
+\texttt{typewriter\_index} maps $n$ to $(k,j)$; \texttt{typewriter} and \texttt{spike}
+evaluate $X_n(\omega)$; and \texttt{mode\_quantities} returns, exactly, the three numbers
+$\mathbb P(|X_n|>\varepsilon)$,
+$\mathbb E\big[|X_n|^p\big]$ and $\mathbb E\big[\frac{|X_n|}{1+|X_n|}\big]$ that decide the three
+modes of convergence to $0$. \texttt{typewriter\_hits} lists the $n$ with $X_n(\omega)=1$ at a
+fixed $\omega$ (\exref{ex:ll-typewriter-numerics}).
+\end{remark}
+
+\demo{15-laws-large-numbers.ipynb}{the two counterexamples, with sliders for $n$, $\omega$, $p$
+and $\varepsilon$.}
+
+For the opposite implications there are partial converses.
+
+\begin{theorem}[Convergence in probability with domination]\label{prop:ll-dominated}
+\leavevmode
+\begin{itemize}
+  \item If $X_n\xrightarrow{\mathbb P}X$ and $|X_n|\le Y$ for every $n$, with $Y\in L^p$, then
+    $X_n\xrightarrow{L^p}X$.
+  \item In particular, if $(X_n)_n$ is uniformly bounded, that is,
+    $|X_n|\le M$ for every $n$, for a constant $M$, then $X_n\xrightarrow{\mathbb P}X$ implies
+    $X_n\xrightarrow{L^p}X$ for every $p\ge1$.
+\end{itemize}
+\end{theorem}
+
+The notes state this theorem without proof. It is the dominated convergence theorem with
+convergence in probability in place of convergence a.e.: for $p=1$ it is
+\citet[Section~2.4, Exercise~34]{folland}, and the general case follows by applying the case
+$p=1$ to $|X_n-X|^p$, which tends to $0$ in probability and is dominated by $2^pY^p$, since also
+$|X|\le Y$ a.s.: for every $\varepsilon>0$,
+$\mathbb P(|X|>Y+\varepsilon)\le\mathbb P(|X_n-X|>\varepsilon)\to0$, because $|X|\le|X_n|+|X_n-X|\le
+Y+|X_n-X|$, so $\mathbb P(|X|>Y+\varepsilon)=0$, and $\mathbb P(|X|>Y)=\lim_k\mathbb
+P(|X|>Y+\frac1k)=0$. The theorem is derived from \cref{prop:ll-subsequence} below in
+\exref{ex:ll-criterion}.
+
+\begin{theorem}[Almost surely convergent subsequences]\label{prop:ll-subsequence}
+If $X_n\xrightarrow{\mathbb P}X$, then there is a subsequence $(X_{n_k})_{k\ge1}$ such that
+$X_{n_k}\xrightarrow{\text{a.s.}}X$.
+\end{theorem}
+
+The notes leave the proof as an exercise, with this hint. Since $X_n\xrightarrow{\mathbb P}X$,
+$\mathbb E\big[\frac{|X_n-X|}{|X_n-X|+1}\big]\to0$ (\cref{prop:ll-metric}). Choose $n_k$ such
+that
+\[
+  \mathbb E\bigg[\frac{|X_{n_k}-X|}{|X_{n_k}-X|+1}\bigg]\le\frac1{2^k},
+\]
+and prove that $X_{n_k}\xrightarrow{\text{a.s.}}X$ along the lines of the proof of the strong law
+of large numbers (\cref{thm:ll-strong-lln}); this is carried out in \exref{ex:ll-subsequence}.
+
+\begin{proposition}[Continuity]\label{prop:ll-continuous-mapping}
+Let $f:\mathbb R\to\mathbb R$ be continuous.
+\begin{enumerate}[label=(\arabic*)]
+  \item If $X_n\xrightarrow{\text{a.s.}}X$, then $f(X_n)\xrightarrow{\text{a.s.}}f(X)$.
+  \item If $X_n\xrightarrow{\mathbb P}X$, then $f(X_n)\xrightarrow{\mathbb P}f(X)$.
+\end{enumerate}
+\end{proposition}
+
+The $f(X_n)$ and $f(X)$ are random variables, because $f$ is Borel
+(\cref{prop:mf-continuous,prop:mf-composition}).
+Statement (1) is obvious: at every $\omega$ where $X_n(\omega)\to X(\omega)$, also
+$f(X_n(\omega))\to f(X(\omega))$, by the continuity of $f$. The notes state (2) without proof; see
+\citet[Section~20, ``Convergence in Probability'']{billingsley} and \citet[Section~2.3]{durrett},
+and \exref{ex:ll-criterion}, which deduces it from \cref{prop:ll-subsequence}. In $L^p$ the
+analogous statement makes no sense: a priori, if $X_n\in L^p$, nothing guarantees that
+$f(X_n)\in L^p$.
+
+\section{The laws of large numbers}\label{sec:ll-lln}
+
+\begin{theorem}[Weak law of large numbers]\label{thm:ll-weak-lln}
+Let $(X_n)_{n\ge1}$ be a sequence of independent and identically distributed (i.i.d.) random
+variables defined on $(\Omega,\mathcal F,\mathbb P)$, with $X_n\in L^2$. Denote by $\mu$ their mean
+(and by $\sigma^2$ their variance), and let
+\[
+  \bar X_n=\frac1n\sum_{i=1}^nX_i
+\]
+be the \emph{sample mean}. Then
+\[
+  \bar X_n\xrightarrow{\mathbb P}\mu,\qquad\text{that is,}\qquad
+  \forall\varepsilon>0\quad\mathbb P(|\bar X_n-\mu|>\varepsilon)\xrightarrow[n\to\infty]{}0 .
+\]
+\end{theorem}
+
+\begin{proof}
+The notes point to the method: Chebyshev's and Markov's inequalities,
+\eqref{eq:ll-markov}.\footnote{The proof is added; the notes only point to the method.} By
+Chebyshev's inequality, for every $\varepsilon>0$,
+\begin{equation}\label{eq:ll-chebyshev-mean}
+  \mathbb P(|\bar X_n-\mu|>\varepsilon)\le\frac{\Var(\bar X_n)}{\varepsilon^2}
+  =\frac{\sigma^2}{n\varepsilon^2}\xrightarrow[n\to\infty]{}0,
+\end{equation}
+where $\mathbb E[\bar X_n]=\mu$ and $\Var(\bar X_n)=\frac{\sigma^2}n$ are computed below, in the
+proof of the convergence in $L^2$. Equivalently: $\bar X_n\xrightarrow{L^2}\mu$, proved below, and
+\cref{thm:ll-implications}.
+\end{proof}
+
+\begin{theorem}[Strong law of large numbers]\label{thm:ll-strong-lln}
+Let $(X_n)_{n\ge1}$ be a sequence of i.i.d.\ random variables defined on
+$(\Omega,\mathcal F,\mathbb P)$, with $X_n\in L^2$. Denote by $\mu$ their mean (and by $\sigma^2$
+their variance), and let $\bar X_n=\frac1n\sum_{i=1}^nX_i$ be the sample mean. Then
+\[
+  \bar X_n\to\mu\quad\text{a.s.\ and in }L^2
+\]
+(and so also in probability, by \cref{thm:ll-implications}).
+\end{theorem}
+
+\begin{remark}[Kolmogorov's strong law]\label{rem:ll-kolmogorov}
+If we assume only $X_n\in L^1$ instead of $X_n\in L^2$, then still
+\[
+  \bar X_n\to\mu\quad\text{a.s.\ and in }L^1 .
+\]
+This is \emph{Kolmogorov's strong law of large numbers}; its proof is much more complicated. The
+notes state it without proof. For the almost sure convergence see \citet[Section~22]{billingsley}
+and \citet[Section~2.4]{durrett}, which proves it under the weaker assumption of pairwise
+independence (Etemadi's proof); for the convergence in $L^1$ as well, see
+\citet[Section~4.7]{durrett}, where the strong law is derived from the convergence of backwards
+martingales.
+\end{remark}
+
+\begin{proof}[Proof of \cref{thm:ll-strong-lln}: convergence in $L^2$]
+By \cref{prop:ll-Lp}~(4),
+\[
+  \bar X_n\xrightarrow{L^2}\mu\iff\mathbb E[\bar X_n]\to\mu\ \text{ and }\ \Var(\bar X_n)\to0 .
+\]
+Both hold:
+\begin{itemize}
+  \item $\displaystyle\mathbb E[\bar X_n]=\mathbb E\Big[\frac1n\sum_{i=1}^nX_i\Big]
+    =\frac1n\sum_{i=1}^n\mathbb E[X_i]=\frac1n\cdot n\mu=\mu\to\mu$;
+  \item $\displaystyle\Var(\bar X_n)=\Var\Big(\frac1n\sum_{i=1}^nX_i\Big)
+    \overset{(\ast)}{=}\frac1{n^2}\sum_{i=1}^n\Var(X_i)=\frac1{n^2}\cdot n\sigma^2
+    =\frac{\sigma^2}n\to0$,
+\end{itemize}
+where $(\ast)$ holds because the $X_i$ are independent: in the expansion
+\[
+  \Var\Big(\sum_iX_i\Big)=\sum_i\Var(X_i)+\sum_{i\ne j}\Cov(X_i,X_j),
+\]
+every $\Cov(X_i,X_j)$ with $i\ne j$ vanishes (\cref{thm:pm-expectation-product}).
+\end{proof}
+
+\subsection{The strong law of large numbers}\label{sec:ll-strong}
+
+The notes now state \cref{thm:ll-strong-lln} again and prove it. Its convergence in $L^2$ has
+just been proved; it remains to prove the almost sure convergence.
+
+\begin{proof}[Proof of \cref{thm:ll-strong-lln}: almost sure convergence]
+We prove that $\bar X_n\xrightarrow{\text{a.s.}}\mu$. First of all we suppose $\mu=0$.
+
+\emph{The subsequence of squares.} We know that $\bar X_n\xrightarrow{\mathbb P}\mu=0$; so there
+is a subsequence that converges almost surely (\cref{prop:ll-subsequence}). We consider the
+subsequence $(\bar X_{n^2})_{n\ge1}$ and show that $\bar X_{n^2}\to0$ a.s. Since $\mu=0$, we have
+$\mathbb E[\bar X_{n^2}]=0$, and since $\Var(\bar X_m)=\frac{\sigma^2}m$ for every $m$,
+\[
+  \mathbb E\big[\bar X_{n^2}^2\big]=\Var(\bar X_{n^2})=\frac{\sigma^2}{n^2} .
+\]
+Therefore, by the theorem of Beppo Levi in the form of \cref{cor:in-series},
+\[
+\begin{gathered}
+  \mathbb E\Big[\sum_{n=1}^\infty\bar X_{n^2}^2\Big]=\sum_{n=1}^\infty\mathbb E\big[\bar X_{n^2}^2\big]
+  =\sum_{n=1}^\infty\frac{\sigma^2}{n^2}<+\infty\\
+  \Longrightarrow\quad\sum_{n=1}^\infty\bar X_{n^2}^2\in L^1(\Omega,\mathcal F,\mathbb P)
+  \quad\Longrightarrow\quad\sum_{n=1}^\infty\bar X_{n^2}^2<+\infty\ \text{a.s.},
+\end{gathered}
+\]
+by the theory of integration (\cref{prop:in-ae}~(1)). The terms of a convergent series tend to
+$0$, so
+\[
+  \bar X_{n^2}^2\xrightarrow{\text{a.s.}}0\quad\Longrightarrow\quad\bar X_{n^2}\xrightarrow{\text{a.s.}}0 .
+\]
+
+\emph{The whole sequence.} For every $m\ge1$ take $k_m\in\mathbb N$ such that
+\[
+  k_m^2\le m<(k_m+1)^2,
+\]
+that is, $k_m=\lfloor\sqrt m\rfloor\ge1$, and consider
+\[
+  \frac1m\sum_{i=k_m^2+1}^mX_i=\frac1m\sum_{i=1}^mX_i-\Big(\frac1{k_m^2}\sum_{i=1}^{k_m^2}X_i\Big)\cdot\frac{k_m^2}m
+  =\bar X_m-\frac{k_m^2}m\,\bar X_{k_m^2}
+\]
+(the sum on the left is empty, and equal to $0$, if $m=k_m^2$). Since $\mu=0$, this variable has
+mean $0$, so its second moment is its variance, and by the independence of the $X_i$,
+\[
+\begin{aligned}
+  \mathbb E\bigg[\Big(\frac1m\sum_{i=k_m^2+1}^mX_i\Big)^2\bigg]
+  &=\mathbb E\bigg[\Big(\bar X_m-\frac{k_m^2}m\,\bar X_{k_m^2}\Big)^2\bigg]
+  =\Var\Big(\frac1m\sum_{i=k_m^2+1}^mX_i\Big)\\
+  &=\frac1{m^2}\sum_{i=k_m^2+1}^m\Var(X_i)
+  =\frac{(m-k_m^2)\,\sigma^2}{m^2}\\
+  &\le\frac{(2k_m+1)\,\sigma^2}{m^2}\le\frac{(2\sqrt m+1)\,\sigma^2}{m^2}\le\frac{3\sigma^2}{m\sqrt m} .
+\end{aligned}
+\]
+Here the first inequality holds because $m-k_m^2<(k_m+1)^2-k_m^2=2k_m+1$; the second because
+$k_m^2\le m$, that is, $k_m\le\sqrt m$; the third because $1\le\sqrt m$. Reasoning as before,
+\[
+  \mathbb E\bigg[\sum_{m=1}^\infty\Big(\bar X_m-\frac{k_m^2}m\,\bar X_{k_m^2}\Big)^2\bigg]
+  \le\sum_{m=1}^\infty\frac{3\sigma^2}{m^{3/2}}<+\infty,
+\]
+and we conclude that
+\[
+  \bar X_m-\frac{k_m^2}m\,\bar X_{k_m^2}\xrightarrow[m\to\infty]{\text{a.s.}}0 .
+\]
+But $\bar X_{k_m^2}\to0$ a.s.\ as $m\to\infty$: indeed $k_m\to\infty$, and at every $\omega$ where
+$\bar X_{n^2}(\omega)\to0$, also $\bar X_{k_m^2}(\omega)\to0$. Moreover $0\le\frac{k_m^2}m\le1$. So
+$\frac{k_m^2}m\,\bar X_{k_m^2}\to0$ a.s., and therefore
+\[
+  \bar X_m=\Big(\bar X_m-\frac{k_m^2}m\,\bar X_{k_m^2}\Big)+\frac{k_m^2}m\,\bar X_{k_m^2}
+  \xrightarrow[m\to\infty]{\text{a.s.}}0
+\]
+(outside the union of two negligible sets, which is negligible).
+
+\emph{The general case.} Finally, if $\mu\ne0$, let $Z_n=X_n-\mu$. The $Z_n$ are i.i.d., in
+$L^2$, with mean $0$ and variance $\sigma^2$, so $\bar Z_n\xrightarrow{\text{a.s.}}0$ by the case
+already proved, and
+\[
+  \bar X_n=\frac1n\sum_{i=1}^nX_i=\frac1n\sum_{i=1}^n(Z_i+\mu)=\Big(\frac1n\sum_{i=1}^nZ_i\Big)+\mu
+  =\bar Z_n+\mu\xrightarrow{\text{a.s.}}\mu .\qedhere
+\]
+\end{proof}
+
+The proof used the independence of the $X_i$ only to compute variances of sums: with a few
+equalities replaced by inequalities, it works for uncorrelated variables with a common mean and
+bounded variances (\exref{ex:ll-uncorrelated}).\footnote{This paragraph and the figure that
+follows are added to the handwritten notes.} The weak law says that, for each large $n$, $\bar X_n$ is probably close
+to $\mu$; the strong law says more: almost every path $n\mapsto\bar X_n(\omega)$ eventually stays
+within $\varepsilon$ of $\mu$, that is, $\mathbb P\big(\sup_{m\ge n}|\bar X_m-\mu|>\varepsilon\big)\to0$
+(\exref{ex:ll-subsequence}). For the typewriter sequence of \cref{exa:ll-typewriter} the
+analogous probability, $\mathbb P\big(\sup_{m\ge n}|X_m|>\varepsilon\big)$, is $1$ for every $n$
+when $0<\varepsilon<1$. \Cref{fig:ll-lln} compares the two probabilities for
+Bernoulli variables with the Chebyshev bound \eqref{eq:ll-chebyshev-mean}.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch15-lln}
+  \caption{Sample means of i.i.d.\ Bernoulli variables $b(\frac12)$. Left: $20$ paths
+    $n\mapsto\bar X_n$, with the band $\frac12\pm\varepsilon$, $\varepsilon=0.05$. Right, from
+    $2000$ paths of length $N=10^4$: the probability $\mathbb P(|\bar X_n-\frac12|>\varepsilon)$ of
+    the weak law, exact (blue) and estimated (dots); the probability
+    $\mathbb P\big(\max_{n\le m\le N}|\bar X_m-\frac12|>\varepsilon\big)$ that the path leaves the
+    band again after time $n$, estimated (gold), which tends to $0$ by the strong law; and
+    Chebyshev's bound $\frac{\sigma^2}{n\varepsilon^2}$ (green, dashed).}
+  \label{fig:ll-lln}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ll-code-lln}
+\texttt{sample\_means} in \coderef{code/src/probnotes/convergence.py} simulates paths of
+$\bar X_n$ for the laws in \texttt{LAWS}, \texttt{deviation\_probability} and
+\texttt{tail\_sup\_deviation} compute the two probabilities of \cref{fig:ll-lln}, and
+\texttt{bernoulli\_mean\_tail} computes $\mathbb P(|\bar X_n-p|>\varepsilon)$ exactly for
+$b(p)$ variables. Chebyshev's bound is far from sharp: the sample size it guarantees for a
+given precision is several times larger than the one the exact probability requires
+(\exref{ex:ll-chebyshev-bernoulli}). The
+function \texttt{square\_gap\_variance} checks the inequality
+$\frac{(m-k_m^2)\sigma^2}{m^2}\le\frac{3\sigma^2}{m\sqrt m}$ of the proof above. For the Cauchy
+law, which is not in $L^1$, the sample mean does not settle at all
+(\exref{ex:ll-cauchy}).
+\end{remark}
+
+\demo{15-laws-large-numbers.ipynb}{paths of the sample mean for several laws, including the
+Cauchy law, against the Chebyshev bound, with sliders for $n$, $\varepsilon$ and the number of
+paths.}
+
+\furtherreading
+\textcite{durrett}, Chapter~2, treats the weak laws (Section~2.2), convergence in probability
+and almost surely convergent subsequences (Section~2.3) and the strong law (Section~2.4), with
+many examples; \textcite{billingsley}, Section~6, proves the laws of large numbers for simple
+random variables, and Sections~20--22 treat convergence in probability and the strong law in
+general.
+\textcite{williams}, Chapter~7, proves an easy strong law under a fourth-moment assumption, and
+Chapter~13 relates convergence in probability and convergence in $L^1$ through uniform
+integrability. \textcite{ross-5}, Chapter~8, has many elementary applications of the inequalities
+of Markov and Chebyshev and of the weak law.

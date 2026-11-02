@@ -64,7 +64,10 @@
 % ---------- one table of contents drives every document ----------
 % latex/toc.tex lists \coursechapter{<slug>}{<title>}; each main file decides
 % what a chapter prints (notes, exercises, or the private solutions).
-\newcommand{\coursechapter}[2]{\chapter{#2}\label{ch:#1}}
+% An optional first argument gives a short running head for long titles:
+% \coursechapter[<short>]{<slug>}{<title>}.
+\newcommand{\coursechaptermark}[1]{\if\relax\detokenize{#1}\relax\else\chaptermark{#1}\fi}
+\newcommand{\coursechapter}[3][]{\chapter{#3}\label{ch:#2}\coursechaptermark{#1}}
 
 % ---------- notation ----------
 \newcommand{\R}{\mathbb{R}}
@@ -80,6 +83,8 @@
 \newcommand{\1}{\mathbf{1}}
 \newcommand{\eqd}{\overset{d}{=}}
 \newcommand{\iid}{i.i.d.\xspace}
+\newcommand{\indep}{\mathrel{\perp\!\!\!\perp}}  % independence
+\newcommand{\cindep}[1]{\mathrel{\underset{#1}{\perp\!\!\!\perp}}}  % conditional independence given #1
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator*{\argmax}{arg\,max}

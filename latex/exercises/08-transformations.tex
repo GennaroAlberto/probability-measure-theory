@@ -1,0 +1,218 @@
+% Exercises for Chapter 8 (multinomial and Gamma laws; transformations of random variables).
+% Statements only: solutions are kept privately. Throughout, (Omega, F, P) is a probability space,
+% Gamma(alpha, lambda) has density lambda^alpha x^(alpha-1) e^(-lambda x) / Gamma(alpha) on (0, inf)
+% (lambda is a rate), and "seed s" means numpy.random.default_rng(s).
+
+\begin{exercise}[The multinomial law]\label{ex:tr-multinomial}
+\medium (in the style of Ross, Ch.~6) Let
+$\underline X=(X_1,\dots,X_N)\sim\mathrm{Multinomial}(n,p_1,\dots,p_N)$, with $p_{N+1}=1-\sum_ip_i$
+and $X_{N+1}=n-\sum_iX_i$. You may use \noteref{eq:tr-multinomial},
+\noteref{rem:tr-multinomial-marginals}, and that $B(n,p)$ has variance $np(1-p)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Complete the computation that the notes leave to the reader in \noteref{exa:tr-urn}, b):
+    compute $\mathbb P(\underline X=(5,3,k))$ for $k=0,1,2$, and check that their sum is the value
+    $0.0567$ found with the merged vector $\underline X'$. Explain why merging two types of outcome
+    gives again a multinomial vector, so that the two methods must agree.
+  \item For $i\ne j$ in $\{1,\dots,N\}$, show that $X_i+X_j\sim B(n,p_i+p_j)$, and deduce that
+    $\operatorname{cov}(X_i,X_j)=-np_ip_j$. Why is a negative sign to be expected?
+  \item Let $0<p_1<1$ and $0\le k\le n$. Show that, given $X_1=k$, the law of $X_2$ is
+    $B\big(n-k,\frac{p_2}{1-p_1}\big)$, that is,
+    $\mathbb P(X_2=j\mid X_1=k)=\binom{n-k}j\big(\frac{p_2}{1-p_1}\big)^j\big(1-\frac{p_2}{1-p_1}\big)^{n-k-j}$.
+    In the urn of \noteref{exa:tr-urn}, compute $\mathbb P(X_2=3\mid X_1=5)$ in this way and as a
+    ratio of two answers of the worked exercise.
+  \item A fair die is rolled $12$ times. Find the probability that each face appears exactly
+    twice, and the probability that more sixes than ones appear. \emph{Hint for the second:}
+    symmetry, and the trinomial law of (number of ones, number of sixes). Check both answers by
+    simulating $10^6$ series of $12$ rolls (seed $2026$).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The annulus, explicitly]\label{ex:tr-annulus}
+\easy Let $(X,Y)$ be uniform on $D=\{(x,y):1\le x^2+y^2\le9\}$, as in \noteref{exa:tr-annulus},
+whose explicit computations are left to the reader. You may use \noteref{thm:pm-tonelli},
+\noteref{thm:pm-fubini}, the marginal density found in the notes, and, in (c), polar coordinates,
+$\iint_Dh(x,y)\,\dd x\,\dd y=\int_1^3\int_0^{2\pi}h(r\cos\theta,r\sin\theta)\,r\,\dd\theta\,\dd r$
+for $h\ge0$ or integrable on $D$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\mathbb E[X]$, $\mathbb E[Y]$ and $\mathbb E[XY]$ as explicit integrals, saying
+    where you use Tonelli's and where Fubini's theorem.
+  \item Show that $\mathbb E[X^2]=\frac52$, using $f_X$ and $\int_{-r}^rx^2\sqrt{r^2-x^2}\,\dd x=\frac{\pi r^4}8$.
+  \item Show that $\mathbb E[X^2Y^2]=\frac{91}{24}$ and $\operatorname{cov}(X^2,Y^2)=-\frac{59}{24}$.
+    Why does this prove again that $X$ and $Y$ are not independent?
+  \item Find $a,b\in\mathbb R$ with $\mathbb P(X>a,\,Y>b)\ne\mathbb P(X>a)\,\mathbb P(Y>b)$,
+    without computing any integral.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Poisson conditionals, dependent]\label{ex:tr-poisson-conditionals}
+\medium This exercise continues \noteref{exa:tr-poisson-joint}, now with $0<\alpha<1$:
+$f_{(X,Y)}(n,m)=c\,\frac{\nu^n\mu^m}{n!\,m!}\alpha^{nm}$ on $\mathbb N^2$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $X$ and $Y$ are not independent, by comparing $f_{(X,Y)}(0,0)f_{(X,Y)}(1,1)$ with
+    $f_{(X,Y)}(0,1)f_{(X,Y)}(1,0)$. Why are these two products equal for a joint density of
+    independent random variables?
+  \item Show that $X$ and $Y$ have finite moments of every order. Using b) of the worked
+    exercise, show that $\sum_nn\,\mathbb P(X=n\mid Y=m)=\nu\alpha^m$, and deduce that
+    $\mathbb E[X]=\mathbb E[\nu\alpha^Y]$, $\mathbb E[XY]=\mathbb E[Y\nu\alpha^Y]$, so that
+    $\operatorname{cov}(X,Y)=\operatorname{cov}(Y,\nu\alpha^Y)$.
+  \item Show that $\operatorname{cov}(X,Y)<0$. \emph{Hint:} for functions $\varphi,\psi$ with
+    $\varphi(Y),\psi(Y),\varphi(Y)\psi(Y)\in L^1$,
+    $\operatorname{cov}(\varphi(Y),\psi(Y))=\frac12\sum_{m,m'}f_Y(m)f_Y(m')\big(\varphi(m)-\varphi(m')\big)\big(\psi(m)-\psi(m')\big)$.
+  \item This part is computational. For $\nu=\mu=2$ and $\alpha\in\{1,0.75,0.5,0.25\}$, compute
+    $c$ (summing the series for $c^{-1}$ of the worked exercise), $\mathbb E[X]$,
+    $\operatorname{var}(X)$ and the correlation coefficient $\rho(X,Y)$. Check that
+    $c=e^{-4}$ for $\alpha=1$. How does $\rho$ depend on $\alpha$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Moments and scale of the Gamma law]\label{ex:tr-gamma-scale}
+\easy Let $X\sim\Gamma(\alpha,\lambda)$. You may use \noteref{prop:tr-gamma-function} and
+\noteref{thm:tr-density}.
+\begin{enumerate}[label=(\alph*)]
+  \item For real $k>-\alpha$, show that
+    $\mathbb E[X^k]=\frac{\Gamma(\alpha+k)}{\Gamma(\alpha)\lambda^k}$, and that $\mathbb E[X^k]=+\infty$ for
+    $k\le-\alpha$. Recover \noteref{prop:tr-gamma-moments}, and show that
+    $\mathbb E[1/X]=\frac\lambda{\alpha-1}$ for $\alpha>1$.
+  \item Let $c>0$. Show that $cX\sim\Gamma(\alpha,\frac\lambda c)$. Deduce that if
+    $Z\sim\Gamma(\alpha,1)$, then $Z/\lambda\sim\Gamma(\alpha,\lambda)$: $\frac1\lambda$ is a scale
+    parameter and $\lambda$ a rate (\noteref{rem:tr-gamma-special}).
+  \item For $\alpha>1$, show that $f_X$ has a unique maximum, at $\frac{\alpha-1}\lambda$. Compute
+    the limits $f_X(0^+)$ and $f_X'(0^+)=\lim_{x\to0^+}f_X'(x)$ for $0<\alpha<1$, $\alpha=1$,
+    $1<\alpha<2$, $\alpha=2$ and $\alpha>2$, and compare with \noteref{fig:tr-gamma} and
+    \noteref{rem:tr-gamma-special}.
+  \item Using $\Gamma(\frac12)=\sqrt\pi$ (\noteref{exa:tr-chi-square-end}), show by induction that
+    $\Gamma(n+\frac12)=\frac{(2n)!}{4^nn!}\sqrt\pi$ for $n\in\mathbb N$, and compute
+    $\mathbb E[\sqrt X]$ for $X\sim\mathrm{Exp}(1)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Wear and rejuvenation]\label{ex:tr-ageing}
+\hard This exercise proves \noteref{rem:tr-ageing}, which the notes state without proof. Let
+$X\sim\Gamma(\alpha,\lambda)$, $S(x)=\mathbb P(X>x)$, and let $h(x)=f_X(x)/S(x)$ for $x>0$ be the
+\emph{hazard rate} of $X$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $S$ is continuous on $[0,+\infty)$ and of class $C^1$ on $(0,+\infty)$, with
+    $S'=-f_X$, and that $h$ is integrable on $(0,t)$ for every $t>0$. Deduce that
+    \[
+      \mathbb P(X>s+t\mid X>s)=\exp\Big(-\int_s^{s+t}h(u)\,\dd u\Big)\qquad(s\ge0,\ t>0).
+    \]
+  \item Show that, for $x>0$,
+    $\frac1{h(x)}=\int_0^{+\infty}\big(1+\frac ux\big)^{\alpha-1}e^{-\lambda u}\,\dd u$. Deduce that
+    $h\equiv\lambda$ if $\alpha=1$, that $h$ is strictly increasing if $\alpha>1$ and strictly
+    decreasing if $\alpha<1$, and that $h(x)\to\lambda$ as $x\to+\infty$ in every case.
+  \item Deduce the three statements of \noteref{rem:tr-ageing}, for all $s,t>0$. Why do they fail
+    for $s=0$?
+  \item Compute $\mathbb P(X>s+1\mid X>s)$ for $\lambda=1$, $s\in\{0,1,5\}$ and
+    $\alpha\in\{\frac12,1,3\}$. What is the limit as $s\to+\infty$, and why?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Simulating a Poisson process]\label{ex:tr-poisson-process}
+\medium This is a computational exercise. Let $U_1,U_2,\dots$ be i.i.d.\ $\mathrm{Exp}(\lambda)$,
+$T_n=U_1+\dots+U_n$ and $N_t=\#\{n\ge1:T_n\le t\}$ for $t\ge0$, as in
+\noteref{rem:tr-poisson-process}. You may use that $T_n\sim\Gamma(n,\lambda)$
+(\noteref{prop:rv-notable-sums}).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\{N_t\ge n\}=\{T_n\le t\}$, and deduce from \noteref{prop:tr-erlang} that
+    $N_t\sim\mathcal P(\lambda t)$. In particular $N_t<+\infty$ a.s.
+  \item Let $t>0$. Show that $\mathbb P(T_1\le s\mid N_t=1)=\frac st$ for $0\le s\le t$: given that
+    exactly one arrival occurs in $[0,t]$, its time is uniform on $[0,t]$. \emph{Hint:}
+    $\{T_1\le s,\,N_t=1\}=\{U_1\le s,\,U_1+U_2>t\}$, and $(U_1,U_2)$ has the density
+    $\lambda^2e^{-\lambda(u_1+u_2)}$ on $(0,+\infty)^2$ (\noteref{thm:pm-density-independence}).
+  \item Take $\lambda=2$ and seed $2026$. Simulate $10^5$ paths and compute the
+    Kolmogorov--Smirnov distance $\sup_t|F^{(n)}(t)-F_5(t)|$ between the empirical distribution
+    function of the $10^5$ values of $T_5$ and the Erlang distribution function $F_5$. Compare it
+    with $1.36/\sqrt n$, which a correct model exceeds with probability about $5\%$ for large $n$.
+    With the same generator, simulate $10^5$ values of $N_3$ and compute the largest difference
+    between their relative frequencies and the density of $\mathcal P(6)$.
+  \item How many paths $n$ are needed so that the estimate $\hat p$ of $p=\mathbb P(T_5\le2)$ has an
+    asymptotic $95\%$ confidence half-width $1.96\sqrt{\hat p(1-\hat p)/n}$ of at most $0.005$,
+    whatever the value of $p$? Run this many paths (seed $2027$) and compare $\hat p$ with the exact
+    value given by \noteref{prop:tr-erlang}.
+  \item Check (b) by simulation for $t=1$ (seed $2028$, $10^5$ paths): estimate $\mathbb P(N_1=1)$,
+    and compute the Kolmogorov--Smirnov distance between the values of $T_1$ on the paths with
+    $N_1=1$ and the uniform law on $[0,1]$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Affine maps of a Gaussian; chi-square by simulation]\label{ex:tr-chi-square}
+\easy Part (a) is the computation left to the reader in \noteref{prop:tr-affine-gaussian}; parts (b) and
+(c) are computational.
+\begin{enumerate}[label=(\alph*)]
+  \item Do the direct computation that the notes leave as an exercise in
+    \noteref{prop:tr-affine-gaussian}: for an absolutely continuous $X$ and $Y=\sigma X+\mu$,
+    compute $F_Y$ in terms of $F_X$ for $\sigma>0$ and for $\sigma<0$, and recover
+    $f_Y(y)=\frac1{|\sigma|}f_X\big(\frac{y-\mu}\sigma\big)$ at the points where $f_X$ is continuous.
+  \item Let $Z\sim\mathcal N(0,1)$. Simulate $10^6$ values of $Z^2$ (seed $2026$) and compute their
+    Kolmogorov--Smirnov distance to the distribution function of $\Gamma(\frac12,\frac12)$; compare
+    with $1.36/\sqrt n$. Make a histogram on $[0,4]$ with $40$ bins, and compare the height of the
+    first bin with the density at the midpoint $0.05$ and with the bin average
+    $\frac{F(0.1)-F(0)}{0.1}$. Which of the two should the height estimate, and why do they differ so
+    much here?
+  \item $\Gamma(\frac12)=\mathbb E[V^{-1/2}]$ for $V\sim\mathrm{Exp}(1)$. Show that this estimator
+    of $\sqrt\pi$ has infinite variance. Show that also $\Gamma(\frac12)=2\,\mathbb E[\sqrt V]$, and
+    that $\operatorname{var}(2\sqrt V)=4-\pi$. How many samples give an asymptotic $95\%$
+    half-width of $0.002$ for the second estimator? Compute both estimators with $10^3,\dots,10^6$
+    samples of $V$ (seed $2026$) and comment.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Piecewise monotone transformations]\label{ex:tr-piecewise}
+\medium This is a computational exercise. You may use \noteref{cor:tr-piecewise}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X$ be uniform on $(-1,2)$ and $Y=X^2$. With the pieces $I_1=(-1,0)$ and $I_2=(0,2)$,
+    show that $f_Y(y)=\frac1{3\sqrt y}$ for $0<y<1$, $f_Y(y)=\frac1{6\sqrt y}$ for $1<y<4$, and
+    $f_Y(y)=0$ otherwise. Check this by computing $F_Y$ directly, and explain the jump of $f_Y$ at
+    $y=1$ (\noteref{fig:tr-transform}).
+  \item Let $X$ be uniform on $(0,2\pi)$ and $Y=\sin X$. Using the three pieces
+    $(0,\frac\pi2)$, $(\frac\pi2,\frac{3\pi}2)$, $(\frac{3\pi}2,2\pi)$, show that
+    $f_Y(y)=\frac1{\pi\sqrt{1-y^2}}$ for $-1<y<1$ (the \emph{arcsine law}). Which pieces contribute
+    for $y>0$, and which for $y<0$? Find $F_Y$.
+  \item Write a function that evaluates the formula of the corollary from $f_X$, $g$ and a list of
+    pieces on which $g$ is strictly monotone, inverting $g$ on each piece numerically by bisection
+    and differentiating the inverse as $1/g'(g_i^{-1}(y))$. Check it against the closed forms of (a)
+    and (b), and compare (a) and (b) with $10^6$ simulated values (seeds $2026$ and $2027$) through
+    the Kolmogorov--Smirnov distance.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A lamp and a wall]\label{ex:tr-cauchy}
+\medium (in the style of Ross, Ch.~5) A lamp stands at distance $1$ from an infinite straight wall.
+It is pointed at a random angle $\Theta$, uniform on $(-\frac\pi2,\frac\pi2)$ and measured from the
+perpendicular to the wall, so that the light hits the wall at the signed distance $Y=\tan\Theta$
+from the foot of the perpendicular.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $Y$ has the density $\frac1{\pi(1+y^2)}$ on $\mathbb R$, the \emph{Cauchy law}.
+  \item Show that $\mathbb E[|Y|]=+\infty$, so that $\mathbb E[Y]$ is not defined, although the
+    density is symmetric.
+  \item The lamp is replaced by a double beam along a line through the lamp, at an angle $\Theta$
+    uniform on $(-\pi,\pi)$; the line hits the wall at $\tan\Theta$ (for $\Theta\ne\pm\frac\pi2$).
+    Use \noteref{cor:tr-piecewise} with three pieces to show that $\tan\Theta$ is again Cauchy, and
+    find the image $g(I_i)$ of each piece.
+  \item Show that $1/Y$ is also Cauchy.
+  \item Simulate $10^6$ values of $\tan\Theta$, $\Theta$ uniform on $(-\pi,\pi)$ (seed $2026$),
+    and print the mean and the median of the first $10^2,10^3,\dots,10^6$ values. Explain what you see.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Calls at a switchboard]\label{ex:tr-arrivals}
+\medium (in the style of Ross, Ch.~5) Calls arrive at a switchboard as a Poisson process of rate
+$\lambda=6$ per hour (\noteref{rem:tr-poisson-process}): the times between successive calls are
+i.i.d.\ $\mathrm{Exp}(6)$, in hours, and the $n$-th call arrives at $T_n\sim\Gamma(n,6)$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the probability that the tenth call arrives within the first hour?
+  \item Find the mean and the standard deviation of the arrival time of the tenth call, in minutes.
+  \item What is the probability that no call arrives in the first $20$ minutes? Given that none
+    arrived in the first $20$ minutes, what is the probability that none arrives in the next $20$
+    minutes? Which property of the exponential law is this?
+  \item Find, numerically, the time $t$ by which the tenth call has arrived with probability
+    $0.9$, by solving $F_{10}(t)=0.9$ with \noteref{prop:tr-erlang}.
+  \item A second switchboard, independent of the first, receives calls as a Poisson process of
+    rate $\mu=4$ per hour; its second call arrives at a time $B\sim\Gamma(2,\mu)$. Show that the
+    probability that the first call at the first switchboard arrives before the second call at the
+    second one is $1-\frac{\mu^2}{(\lambda+\mu)^2}=0.84$. \emph{Hint:} condition on $B$, that is, use
+    \noteref{thm:pm-independence-product} and \noteref{thm:pm-tonelli} to write
+    $\mathbb P(T_1<B)=\int_0^{+\infty}\mathbb P(T_1<t)\,f_B(t)\,\dd t$. Check by simulation
+    ($10^6$ pairs, seed $2026$).
+\end{enumerate}
+\end{exercise}

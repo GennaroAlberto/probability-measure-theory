@@ -1,5 +1,1045 @@
-\begin{planned}
-  \item special cases and properties of conditional expectation
-  \item conditional variance and the law of total variance
-  \item conditional independence
-\end{planned}
+% Chapter 12: Properties of conditional expectation.
+% Translation of Paola Siri's handwritten notes, PDF pages 179 ("ATTESA CONDIZIONATA: CASI
+% PARTICOLARI E PROPRIETA'") to 202: four special cases, properties 1-9 of conditional
+% expectation (linearity, monotonicity, conditional monotone and dominated convergence and Fatou,
+% Jensen, the tower property, E[E[X|G]] = E[X], contraction in L^p, "taking out what is known",
+% the L^2 best predictor), the remark that E[X|Y] = E[X] does not imply independence (p. 186, at
+% the start of a new lecture that restates property 8: once here), conditional variance and the
+% law of total variance with two examples (pp. 189-191), three typed worked exercises (pp.
+% 192-200; the Poisson-Gamma exercise is copied twice in the notes, pp. 197-198 and 199-200: once
+% here), and conditional independence (pp. 201-202, heading "INDIPENDENZA CONDIZIONATA").
+% The headings "Conditional variance" and "Worked exercises" are added; the notes have none there.
+% Conditional independence given a sigma-algebra or a random variable: the subscript goes below.
+
+\Cref{ch:11-conditional-expectation} defined the conditional expectation $\mathbb E[X\mid\mathcal G]$
+by two properties, Kolmogorov's, and showed that it exists and is unique a.s. This chapter derives
+the rules for computing with it. Four special cases come first: no information, full information,
+a $\mathcal G$-measurable $X$, and an $X$ independent of $\mathcal G$. Nine properties follow, which
+mirror those of the expectation (linearity, monotonicity, the convergence theorems, Jensen's
+inequality) and add new ones: conditioning twice on nested $\sigma$-algebras, taking out what is
+known, and the interpretation of $\mathbb E[X\mid\mathcal G]$ as the best predictor of $X$ in
+$L^2$, the orthogonal projection on the functions that only use the information in $\mathcal G$.
+The conditional variance and the law of total variance come next, then three worked exercises
+on Poisson thinning, conditional densities and a Poisson law with a Gamma parameter. The chapter
+closes with conditional independence.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space and $\mathcal G\subseteq\mathcal F$
+is a sub-$\sigma$-algebra. Whenever we write $\mathbb E[X\mid\mathcal G]$, the random variable $X$
+is non-negative or integrable, as in \cref{def:ce-conditional-expectation}; the notes say ``$X$
+any'' for this. Conditional expectations are defined up to a.s.\ equality (\cref{thm:ce-existence}),
+so the identities and inequalities between them hold a.s.
+
+\section{Conditional expectation: special cases and properties}\label{sec:cp-properties}
+
+\subsection{Special cases}\label{sec:cp-special-cases}
+
+\begin{proposition}[Special cases]\label{prop:cp-special-cases}
+Let $X\ge0$ or $X\in L^1$.
+\begin{enumerate}[label=\arabic*)]
+  \item If $\mathcal G=\{\emptyset,\Omega\}$ (no information), then $\mathbb E[X\mid\mathcal G]=\mathbb E[X]$ a.s.
+  \item If $\mathcal G=\mathcal F$ (we know everything), then $\mathbb E[X\mid\mathcal F]=X$ a.s.
+  \item If $X$ is $\mathcal G$-measurable (we know $X$), for any $\mathcal G$, then
+    $\mathbb E[X\mid\mathcal G]=X$ a.s.
+  \item If $\mathcal G\indep\sigma(X)$ (we know nothing about $X$), then
+    $\mathbb E[X\mid\mathcal G]=\mathbb E[X]$ a.s.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+1) $\mathbb E[X\mid\mathcal G]$ is $\mathcal G$-measurable, and a random variable $Z$ is
+$\{\emptyset,\Omega\}$-measurable if and only if $Z$ is constant (\exref{ex:cp-trivial}).\footnote{The
+handwritten notes write ``$Z$ is constant (a.e.)''. Measurability with respect to
+$\{\emptyset,\Omega\}$ forces $Z$ to be constant everywhere: if $Z$ took two values $a\ne b$, the
+event $\{Z=a\}$ would be in $\mathcal G$ and different from $\emptyset$ and $\Omega$. Being
+constant a.s.\ characterises measurability with respect to the $\sigma$-algebra of the events of
+probability $0$ or $1$ (\exref{ex:cp-trivial}). Corrected here.} Hence
+$\mathbb E[X\mid\mathcal G]=c$ for some constant $c$. Property 2) of
+\cref{def:ce-conditional-expectation} is trivial for $A=\emptyset$; for $A=\Omega$ it gives
+\[
+  \mathbb E[X]=\int_\Omega X\,\dd\mathbb P=\int_\Omega\mathbb E[X\mid\mathcal G]\,\dd\mathbb P
+  =\int_\Omega c\,\dd\mathbb P=c\,\mathbb P(\Omega)=c .
+\]
+Hence $c=\mathbb E[X]$, and $\mathbb E[X\mid\mathcal G]=\mathbb E[X]$ a.s. (If $X\ge0$ and
+$\mathbb E[X]=+\infty$, the constant is $+\infty$, a value that
+\cref{def:ce-conditional-expectation} allows.)
+
+2) $X$ is $\mathcal F$-measurable, so $X$ itself satisfies 1) and 2) of
+\cref{def:ce-conditional-expectation} with $\mathcal G=\mathcal F$, and
+$\mathbb E[X\mid\mathcal F]=X$ a.s.\ by the uniqueness in \cref{thm:ce-existence}.
+
+3) In the same way, if $X$ is $\mathcal G$-measurable, then $X$ satisfies 1) and 2) of
+\cref{def:ce-conditional-expectation}, and $\mathbb E[X\mid\mathcal G]=X$ a.s.; 2) is the case
+$\mathcal G=\mathcal F$.\footnote{The notes state 2) and 3) without comment; the one-line proofs
+are added.}
+
+4) $\mathcal G\indep\sigma(X)$ means that $A\indep B$ for every $A\in\mathcal G$ and every
+$B\in\sigma(X)$ (\cref{def:ms-independence-sigma}), or equivalently that $X\indep Y$ for every
+$\mathcal G$-measurable random variable $Y$: if $\sigma(Y)\subseteq\mathcal G$, then
+$\sigma(Y)\indep\sigma(X)$.\footnote{Added to the handwritten notes: conversely, if $X\indep Y$ for
+every $\mathcal G$-measurable $Y$, take $Y=\1_A$ with $A\in\mathcal G$; then
+$\sigma(\1_A)=\{\emptyset,A,A^c,\Omega\}$ is independent of $\sigma(X)$, and in particular
+$A\indep B$ for every $B\in\sigma(X)$.}
+
+$\mathbb E[X\mid\mathcal G]$ must be $\mathcal G$-measurable and satisfy
+$\int_AX\,\dd\mathbb P=\int_A\mathbb E[X\mid\mathcal G]\,\dd\mathbb P$ for every $A\in\mathcal G$.
+For $A\in\mathcal G$,
+\[
+  \int_AX\,\dd\mathbb P=\int_\Omega X\1_A\,\dd\mathbb P=\mathbb E[X\1_A]
+  =\mathbb E[X]\,\mathbb E[\1_A]=\mathbb E[X]\,\mathbb P(A)=\int_A\mathbb E[X]\,\dd\mathbb P,
+\]
+where the third equality holds because $\1_A$ is $\mathcal G$-measurable, so that $\1_A\indep X$
+(\cref{thm:pm-expectation-product}),\footnote{If $X\ge0$ is not integrable, the identity
+$\mathbb E[X\1_A]=\mathbb E[X]\,\mathbb P(A)$ holds in $[0,+\infty]$: the first half of the proof of
+\cref{thm:pm-expectation-product}, which uses Tonelli's theorem, does not need integrability.
+Added to the handwritten notes.} and the last because $\mathbb E[X]$ is a constant. The constant
+$\mathbb E[X]$ is $\mathcal G$-measurable, so $\mathbb E[X\mid\mathcal G]=\mathbb E[X]$ a.s.
+\end{proof}
+
+\subsection{Properties}\label{sec:cp-list}
+
+\begin{proposition}[Property \textcircled{\scriptsize 1}: linearity]\label{prop:cp-linearity}
+Let $X,Y\ge0$ and $a,b,c\ge0$, or $X,Y\in L^1$ and $a,b,c\in\mathbb R$. Then
+\[
+  \mathbb E[aX+bY+c\mid\mathcal G]=a\,\mathbb E[X\mid\mathcal G]+b\,\mathbb E[Y\mid\mathcal G]+c
+  \qquad\text{a.s.}
+\]
+\end{proposition}
+
+\begin{proof}
+The right-hand side is $\mathcal G$-measurable (\cref{prop:mf-operations}).\footnote{The
+handwritten notes allow $a,b,c\in\mathbb R$ also when $X,Y\ge0$. Then $aX+bY+c$ need be neither
+non-negative nor integrable, and $\mathbb E[aX+bY+c\mid\mathcal G]$ need not be defined; for
+$X,Y\ge0$ the coefficients must be non-negative. Corrected here.} For every $A\in\mathcal G$, by
+2) of \cref{def:ce-conditional-expectation} applied three times,
+\[
+\begin{aligned}
+  \int_A\mathbb E[aX+bY+c\mid\mathcal G]\,\dd\mathbb P&=\int_A(aX+bY+c)\,\dd\mathbb P
+  =a\int_AX\,\dd\mathbb P+b\int_AY\,\dd\mathbb P+c\underbrace{\int_A\dd\mathbb P}_{=\,\mathbb P(A)}\\
+  &=a\int_A\mathbb E[X\mid\mathcal G]\,\dd\mathbb P+b\int_A\mathbb E[Y\mid\mathcal G]\,\dd\mathbb P+c\,\mathbb P(A)\\
+  &=\int_A\big(a\,\mathbb E[X\mid\mathcal G]+b\,\mathbb E[Y\mid\mathcal G]+c\big)\,\dd\mathbb P,
+\end{aligned}
+\]
+by the linearity of the integral (\cref{prop:in-properties} for $X,Y\ge0$; \cref{prop:ig-linearity}
+for $X,Y\in L^1$, where all the integrals are finite since $\mathbb E[X\mid\mathcal G]$ and
+$\mathbb E[Y\mid\mathcal G]$ are integrable, as shown in the proof of \cref{thm:ce-existence}).
+The thesis follows from the uniqueness in \cref{thm:ce-existence}.
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 2}: monotonicity]\label{prop:cp-monotonicity}
+Let $X,Y\ge0$ or $X,Y\in L^1$. If $X\le Y$ a.s., then
+$\mathbb E[X\mid\mathcal G]\le\mathbb E[Y\mid\mathcal G]$ a.s.
+\end{proposition}
+
+\begin{proof}
+Let $X,Y\in L^1$. Then $Y-X\ge0$ a.s., and so $\mathbb E[Y-X\mid\mathcal G]\ge0$ a.s.: the
+conditional expectation of a non-negative variable is a Radon--Nikodym density, which is
+non-negative (proof of \cref{thm:ce-existence}).\footnote{Added to the handwritten notes, a direct
+argument: the set $A=\{\mathbb E[Y-X\mid\mathcal G]<0\}$ is in $\mathcal G$, and
+$\int_A\mathbb E[Y-X\mid\mathcal G]\,\dd\mathbb P=\int_A(Y-X)\,\dd\mathbb P\ge0$; so the
+non-negative function $-\mathbb E[Y-X\mid\mathcal G]\1_A$ has integral $\le0$, hence it vanishes
+a.s.\ (\cref{prop:in-ae}), and $\mathbb P(A)=0$.} By 1),
+\[
+  0\le\mathbb E[Y-X\mid\mathcal G]=\mathbb E[Y\mid\mathcal G]-\mathbb E[X\mid\mathcal G]
+  \qquad\text{a.s.}
+\]
+If $X,Y\ge0$ are not integrable, $Y-X$ and $\mathbb E[Y\mid\mathcal G]-\mathbb E[X\mid\mathcal G]$
+may be of the form $\infty-\infty$, and we argue on the definition.\footnote{The handwritten notes
+give only the argument for $X,Y\in L^1$; the case of non-negative, non-integrable variables is
+added here.} Let $\hat X=\mathbb E[X\mid\mathcal G]$ and $\hat Y=\mathbb E[Y\mid\mathcal G]$, with
+values in $[0,+\infty]$, and for $n\in\mathbb N$ let
+$A_n=\{\hat X>\hat Y,\ \hat Y\le n\}\in\mathcal G$. Then
+\[
+  \int_{A_n}\hat X\,\dd\mathbb P=\int_{A_n}X\,\dd\mathbb P\le\int_{A_n}Y\,\dd\mathbb P
+  =\int_{A_n}\hat Y\,\dd\mathbb P\le n<+\infty ,
+\]
+so $\hat X<+\infty$ a.s.\ on $A_n$ (\cref{prop:in-ae}), and
+$\int_{A_n}(\hat X-\hat Y)\,\dd\mathbb P\le0$ with $\hat X-\hat Y>0$ on $A_n$: hence
+$\mathbb P(A_n)=0$. Since $\{\hat X>\hat Y\}\subseteq\bigcup_nA_n$ (on this set $\hat Y<+\infty$),
+$\hat X\le\hat Y$ a.s.
+\end{proof}
+
+\begin{theorem}[Property \textcircled{\scriptsize 3}: conditional monotone convergence]\label{thm:cp-monotone-convergence}
+Let $(X_n)_{n\ge1}$ be a sequence of random variables with $X_n\ge0$ and $X_n\le X_{n+1}$ a.s.\ for
+every $n$, and let $X=\lim_nX_n$. Then
+\[
+  \mathbb E[X\mid\mathcal G]=\lim_n\mathbb E[X_n\mid\mathcal G]\qquad\text{a.s.}
+\]
+\end{theorem}
+
+The limit $X$ exists a.s., and it may take the value $+\infty$.\footnote{Added to the handwritten
+notes: outside the negligible set $N=\bigcup_n\{X_n>X_{n+1}\}$ the sequence is increasing, and we
+set $X=\lim_nX_n$ there and $X=0$ on $N$. \Cref{def:ce-conditional-expectation} applies verbatim to
+an $\mathcal F$-measurable $X$ with values in $[0,+\infty]$, and so does the existence proof of
+\cref{thm:ce-existence}, which truncates $X$ at the levels $n$.}
+
+\begin{proof}
+By 2), $X_n\le X_{n+1}$ a.s.\ gives $\mathbb E[X_n\mid\mathcal G]\le\mathbb E[X_{n+1}\mid\mathcal G]$
+a.s., so the limit $\lim_n\mathbb E[X_n\mid\mathcal G]$ exists a.s. There is no problem with
+$\mathcal G$-measurability: the limit is taken outside the set
+$\bigcup_n\{\mathbb E[X_n\mid\mathcal G]>\mathbb E[X_{n+1}\mid\mathcal G]\}$, which is in $\mathcal G$
+and negligible, and it is $\mathcal G$-measurable (\cref{prop:mf-limits}). Let $A\in\mathcal G$.
+Then
+\[
+\begin{aligned}
+  \int_A\mathbb E[X\mid\mathcal G]\,\dd\mathbb P&=\int_AX\,\dd\mathbb P=\int_A\big(\lim_nX_n\big)\,\dd\mathbb P
+  \overset{(a)}{=}\lim_n\int_AX_n\,\dd\mathbb P\\
+  &=\lim_n\int_A\mathbb E[X_n\mid\mathcal G]\,\dd\mathbb P
+  \overset{(b)}{=}\int_A\big(\lim_n\mathbb E[X_n\mid\mathcal G]\big)\,\dd\mathbb P,
+\end{aligned}
+\]
+where (a) is the theorem of Beppo Levi for $(X_n)_n$ and (b) the same theorem for
+$(\mathbb E[X_n\mid\mathcal G])_n$, both in the a.e.\ version of
+\cref{thm:in-monotone-convergence-ae}. By the uniqueness in \cref{thm:ce-existence},
+$\mathbb E[X\mid\mathcal G]=\lim_n\mathbb E[X_n\mid\mathcal G]$ a.s.
+\end{proof}
+
+The notes state the conditional versions of the dominated convergence theorem and of Fatou's
+lemma without proof.\footnote{See \citet[Section~9.7]{williams}, where both are proved, and
+\citet[Section~34]{billingsley}; \citet[Sections~4.1 and~4.6]{durrett} has conditional monotone and
+dominated convergence. Fatou's lemma follows from 3) as \cref{lem:in-fatou} follows from
+\cref{thm:in-monotone-convergence}, and dominated convergence follows from Fatou's lemma applied to
+$Y\pm X_n$: \exref{ex:cp-convergence}.}
+
+\begin{theorem}[Conditional dominated convergence]\label{thm:cp-dominated-convergence}
+Let $(X_n)_{n\ge1}$ be a sequence of random variables with $|X_n|\le Y$ for every $n$, where
+$Y\in L^1(\Omega,\mathcal F,\mathbb P)$, and $X_n\to X$ a.s., with $X$ a random variable. Then
+$X_n,X\in L^1(\Omega,\mathcal F,\mathbb P)$ and
+\[
+  \mathbb E[X\mid\mathcal G]=\lim_n\mathbb E[X_n\mid\mathcal G]\qquad\text{a.s.}
+\]
+\end{theorem}
+
+\begin{lemma}[Conditional Fatou lemma]\label{lem:cp-fatou}
+Let $(X_n)_{n\ge1}$ be a sequence of random variables with $X_n\ge0$. Then
+\[
+  \mathbb E\big[\liminf_nX_n\,\big|\,\mathcal G\big]\le\liminf_n\mathbb E[X_n\mid\mathcal G]
+  \qquad\text{a.s.}
+\]
+\end{lemma}
+
+\begin{theorem}[Property \textcircled{\scriptsize 4}: Jensen's inequality]\label{thm:cp-jensen}
+Let $X$ be a random variable with $X\in L^1(\Omega,\mathcal F,\mathbb P)$, let
+$\mathcal G\subseteq\mathcal F$, and let $\Phi:\mathbb R\to\mathbb R$ be convex, with
+$\Phi(X)\in L^1(\Omega,\mathcal F,\mathbb P)$. Then
+\[
+  \Phi\big(\mathbb E[X\mid\mathcal G]\big)\le\mathbb E[\Phi(X)\mid\mathcal G]\qquad\text{a.s.}
+\]
+\end{theorem}
+
+\begin{proof}
+$\Phi$ is convex, so ``$\Phi$ rests on straight lines'': there are $a_n,b_n\in\mathbb R$,
+$n\ge1$, such that
+\begin{equation}\label{eq:cp-affine-minorants}
+  \Phi(x)=\sup_n\,(a_nx+b_n)=\sup_nL_n(x)\qquad\forall x\in\mathbb R,\qquad L_n(x)=a_nx+b_n .
+\end{equation}
+One such family is given by the lines that support the graph at the rational
+points:\footnote{The handwritten notes assert that such $a_n,b_n$ exist; the explicit family
+of lines at the rational points is added here, and the facts on convex functions it uses are proved in
+\exref{ex:cp-jensen}.} for $q\in\mathbb Q$ let
+$L_q(x)=\Phi(q)+\Phi'_+(q)(x-q)$, where $\Phi'_+(q)$ is the right derivative of $\Phi$ at $q$.
+Every $L_q$ lies below $\Phi$, and for every $x$ and rationals $q_k\to x$ we have
+$L_{q_k}(x)\to\Phi(x)$, because $\Phi$ is continuous and $\Phi'_+$ is bounded near $x$. That the
+family is countable is what matters below.
+
+For each $n$, $L_n(x)\le\Phi(x)$ for every $x$, so $L_n(X)=a_nX+b_n\le\Phi(X)$, and by
+monotonicity 2)
+\[
+  \mathbb E[L_n(X)\mid\mathcal G]\le\mathbb E[\Phi(X)\mid\mathcal G]\qquad\text{a.s.}
+\]
+By linearity 1),
+\[
+  \mathbb E[L_n(X)\mid\mathcal G]=\mathbb E[a_nX+b_n\mid\mathcal G]=a_n\,\mathbb E[X\mid\mathcal G]+b_n
+  =L_n\big(\mathbb E[X\mid\mathcal G]\big)\qquad\text{a.s.}
+\]
+Outside the union of countably many negligible sets, one for each $n$, we thus have
+$L_n(\mathbb E[X\mid\mathcal G])\le\mathbb E[\Phi(X)\mid\mathcal G]$ for every $n$, and by
+\eqref{eq:cp-affine-minorants}
+\[
+  \Phi\big(\mathbb E[X\mid\mathcal G]\big)=\sup_nL_n\big(\mathbb E[X\mid\mathcal G]\big)
+  \le\mathbb E[\Phi(X)\mid\mathcal G]\qquad\text{a.s.}\qedhere
+\]
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 5}: tower property]\label{prop:cp-tower}
+If $\Theta\subseteq\mathcal G\subseteq\mathcal F$ are sub-$\sigma$-algebras and $X\ge0$ or
+$X\in L^1$, then
+\[
+  \mathbb E\big[\mathbb E[X\mid\mathcal G]\,\big|\,\Theta\big]=\mathbb E[X\mid\Theta]\qquad\text{a.s.}
+\]
+\end{proposition}
+
+This is also called the absorption, or projectivity, property.
+
+\begin{proof}
+Both sides are $\Theta$-measurable; the left-hand side is defined, because
+$\mathbb E[X\mid\mathcal G]$ is non-negative or integrable together with $X$. Moreover, for
+every $A\in\Theta$,
+\[
+  \int_A\mathbb E[X\mid\Theta]\,\dd\mathbb P=\int_AX\,\dd\mathbb P
+  \overset{A\in\mathcal G}{=}\int_A\mathbb E[X\mid\mathcal G]\,\dd\mathbb P
+  =\int_A\mathbb E\big[\mathbb E[X\mid\mathcal G]\,\big|\,\Theta\big]\,\dd\mathbb P,
+\]
+by 2) of \cref{def:ce-conditional-expectation} three times: for $\Theta$, for $\mathcal G$ (since
+$A\in\Theta\subseteq\mathcal G$), and for $\Theta$ again. Hence
+$\mathbb E[X\mid\Theta]=\mathbb E\big[\mathbb E[X\mid\mathcal G]\mid\Theta\big]$ a.s.
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 6}]\label{prop:cp-expectation}
+For $X\ge0$ or $X\in L^1$,
+\[
+  \mathbb E[X]=\mathbb E\big[\mathbb E[X\mid\mathcal G]\big].
+\]
+\end{proposition}
+
+\begin{proof}
+This is 5) with $\Theta=\{\emptyset,\Omega\}$, by 1) of \cref{prop:cp-special-cases}. In fact it
+follows directly from the definition: since $\Omega\in\mathcal G$,
+$\int_\Omega X\,\dd\mathbb P=\int_\Omega\mathbb E[X\mid\mathcal G]\,\dd\mathbb P$.
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 7}: contraction in $L^p$]\label{prop:cp-contraction}
+Let $p\ge1$. If $X\in L^p(\Omega,\mathcal F,\mathbb P)$, then
+$\mathbb E[X\mid\mathcal G]\in L^p(\Omega,\mathcal G,\mathbb P)$ and
+\[
+  \big\|\mathbb E[X\mid\mathcal G]\big\|_{L^p(\Omega,\mathcal G,\mathbb P)}\le\|X\|_{L^p(\Omega,\mathcal F,\mathbb P)} :
+\]
+$\mathbb E[\,\cdot\mid\mathcal G]$ is a contraction from $L^p(\Omega,\mathcal F,\mathbb P)$ into
+$L^p(\Omega,\mathcal G,\mathbb P)$. The same holds for $p=\infty$.
+\end{proposition}
+
+\begin{proof}
+Let $\Phi(x)=|x|^p$, which is convex since $p\ge1$. If $X\in L^p(\Omega,\mathcal F,\mathbb P)$, then
+$\Phi(X)=|X|^p\in L^1(\Omega,\mathcal F,\mathbb P)$, and $X\in L^1$ (\cref{prop:ld-inclusions}). By
+Jensen's inequality 4),
+\[
+  \big|\mathbb E[X\mid\mathcal G]\big|^p\le\mathbb E\big[|X|^p\,\big|\,\mathcal G\big]\qquad\text{a.s.},
+\]
+and therefore, by the monotonicity of the integral and by 6),
+\[
+  \mathbb E\big[|\mathbb E[X\mid\mathcal G]|^p\big]\le\mathbb E\big[\mathbb E[|X|^p\mid\mathcal G]\big]
+  =\mathbb E\big[|X|^p\big]<+\infty .
+\]
+So if $X\in L^p(\Omega,\mathcal F,\mathbb P)$, then $\mathbb E[X\mid\mathcal G]\in L^p(\Omega,\mathcal G,\mathbb P)$,
+and taking $p$-th roots gives the inequality between the norms.\footnote{The integral of a
+$\mathcal G$-measurable function is the same for $\mathbb P$ and for its restriction to $\mathcal G$
+(\cref{ch:11-conditional-expectation}, before the proof of \cref{thm:ce-existence}), so the norm of
+$\mathbb E[X\mid\mathcal G]$ is the same in $L^p(\Omega,\mathcal G,\mathbb P)$ and in
+$L^p(\Omega,\mathcal F,\mathbb P)$. The map is well defined on equivalence classes and linear,
+by 1). Added to the handwritten notes.}
+
+In the same way, let $X\in L^\infty(\Omega,\mathcal F,\mathbb P)$. Then
+\[
+  |X|\le\|X\|_\infty=\operatorname{ess\,sup}|X|=\inf\{M>0:\mathbb P(|X|>M)=0\}\qquad\text{a.s.}
+\]
+(\cref{def:ld-Linfty}), and by Jensen's inequality, then by monotonicity 2),
+\[
+  \big|\mathbb E[X\mid\mathcal G]\big|\le\mathbb E\big[|X|\,\big|\,\mathcal G\big]
+  \le\mathbb E\big[\|X\|_\infty\,\big|\,\mathcal G\big]=\|X\|_\infty\qquad\text{a.s.},
+\]
+where the last equality holds because $\|X\|_\infty$ is a constant, hence $\mathcal G$-measurable
+(3) of \cref{prop:cp-special-cases}). Hence
+\begin{equation}\label{eq:cp-contraction-infty}
+  \big\|\mathbb E[X\mid\mathcal G]\big\|_\infty\le\|X\|_\infty .
+\end{equation}
+If $X\in L^\infty(\Omega,\mathcal F,\mathbb P)$, then $\mathbb E[X\mid\mathcal G]\in L^\infty(\Omega,\mathcal G,\mathbb P)$
+and \eqref{eq:cp-contraction-infty} holds: in this case too, $\mathbb E[\,\cdot\mid\mathcal G]$ is a
+contraction.
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 8}: taking out what is known]\label{prop:cp-taking-out}
+Let $X$ and $Y$ be random variables. Suppose that $X,Y\ge0$, or that $X,Y,XY\in L^1$ (for example
+$X,Y\in L^2$; or $X\in L^1$ and $Y\in L^\infty$; or $X\in L^p$ and $Y\in L^q$ with $p$ and $q$
+conjugate exponents, which gives $XY\in L^1$ by H\"older's inequality, \cref{thm:ld-holder}). Let
+$Y$ be $\mathcal G$-measurable. Then
+\[
+  \mathbb E[XY\mid\mathcal G]=Y\,\mathbb E[X\mid\mathcal G]\qquad\text{a.s.}
+\]
+\end{proposition}
+
+The name is \citeauthor{williams}'s \citep[Section~9.7]{williams}; the notes number the
+property only.\footnote{The notes state this property twice: on p.~185, with the first step of the
+proof, and again at the start of the next lecture (p.~186), adding the example $X,Y\in L^2$. It
+appears once here.}
+
+\begin{proof}
+\begin{itemize}
+  \item Consider first $Y=\1_B$, with $B\in\mathcal G$. Then $Y\,\mathbb E[X\mid\mathcal G]=\1_B\,\mathbb E[X\mid\mathcal G]$
+    is $\mathcal G$-measurable, and for every $A\in\mathcal G$
+    \[
+    \begin{aligned}
+      \int_A\mathbb E[XY\mid\mathcal G]\,\dd\mathbb P&=\int_AXY\,\dd\mathbb P=\int_AX\1_B\,\dd\mathbb P
+      =\int_{A\cap B}X\,\dd\mathbb P\\
+      &\overset{A\cap B\in\mathcal G}{=}\int_{A\cap B}\mathbb E[X\mid\mathcal G]\,\dd\mathbb P
+      =\int_A\1_B\,\mathbb E[X\mid\mathcal G]\,\dd\mathbb P .
+    \end{aligned}
+    \]
+    Hence $\mathbb E[XY\mid\mathcal G]=Y\,\mathbb E[X\mid\mathcal G]$ a.s.
+\end{itemize}
+The result then extends to $Y$ simple and $\ge0$, to $Y\ge0$, and to $Y$ of any
+sign.\footnote{The handwritten notes list these three extensions without carrying them out; the
+details are added here. They show that the proof uses only $X,XY\in L^1$: the hypothesis
+$Y\in L^1$ is not needed.}
+\begin{itemize}
+  \item Let $Y=\sum_{i=1}^ka_i\1_{B_i}$ be simple, $\mathcal G$-measurable and $\ge0$, with $a_i\ge0$
+    and $B_i\in\mathcal G$ (\cref{prop:mf-canonical} on $(\Omega,\mathcal G)$). By linearity 1) and
+    the first step,
+    $\mathbb E[XY\mid\mathcal G]=\sum_ia_i\,\mathbb E[X\1_{B_i}\mid\mathcal G]=\sum_ia_i\1_{B_i}\mathbb E[X\mid\mathcal G]
+    =Y\,\mathbb E[X\mid\mathcal G]$ a.s.
+  \item Let $X,Y\ge0$, with $Y$ $\mathcal G$-measurable. There are simple $\mathcal G$-measurable
+    $Y_n$ with $0\le Y_n\nearrow Y$ (\cref{thm:mf-approximation} on $(\Omega,\mathcal G)$). Then
+    $XY_n\nearrow XY$, and by 3) and the previous step
+    $\mathbb E[XY\mid\mathcal G]=\lim_n\mathbb E[XY_n\mid\mathcal G]=\lim_nY_n\,\mathbb E[X\mid\mathcal G]
+    =Y\,\mathbb E[X\mid\mathcal G]$ a.s., with the convention $0\cdot\infty=0$: where
+    $\mathbb E[X\mid\mathcal G]=+\infty$, the products $Y_n\,\mathbb E[X\mid\mathcal G]$ are $0$ if
+    $Y=0$ and eventually $+\infty$ if $Y>0$.
+  \item Let $X,XY\in L^1$ and $Y$ $\mathcal G$-measurable, of any sign. Write $X=X^+-X^-$ and
+    $Y=Y^+-Y^-$; $Y^\pm$ are $\mathcal G$-measurable and non-negative. By the previous step
+    $\mathbb E[X^\pm Y^\pm\mid\mathcal G]=Y^\pm\,\mathbb E[X^\pm\mid\mathcal G]$ for the four choices
+    of signs, and these are finite a.s., since $X^\pm Y^\pm\le|XY|$ and $X^\pm$ are integrable.
+    Since $XY=X^+Y^+-X^+Y^--X^-Y^++X^-Y^-$, linearity 1) gives
+    \[
+      \mathbb E[XY\mid\mathcal G]=(Y^+-Y^-)\big(\mathbb E[X^+\mid\mathcal G]-\mathbb E[X^-\mid\mathcal G]\big)
+      =Y\,\mathbb E[X\mid\mathcal G]\qquad\text{a.s.}\qedhere
+    \]
+\end{itemize}
+\end{proof}
+
+\begin{remark}[Independence and conditional expectation]\label{rem:cp-independence}
+We have seen that if $\sigma(X)\indep\mathcal G$, then $\mathbb E[X\mid\mathcal G]=\mathbb E[X]$
+(4) of \cref{prop:cp-special-cases}). Consequently, if $X\indep Y$, then
+\[
+  \mathbb E[X\mid Y]=\mathbb E[X],\qquad\text{and we may take}\quad\mathbb E[X\mid Y=y]=\mathbb E[X]\quad\forall y\in\mathbb R .
+\]
+But \emph{the converse does not hold}.
+
+\emph{Example.} Let $X\sim U(\{-2,-1,1,2\})$: $f_X(i)=\mathbb P(X=i)=\frac14$ for $i=-2,-1,1,2$. Then
+$Y=X^2\sim U(\{1,4\})$; indeed
+\[
+\begin{aligned}
+  f_Y(1)&=\mathbb P(Y=1)=\mathbb P(X^2=1)=\mathbb P(X=-1)+\mathbb P(X=1)=\tfrac12,\\
+  f_Y(4)&=\mathbb P(Y=4)=\mathbb P(X^2=4)=\mathbb P(X=-2)+\mathbb P(X=2)=\tfrac12 .
+\end{aligned}
+\]
+Moreover
+\[
+  f_{X\mid Y=1}(i)=\mathbb P(X=i\mid Y=1)=\mathbb P(X=i\mid X^2=1)=
+  \begin{cases}\frac12&i=-1,1,\\[0.3ex]0&i=-2,2,\end{cases}
+\]
+that is, $X\mid Y=1\sim U(\{-1,1\})$; similarly $X\mid Y=4\sim U(\{-2,2\})$. Hence
+\[
+  h(1)=\mathbb E[X\mid Y=1]=0=\mathbb E[X\mid Y=4]=h(4)
+  \quad\Longrightarrow\quad h(Y)=\mathbb E[X\mid Y]=0=\mathbb E[X],
+\]
+but $X$ and $Y=X^2$ are not independent: for instance
+$\mathbb P(X=1,\,Y=4)=0\ne\frac18=\mathbb P(X=1)\,\mathbb P(Y=4)$.
+\end{remark}
+
+\begin{remark}[A characterisation of $\mathbb E{[X\mid\mathcal G]}$]\label{rem:cp-characterisation}
+Under the hypotheses of 8), taking expectations and using 6),
+\[
+  \mathbb E[XY]=\mathbb E\big[\mathbb E[XY\mid\mathcal G]\big]=\mathbb E\big[Y\,\mathbb E[X\mid\mathcal G]\big].
+\]
+So, if $Y$ is $\mathcal G$-measurable,
+\begin{equation}\label{eq:cp-characterisation}
+  \mathbb E[XY]=\mathbb E\big[\mathbb E[X\mid\mathcal G]\,Y\big]
+\end{equation}
+(for the $Y$ for which the expectations are well defined). For $Y=\1_B$ with $B\in\mathcal G$,
+\eqref{eq:cp-characterisation} reads $\mathbb E[X\1_B]=\mathbb E\big[\mathbb E[X\mid\mathcal G]\1_B\big]$:
+we recover the definition. Hence $\mathbb E[X\mid\mathcal G]$ is the unique (a.s.)
+$\mathcal G$-measurable function that satisfies \eqref{eq:cp-characterisation} (for all bounded
+$\mathcal G$-measurable $Y$, say). Property \eqref{eq:cp-characterisation} characterises
+$\mathbb E[X\mid\mathcal G]$, and can be taken as an alternative definition.
+\end{remark}
+
+\begin{theorem}[Property \textcircled{\scriptsize 9}: the best predictor in $L^2$]\label{thm:cp-projection}
+Let $X\in L^2(\Omega,\mathcal F,\mathbb P)$, so that $\hat X=\mathbb E[X\mid\mathcal G]\in L^2(\Omega,\mathcal G,\mathbb P)$
+by 7). Then, for every $Z\in L^2(\Omega,\mathcal G,\mathbb P)$,
+\[
+  \|X-\hat X\|_{L^2}\le\|X-Z\|_{L^2},\qquad\text{that is,}\qquad
+  \mathbb E\big[(X-\hat X)^2\big]\le\mathbb E\big[(X-Z)^2\big].
+\]
+If in particular $\mathbb E[Z]=\mathbb E[X]$ $(=\mathbb E[\hat X])$, then
+\[
+  \operatorname{var}(X-\hat X)\le\operatorname{var}(X-Z).
+\]
+\end{theorem}
+
+$\hat X$ represents the best prediction of $X$ given the information contained in $\mathcal G$:
+$\hat X$ is the best unbiased estimate of $X$ given $\mathcal G$, where unbiased means that
+$\mathbb E[\hat X]=\mathbb E[X]$.
+
+\begin{example}[Signal and noise]\label{exa:cp-signal}
+Let $X$ be a transmitted signal and $Y=X+W$ the received signal, where $W$ is a noise. $Y$ is
+known, so $\mathcal G=\sigma(Y)$; what about $X$? We estimate $X$ by $f(Y)$: what is the best
+choice of $f$? It is $f=h$; that is, the best (unbiased) estimate of $X$ is
+$h(Y)=\mathbb E[X\mid Y]$. In particular, if we receive a value $y$, we estimate $X$ by
+$\mathbb E[X\mid Y=y]=h(y)$.\footnote{Added to the handwritten notes: by \cref{thm:ce-doob-dynkin}
+the $\sigma(Y)$-measurable random variables are exactly the $f(Y)$ with $f$ Borel, so
+\cref{thm:cp-projection} compares $h(Y)$ with every $f(Y)\in L^2$.}
+\end{example}
+
+\begin{proof}[Proof of \cref{thm:cp-projection}]
+Let $Z\in L^2(\Omega,\mathcal G,\mathbb P)$. Then
+\[
+\begin{aligned}
+  \mathbb E\big[(X-Z)^2\big]&=\mathbb E\Big[\big((X-\hat X)+(\hat X-Z)\big)^2\Big]\\
+  &=\mathbb E\big[(X-\hat X)^2\big]+\mathbb E\big[(\hat X-Z)^2\big]+2\,\mathbb E\big[(X-\hat X)(\hat X-Z)\big],
+\end{aligned}
+\]
+where all the expectations are finite by the Cauchy--Schwarz inequality
+(\cref{cor:ld-cauchy-schwarz}). Let $Y=\hat X-Z$, which is $\mathcal G$-measurable and in
+$L^2(\Omega,\mathcal G,\mathbb P)$. The last term vanishes:
+\[
+  \mathbb E\big[(X-\hat X)(\hat X-Z)\big]=\mathbb E\big[X(\hat X-Z)\big]-\mathbb E\big[\hat X(\hat X-Z)\big]
+  =\mathbb E[XY]-\mathbb E[\hat XY]=0
+\]
+by \eqref{eq:cp-characterisation}, because $Y$ is $\mathcal G$-measurable and $X,Y,XY\in L^1$.
+Hence
+\[
+  \mathbb E\big[(X-Z)^2\big]=\mathbb E\big[(X-\hat X)^2\big]+\underbrace{\mathbb E\big[(\hat X-Z)^2\big]}_{\ge0}
+  \ge\mathbb E\big[(X-\hat X)^2\big].
+\]
+If $\mathbb E[Z]=\mathbb E[X]$, then $\mathbb E[X-Z]=0=\mathbb E[X-\hat X]$ (by 6)), so the two
+mean squares are the variances of $X-Z$ and $X-\hat X$.
+\end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch12-projection}
+  \caption{The signal $X\sim\mathrm{Exp}(1)$ received as $Y=X+W$, $W\sim\mathcal N(0,1)$ independent
+    of $X$. Left: $1500$ simulated pairs $(Y,X)$, the best predictor $h(y)=\mathbb E[X\mid Y=y]$,
+    the best affine predictor, and the regression on the indicators of $12$ bins of $Y$ fitted on
+    $10^5$ pairs (a step function). Right: the mean squared error of the bin regression on
+    $10^6$ new pairs, against the number $K$ of bins (with the same number of samples in each), for
+    regressions fitted on $2000$ and on $10^5$ pairs; the horizontal lines are the errors of $h$
+    ($0.4118$) and of the affine predictor ($0.5$).}
+  \label{fig:cp-projection}
+\end{figure}
+
+\begin{remark}[Orthogonal projection]\label{rem:cp-orthogonal}
+By \cref{thm:cp-projection}, $\|X-\hat X\|_{L^2}\le\|X-Z\|_{L^2}$ for every
+$Z\in L^2(\Omega,\mathcal G,\mathbb P)$: $\hat X=\mathbb E[X\mid\mathcal G]$ is the
+\emph{orthogonal projection} of $X\in L^2(\Omega,\mathcal F,\mathbb P)$ onto
+$L^2(\Omega,\mathcal G,\mathbb P)$. In fact this can be seen from the fact that for every
+$Y\in L^2(\Omega,\mathcal G,\mathbb P)$
+\[
+  \underbrace{\mathbb E[XY]}_{=\,\langle X,Y\rangle}=\underbrace{\mathbb E[\hat XY]}_{=\,\langle\hat X,Y\rangle}
+  \quad\Longleftrightarrow\quad\langle X-\hat X,Y\rangle=0,
+\]
+where $\langle U,V\rangle=\mathbb E[UV]$ is the inner product of $L^2$: $X-\hat X$ is orthogonal to
+the subspace $L^2(\Omega,\mathcal G,\mathbb P)$.\footnote{Added to the handwritten notes. The
+subspace is closed, since $L^2(\Omega,\mathcal G,\mathbb P)$ is complete \citep[Theorem~3.11]{rudin-rca};
+the identity in the proof of \cref{thm:cp-projection} also shows that the minimiser is unique
+a.s.: $\mathbb E[(X-Z)^2]=\mathbb E[(X-\hat X)^2]$ forces $\mathbb E[(\hat X-Z)^2]=0$. This
+is the route by which \citet[Chapter~9]{williams} constructs $\mathbb E[X\mid\mathcal G]$.}
+\end{remark}
+
+\begin{remark}[computational]\label{rem:cp-code-projection}
+When $\mathcal G=\sigma(Y)$ is replaced by the $\sigma$-algebra generated by the events
+$\{Y\in I_1\},\dots,\{Y\in I_K\}$ for a partition of $\mathbb R$ into intervals, the
+$\mathcal G$-measurable variables are the linear combinations of the indicators
+$\1_{\{Y\in I_j\}}$, and the projection of \cref{rem:cp-orthogonal} is a least-squares regression
+of $X$ on these $K$ indicator features. On a sample, the fitted coefficients are the averages of
+$X$ over the bins. \texttt{l2\_projection} and \texttt{indicator\_features} in
+\coderef{code/src/probnotes/condprops.py} compute it (\texttt{bin\_regression} does the same
+without forming the design matrix); \texttt{affine\_predictor} computes the best
+predictor of the form $a+bY$, the projection on the span of $1$ and $Y$. For the signal
+$X\sim\mathrm{Exp}(1)$ with Gaussian noise of variance $\sigma^2$ (\exref{ex:cp-best-predictor}),
+$h(y)=\mathbb E[X\mid Y=y]$ is known in closed form (\texttt{signal\_posterior\_mean}); for
+$\sigma=1$ its mean squared error is $0.4118$, against $0.5$ for the best affine predictor, and
+the bin regressions approach $h$ as the bins get finer, as long as each bin keeps enough samples
+(\cref{fig:cp-projection}).
+\end{remark}
+
+
+\demo{12-conditional-properties.ipynb}{$\mathbb E[X\mid Y]$, the best affine predictor and the
+regression on bin indicators for a signal with noise, with sliders for the noise level and the
+number of bins.}
+
+\section{Conditional variance}\label{sec:cp-variance}
+
+\begin{definition}[Conditional variance]\label{def:cp-conditional-variance}
+Let $X\in L^2$ and let $\mathcal G\subseteq\mathcal F$ be a sub-$\sigma$-algebra. The
+\emph{variance of $X$ conditioned on $\mathcal G$} is
+\[
+  \operatorname{var}(X\mid\mathcal G)=\mathbb E\Big[\big(X-\mathbb E[X\mid\mathcal G]\big)^2\,\Big|\,\mathcal G\Big].
+\]
+In particular, if $\mathcal G=\sigma(Y)$,
+\[
+  \operatorname{var}(X\mid Y)=\mathbb E\Big[\big(X-\mathbb E[X\mid Y]\big)^2\,\Big|\,Y\Big]=g(Y)
+\]
+is called the \emph{variance of $X$ conditioned on $Y$}, and
+\[
+  g(y)=\operatorname{var}(X\mid Y=y)=\mathbb E\Big[\big(X-\mathbb E[X\mid Y=y]\big)^2\,\Big|\,Y=y\Big]
+\]
+the \emph{variance of $X$ conditioned on $(Y=y)$}: it is the variance computed with respect to the
+conditional density $f_{X\mid Y=y}$ (when it exists!).\footnote{Added to the handwritten notes:
+in the absolutely continuous case this needs the analogue of \cref{thm:ce-density} for
+$\mathbb E[\varphi(X,Y)\mid Y]$, here with $\varphi(x,y)=(x-h(y))^2$; its proof is the same
+(\exref{ex:cp-conditional-independence}). It then holds for $\mathbb P_Y$-a.e.\ $y$.}
+\end{definition}
+
+\begin{proposition}[Law of total variance]\label{thm:cp-total-variance}
+Let $X\in L^2$. Then
+\begin{enumerate}[label=\arabic*)]
+  \item $\mathbb E[X]=\mathbb E\big[\mathbb E[X\mid\mathcal G]\big]$;
+  \item $\operatorname{var}(X)=\operatorname{var}\big(\mathbb E[X\mid\mathcal G]\big)+\mathbb E\big[\operatorname{var}(X\mid\mathcal G)\big]$.
+\end{enumerate}
+\end{proposition}
+
+The name is added; the notes call it a proposition.
+
+\begin{proof}
+1) is property 6). For 2), let $\hat X=\mathbb E[X\mid\mathcal G]$, which is in $L^2$ by 7). Then
+\[
+\begin{aligned}
+  \operatorname{var}(X)&=\mathbb E\big[(X-\mathbb E[X])^2\big]=\mathbb E\Big[\big((X-\hat X)+(\hat X-\mathbb E[X])\big)^2\Big]\\
+  &=\mathbb E\big[(X-\hat X)^2\big]+\mathbb E\big[(\hat X-\mathbb E[X])^2\big]+2\,\mathbb E\big[(X-\hat X)(\hat X-\mathbb E[X])\big]\\
+  &=\underbrace{\mathbb E\big[(X-\hat X)^2\big]}_{(A)}+\underbrace{\mathbb E\big[(\hat X-\mathbb E[X])^2\big]}_{(B)},
+\end{aligned}
+\]
+since the last term vanishes, as in the proof of \cref{thm:cp-projection}, with
+$Y=\hat X-\mathbb E[X]\in L^2(\Omega,\mathcal G,\mathbb P)$. Now
+\[
+  (B)=\mathbb E\big[(\hat X-\mathbb E[X])^2\big]\overset{\mathbb E[X]=\mathbb E[\hat X]}{=}\mathbb E\big[(\hat X-\mathbb E[\hat X])^2\big]
+  =\operatorname{var}(\hat X)=\operatorname{var}\big(\mathbb E[X\mid\mathcal G]\big),
+\]
+and, with $V=\big(X-\mathbb E[X\mid\mathcal G]\big)^2$,
+\[
+  (A)=\mathbb E\Big[\big(X-\mathbb E[X\mid\mathcal G]\big)^2\Big]=\mathbb E[V]\overset{1)}{=}\mathbb E\big[\mathbb E[V\mid\mathcal G]\big]
+  =\mathbb E\Big[\mathbb E\big[(X-\mathbb E[X\mid\mathcal G])^2\,\big|\,\mathcal G\big]\Big]
+  =\mathbb E\big[\operatorname{var}(X\mid\mathcal G)\big].
+\]
+Hence $\operatorname{var}(X)=\mathbb E\big[\operatorname{var}(X\mid\mathcal G)\big]+\operatorname{var}\big(\mathbb E[X\mid\mathcal G]\big)$.
+\end{proof}
+
+The notes give two examples, which recover the mean and the variance of a law from a conditional
+law computed in \cref{ch:11-conditional-expectation}.
+
+\begin{example}[A Poisson variable given the sum]\label{exa:cp-tv-poisson}
+Let $X\sim\mathcal P(\lambda)$ and $Y\sim\mathcal P(\mu)$, with $X\indep Y$, and $Z=X+Y\sim\mathcal P(\lambda+\mu)$.
+By \cref{exa:ce-poisson},
+\[
+  X\mid Z=m\ \sim\ B(m,p),\qquad p=\frac\lambda{\lambda+\mu}.
+\]
+\begin{itemize}
+  \item $\mathbb E[X\mid Z=m]=mp$, so $\mathbb E[X\mid Z]=Zp$, and
+    \[
+      \mathbb E[X]=\mathbb E\big[\mathbb E[X\mid Z]\big]=\mathbb E[Zp]=p\,\mathbb E[Z]
+      =\frac\lambda{\lambda+\mu}\,(\lambda+\mu)=\lambda .
+    \]
+  \item $\operatorname{var}(X\mid Z=m)=mp(1-p)$, so $\operatorname{var}(X\mid Z)=Zp(1-p)$, and
+    \[
+    \begin{aligned}
+      \operatorname{var}(X)&=\operatorname{var}\big(\mathbb E[X\mid Z]\big)+\mathbb E\big[\operatorname{var}(X\mid Z)\big]
+      =\operatorname{var}(Zp)+\mathbb E\big[Zp(1-p)\big]\\
+      &=p^2\operatorname{var}(Z)+p(1-p)\,\mathbb E[Z]
+      =\frac{\lambda^2}{(\lambda+\mu)^2}\,(\lambda+\mu)+\frac\lambda{\lambda+\mu}\,\frac\mu{\lambda+\mu}\,(\lambda+\mu)\\
+      &=\frac1{\lambda+\mu}\,(\lambda^2+\lambda\mu)=\lambda .
+    \end{aligned}
+    \]
+\end{itemize}
+\end{example}
+
+\begin{example}[An exponential variable given the sum]\label{exa:cp-tv-exponential}
+Let $X\indep Y$ with $X,Y\sim\mathrm{Exp}(\lambda)$, and $Z=X+Y\sim\Gamma(2,\lambda)$. By
+\cref{exa:ce-exponential}, $X\mid Z=z\sim U((0,z))$.
+\begin{itemize}
+  \item $\mathbb E[X\mid Z=z]=\frac z2$, so $\mathbb E[X\mid Z]=\frac Z2$, and
+    $\mathbb E[X]=\mathbb E\big[\mathbb E[X\mid Z]\big]=\mathbb E\big[\frac Z2\big]=\frac12\,\mathbb E[Z]=\frac12\cdot\frac2\lambda=\frac1\lambda$.
+  \item $\operatorname{var}(X\mid Z=z)=\frac{z^2}{12}$, so $\operatorname{var}(X\mid Z)=\frac{Z^2}{12}$, and
+    \[
+    \begin{aligned}
+      \operatorname{var}(X)&=\operatorname{var}\big(\mathbb E[X\mid Z]\big)+\mathbb E\big[\operatorname{var}(X\mid Z)\big]
+      =\operatorname{var}\Big(\frac Z2\Big)+\mathbb E\Big[\frac{Z^2}{12}\Big]
+      =\frac14\operatorname{var}(Z)+\frac1{12}\,\mathbb E[Z^2]\\
+      &=\frac14\operatorname{var}(Z)+\frac1{12}\big(\operatorname{var}(Z)+\mathbb E[Z]^2\big)
+      =\frac13\operatorname{var}(Z)+\frac1{12}\,\mathbb E[Z]^2
+      =\frac13\cdot\frac2{\lambda^2}+\frac1{12}\Big(\frac2\lambda\Big)^2\\
+      &=\frac2{3\lambda^2}+\frac1{3\lambda^2}=\frac1{\lambda^2},
+    \end{aligned}
+    \]
+    since $\mathbb E[Z]=\frac\alpha\lambda$ and $\operatorname{var}(Z)=\frac\alpha{\lambda^2}$ with
+    $\alpha=2$ (\cref{prop:tr-gamma-moments}).
+\end{itemize}
+\end{example}
+
+\begin{remark}[computational]\label{rem:cp-code-variance}
+For a discrete vector with finitely many values, \texttt{total\_variance} in
+\coderef{code/src/probnotes/condprops.py} computes both sides of 2) of
+\cref{thm:cp-total-variance} from the joint density: $\operatorname{var}(X)$ directly, and
+$\operatorname{var}(\mathbb E[X\mid Y])$ and $\mathbb E[\operatorname{var}(X\mid Y)]$ from the
+conditional means and variances of the columns. For the table of \cref{rem:cp-independence} it
+gives $\operatorname{var}(\mathbb E[X\mid Y])=0$ and $\mathbb E[\operatorname{var}(X\mid Y)]=\frac52=\operatorname{var}(X)$:
+$Y$ explains none of the variance of $X$, although it determines $|X|$. In a simulation, the two
+terms can be estimated by a nested experiment, drawing several second stages for each first stage;
+\texttt{nested\_variance} corrects the variance of the group means for their own noise
+(\exref{ex:cp-total-variance-simulation}).
+\end{remark}
+
+\section{Worked exercises}\label{sec:cp-worked}
+
+\begin{example}[Worked exercise: Poisson thinning]\label{exa:cp-thinning}
+Let $X$ be a Poisson variable with parameter $\lambda>0$ and $Y$ a random variable whose law is
+not known. We know that, conditionally on the event $(X=n)$, the random variable $Y$ has the
+binomial law with parameters $n$ and $p$.\footnote{The typed statement does not restrict $p$;
+we take $0<p<1$, which excludes the degenerate cases $Y=0$ and $Y=X$. Added here.}
+\begin{enumerate}[label=\alph*)]
+  \item Compute $\mathbb E[Y\mid X]$ and $\mathbb E[Y]$.
+  \item Determine the law of $Y$, and find its expected value again.
+  \item Determine the law of $X$ conditioned on $(Y=k)$.
+  \item Compute $\mathbb E[X\mid Y]$ (compute $\mathbb E[X-Y\mid Y]$ first).
+\end{enumerate}
+
+\emph{Solution.} We have
+\[
+  X\sim\mathcal P(\lambda),\qquad Y\mid X=n\ \sim\ B(n,p)\qquad\text{(that is, ``$Y\sim B(X,p)$'')}.
+\]
+
+a) $\mathbb E[Y\mid X=n]=np$, so $\mathbb E[Y\mid X]=Xp$, and
+\[
+  \mathbb E[Y]=\mathbb E\big[\mathbb E[Y\mid X]\big]=\mathbb E[Xp]=p\,\mathbb E[X]=\lambda p .
+\]
+
+b) $Y(\Omega)=\mathbb N$. For every $k\in\mathbb N$, the marginal density of $Y$ is a sum of
+values of the joint density $f_{(X,Y)}(n,k)=f_{Y\mid X=n}(k)\,f_X(n)$ (\cref{def:ce-discrete};
+$f_X(n)>0$ for every $n$):
+\[
+\begin{aligned}
+  f_Y(k)=\mathbb P(Y=k)&=\sum_{n=0}^\infty\mathbb P(X=n,\,Y=k)=\sum_{n=0}^\infty\mathbb P(Y=k\mid X=n)\,\mathbb P(X=n)\\
+  &=\sum_{n=k}^\infty\binom nkp^k(1-p)^{n-k}\cdot e^{-\lambda}\frac{\lambda^n}{n!}
+  =\sum_{n=k}^\infty\frac{n!}{k!\,(n-k)!}\,p^k(1-p)^{n-k}e^{-\lambda}\frac{\lambda^n}{n!}\\
+  &=e^{-\lambda}\frac{p^k}{k!}\,\lambda^k\sum_{n=k}^\infty\frac{(1-p)^{n-k}}{(n-k)!}\,\lambda^{n-k}
+  =e^{-\lambda}\frac{(\lambda p)^k}{k!}\sum_{m=0}^\infty\frac{\big(\lambda(1-p)\big)^m}{m!}\\
+  &=e^{-\lambda}\frac{(\lambda p)^k}{k!}\,e^{\lambda(1-p)}=e^{-\lambda p}\frac{(\lambda p)^k}{k!},
+\end{aligned}
+\]
+where the sum starts at $n=k$ because $\mathbb P(Y=k\mid X=n)=0$ if $n<k$, and $m=n-k$. Hence
+\[
+  Y\sim\mathcal P(\lambda p),\qquad\text{and}\qquad\mathbb E[Y]=\lambda p .
+\]
+
+c) Fix $k\in\mathbb N$. We compute, for every $n\in\mathbb N$,
+\[
+  f_{X\mid Y=k}(n)=\mathbb P(X=n\mid Y=k)=\frac{\mathbb P(X=n,\,Y=k)}{\mathbb P(Y=k)}=\frac{f_{(X,Y)}(n,k)}{f_Y(k)},
+\]
+which is $0$ if $n<k$. If $n\ge k$,
+\[
+\begin{aligned}
+  \mathbb P(X=n\mid Y=k)&=\frac{\dfrac{n!}{k!\,(n-k)!}\,p^k(1-p)^{n-k}\,\dfrac{\lambda^n}{n!}\,e^{-\lambda}}{e^{-\lambda p}\,\dfrac{(\lambda p)^k}{k!}}
+  =\frac1{(n-k)!}\,\frac{(\lambda p)^k\big(\lambda(1-p)\big)^{n-k}e^{-\lambda}}{e^{-\lambda p}(\lambda p)^k}\\
+  &=\frac{\big(\lambda(1-p)\big)^{n-k}}{(n-k)!}\,e^{-\lambda(1-p)} .
+\end{aligned}
+\]
+Hence
+\[
+  f_{X\mid Y=k}(n)=\mathbb P(X=n\mid Y=k)=e^{-\lambda(1-p)}\frac{\big(\lambda(1-p)\big)^{n-k}}{(n-k)!}\qquad\forall n\ge k .
+\]
+If we consider $Z=X-Y$, then for every $m\ge0$
+\[
+  \mathbb P(Z=m\mid Y=k)=\mathbb P(X-Y=m\mid Y=k)=\mathbb P(X=m+k\mid Y=k)=e^{-\lambda(1-p)}\frac{\big(\lambda(1-p)\big)^m}{m!},
+\]
+so that $Z\mid Y=k\sim\mathcal P\big(\lambda(1-p)\big)$. Note that the law of $Z$ conditioned on
+$(Y=k)$ does not depend on $k$, hence $Z\indep Y$.\footnote{Added to the handwritten notes: if
+$\mathbb P(Z=m\mid Y=k)=q(m)$ for every $k$, then $\mathbb P(Z=m,\,Y=k)=q(m)\,f_Y(k)$, and summing
+over $k$ gives $f_Z(m)=q(m)$; so $f_{(Z,Y)}=f_Zf_Y$, and $Z\indep Y$ by
+\cref{prop:pm-discrete-independence}.}
+
+d) What is $\mathbb E[X\mid Y]$? We could compute
+$\mathbb E[X\mid Y=k]=\sum_{n\ge k}n\,f_{X\mid Y=k}(n)=\dots$, but that takes too many computations.
+Instead, by linearity,
+\[
+  \mathbb E[X\mid Y=k]=\mathbb E[X-Y\mid Y=k]+\mathbb E[Y\mid Y=k]=\mathbb E[Z\mid Y=k]+k=\lambda(1-p)+k,
+\]
+by the mean of the Poisson law; hence
+\[
+  \mathbb E[X\mid Y]=\lambda(1-p)+Y .
+\]
+Alternatively: $\mathbb E[Z\mid Y=k]=\lambda(1-p)$ gives $\mathbb E[Z\mid Y]=\lambda(1-p)$, and
+\[
+  \mathbb E[X\mid Y]=\mathbb E[X-Y\mid Y]+\mathbb E[Y\mid Y]=\mathbb E[Z\mid Y]+Y=\lambda(1-p)+Y,
+\]
+with $\mathbb E[Y\mid Y]=Y$ by 3) of \cref{prop:cp-special-cases}.
+
+\emph{Note.} To recover $\mathbb E[X]$:
+$\mathbb E[X]=\mathbb E\big[\mathbb E[X\mid Y]\big]=\mathbb E\big[\lambda(1-p)+Y\big]=\lambda(1-p)+\mathbb E[Y]=\lambda(1-p)+\lambda p=\lambda$.
+\end{example}
+
+\begin{example}[Worked exercise: conditioning the other way]\label{exa:cp-gamma-conditional}
+Let $(X,Y)$ be an absolutely continuous random vector, with
+\[
+  f_Y(y)=\frac1{y^2}\1_{[1,+\infty)}(y),\qquad f_{X\mid Y=y}(x)=y^2x\,e^{-xy}\1_{(0,+\infty)}(x).
+\]
+\begin{enumerate}[label=\alph*)]
+  \item Determine the joint law of $(X,Y)$.
+  \item Determine the marginal law of $X$.
+  \item Determine the law of $Y$ conditioned on $(X=x)$.
+  \item Compute $\mathbb E[Y\mid X]$.
+\end{enumerate}
+
+\emph{Solution.} a) By \eqref{eq:ce-joint-from-conditional}, for every $(x,y)\in\mathbb R^2$,
+\[
+\begin{aligned}
+  f_{(X,Y)}(x,y)&=f_{X\mid Y=y}(x)\,f_Y(y)=y^2x\,e^{-xy}\1_{(0,+\infty)}(x)\cdot\frac1{y^2}\1_{[1,+\infty)}(y)\\
+  &=x\,e^{-xy}\1_{(0,+\infty)\times[1,+\infty)}(x,y)=x\,e^{-xy}\1_D(x,y),\qquad D=(0,+\infty)\times[1,+\infty).
+\end{aligned}
+\]
+
+b) $f_X(x)=\int_{-\infty}^{+\infty}f_{(X,Y)}(x,y)\,\dd y$. If $x\le0$, then $f_X(x)=0$. If $x>0$,
+the vertical line through $x$ meets $D$ in the half-line $y\ge1$, and
+\[
+  f_X(x)=\int_1^{+\infty}x\,e^{-xy}\,\dd y=\Big[-e^{-xy}\Big]_{y=1}^{y=+\infty}=e^{-x}.
+\]
+Hence $X\sim\mathrm{Exp}(1)$.
+
+c) Inverting the conditioning, for $f_X(x)\ne0$,
+\[
+  f_{Y\mid X=x}(y)=\frac{f_{(X,Y)}(x,y)}{f_X(x)}=\frac{f_{X\mid Y=y}(x)\,f_Y(y)}{f_X(x)} .
+\]
+For every fixed $x>0$,
+\[
+  f_{Y\mid X=x}(y)=\frac{x\,e^{-xy}\1_D(x,y)}{e^{-x}}=\frac{x\,e^{-xy}\1_{(0,+\infty)}(x)\1_{[1,+\infty)}(y)}{e^{-x}},
+\]
+where the indicator of $(0,+\infty)$ is redundant. Hence
+\[
+  f_{Y\mid X=x}(y)=x\,e^{-x(y-1)}\1_{[1,+\infty)}(y).
+\]
+If we take $Z=Y-1$, then $f_Z(z)=f_Y(z+1)$, and analogously
+\[
+  f_{Z\mid X=x}(z)=f_{Y\mid X=x}(z+1)
+\]
+(try this as an exercise: compute $f_{(X,Z)}(x,z)$ first, and then $f_{Z\mid X=x}(z)$;
+\exref{ex:cp-heavy-tail}). So
+\[
+  f_{Z\mid X=x}(z)=f_{Y\mid X=x}(z+1)=x\,e^{-xz}\1_{[0,+\infty)}(z),
+  \qquad\text{that is,}\qquad Z\mid X=x\ \sim\ \mathrm{Exp}(x).
+\]
+In this case $Z$ is not independent of $X$, since its conditional law depends on $x$ (5) of
+\cref{rem:ce-density-remarks}).
+
+d) By linearity and the mean of the law $\mathrm{Exp}(x)$,
+\[
+  \mathbb E[Y\mid X=x]=\mathbb E[Y-1\mid X=x]+1=\mathbb E[Z\mid X=x]+1=\frac1x+1,
+  \qquad\text{so}\qquad\mathbb E[Y\mid X]=\frac1X+1 .
+\]
+Here $Y$ is not integrable: $\mathbb E[Y]=\int_1^{+\infty}y\,\frac1{y^2}\,\dd y=+\infty$. Since
+$Y\ge0$, its conditional expectation is defined nonetheless, and \cref{thm:ce-density} applies
+(with the roles of the two variables exchanged); so does linearity, with $Y-1\ge0$ and the
+constant $1\ge0$.\footnote{This comment is added to the handwritten notes. Consistently, by 6),
+$\mathbb E\big[\frac1X+1\big]=+\infty$: $\int_0^1\frac{e^{-x}}x\,\dd x=+\infty$.}
+\end{example}
+
+\begin{example}[Worked exercise: a Poisson law with a Gamma parameter]\label{exa:cp-poisson-gamma}
+Some pieces of equipment undergo maintenance $Y$ times a year. The variable $Y$ has a Poisson law
+with a random parameter $X\sim\Gamma(\alpha,\lambda)$, $\alpha,\lambda>0$, where $X$ represents the
+proneness to failure of each piece of equipment.
+\begin{enumerate}[label=\alph*)]
+  \item Determine the law of $Y$ and the mean number of maintenances per year.
+  \item Assuming that the number of maintenances in a year is known, estimate the proneness to
+    failure.
+\end{enumerate}
+
+\emph{Solution.}\footnote{The handwritten notes copy this exercise twice, on pp.~197--198 and on
+pp.~199--200: the first copy solves a), the second summarises a) and solves b). It appears once
+here.} $Y$ is the number of maintenances in a year, $X$ the proneness to failure, and
+\[
+  Y\sim\mathcal P(X)\quad\text{with}\quad X\sim\Gamma(\alpha,\lambda)\qquad\text{(that is, $Y\mid X=x\sim\mathcal P(x)$)}.
+\]
+
+a) We have (\cref{def:tr-gamma}, \cref{def:tr-gamma-function})
+\[
+  f_X(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\lambda x}\1_{(0,+\infty)}(x),\qquad
+  f_{Y\mid X=x}(k)=\mathbb P(Y=k\mid X=x)=e^{-x}\frac{x^k}{k!}\quad\forall k\in\mathbb N,
+\]
+the latter for $x>0$, that is, where $f_X(x)\ne0$. Hence, for every $k\in\mathbb N$ and
+$x\in\mathbb R$,\footnote{Added to the handwritten notes: $(X,Y)$ is neither discrete nor
+absolutely continuous. Its joint density $f_{(X,Y)}$ is a density with respect to the product of
+Lebesgue measure and the counting measure on $\mathbb N$, and the formulas of
+\cref{def:ce-discrete} and \cref{thm:ce-density} hold for it with the same proofs, with sums in the
+discrete variable and integrals in the other (\exref{ex:cp-beta-binomial} works this out for a
+binomial law with a Beta parameter).}
+\[
+\begin{aligned}
+  f_{(X,Y)}(x,k)&=f_{Y\mid X=x}(k)\,f_X(x)=\frac{\lambda^\alpha}{\Gamma(\alpha)}\,x^{\alpha-1}e^{-\lambda x}\1_{(0,+\infty)}(x)\cdot e^{-x}\frac{x^k}{k!}\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\,x^{\alpha+k-1}e^{-x(\lambda+1)}\1_{(0,+\infty)}(x).
+\end{aligned}
+\]
+Then, for every $k\in\mathbb N$,
+\[
+\begin{aligned}
+  f_Y(k)&=\int_{-\infty}^{+\infty}f_{(X,Y)}(x,k)\,\dd x=\int_0^{+\infty}\frac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\,x^{\alpha+k-1}e^{-x(\lambda+1)}\,\dd x\\
+  &=\frac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\,\frac{\Gamma(\alpha+k)}{(\lambda+1)^{\alpha+k}}
+  \underbrace{\int_0^{+\infty}\frac{(\lambda+1)^{\alpha+k}}{\Gamma(\alpha+k)}\,x^{(\alpha+k)-1}e^{-(\lambda+1)x}\,\dd x}_{=\,1:\ \text{density of }\Gamma(\alpha+k,\,\lambda+1)}
+  =\frac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\cdot\frac{\Gamma(\alpha+k)}{(\lambda+1)^{\alpha+k}},
+\end{aligned}
+\]
+that is,
+\begin{equation}\label{eq:cp-negative-binomial}
+  f_Y(k)=\mathbb P(Y=k)=\frac{\Gamma(\alpha+k)}{\Gamma(\alpha)\,k!}\Big(\frac\lambda{\lambda+1}\Big)^\alpha\Big(\frac1{\lambda+1}\Big)^k
+  \qquad\forall k\in\mathbb N .
+\end{equation}
+
+\emph{Note.} If $\alpha=m\in\mathbb N^*$ ($X$ has the Erlang law $\Gamma(m,\lambda)$,
+\cref{prop:tr-erlang}), then, since $\frac1{\lambda+1}=1-\frac\lambda{\lambda+1}$,
+\[
+  f_Y(k)=\frac{(m+k-1)!}{(m-1)!\,k!}\Big(\frac\lambda{\lambda+1}\Big)^m\Big(\frac1{\lambda+1}\Big)^k
+  =\binom{m+k-1}k\Big(\frac\lambda{\lambda+1}\Big)^m\Big(1-\frac\lambda{\lambda+1}\Big)^k :
+\]
+\[
+  Y\sim BN\Big(m,\frac\lambda{\lambda+1}\Big)\ \text{(negative binomial)},\qquad Y=Z-m\quad\text{with}\quad
+  Z\sim\mathrm{Pascal}\Big(m,\frac\lambda{\lambda+1}\Big).
+\]
+Recall (\cref{rem:rv-pascal}) that if $Z\sim\mathrm{Pascal}(m,p)$, then
+$\mathbb P(Z=k)=\binom{k-1}{m-1}p^m(1-p)^{k-m}$ for every $k\ge m$; so if $Y=Z-m$,
+\[
+  \mathbb P(Y=k)=\mathbb P(Z=m+k)=\binom{m+k-1}{m-1}p^m(1-p)^k=\binom{m+k-1}kp^m(1-p)^k\qquad\forall k\ge0 .
+\]
+Even if $\alpha\notin\mathbb N$, we keep the name: $Y\sim BN\big(\alpha,\frac\lambda{\lambda+1}\big)$
+is the law \eqref{eq:cp-negative-binomial}.
+
+We now compute the mean number of maintenances per year, $\mathbb E[Y]=\mathbb E\big[\mathbb E[Y\mid X]\big]$.
+Since $Y\mid X=x\sim\mathcal P(x)$, $\mathbb E[Y\mid X=x]=x$, so $\mathbb E[Y\mid X]=X$ and
+\[
+  \mathbb E[Y]=\mathbb E[X]=\frac\alpha\lambda\qquad\text{(\cref{prop:tr-gamma-moments})}.
+\]
+
+b) Knowing $Y$, we want to estimate $X$: the best estimate is $\mathbb E[X\mid Y]$
+(\cref{thm:cp-projection}; $X\in L^2$). Fix $k\in\mathbb N$. Then
+\[
+\begin{aligned}
+  f_{X\mid Y=k}(x)&=\frac{f_{(X,Y)}(x,k)}{f_Y(k)}
+  =\frac{\dfrac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\,x^{\alpha+k-1}e^{-x(\lambda+1)}\1_{(0,+\infty)}(x)}{\dfrac{\lambda^\alpha}{\Gamma(\alpha)\,k!}\,\dfrac{\Gamma(\alpha+k)}{(\lambda+1)^{\alpha+k}}}\\
+  &=\frac{(\lambda+1)^{\alpha+k}}{\Gamma(\alpha+k)}\,x^{\alpha+k-1}e^{-(\lambda+1)x}\1_{(0,+\infty)}(x),
+\end{aligned}
+\]
+so that
+\[
+  X\mid Y=k\ \sim\ \Gamma(\alpha+k,\lambda+1)\quad\forall k\in\mathbb N,\qquad
+  \mathbb E[X\mid Y=k]=\frac{\alpha+k}{\lambda+1}=h(k),
+\]
+and
+\[
+  \mathbb E[X\mid Y]=h(Y)=\frac{\alpha+Y}{\lambda+1}.
+\]
+The function of $Y$ that best estimates $X$ is $\frac{\alpha+Y}{\lambda+1}$, where $\alpha>0$ and
+$\lambda>0$ are known parameters.
+\end{example}
+
+\begin{remark}[computational]\label{rem:cp-code-mixtures}
+\Cref{fig:cp-poisson-gamma} checks the two answers by simulation, with $\alpha=2$ and
+$\lambda=\frac12$: we draw $10^5$ pairs $(X,Y)$, first $X$ and then $Y$ given $X$
+(\texttt{sample\_poisson\_gamma} in \coderef{code/src/probnotes/condprops.py}). The law of $Y$ has
+mean $\frac\alpha\lambda=4$ and, by the law of total variance, variance
+$\mathbb E[\operatorname{var}(Y\mid X)]+\operatorname{var}(\mathbb E[Y\mid X])=\mathbb E[X]+\operatorname{var}(X)=4+8=12$:
+it is more spread out than the Poisson law with the same mean. \texttt{negbin\_pmf} evaluates
+\eqref{eq:cp-negative-binomial}, and \texttt{poisson\_gamma\_pmf\_quad} computes the same
+probabilities by integrating $\mathbb P(Y=k\mid X=x)f_X(x)$ numerically; for $k\le20$ the two
+differ by at most $1.2\cdot10^{-11}$. For Poisson thinning (\cref{exa:cp-thinning}), \texttt{thinning\_table} and
+\texttt{sample\_thinning} do the same.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch12-poisson-gamma}
+  \caption{\Cref{exa:cp-poisson-gamma} with $\alpha=2$, $\lambda=\frac12$. Left: the law
+    $BN(2,\frac13)$ of $Y$ (bars), the relative frequencies in $10^5$ simulated pairs (diamonds),
+    and the Poisson law $\mathcal P(4)$ with the same mean (dots). Right: the density of
+    $X\sim\Gamma(2,\frac12)$ and the conditional densities $\Gamma(2+k,\frac32)$ of $X$ given $Y=k$
+    for $k=0,4,10$, with their means $\frac{2+k}{3/2}$ (dashed), and histograms of $X$ over the
+    simulated pairs with $Y=k$.}
+  \label{fig:cp-poisson-gamma}
+\end{figure}
+
+\demo{12-conditional-properties.ipynb}{the law of total variance for the Poisson--Gamma mixture,
+and the law of $X$ given $Y=k$, with sliders for $\alpha$, $\lambda$ and $k$.}
+
+\section{Conditional independence}\label{sec:cp-conditional-independence}
+
+\begin{definition}[Conditional probability given a $\sigma$-algebra]\label{def:cp-conditional-probability}
+On $(\Omega,\mathcal F,\mathbb P)$, let $\mathcal G\subseteq\mathcal F$. The \emph{probability of an
+event $A\in\mathcal F$ conditioned on $\mathcal G$} is
+\[
+  \mathbb P(A\mid\mathcal G)=\mathbb E[\1_A\mid\mathcal G]\qquad\text{a.s.}
+\]
+\end{definition}
+
+\begin{definition}[Conditionally independent $\sigma$-algebras]\label{def:cp-conditional-independence}
+Let $\mathcal G_1$, $\mathcal G_2$ and $\mathcal G_3$ be sub-$\sigma$-algebras of $\mathcal F$. We
+say that $\mathcal G_1$ and $\mathcal G_2$ are \emph{conditionally independent given
+$\mathcal G_3$} (or \emph{independent conditionally on $\mathcal G_3$}) if for every
+$A_1\in\mathcal G_1$ and every $A_2\in\mathcal G_2$
+\[
+  \mathbb P(A_1\cap A_2\mid\mathcal G_3)=\mathbb P(A_1\mid\mathcal G_3)\cdot\mathbb P(A_2\mid\mathcal G_3)\qquad\text{a.s.}
+\]
+We write $\mathcal G_1\cindep{\mathcal G_3}\mathcal G_2$.
+\end{definition}
+
+\begin{remark}\label{rem:cp-trivial-conditioning}
+If $\mathcal G_3=\{\emptyset,\Omega\}$, then by 1) of \cref{prop:cp-special-cases} the condition
+reads $\mathbb P(A_1\cap A_2)=\mathbb P(A_1)\,\mathbb P(A_2)$ for every $A_1\in\mathcal G_1$ and
+$A_2\in\mathcal G_2$, that is, $A_1\indep A_2$ for every $A_1\in\mathcal G_1$, $A_2\in\mathcal G_2$,
+that is, $\mathcal G_1\indep\mathcal G_2$.
+\end{remark}
+
+\begin{definition}[Conditionally independent random variables]\label{def:cp-conditional-independence-rv}
+Let $Y_1$, $Y_2$, $Y_3$ be real random variables. We say that $Y_1$ and $Y_2$ are
+\emph{conditionally independent given $Y_3$} if $\sigma(Y_1)$ and $\sigma(Y_2)$ are conditionally
+independent given $\sigma(Y_3)$. We write $Y_1\cindep{Y_3}Y_2$.
+\end{definition}
+
+That is, for every $A_1\in\sigma(Y_1)$ and every $A_2\in\sigma(Y_2)$,
+\begin{equation}\label{eq:cp-conditional-independence}
+  \mathbb P\big(A_1\cap A_2\mid\sigma(Y_3)\big)=\mathbb P\big(A_1\mid\sigma(Y_3)\big)\cdot\mathbb P\big(A_2\mid\sigma(Y_3)\big)\qquad\text{a.s.}
+\end{equation}
+But $A_1=Y_1^{-1}(B_1)$ and $A_2=Y_2^{-1}(B_2)$ with $B_1,B_2\in\mathcal B(\mathbb R)$
+(\cref{prop:mf-sigma-f}). Then \eqref{eq:cp-conditional-independence} holds for all such $A_1,A_2$
+if and only if, for all $B_1,B_2\in\mathcal B(\mathbb R)$,
+\[
+\begin{aligned}
+  &\mathbb P\big(Y_1^{-1}(B_1)\cap Y_2^{-1}(B_2)\mid Y_3\big)=\mathbb P\big(Y_1^{-1}(B_1)\mid Y_3\big)\,\mathbb P\big(Y_2^{-1}(B_2)\mid Y_3\big)\qquad\text{a.s.}\\
+  \iff\ &\mathbb P(Y_1\in B_1,\,Y_2\in B_2\mid Y_3)=\mathbb P(Y_1\in B_1\mid Y_3)\,\mathbb P(Y_2\in B_2\mid Y_3)\qquad\text{a.s.}\\
+  \iff\ &\mathbb P(Y_1\in B_1,\,Y_2\in B_2\mid Y_3=y_3)=\mathbb P(Y_1\in B_1\mid Y_3=y_3)\,\mathbb P(Y_2\in B_2\mid Y_3=y_3)\\
+  &\qquad\text{for $\mathbb P_{Y_3}$-a.e.\ $y_3$}.
+\end{aligned}
+\]
+The last equivalence holds because, for Borel functions $g_1,g_2$, $g_1(Y_3)=g_2(Y_3)$ a.s.\ if
+and only if $g_1=g_2$ $\mathbb P_{Y_3}$-a.e., since
+$\mathbb P\big(g_1(Y_3)\ne g_2(Y_3)\big)=\mathbb P_{Y_3}(\{g_1\ne g_2\})$ (\cref{def:ce-given-Y}).
+
+\begin{proposition}[Conditional independence and conditional densities]\label{prop:cp-conditional-independence-densities}
+When the conditional densities exist, the condition above is equivalent to
+\[
+  f_{(Y_1,Y_2)\mid Y_3=y_3}(y_1,y_2)=f_{Y_1\mid Y_3=y_3}(y_1)\cdot f_{Y_2\mid Y_3=y_3}(y_2)\qquad\text{a.e.}
+\]
+\end{proposition}
+
+The notes state this without proof.\footnote{Added to the handwritten notes: if $(Y_1,Y_2,Y_3)$ is
+absolutely continuous, the conditional densities are defined as in \cref{thm:ce-density}, for
+instance $f_{(Y_1,Y_2)\mid Y_3=y_3}(y_1,y_2)=f_{(Y_1,Y_2,Y_3)}(y_1,y_2,y_3)/f_{Y_3}(y_3)$ where
+$f_{Y_3}(y_3)\ne0$, and the factorisation is required for a.e.\ $(y_1,y_2,y_3)$ with
+$f_{Y_3}(y_3)\ne0$. A proof in this case is outlined in \exref{ex:cp-conditional-independence}; in
+the discrete case the same statement holds with discrete densities, for every $y_3$ with
+$\mathbb P(Y_3=y_3)>0$.}\footnote{Added to the handwritten notes: conditional independence and
+independence do not imply each other. Two noisy measurements of the same quantity are
+conditionally independent given that quantity, but not independent, and two independent fair coins
+are not conditionally independent given their sum (\exref{ex:cp-conditional-independence}).}
+
+\begin{remark}[computational]\label{rem:cp-code-conditional-independence}
+For a discrete vector $(Y_1,Y_2,Y_3)$ with finitely many values, the joint density is a
+three-way table, and the discrete form of \cref{prop:cp-conditional-independence-densities}
+compares, for each value $y_3$ of positive probability, the normalised slice
+$f_{(Y_1,Y_2)\mid Y_3=y_3}$ with the product of its margins.
+\texttt{conditional\_independence\_gap} in \coderef{code/src/probnotes/condprops.py} returns the
+largest difference; for two independent fair coins and their sum it is $\frac14$, attained at
+$Y_3=1$.
+\end{remark}
+
+\furtherreading
+\textcite{billingsley}, Section~34, proves the properties of conditional expectation of this
+chapter, including Jensen's inequality and the conditional convergence theorems, and
+\textcite{williams}, Chapter~9, lists them in Section~9.7 with short proofs and the names used
+here (``tower property'', ``taking out what is known''); Williams constructs
+$\mathbb E[X\mid\mathcal G]$ for $X\in L^2$ as an orthogonal projection, as in
+\cref{rem:cp-orthogonal}. \textcite{durrett}, Section~4.1, has most of the same properties
+(conditional dominated convergence is in Section~4.6) and many examples. \textcite{ross-5}, Chapter~7, computes expectations and variances by conditioning,
+with many problems on random sums and mixtures such as \cref{exa:cp-poisson-gamma}.

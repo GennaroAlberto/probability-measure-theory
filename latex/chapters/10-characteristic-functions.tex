@@ -1,5 +1,760 @@
-\begin{planned}
-  \item Fourier transforms of measures and characteristic functions
-  \item properties, moments, uniqueness and inversion
-  \item the independence criterion
-\end{planned}
+% Chapter 10: Characteristic functions.
+% Translation of Paola Siri's handwritten notes, PDF pages 150-161 (topic "FUNZIONI
+% CARATTERISTICHE"): integrals of complex-valued functions, Fourier transforms of probability
+% measures and characteristic functions, their properties 1-8 (continuity, conjugation,
+% independence, affine maps, marginals, derivatives and moments, uniqueness and inversion, the
+% independence criterion), and three typed worked exercises with handwritten solutions.
+
+The law of a random vector is a measure on $\mathbb R^N$, an object that is not easy to
+compute with. This chapter attaches to it a function, its \emph{characteristic function}: the
+expectation of $e^{i\underline t^T\underline X}$, as a function of $\underline t\in\mathbb R^N$.
+It is always defined, it is continuous and bounded, and it turns the operations of probability
+into operations on functions: the law of a sum of independent random vectors, which is
+otherwise a convolution, has as characteristic function the product of the characteristic
+functions; affine maps act by a change of variable; the moments are derivatives at $0$.
+Above all, the characteristic function determines the law. These properties are numbered
+\textcircled{\scriptsize 1}--\textcircled{\scriptsize 8} in the notes, which then compute
+the characteristic function of the Gaussian law and use the properties in two exercises.
+Characteristic functions return in \cref{ch:13-gaussian-vectors}, to define Gaussian vectors,
+and in \cref{ch:16-convergence-in-law,ch:17-clt-delta}, to prove limit theorems.
+
+\section{Fourier transforms and characteristic functions}\label{sec:cf-definitions}
+
+\begin{remark}[Integrals of complex-valued functions]\label{rem:cf-complex}
+The theory of Lebesgue integration extends to functions with complex values: on a measure
+space $(X,\mathcal A,\mu)$,
+\[
+  \int_Xf\,\dd\mu=\int_X\operatorname{Re}f\,\dd\mu+i\int_X\operatorname{Im}f\,\dd\mu .
+\]
+In particular, if $X$ is a random variable with values in $\mathbb C$,
+\[
+  \mathbb E[X]=\mathbb E[\operatorname{Re}X]+i\,\mathbb E[\operatorname{Im}X].
+\]
+\end{remark}
+
+Precisely,\footnote{This paragraph is added to the handwritten notes.} a function
+$f:X\to\mathbb C$ is measurable if $\operatorname{Re}f$ and $\operatorname{Im}f$ are, and
+integrable if $\operatorname{Re}f$ and $\operatorname{Im}f$ are integrable
+(\cref{def:ig-integrable}); since
+$|\operatorname{Re}f|,|\operatorname{Im}f|\le|f|\le|\operatorname{Re}f|+|\operatorname{Im}f|$,
+this holds if and only if $|f|$ is integrable. The integral is then $\mathbb C$-linear, by
+\cref{prop:ig-linearity} applied to real and imaginary parts, and
+\begin{equation}\label{eq:cf-modulus}
+  \Big|\int_Xf\,\dd\mu\Big|\le\int_X|f|\,\dd\mu :
+\end{equation}
+if $\int_Xf\,\dd\mu=re^{i\theta}$ with $r\ge0$, then
+$r=\int_Xe^{-i\theta}f\,\dd\mu=\int_X\operatorname{Re}(e^{-i\theta}f)\,\dd\mu\le\int_X|f|\,\dd\mu$,
+because the imaginary part of the real number $r$ vanishes and
+$\operatorname{Re}(e^{-i\theta}f)\le|f|$. The dominated convergence theorem
+(\cref{thm:ig-dominated-convergence}) holds for complex-valued functions, with $|f_n|\le g$,
+since it applies to the real and imaginary parts.
+
+\begin{definition}[Fourier transform]\label{def:cf-fourier}
+Let $\mu$ be a probability measure on $(\mathbb R^N,\mathcal B(\mathbb R^N))$. The
+\emph{Fourier transform} of $\mu$ is the function $\hat\mu:\mathbb R^N\to\mathbb C$ defined by
+\[
+  \hat\mu(\underline t)=\int_{\mathbb R^N}e^{i\underline t^T\underline x}\,\dd\mu(\underline x)
+  =\int_{\mathbb R^N}\cos(\underline t^T\underline x)\,\dd\mu(\underline x)
+  +i\int_{\mathbb R^N}\sin(\underline t^T\underline x)\,\dd\mu(\underline x)
+\]
+for every $\underline t=(t_1,\dots,t_N)^T\in\mathbb R^N$, where
+$\underline t^T\underline x=\sum_{i=1}^Nt_ix_i$.
+\end{definition}
+
+\begin{remark}\label{rem:cf-well-defined}
+$\hat\mu$ is well defined for every $\underline t\in\mathbb R^N$, because
+$\underline x\mapsto\cos(\underline t^T\underline x)$ and
+$\underline x\mapsto\sin(\underline t^T\underline x)$ are measurable (they are continuous,
+\cref{prop:mf-continuous}) and bounded, hence integrable with respect to the finite measure
+$\mu$.
+\end{remark}
+
+\begin{definition}[Characteristic function]\label{def:cf-characteristic}
+Let $\underline X$ be a random vector with values in $\mathbb R^N$ (\cref{def:pm-random-vector}).
+The \emph{characteristic function} of $\underline X$ is the Fourier transform of its law
+$\mathbb P_{\underline X}$ (\cref{def:pm-joint-law}):
+$\Phi_{\underline X}=\hat{\mathbb P}_{\underline X}:\mathbb R^N\to\mathbb C$,
+\[
+  \Phi_{\underline X}(\underline t)
+  =\int_{\mathbb R^N}e^{i\underline t^T\underline x}\,\dd\mathbb P_{\underline X}(\underline x)
+  =\mathbb E\big[e^{i\underline t^T\underline X}\big]
+  =\mathbb E\big[\cos(\underline t^T\underline X)\big]+i\,\mathbb E\big[\sin(\underline t^T\underline X)\big].
+\]
+\end{definition}
+
+(The second equality is \cref{thm:ld-image-integral}, applied to the real and the imaginary
+part.) In particular $\Phi_{\underline X}$ depends only on the law of $\underline X$.
+
+\begin{remark}\label{rem:cf-always-defined}
+$\Phi_{\underline X}$ is well defined for every $\underline t\in\mathbb R^N$ and for
+\emph{every} random vector $\underline X$ with values in $\mathbb R^N$, by
+\cref{rem:cf-well-defined}. This is not the case for the \emph{moment generating function}
+$\mathbb E[e^{\underline t^T\underline X}]$, which can be infinite.\footnote{For example, if $X$
+has the Cauchy density $\frac1{\pi(1+x^2)}$, then $\mathbb E[e^{tX}]=+\infty$ for every
+$t\ne0$, while $\Phi_X(t)=e^{-|t|}$ (\exref{ex:cf-cauchy}). The example is added to the
+handwritten notes.}
+\end{remark}
+
+\begin{remark}[computational]\label{rem:cf-code-ecf}
+Given a sample $\underline X_1,\dots,\underline X_n$ of the law of $\underline X$, the
+\emph{empirical characteristic function}
+$\Phi_n(\underline t)=\frac1n\sum_{k=1}^ne^{i\underline t^T\underline X_k}$ is the characteristic
+function of the empirical law $\frac1n\sum_k\delta_{\underline X_k}$, and an average of $n$
+independent copies of $e^{i\underline t^T\underline X}$, whose variance is
+$\mathbb E|e^{i\underline t^T\underline X}-\Phi_{\underline X}(\underline t)|^2=1-|\Phi_{\underline X}(\underline t)|^2$.
+\texttt{ecf} and \texttt{ecf\_standard\_error} in \coderef{code/src/probnotes/charfun.py} compute
+$\Phi_n$ and its standard error $\sqrt{(1-|\Phi_n|^2)/n}$, in any dimension; the module also
+has the characteristic functions of the laws used in this chapter (\cref{fig:cf-examples},
+\exref{ex:cf-standard}).
+\end{remark}
+
+\demo{10-characteristic-functions.ipynb}{the empirical characteristic function of a sample
+against the characteristic function of the law, with a slider for the sample size.}
+
+\section{Properties of the characteristic function}\label{sec:cf-properties}
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space and $\underline X$ a random
+vector with values in $\mathbb R^N$.
+
+\begin{proposition}[Property \textcircled{\scriptsize 1}]\label{prop:cf-continuity}
+$\Phi_{\underline X}$ is a (uniformly) continuous, bounded function, and
+$\Phi_{\underline X}(\underline 0)=1$. More precisely,
+$|\Phi_{\underline X}(\underline t)|\le1$ for every $\underline t\in\mathbb R^N$.
+\end{proposition}
+
+\begin{proof}
+\begin{itemize}
+  \item $\Phi_{\underline X}(\underline 0)=\mathbb E\big[e^{i\underline 0^T\underline X}\big]=\mathbb E[1]=1$.
+  \item $|\Phi_{\underline X}(\underline t)|=\big|\mathbb E\big[e^{i\underline t^T\underline X}\big]\big|
+    \le\mathbb E\big[|e^{i\underline t^T\underline X}|\big]=\mathbb E[1]=1$, by \eqref{eq:cf-modulus}.
+  \item We prove that $\Phi_{\underline X}$ is continuous (it is in fact uniformly continuous).
+    Let $\underline t_n\to\underline t$ as $n\to\infty$. Then
+    $e^{i\underline t_n^T\underline X}\to e^{i\underline t^T\underline X}$ pointwise on $\Omega$,
+    and $|e^{i\underline t_n^T\underline X}|=1$, which is integrable. By the dominated convergence
+    theorem (\cref{thm:ig-dominated-convergence}),
+    \[
+      \lim_n\Phi_{\underline X}(\underline t_n)=\lim_n\mathbb E\big[e^{i\underline t_n^T\underline X}\big]
+      =\mathbb E\big[\lim_ne^{i\underline t_n^T\underline X}\big]=\mathbb E\big[e^{i\underline t^T\underline X}\big]
+      =\Phi_{\underline X}(\underline t),
+    \]
+    so $\Phi_{\underline X}$ is continuous. For uniform continuity,\footnote{The handwritten notes
+    state uniform continuity but prove only continuity; this last step is added here.} for all
+    $\underline t,\underline h\in\mathbb R^N$,
+    \[
+      |\Phi_{\underline X}(\underline t+\underline h)-\Phi_{\underline X}(\underline t)|
+      =\big|\mathbb E\big[e^{i\underline t^T\underline X}\big(e^{i\underline h^T\underline X}-1\big)\big]\big|
+      \le\mathbb E\big[|e^{i\underline h^T\underline X}-1|\big],
+    \]
+    which does not depend on $\underline t$, and tends to $0$ as $\underline h\to\underline 0$
+    by dominated convergence again (the integrand tends to $0$ and is bounded by $2$).\qedhere
+\end{itemize}
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 2}]\label{prop:cf-conjugate}
+Let $\underline X$ be a random vector with values in $\mathbb R^N$. Then
+\[
+  \Phi_{-\underline X}(\underline t)=\overline{\Phi_{\underline X}(\underline t)}
+  \qquad\forall\underline t\in\mathbb R^N .
+\]
+\end{proposition}
+
+\begin{proof}
+Splitting into real and imaginary parts, $\mathbb E[\overline Z]=\overline{\mathbb E[Z]}$ for a
+complex integrable $Z$; hence
+\[
+  \Phi_{-\underline X}(\underline t)=\mathbb E\big[e^{i\underline t^T(-\underline X)}\big]
+  =\mathbb E\big[e^{-i\underline t^T\underline X}\big]=\mathbb E\Big[\overline{e^{i\underline t^T\underline X}}\Big]
+  =\overline{\mathbb E\big[e^{i\underline t^T\underline X}\big]}=\overline{\Phi_{\underline X}(\underline t)} .\qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Symmetric laws]\label{cor:cf-symmetric}
+We say that $\underline X$ is \emph{symmetric} if $\underline X$ and $-\underline X$ have the
+same law, written $\underline X\sim-\underline X$ (that is,
+$\mathbb P_{\underline X}=\mathbb P_{-\underline X}$). If $\underline X$ is symmetric, then
+\[
+  \Phi_{\underline X}(\underline t)=\Phi_{-\underline X}(\underline t)
+  =\overline{\Phi_{\underline X}(\underline t)}
+  \quad\Longrightarrow\quad\Phi_{\underline X}(\underline t)\in\mathbb R\qquad\forall\underline t\in\mathbb R^N,
+\]
+where the first equality holds by definition (the characteristic function depends only on the
+law). The converse also holds: if $\Phi_{\underline X}$ is real, then $\underline X$ is
+symmetric.
+\end{corollary}
+
+The converse needs the uniqueness of the characteristic function, \cref{thm:cf-uniqueness}
+below: if
+$\Phi_{\underline X}$ is real, then
+$\Phi_{-\underline X}=\overline{\Phi_{\underline X}}=\Phi_{\underline X}$, so
+$-\underline X\sim\underline X$.\footnote{The handwritten notes state the converse without
+justification at this point; the reference to property \textcircled{\scriptsize 7} is added.}
+
+\begin{example}\label{exa:cf-normal-symmetric}
+$X\sim\mathcal N(0,1)$ is symmetric. Indeed, for every $x\in\mathbb R$,
+\[
+  f_{-X}(x)=f_X(-x)=f_X(x),
+\]
+where the first equality holds for every absolutely continuous $X$ (\cref{thm:tr-density} with
+$g(x)=-x$), and the second because $f_X(x)=\frac1{\sqrt{2\pi}}e^{-x^2/2}$ is even. So $-X$
+and $X$ have the same density, hence the same law: $X\sim-X$.
+\end{example}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch10-cfs}
+  \caption{Left: four symmetric laws and their characteristic functions, which are real
+    (\cref{cor:cf-symmetric}), equal to $1$ at $0$ and bounded by $1$
+    (\cref{prop:cf-continuity}). The smoother the density, the faster the decay: the Gaussian
+    and Laplace characteristic functions are integrable, while $\sin t/t$ (the density of
+    $U(-1,1)$ jumps) and $(1+t^2)^{-1/2}$ (the law of \cref{exa:cf-one-over-sqrt}, whose
+    density is unbounded) are not. Right: the exponential law is not symmetric, and its
+    characteristic function is not real; the dots are the empirical characteristic function
+    of $200$ draws, with bars of two standard errors (\cref{rem:cf-code-ecf}).}
+  \label{fig:cf-examples}
+\end{figure}
+
+\begin{proposition}[Property \textcircled{\scriptsize 3}]\label{prop:cf-independence}
+Let $\underline X$ and $\underline Y$ be random vectors with values in $\mathbb R^N$. If
+$\underline X\indep\underline Y$, then
+\[
+  \Phi_{\underline X+\underline Y}(\underline t)=\Phi_{\underline X}(\underline t)\,\Phi_{\underline Y}(\underline t)
+  \qquad\forall\underline t\in\mathbb R^N .
+\]
+\end{proposition}
+
+(As for random variables, $\underline X\indep\underline Y$ means that the $\sigma$-algebras
+$\sigma(\underline X)=\{\underline X^{-1}(B):B\in\mathcal B(\mathbb R^N)\}$ and
+$\sigma(\underline Y)$ are independent, \cref{def:pm-independent}.)
+
+\begin{proof}
+\[
+  \Phi_{\underline X+\underline Y}(\underline t)=\mathbb E\big[e^{i\underline t^T(\underline X+\underline Y)}\big]
+  =\mathbb E\big[e^{i\underline t^T\underline X}\cdot e^{i\underline t^T\underline Y}\big]
+  \overset{(\ast)}{=}\mathbb E\big[e^{i\underline t^T\underline X}\big]\cdot\mathbb E\big[e^{i\underline t^T\underline Y}\big]
+  =\Phi_{\underline X}(\underline t)\,\Phi_{\underline Y}(\underline t),
+\]
+where $(\ast)$ holds because $\underline X\indep\underline Y$.\footnote{In detail (added to the
+handwritten notes): write $e^{i\underline t^T\underline X}=U_1+iU_2$ and
+$e^{i\underline t^T\underline Y}=V_1+iV_2$, with $U_1=\cos(\underline t^T\underline X)$,
+$U_2=\sin(\underline t^T\underline X)$, and likewise $V_1,V_2$. These are bounded real random
+variables, and $U_k$ is $\sigma(\underline X)$-measurable, $V_l$ is
+$\sigma(\underline Y)$-measurable (\cref{prop:mf-composition}), so
+$\sigma(U_k)\subseteq\sigma(\underline X)$ and $\sigma(V_l)\subseteq\sigma(\underline Y)$ are
+independent: $U_k\indep V_l$. By \cref{thm:pm-expectation-product},
+$\mathbb E[U_kV_l]=\mathbb E[U_k]\,\mathbb E[V_l]$, and expanding
+$(U_1+iU_2)(V_1+iV_2)=U_1V_1-U_2V_2+i(U_1V_2+U_2V_1)$ gives $(\ast)$.}
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 4}: affine maps]\label{prop:cf-affine}
+Let $\underline X$ be a random vector with values in $\mathbb R^N$, and
+\[
+  \underline Y=A\underline X+\underline b,\qquad A\in\mathcal M_{K\times N}(\mathbb R),\
+  \underline b\in\mathbb R^K .
+\]
+Then $\underline Y$ is a random vector with values in $\mathbb R^K$, and for every
+$\underline t\in\mathbb R^K$
+\[
+  \Phi_{\underline Y}(\underline t)=\Phi_{A\underline X+\underline b}(\underline t)
+  =e^{i\underline t^T\underline b}\,\Phi_{\underline X}(A^T\underline t).
+\]
+\end{proposition}
+
+\begin{proof}
+($\underline Y$ is measurable because $\underline x\mapsto A\underline x+\underline b$ is
+continuous, \cref{prop:mf-continuous,prop:mf-composition}.) Since
+$\underline t^TA=(A^T\underline t)^T$,
+\[
+\begin{aligned}
+  \Phi_{A\underline X+\underline b}(\underline t)
+  &=\mathbb E\big[e^{i\underline t^T(A\underline X+\underline b)}\big]
+  =\mathbb E\big[e^{i\underline t^TA\underline X}\cdot e^{i\underline t^T\underline b}\big]
+  =e^{i\underline t^T\underline b}\,\mathbb E\big[e^{i(\underline t^TA)\underline X}\big]\\
+  &=e^{i\underline t^T\underline b}\,\mathbb E\big[e^{i(A^T\underline t)^T\underline X}\big]
+  =e^{i\underline t^T\underline b}\,\Phi_{\underline X}(A^T\underline t).\qedhere
+\end{aligned}
+\]
+\end{proof}
+
+\begin{proposition}[Property \textcircled{\scriptsize 5}: marginals]\label{prop:cf-marginals}
+Let $\underline X=(X_1,\dots,X_N)^T$. For every $j=1,\dots,N$ and every $t\in\mathbb R$,
+\[
+  \Phi_{X_j}(t)=\Phi_{\underline X}(t\underline e_j),\qquad
+  t\underline e_j=(0,\dots,0,t,0,\dots,0)^T\quad(t\text{ in the $j$-th position}).
+\]
+\end{proposition}
+
+\begin{proof}
+$\Phi_{X_j}(t)=\mathbb E\big[e^{itX_j}\big]=\mathbb E\big[e^{it\underline e_j^T\underline X}\big]
+=\mathbb E\big[e^{i(t\underline e_j)^T\underline X}\big]=\Phi_{\underline X}(t\underline e_j)$.
+(This is also the case $A=\underline e_j^T$, $\underline b=0$ of \cref{prop:cf-affine}.)
+\end{proof}
+
+\subsection{Property \textcircled{\scriptsize 6}: regularity of \texorpdfstring{$\Phi_{\underline X}$}{the characteristic function} and moments}\label{sec:cf-moments}
+
+\begin{theorem}[Property \textcircled{\scriptsize 6}]\label{thm:cf-moments}
+Let $\underline X=(X_1,\dots,X_N)^T$ be a random vector with values in $\mathbb R^N$ such that,
+for some $m\in\mathbb N^*$, $X_i\in L^m(\Omega,\mathcal F,\mathbb P)$ for every $i=1,\dots,N$.
+Then $\Phi_{\underline X}$ has continuous partial derivatives up to order $m$, and for every
+$k\le m$ and all $j_1,\dots,j_k\in\{1,\dots,N\}$
+\[
+  \frac{\partial^k}{\partial t_{j_1}\cdots\partial t_{j_k}}\Phi_{\underline X}(\underline t)
+  =i^k\,\mathbb E\big[X_{j_1}\cdots X_{j_k}\,e^{i\underline t^T\underline X}\big]
+  \qquad\forall\underline t\in\mathbb R^N .
+\]
+\end{theorem}
+
+The notes state the theorem without proof. The expectation on the right is finite, because
+$|x_{j_1}\cdots x_{j_k}|\le\frac1k\big(|x_{j_1}|^k+\dots+|x_{j_k}|^k\big)$ (the inequality
+between the geometric and the arithmetic mean) and $L^m\subseteq L^k$ for $k\le m$ on a
+probability space (\cref{prop:ld-inclusions}). The proof differentiates under the integral sign,
+with dominated convergence; for $N=1$ see \citet[Section~26, ``Moments and
+Derivatives'']{billingsley} or \citet[Section~3.3.3]{durrett}, and the same argument works in
+$\mathbb R^N$ (\exref{ex:cf-derivatives}).
+
+\begin{remark}[Moments]\label{rem:cf-moments}
+Let $X$ be a real random variable and $m\in\mathbb N^*$. We say that $X$ \emph{has a moment of
+order $m$} if $X\in L^m(\Omega,\mathcal F,\mathbb P)$, that is, if $\mathbb E[|X|^m]<+\infty$. In
+that case $\mathbb E[X^m]$ is called the \emph{moment of order $m$} of $X$, and
+$\mathbb E\big[(X-\mathbb E[X])^m\big]$ the \emph{centred moment of order $m$} of
+$X$.\footnote{It is finite: $X-\mathbb E[X]\in L^m$, because $L^m$ is a vector space containing
+the constants ($\mathbb P$ is finite). Added to the handwritten notes.} For instance,
+$\mathbb E[X]$ is the moment of order $1$, and
+$\operatorname{var}(X)=\mathbb E\big[(X-\mathbb E[X])^2\big]$ is the centred moment of order $2$.
+\end{remark}
+
+For a real random variable ($N=1$), \cref{thm:cf-moments} reads: if $X\in L^m$, then
+$\Phi_X\in C^m(\mathbb R)$ and, for every $k\le m$,
+\[
+  \frac{\dd^k}{\dd t^k}\Phi_X(t)=i^k\,\mathbb E\big[X^ke^{itX}\big]\qquad\forall t\in\mathbb R .
+\]
+In particular
+\begin{equation}\label{eq:cf-moments}
+  \frac{\dd^k}{\dd t^k}\Phi_X(0)=\Phi_X^{(k)}(0)=i^k\,\mathbb E[X^k],
+\end{equation}
+and we obtain the moments from the derivatives at $0$:
+\begin{itemize}
+  \item $\Phi_X'(0)=i\,\mathbb E[X]$, which gives $\mathbb E[X]$;
+  \item $\Phi_X''(0)=i^2\,\mathbb E[X^2]=-\mathbb E[X^2]$, which gives
+    $\operatorname{var}(X)=\mathbb E[X^2]-\mathbb E[X]^2$;
+  \item for a random vector $\underline X=(X_1,X_2)^T$ with $X_1,X_2\in L^2$,
+    \[
+      \frac{\partial}{\partial t_1}\Phi_{\underline X}(\underline 0)=i\,\mathbb E[X_1],\qquad
+      \frac{\partial}{\partial t_2}\Phi_{\underline X}(\underline 0)=i\,\mathbb E[X_2],\qquad
+      \frac{\partial^2}{\partial t_1\partial t_2}\Phi_{\underline X}(\underline 0)=i^2\,\mathbb E[X_1X_2],
+    \]
+    which give $\operatorname{cov}(X_1,X_2)=\mathbb E[X_1X_2]-\mathbb E[X_1]\,\mathbb E[X_2]$.
+\end{itemize}
+
+\begin{remark}[computational]\label{rem:cf-code-moments}
+Formula \eqref{eq:cf-moments} can be applied numerically: \texttt{moments\_from\_cf} in
+\coderef{code/src/probnotes/charfun.py} approximates $\Phi_X^{(k)}(0)$ by a central difference on
+the points $jh$, $|j|\le p$, with weights computed by Fornberg's algorithm (\texttt{fd\_weights}),
+and returns $\Phi_X^{(k)}(0)/i^k$. The step $h$ must be neither too large (the truncation error
+of the difference grows like a power of $h$) nor too small (rounding errors in the values of
+$\Phi_X$ are divided by $h^k$). Applied to an empirical characteristic function it returns the
+moments of the sample, since the empirical law has the characteristic function $\Phi_n$.
+\exref{ex:cf-random-sums} uses it on the characteristic function of a random sum.
+\end{remark}
+
+\demo{10-characteristic-functions.ipynb}{moments from finite differences at $0$, and the error
+as a function of the step $h$.}
+
+\subsection{Property \textcircled{\scriptsize 7}: uniqueness of \texorpdfstring{$\Phi_{\underline X}$}{the characteristic function} and characterisation of the law}\label{sec:cf-uniqueness}
+
+\begin{theorem}[Property \textcircled{\scriptsize 7}: uniqueness]\label{thm:cf-uniqueness}
+\begin{enumerate}[label=\arabic*)]
+  \item Let $\mu_1$ and $\mu_2$ be probability measures on
+    $(\mathbb R^N,\mathcal B(\mathbb R^N))$. Then
+    \[
+      \mu_1=\mu_2\iff\hat\mu_1=\hat\mu_2 .
+    \]
+  \item Let $\underline X$ and $\underline Y$ be random vectors with values in $\mathbb R^N$.
+    Then
+    \[
+      \underline X\sim\underline Y\ \ (\text{that is, }\mathbb P_{\underline X}=\mathbb P_{\underline Y})
+      \iff\Phi_{\underline X}=\Phi_{\underline Y}.
+    \]
+\end{enumerate}
+\emph{$\Phi_{\underline X}$ determines the law of $\underline X$ uniquely.}
+\end{theorem}
+
+The implications ``$\Rightarrow$'' are clear from the definitions, and 2) is 1) applied to
+$\mu_1=\mathbb P_{\underline X}$ and $\mu_2=\mathbb P_{\underline Y}$. The notes state the theorem
+without proof. For $N=1$ it follows from the inversion formula for intervals,
+\citet[Section~26, ``Inversion and the Uniqueness Theorem'']{billingsley} and
+\citet[Section~3.3.1]{durrett}; for $\mathbb R^N$ see \citet[Section~29, ``Characteristic
+Functions'']{billingsley} and \citet[Section~3.10]{durrett}.
+
+\begin{theorem}[Inversion formula]\label{thm:cf-inversion}
+If $\Phi_{\underline X}$ is Lebesgue integrable on $\mathbb R^N$, then $\underline X$ is
+absolutely continuous, and
+\[
+  f_{\underline X}(\underline x)=\frac1{(2\pi)^N}\int_{\mathbb R^N}e^{-i\underline t^T\underline x}\,
+  \Phi_{\underline X}(\underline t)\,\dd\underline t\qquad\forall\underline x\in\mathbb R^N
+\]
+is a density of $\underline X$; it is continuous and bounded.\footnote{The handwritten notes
+write ``$f_{\underline X}(\underline x)=\dots$'' for \emph{the} density. Since a density is
+determined only up to a negligible set (\cref{def:ld-ac-rv}), the formula gives one version of
+it, the only continuous one; made precise here.}
+\end{theorem}
+
+Here ``absolutely continuous'' means $\mathbb P_{\underline X}\ll\underline m$, Lebesgue measure
+on $\mathbb R^N$ (the $\mathbb R^N$ analogue of \cref{def:pm-ac-vector}); and $\dd\underline t$
+denotes integration with respect to $\underline m$ (the $\mathbb R^N$ analogue of
+\cref{rem:pm-double-integral}). The notes state the theorem without
+proof. For $N=1$ it is in \citet[Section~26, ``Inversion and the Uniqueness
+Theorem'']{billingsley} and \citet[Section~3.3.1]{durrett}; in $\mathbb R^N$ the proof is the
+same, starting from the inversion formula for rectangles of \citet[Section~3.10]{durrett}. The
+continuity and the bound $|f_{\underline X}|\le(2\pi)^{-N}\int|\Phi_{\underline X}|$ are
+immediate from the formula, by dominated convergence as in \cref{prop:cf-continuity}.
+
+Recall that if $\underline X$ is absolutely continuous, then
+(\cref{thm:ld-image-integral,prop:ld-density-integral})
+\[
+  \Phi_{\underline X}(\underline t)=\mathbb E\big[e^{i\underline t^T\underline X}\big]
+  =\int_{\mathbb R^N}e^{i\underline t^T\underline x}f_{\underline X}(\underline x)\,\dd\underline x .
+\]
+The inversion formula goes back from $\Phi_{\underline X}$ to $f_{\underline X}$, with the
+opposite sign in the exponent and the factor $(2\pi)^{-N}$.
+
+\begin{remark}[computational]\label{rem:cf-code-inversion}
+\texttt{invert\_density} in \coderef{code/src/probnotes/charfun.py} computes the inversion
+integral truncated to $[-L,L]$, for $N=1$. By \cref{prop:cf-conjugate} it is
+\[
+  f_L(x)=\frac1{2\pi}\int_{-L}^Le^{-itx}\Phi_X(t)\,\dd t=\frac1\pi\int_0^L\operatorname{Re}\big(e^{-itx}\Phi_X(t)\big)\,\dd t,
+\]
+computed by the trapezoidal rule. If $\Phi_X$ is integrable, the truncation error
+$|f_L(x)-f_X(x)|$ is at most $\frac1\pi\int_L^{\infty}|\Phi_X(t)|\,\dd t$. If it is not, $X$ may
+have no density, a discontinuous one or even a continuous one, and this error bound is lost
+(\cref{fig:cf-inversion}, right): at a jump of the density $f_L$ tends to the mean of the two
+one-sided limits, with the oscillations of the Gibbs phenomenon nearby, and at an atom it
+diverges (\exref{ex:cf-inversion-numerics} and \exref{ex:cf-non-integrable}). For laws with
+atoms, \texttt{atom\_mass} computes $\frac1{2L}\int_{-L}^Le^{-itx}\Phi_X(t)\,\dd t$, which tends
+to $\mathbb P(X=x)$ (\exref{ex:cf-non-integrable}), and \texttt{levy\_inversion} the inversion
+formula for intervals, which holds for every law.
+\end{remark}
+
+\demo{10-characteristic-functions.ipynb}{the truncated inversion integral for several laws, with
+a slider for the truncation $L$, and the law of a sum of independent variables recovered from
+the product of their characteristic functions.}
+
+\subsection{Property \textcircled{\scriptsize 8}: independence criterion}\label{sec:cf-independence-criterion}
+
+\begin{theorem}[Property \textcircled{\scriptsize 8}: independence criterion]\label{thm:cf-independence-criterion}
+Let $\underline X=(X_1,\dots,X_N)^T$. The random variables $X_j$, $j=1,\dots,N$, are
+independent if and only if
+\[
+  \Phi_{\underline X}(\underline t)=\prod_{j=1}^N\Phi_{X_j}(t_j)\qquad\forall\underline t=(t_1,\dots,t_N)^T\in\mathbb R^N .
+\]
+\end{theorem}
+
+The proof uses \cref{thm:pm-independence-product} for $N$ random variables: $X_1,\dots,X_N$
+are independent if and only if
+$\mathbb P_{\underline X}=\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}$, where the product of
+$N$ probability measures on $\mathcal B(\mathbb R)$ is the unique measure on
+$\mathcal B(\mathbb R^N)$ that gives every rectangle $A_1\times\dots\times A_N$ the measure
+$\prod_j\mathbb P_{X_j}(A_j)$; the proof is the same as for $N=2$, and Fubini's theorem
+(\cref{thm:pm-fubini}) extends to $N$ factors by induction.\footnote{This paragraph is added to
+the handwritten notes, which use these facts without comment.}
+
+\begin{proof}
+``$\Rightarrow$''.
+\[
+  \Phi_{\underline X}(\underline t)=\mathbb E\big[e^{i\underline t^T\underline X}\big]
+  =\mathbb E\Big[e^{i\sum_{j=1}^Nt_jX_j}\Big]=\mathbb E\Big[\prod_{j=1}^Ne^{it_jX_j}\Big]
+  \overset{(\ast)}{=}\prod_{j=1}^N\mathbb E\big[e^{it_jX_j}\big]=\prod_{j=1}^N\Phi_{X_j}(t_j),
+\]
+where $(\ast)$ holds because the $X_j$ are independent: it is the computation of
+``$\Leftarrow$'' below, read from the bottom up, with
+$\mathbb P_{\underline X}=\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}$.\footnote{The
+handwritten notes justify $(\ast)$ by the independence of the $X_j$ alone; for $N=2$ it is the
+footnote to \cref{prop:cf-independence}.}
+
+``$\Leftarrow$''. By definition and by hypothesis,
+\[
+\begin{aligned}
+  \hat{\mathbb P}_{\underline X}(\underline t)=\Phi_{\underline X}(\underline t)
+  &=\prod_{j=1}^N\Phi_{X_j}(t_j)=\prod_{j=1}^N\int_{\mathbb R}e^{it_jx_j}\,\dd\mathbb P_{X_j}(x_j)
+  =\int_{\mathbb R^N}\prod_{j=1}^Ne^{it_jx_j}\,\dd\mathbb P_{X_1}(x_1)\cdots\dd\mathbb P_{X_N}(x_N)\\
+  &=\int_{\mathbb R^N}e^{i\underline t^T\underline x}\,\dd\big(\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}\big)(\underline x)
+  =\big(\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}\big)^{\wedge}(\underline t)
+\end{aligned}
+\]
+for every $\underline t\in\mathbb R^N$, where the fourth equality is Fubini's theorem, which
+applies because the integrand has modulus $1$ and the measures are finite (to the real and
+imaginary parts). So the probability measures $\mathbb P_{\underline X}$ and
+$\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}$ have the same Fourier transform, and by
+\cref{thm:cf-uniqueness}
+\[
+  \mathbb P_{\underline X}=\mathbb P_{X_1}\otimes\dots\otimes\mathbb P_{X_N}
+  \quad\Longrightarrow\quad\text{the $X_j$ are independent.}\qedhere
+\]
+\end{proof}
+
+\begin{remark}[computational]\label{rem:cf-code-independence}
+The criterion can be tested on a sample of pairs. The function
+\texttt{cf\_independence\_defect} in \coderef{code/src/probnotes/charfun.py} computes the largest
+value of
+$|\Phi_n(s,t)-\Phi_n^X(s)\Phi_n^Y(t)|$ over a grid, with the empirical characteristic functions
+of the pair and of its components. For independent $X$ and $Y$ it is sampling noise, of order
+$n^{-1/2}$; for $X$ uniform on $(-1,1)$ and $Y=X^2$, which are uncorrelated but dependent, it
+stays away from $0$ (compare the distribution functions in \cref{rem:pm-code-uncorrelated}).
+\end{remark}
+
+\section{Worked exercises}\label{sec:cf-worked}
+
+\begin{example}[Worked exercise: the Gaussian characteristic function]\label{exa:cf-gaussian}
+\leavevmode
+\begin{enumerate}[label=\alph*)]
+  \item Prove that if $N$ is a standard Gaussian random variable, then
+    \[
+      \Phi_N(t)=\exp\Big(-\frac{t^2}2\Big)\qquad\forall t\in\mathbb R .
+    \]
+  \item Deduce that if $X$ is a Gaussian random variable with parameters $\mu$ and $\sigma^2$, then
+    $\Phi_X(t)=\exp\big(it\mu-\frac{\sigma^2t^2}2\big)$ for every $t\in\mathbb R$.
+  \item Use the previous result to prove that if $X_1\sim\mathcal N(\mu_1,\sigma_1^2)$ and
+    $X_2\sim\mathcal N(\mu_2,\sigma_2^2)$ are independent random variables, then
+    $X_1+X_2\sim\mathcal N(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$.
+\end{enumerate}
+
+\emph{Solution.} a) Let $t\in\mathbb R$. $N$ has moments of every order, so by
+\cref{thm:cf-moments} $\Phi_N$ is differentiable, and
+\[
+\begin{aligned}
+  \Phi_N'(t)&=\mathbb E\big[iN\,e^{itN}\big]=\int_{-\infty}^{+\infty}ix\,e^{itx}f_N(x)\,\dd x
+  =\int_{-\infty}^{+\infty}ix\,e^{itx}\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x\\
+  &=i\underbrace{\int_{-\infty}^{+\infty}x\cos(tx)\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x}_{=\,0\ \text{(odd integrand)}}
+   -\int_{-\infty}^{+\infty}x\sin(tx)\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x\\
+  &=\int_{-\infty}^{+\infty}\sin(tx)\big(-x\,e^{-x^2/2}\big)\frac1{\sqrt{2\pi}}\,\dd x .
+\end{aligned}
+\]
+We integrate by parts, with $\big(e^{-x^2/2}\big)'=-x\,e^{-x^2/2}$:\footnote{All the integrals
+here converge absolutely, so the Lebesgue integrals are improper Riemann integrals
+(\cref{rem:ig-improper}), and the integration by parts is done on $[-R,R]$ before letting
+$R\to\infty$. Added to the handwritten notes.}
+\[
+\begin{aligned}
+  \Phi_N'(t)&=\Big[\frac1{\sqrt{2\pi}}\sin(tx)\,e^{-x^2/2}\Big]_{-\infty}^{+\infty}
+   -\int_{-\infty}^{+\infty}t\cos(tx)\,e^{-x^2/2}\frac1{\sqrt{2\pi}}\,\dd x\\
+  &=-t\int_{-\infty}^{+\infty}\cos(tx)\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x
+   -ti\underbrace{\int_{-\infty}^{+\infty}\sin(tx)\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x}_{=\,0\ \text{(odd integrand)}}\\
+  &=-t\int_{-\infty}^{+\infty}\big(\cos(tx)+i\sin(tx)\big)\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x
+  =-t\int_{-\infty}^{+\infty}e^{itx}\frac1{\sqrt{2\pi}}e^{-x^2/2}\,\dd x=-t\,\Phi_N(t),
+\end{aligned}
+\]
+where the boundary term vanishes. Hence
+\[
+  \Phi_N'(t)=-t\,\Phi_N(t)\quad\Longrightarrow\quad\Phi_N(t)=c\,e^{-t^2/2}\qquad\forall t\in\mathbb R,
+\]
+because $\big(e^{t^2/2}\Phi_N(t)\big)'=e^{t^2/2}\big(t\Phi_N(t)+\Phi_N'(t)\big)=0$, so that
+$e^{t^2/2}\Phi_N(t)$ is a constant $c$ (its real and imaginary parts have zero derivative). But
+$\Phi_N(0)=1$, so $c=1$ and
+\[
+  \Phi_N(t)=e^{-t^2/2}\qquad\forall t\in\mathbb R .
+\]
+
+b) If $X\sim\mathcal N(\mu,\sigma^2)$, then $X$ has the law of $\sigma N+\mu$ with
+$N\sim\mathcal N(0,1)$ (\cref{prop:tr-affine-gaussian}), and $\Phi_X$ depends only on the law. By
+\cref{prop:cf-affine},
+\[
+  \Phi_X(t)=\Phi_{\sigma N+\mu}(t)=e^{it\mu}\,\Phi_N(\sigma t)=e^{it\mu}\cdot e^{-\sigma^2t^2/2},
+  \qquad\text{that is,}\qquad\Phi_X(t)=e^{it\mu-\sigma^2t^2/2}\quad\forall t\in\mathbb R .
+\]
+
+c) Let $X_1\sim\mathcal N(\mu_1,\sigma_1^2)$ and $X_2\sim\mathcal N(\mu_2,\sigma_2^2)$ be
+independent. By \cref{prop:cf-independence} and b),
+\[
+  \Phi_{X_1+X_2}(t)=\Phi_{X_1}(t)\,\Phi_{X_2}(t)=e^{it\mu_1-\sigma_1^2t^2/2}\cdot e^{it\mu_2-\sigma_2^2t^2/2}
+  =\exp\Big[it(\mu_1+\mu_2)-(\sigma_1^2+\sigma_2^2)\frac{t^2}2\Big],
+\]
+which is the characteristic function of $\mathcal N(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$. By
+\cref{thm:cf-uniqueness},
+\[
+  X_1+X_2\sim\mathcal N(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2).
+\]
+(Compare the computation of the same law by convolution in \cref{prop:rv-notable-sums}.)
+\end{example}
+
+\begin{example}[Worked exercise: the characteristic function $(1+t^2)^{-1/2}$]\label{exa:cf-one-over-sqrt}
+A random variable $X$ has characteristic function
+$\varphi(t)=\dfrac1{\sqrt{1+t^2}}$, $t\in\mathbb R$.\footnote{Such a random variable exists: the
+product of two independent standard Gaussian random variables
+(\exref{ex:cf-product-normals}). Added to the handwritten notes.}
+\begin{enumerate}[label=\alph*)]
+  \item Show that $X$ has finite variance, and compute $\mathbb E[X]$ and $\operatorname{var}(X)$.
+  \item Let $X$ and $Y$ be independent random variables, both with characteristic function
+    $\varphi$. Compute $\mathbb E[(X+Y)^4]$.
+  \item Let $X$, $Y$ and $Z$ be independent random variables, all with characteristic function
+    $\varphi$. Is the random variable $T=X+Y+Z$ absolutely continuous? What is
+    $\mathbb P(T\ge0)$?
+\end{enumerate}
+
+\emph{Solution.} a) $\Phi_X(t)=\varphi(t)=\frac1{\sqrt{1+t^2}}=(1+t^2)^{-1/2}$ for every
+$t\in\mathbb R$.
+
+\emph{Note:} if $\Phi_X\in C^m$ with $m$ even, then $X\in L^m$. (The notes state this without
+proof; it is a partial converse of \cref{thm:cf-moments}. For $m=2$ see
+\citet[Section~3.3.3]{durrett}; the general case, and the fact that ``$m$ even'' cannot be
+dropped, are \exref{ex:cf-even-moments}.)
+
+Here $\Phi_X\in C^\infty$, so $X\in L^m$ for every $m\ge1$; in particular $X\in L^2$ and
+$\operatorname{var}(X)<+\infty$. Now
+\[
+  \Phi_X'(t)=-\frac12(1+t^2)^{-3/2}\cdot2t=-t(1+t^2)^{-3/2}\qquad\forall t\in\mathbb R,
+\]
+so by \eqref{eq:cf-moments}
+\[
+  \Phi_X'(0)=0=i\,\mathbb E[X]\quad\Longrightarrow\quad\mathbb E[X]=0,
+\]
+which could be predicted, because $\Phi_X$ is real: $X$ is symmetric (\cref{cor:cf-symmetric}),
+so $\mathbb E[X]=\mathbb E[-X]=-\mathbb E[X]$. Moreover
+\[
+  \Phi_X''(t)=-(1+t^2)^{-3/2}-t\Big(-\frac32(1+t^2)^{-5/2}\cdot2t\Big)
+  =-(1+t^2)^{-3/2}+3t^2(1+t^2)^{-5/2},
+\]
+and
+\[
+  \Phi_X''(0)=-1=i^2\,\mathbb E[X^2]=-\mathbb E[X^2]\quad\Longrightarrow\quad
+  \mathbb E[X^2]=\operatorname{var}(X)=1 .
+\]
+
+b) $\Phi_X=\Phi_Y=\varphi$ and $X\indep Y$. By \cref{prop:cf-independence},
+\[
+  \Phi_{X+Y}(t)=\Phi_X(t)\,\Phi_Y(t)=\varphi^2(t)=\frac1{1+t^2}=(1+t^2)^{-1}\qquad\forall t\in\mathbb R .
+\]
+To find $\mathbb E[(X+Y)^4]$: $X+Y\in L^4$ by a) (or by the note, since $\Phi_{X+Y}\in C^\infty$), so
+by \eqref{eq:cf-moments}
+\[
+  1\cdot\mathbb E[(X+Y)^4]=i^4\,\mathbb E[(X+Y)^4]=\Phi_{X+Y}^{(4)}(0).
+\]
+(The notes leave the direct computation as an exercise, \exref{ex:cf-fourth-moment}.) Observe
+that, in a neighbourhood of $0$ (for $|t|<1$),
+\[
+  \Phi_{X+Y}(t)=\frac1{1+t^2}=\sum_{k=0}^\infty(-t^2)^k=\sum_{k=0}^\infty(-1)^kt^{2k}
+\]
+by the geometric series, while the Maclaurin expansion gives
+\[
+  \Phi_{X+Y}(t)=\sum_{j=0}^\infty\frac{\Phi_{X+Y}^{(j)}(0)}{j!}\,t^j .
+\]
+The two expansions have the same coefficients, because the sum of a power series is infinitely
+differentiable inside its interval of convergence and its $j$-th derivative at $0$ is $j!$ times
+the $j$-th coefficient.\footnote{This justification is added to the handwritten notes, which
+compare the two series directly.} Hence:
+\begin{itemize}
+  \item if $j$ is odd, $\frac{\Phi_{X+Y}^{(j)}(0)}{j!}=0$, so $\Phi_{X+Y}^{(j)}(0)=0$ (and
+    $\mathbb E[(X+Y)^j]=0$);
+  \item if $j$ is even, $j=2k$, $\frac{\Phi_{X+Y}^{(j)}(0)}{j!}=(-1)^{j/2}$, so
+    $\Phi_{X+Y}^{(j)}(0)=j!\,(-1)^{j/2}$.
+\end{itemize}
+In our case
+\[
+  \Phi_{X+Y}^{(4)}(0)=4!\,(-1)^2=4!=24\quad\Longrightarrow\quad\mathbb E[(X+Y)^4]=24 .
+\]
+
+c) $\Phi_X=\Phi_Y=\Phi_Z=\varphi$ and $T=X+Y+Z$. Then
+\[
+  \Phi_T(t)=\Phi_X(t)\,\Phi_Y(t)\,\Phi_Z(t)=\varphi^3(t)=\frac1{\big(\sqrt{1+t^2}\big)^3}=(1+t^2)^{-3/2}
+  \qquad\forall t\in\mathbb R,
+\]
+by \cref{thm:cf-independence-criterion} and \cref{prop:cf-affine}:
+$\Phi_T(t)=\Phi_{(X,Y,Z)}(t,t,t)=\varphi(t)^3$.\footnote{The handwritten notes write the product
+directly, as in \cref{prop:cf-independence}; that proposition is stated for two summands, and the
+justification for three is added here.}
+\begin{itemize}
+  \item $\Phi_T$ is integrable on all of $\mathbb R$:
+    $\int_{-\infty}^{+\infty}(1+t^2)^{-3/2}\,\dd t=\big[t(1+t^2)^{-1/2}\big]_{-\infty}^{+\infty}=2$.
+    So by \cref{thm:cf-inversion} $T$ is absolutely continuous, and
+    \[
+      f_T(x)=\frac1{2\pi}\int_{-\infty}^{+\infty}e^{-itx}\,\frac1{(1+t^2)^{3/2}}\,\dd t .
+    \]
+  \item $\Phi_T$ is real, so $T$ is symmetric (\cref{cor:cf-symmetric}): $T\sim-T$, and
+    $f_T$ can be taken even. Since $T$ is absolutely continuous, $\mathbb P(T=0)=0$, and
+    $\mathbb P(T>0)=\mathbb P(-T>0)=\mathbb P(T<0)$; the three probabilities add up to $1$, so
+    \[
+      \mathbb P(T\ge0)=\mathbb P(T>0)=\mathbb P(T<0)=\frac12 .
+    \]
+\end{itemize}
+\end{example}
+
+\begin{remark}[computational]\label{rem:cf-code-T}
+The density of $T$ has a closed form, $f_T(x)=\frac1\pi|x|K_1(|x|)$, where $K_1$ is a modified
+Bessel function; it is computed by \texttt{density\_product\_normals} in
+\coderef{code/src/probnotes/charfun.py}. In particular $f_T(0)=\frac1{2\pi}\int(1+t^2)^{-3/2}\dd
+t=\frac1\pi$. \Cref{fig:cf-inversion}, left, compares it with the truncated inversion integral
+and with a histogram of simulated values of $T$ (\exref{ex:cf-inversion-numerics}).
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch10-inversion}
+  \caption{The truncated inversion integral $f_L(x)=\frac1{2\pi}\int_{-L}^Le^{-itx}\Phi(t)\,\dd t$
+    (\cref{rem:cf-code-inversion}). Left: $\Phi_T(t)=(1+t^2)^{-3/2}$ of
+    \cref{exa:cf-one-over-sqrt}, integrable; already for $L=4$ the result is close to the density
+    $|x|K_1(|x|)/\pi$, and to the histogram of $10^5$ simulated values of $T$ (as sums of three
+    products of independent standard Gaussians). Right: the exponential law, whose
+    characteristic function is not integrable. The density has a jump at $0$; there $f_L$
+    tends to $\frac12$, the mean of the two one-sided limits, and it oscillates nearby (the
+    Gibbs phenomenon), with an overshoot that does not vanish as $L$ grows.}
+  \label{fig:cf-inversion}
+\end{figure}
+
+\begin{example}[Worked exercise: the density $2x$ on $(0,1)$]\label{exa:cf-density-2x}
+Determine the characteristic function of the random variable $X$ with density
+$f_X(x)=2x\1_{(0,1)}(x)$.
+
+\emph{Solution. First method.} For $t\ne0$, integrating by parts,
+\[
+\begin{aligned}
+  \Phi_X(t)&=\mathbb E\big[e^{itX}\big]=\int_{-\infty}^{+\infty}e^{itx}f_X(x)\,\dd x
+  =\int_0^12x\,e^{itx}\,\dd x
+  =\Big[2x\,\frac{e^{itx}}{it}\Big]_0^1-\int_0^12\,\frac{e^{itx}}{it}\,\dd x\\
+  &=\frac{2e^{it}}{it}-\frac2{it}\cdot\frac{e^{it}-1}{it}
+  =\frac{-2ite^{it}+2e^{it}-2}{t^2}
+  =\frac2{t^2}\big[e^{it}(1-it)-1\big],
+\end{aligned}
+\]
+using $\frac1i=-i$ and $(it)^2=-t^2$; and $\Phi_X(0)=1$.
+
+\emph{Second method.} If $Y\sim U(0,1)$, then
+\[
+  \Phi_Y(t)=\int_0^1e^{ity}\,\dd y=\frac{e^{it}-1}{it}\qquad\forall t\ne0,\qquad\Phi_Y(0)=1 .
+\]
+Since $f_X(x)=2x\1_{(0,1)}(x)=2x\,f_Y(x)$,
+\[
+\begin{aligned}
+  \Phi_X(t)&=\mathbb E\big[e^{itX}\big]=\int_{-\infty}^{+\infty}e^{itx}f_X(x)\,\dd x
+  =\int_{-\infty}^{+\infty}e^{itx}\cdot2x\,f_Y(x)\,\dd x\\
+  &=2\,\mathbb E\big[Ye^{itY}\big]=\frac2i\,i\,\mathbb E\big[Ye^{itY}\big]=\frac2i\,\Phi_Y'(t)
+\end{aligned}
+\]
+by \cref{thm:cf-moments}, that is, $\Phi_X(t)=-2i\,\Phi_Y'(t)$. For $t\ne0$,
+\[
+  \frac{\dd}{\dd t}\Big(\frac{e^{it}-1}{it}\Big)=\frac{ie^{it}\cdot it-(e^{it}-1)\,i}{(it)^2}
+  =\frac{te^{it}+ie^{it}-i}{t^2},
+\]
+so that
+\[
+  \Phi_X(t)=-2i\,\frac{te^{it}+ie^{it}-i}{t^2}=\frac{-2ite^{it}+2e^{it}-2}{t^2}
+  =\frac2{t^2}\big(e^{it}(1-it)-1\big),
+\]
+as with the first method.\footnote{The handwritten notes leave both computations to the reader
+(``fare i conti''); they are written out here.}
+\end{example}
+
+\begin{remark}[computational]\label{rem:cf-code-2x}
+Near $t=0$ the closed form subtracts nearly equal numbers: its numerator is of order $t^2$, so
+for $|t|=10^{-6}$ a rounding error of $10^{-16}$ in $e^{it}(1-it)$ becomes a relative error of
+order $10^{-4}$. \texttt{cf\_density\_2x} in \coderef{code/src/probnotes/charfun.py} therefore
+uses the Taylor series $\Phi_X(t)=\sum_k\frac{(it)^k}{k!}\,\mathbb E[X^k]$, with
+$\mathbb E[X^k]=\frac2{k+2}$, for $|t|<0.1$. The tests check both methods of the solution against
+numerical quadrature.
+\end{remark}
+
+\furtherreading
+\textcite{billingsley}, Section~26, treats characteristic functions on $\mathbb R$: moments and
+derivatives, independence, the inversion formula and the uniqueness theorem, and the continuity
+theorem used in \cref{ch:16-convergence-in-law}; Section~29 extends them to $\mathbb R^k$.
+\textcite{durrett}, Sections~3.3 and~3.10, covers the same ground with many examples, including
+the criterion for $\mathbb E[X^2]<\infty$ in terms of $\Phi_X$. \textcite{ross-5}, Chapter~7,
+uses the moment generating function in the same way as \cref{exa:cf-one-over-sqrt}: to compute
+moments and to identify the laws of sums of independent random variables.

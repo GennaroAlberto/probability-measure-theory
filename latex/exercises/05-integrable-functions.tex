@@ -1,0 +1,217 @@
+% Exercises for Chapter 5 (Integrable functions and dominated convergence). Statements only:
+% solutions are kept privately. Throughout, (X, A, mu) is a measure space and m is Lebesgue
+% measure, as in the notes.
+
+\begin{exercise}[Signed integrals: what can go wrong]\label{ex:ig-signed}
+\easy You may use the results of \noteref{sec:ig-signed} and of \cref{ch:04-integral}.
+\begin{enumerate}[label=(\alph*)]
+  \item On $(\mathbb R,\mathcal B(\mathbb R),m)$ let $f(x)=\frac x{1+x^2}$. Show that
+    $\int f^+\,\dd m=\int f^-\,\dd m=+\infty$, so that $\int_{\mathbb R}f\,\dd m$ is not defined,
+    although $\int_{[-T,T]}f\,\dd m=0$ for every $T>0$. Compute
+    $\lim_{T\to\infty}\int_{[-T,2T]}f\,\dd m$.
+  \item Show that the hypothesis ``$\varphi$ and $\psi$ integrable'' in
+    \noteref{rem:ig-difference} cannot be dropped: find measurable $\varphi,\psi\ge0$ on
+    $(\mathbb R,\mathcal B(\mathbb R),m)$ with $\varphi-\psi=\1_{[0,1]}$ and
+    $\int\varphi\,\dd m=\int\psi\,\dd m=+\infty$.
+  \item Let $f$ be integrable. Show that $\big|\int_Xf\,\dd\mu\big|=\int_X|f|\,\dd\mu$ if and
+    only if $f\ge0$ a.e.\ or $f\le0$ a.e.
+  \item Let $f$ be integrable and let $E_1,E_2,\ldots\in\mathcal A$ be pairwise disjoint, with
+    union $E$. Show that $\int_Ef\,\dd\mu=\sum_{k\ge1}\int_{E_k}f\,\dd\mu$, the series converging
+    absolutely. Show that the equality still holds, in $\overline{\mathbb R}$, if $f$ is only
+    measurable with $\int_Ef^-\,\dd\mu<+\infty$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Forgetting the completion]\label{ex:ig-borel-version}
+\medium This exercise makes \noteref{rem:ig-null-sets} precise. You may use
+\noteref{def:mf-completion}, \noteref{prop:mf-limits}, \noteref{thm:mf-approximation} and the
+results of the chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $f:\mathbb R\to\overline{\mathbb R}$ be $\mathcal L(\mathbb R)$-measurable. Show
+    that there are a Borel function $g:\mathbb R\to\overline{\mathbb R}$ and a Borel set $N$ with
+    $m(N)=0$ such that $f=g$ on $N^c$. \emph{Hint:} start with $f=\1_E$, $E\in\mathcal L(\mathbb
+    R)$; then treat simple functions, and $f^+$, $f^-$ through the approximation theorem.
+  \item Deduce that if $f$ is $\mathcal L(\mathbb R)$-measurable and either $f\ge0$ or $f$ is
+    $\bar m$-integrable, then $\int_{\mathbb R}f\,\dd\bar m=\int_{\mathbb R}g\,\dd m$: integrals on
+    the completed space reduce to integrals on $(\mathbb R,\mathcal B(\mathbb R),m)$.
+  \item Let $A$ be a subset of the Cantor set that is not a Borel set. Show that $\1_A$ is
+    Riemann integrable on $[0,1]$, find a Borel function equal to it a.e., and compute
+    $\int_{[0,1]}\1_A\,\dd\bar m$.
+  \item Let $N\in\mathcal A$ be negligible and let $f,f':X\to\overline{\mathbb R}$ be measurable
+    with $f=f'$ on $N^c$. Show that $f$ is integrable if and only if $f'$ is, and that then
+    $\int_Xf\,\dd\mu=\int_Xf'\,\dd\mu$. Explain how this gives a meaning to ``an integrable
+    function defined a.e.''.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Using dominated convergence]\label{ex:ig-dct-variants}
+\medium You may use \noteref{thm:ig-dominated-convergence}, \noteref{cor:ig-series} and
+\noteref{exa:ig-discrete-measure}.
+\begin{enumerate}[label=(\alph*)]
+  \item (\emph{Bounded convergence.}) Let $\mu(X)<+\infty$, and let $f_n$ be measurable with
+    $|f_n|\le M$ for every $n$ and $f_n\to f$ a.e., $f$ measurable. Show that
+    $\int_Xf_n\,\dd\mu\to\int_Xf\,\dd\mu$. Show by an example that $\mu(X)<+\infty$ cannot be
+    dropped.
+  \item Show that, under the hypotheses of \noteref{thm:ig-dominated-convergence},
+    $\int_X|f_n-f|\,\dd\mu\to0$.
+  \item (\emph{Differentiation under the integral sign.}) Let
+    $F(t)=\int_{(0,+\infty)}e^{-x}\frac{\sin(tx)}x\,\dd m(x)$, $t\in\mathbb R$. Show that $F$ is well
+    defined and differentiable, with $F'(t)=\int_{(0,+\infty)}e^{-x}\cos(tx)\,\dd m(x)$, and
+    deduce that $F(t)=\arctan t$. \emph{Hint:} apply dominated convergence to difference
+    quotients along a sequence $h_k\to0$, using the mean value theorem.
+  \item Use \noteref{cor:ig-series} to show that
+    $\int_{(0,1)}\frac{\log x}{1+x}\,\dd m(x)=-\frac{\pi^2}{12}$. You may use
+    $\sum_{k\ge1}\frac{(-1)^{k+1}}{k^2}=\frac{\pi^2}{12}$.
+  \item (\emph{Tannery's theorem.}) Let $a_{n,k}\in\mathbb R$, $n,k\ge0$, with
+    $a_{n,k}\to a_k$ as $n\to\infty$ for each $k$, and $|a_{n,k}|\le b_k$ with $\sum_kb_k<+\infty$.
+    Show that $\sum_ka_{n,k}\to\sum_ka_k$, by viewing series as integrals with respect to the
+    counting measure on $\mathbb N$. Deduce that $\lim_n(1+\frac1n)^n=\sum_{k\ge0}\frac1{k!}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A generalised dominated convergence theorem; Scheff\'e's lemma]\label{ex:ig-generalized-dct}
+\hard You may use Fatou's lemma (\noteref{lem:in-fatou}) and the results of the chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $f_n,f,g_n,g$ be measurable, with $g_n,g$ integrable, $|f_n|\le g_n$, $f_n\to f$ and
+    $g_n\to g$ a.e., and $\int_Xg_n\,\dd\mu\to\int_Xg\,\dd\mu$. Show that
+    $\int_Xf_n\,\dd\mu\to\int_Xf\,\dd\mu$.
+  \item (\emph{Scheff\'e.}) Let $f_n,f\ge0$ be integrable, with $f_n\to f$ a.e.\ and
+    $\int_Xf_n\,\dd\mu\to\int_Xf\,\dd\mu$. Show that $\int_X|f_n-f|\,\dd\mu\to0$.
+  \item Show by examples that the hypothesis $\int g_n\to\int g$ cannot be dropped in (a), nor
+    $\int f_n\to\int f$ in (b).
+  \item Let $p_n,p\ge0$ be Borel functions on $\mathbb R$ with
+    $\int p_n\,\dd m=\int p\,\dd m=1$ and $p_n\to p$ a.e. Show that
+    \[
+      \sup_{B\in\mathcal B(\mathbb R)}\Big|\int_Bp_n\,\dd m-\int_Bp\,\dd m\Big|
+      =\frac12\int_{\mathbb R}|p_n-p|\,\dd m\longrightarrow0 .
+    \]
+  \item For $p_n(x)=(1+\frac1n)x^{1/n}\1_{(0,1)}(x)$ and $p=\1_{(0,1)}$, compute the supremum in
+    (d) exactly, and its rate of convergence.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Improper integrals]\label{ex:ig-improper}
+\medium This exercise proves the statement in the box of \noteref{rem:ig-improper}, and
+completes the two worked exercises. Let $a\in\mathbb R$ and let $f:[a,+\infty)\to\mathbb R$ be
+locally Riemann integrable. You may use \noteref{thm:ig-riemann}, monotone convergence and
+dominated convergence.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $f$ is $\mathcal L([a,+\infty))$-measurable.
+  \item Show that if the improper integral $\int_a^{+\infty}|f(x)|\,\dd x$ converges, then
+    $f\in\mathcal L^1([a,+\infty))$ and $\int_{[a,+\infty)}f\,\dd m=\int_a^{+\infty}f(x)\,\dd x$.
+  \item Show that, conversely, if $f\in\mathcal L^1([a,+\infty))$, then
+    $\int_a^{+\infty}|f(x)|\,\dd x$ converges. State, without proof, the analogous result for
+    $f$ locally Riemann integrable on $(a,b]$ and unbounded near $a$.
+  \item Show that $f_n(x)=x^{-3/2}\log(1+\frac xn)$ is Lebesgue integrable on $[1,+\infty)$
+    (the step of \noteref{exa:ig-exercise-halfline} left to the reader). \emph{Hint:}
+    $\log(1+t)\le4t^{1/4}$ for $t\ge0$. Then show that
+    $\int_{(0,+\infty)}f_n\,\dd m=\frac{2\pi}{\sqrt n}$, which gives the limit of that exercise
+    again.
+  \item Show that the improper integral $\int_1^{+\infty}\frac{\sin x}x\,\dd x$ converges, that
+    $\int_{k\pi}^{(k+1)\pi}\frac{|\sin x|}x\,\dd x\ge\frac2{(k+1)\pi}$ for $k\ge1$, and deduce that
+    $\frac{\sin x}x\notin\mathcal L^1([1,+\infty))$, with
+    $\int_{[1,+\infty)}\big(\frac{\sin x}x\big)^\pm\,\dd m=+\infty$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The discrete measure of the worked exercise]\label{ex:ig-discrete}
+\easy Let $\mu$ be the measure of \noteref{exa:ig-discrete-exercise}, with
+$\mu(\{x_n\})=2^{-n}$ at $x_n=(-1)^{n-1}\frac{2^n}n$, $n\ge1$, and $f(x)=x$. You may use
+\noteref{exa:ig-discrete-measure}. These are the two claims that the notes leave to the reader,
+and a few more.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\sum_{n\ge1}f(x_n)\mu(\{x_n\})$ converges, with sum $\log2$. \emph{Hint:}
+    \[
+      \sum_{n=1}^N\frac{(-1)^{n-1}}n=\int_0^1\frac{1-(-t)^N}{1+t}\,\dd t .
+    \]
+  \item Show that $\int_{\mathbb R}f^+\,\dd\mu=+\infty$ and $\int_{\mathbb R}f^-\,\dd\mu=+\infty$.
+  \item Compute $\mu((0,+\infty))$, $\mu([-4,4])$ and $\int_{\mathbb R}\frac1x\,\dd\mu(x)$.
+  \item For which $p>0$ is $|x|^p\in\mathcal L^1(\mathbb R,\mathcal B(\mathbb R),\mu)$? Since $\mu$
+    is a probability measure, the identity $X(x)=x$ is a random variable with
+    $\mathbb P(X=x_n)=2^{-n}$: restate your answer, and the worked exercise, in terms of $X$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Rearranging a series that is not an integral]\label{ex:ig-rearrangement}
+\hard This is a computational exercise (Python with NumPy). Let $\mu$ and $f$ be as in
+\noteref{exa:ig-discrete-exercise}, so that $f(x_n)\mu(\{x_n\})=\frac{(-1)^{n-1}}n$. You may use
+$H_n=\sum_{k=1}^n\frac1k=\log n+\gamma+o(1)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the partial sums $S_N$ for $N=10^k$, $k=1,\dots,7$, and check that
+    $|S_N-\log2|\le\frac1{N+1}$.
+  \item For integers $p,q\ge1$, rearrange the series by taking the first $p$ positive terms, then
+    the first $q$ negative terms, then the next $p$ positive terms, and so on. Compute the sums for
+    $(p,q)\in\{(1,1),(2,1),(1,2),(4,1),(1,4)\}$ with about $10^6$ terms, and compare them with
+    $\log2+\frac12\log\frac pq$. Then prove this formula.
+  \item Implement Riemann's rearrangement: take positive terms until the partial sum exceeds a
+    target $t$, then negative terms until it falls below $t$, and so on. Run it for
+    $t\in\{-1,0,\pi\}$, and compare the proportion of positive terms among the first $2\cdot10^5$
+    terms with the value predicted by (b).
+  \item Let $g(x)=\operatorname{sign}(x)|x|^{1/2}$. Show that $g\in\mathcal L^1(\mu)$, compute
+    $\int_{\mathbb R}g\,\dd\mu$ to ten digits, and check that the rearrangements of (b) do not
+    change the sum. Why can they not?
+  \item Explain in two or three sentences why \noteref{def:ig-integrable} asks for
+    $\int f^+\,\dd\mu<+\infty$ and $\int f^-\,\dd\mu<+\infty$, rather than for the convergence of
+    $\sum_nf(x_n)\mu(\{x_n\})$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Two integrals of $\sin x/x$]\label{ex:ig-sine}
+\medium This is a computational exercise (Python with NumPy and SciPy). Let
+$I(T)=\int_1^T\frac{\sin x}x\,\dd x$ and $J(T)=\int_1^T\frac{|\sin x|}x\,\dd x$, and let
+$\mathrm{Si}(t)=\int_0^t\frac{\sin x}x\,\dd x$ and $\mathrm{Ci}(t)=-\int_t^\infty\frac{\cos x}x\,\dd x$
+(\texttt{scipy.special.sici}).
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $I(T)$ and $J(T)$ exactly in terms of $\mathrm{Si}$ (for $J$, split $[1,T]$ at the
+    multiples of $\pi$), for $T=10^k$, $k=1,\dots,6$; check them against
+    \texttt{scipy.integrate.quad} for $T\le50$.
+  \item Show that $\big|I(T)-(\frac\pi2-\mathrm{Si}(1))\big|\le\frac2T$, and check it numerically.
+    What is the largest value of $I(T)$ over $T\ge1$?
+  \item Show that $J(T)-\frac2\pi\log T$ converges to a constant $C$, and compute $C$ to six
+    digits. \emph{Hint:} $|\sin x|=\frac2\pi-\frac4\pi\sum_{k\ge1}\frac{\cos(2kx)}{4k^2-1}$, and
+    $\int_1^\infty\frac{\cos(2kx)}x\,\dd x=-\mathrm{Ci}(2k)$.
+  \item How large must $T$ be for $J(T)\ge10$? What does this say about recognising a
+    non-integrable function from numerical values of $\int_1^T|f|$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[When the limit of the integrals is wrong]\label{ex:ig-no-domination}
+\medium This is a computational exercise (Python with NumPy and SciPy). On $[0,1]$ let
+$f_n(x)=n^2xe^{-nx}$ and $g_n(x)=nxe^{-nx}$, $n\ge1$. You may use the results of the chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $f_n\to0$ and $g_n\to0$ pointwise, that $\int_0^1f_n\,\dd x=1-(1+n)e^{-n}\to1$
+    and that $\int_0^1g_n\,\dd x\to0$. Check the integrals with \texttt{quad} for
+    $n\in\{1,10,100,1000\}$.
+  \item Compute the envelopes $F=\sup_nf_n$ and $G=\sup_ng_n$ numerically on a logarithmic grid
+    of $(0,1]$. Show that $G\le\frac1e$ and that $F(x)\ge\frac1{e^2x}$; deduce that no integrable
+    function dominates $(f_n)$, while a constant dominates $(g_n)$.
+  \item Compute $\int_\varepsilon^1F\,\dd x$ for $\varepsilon=10^{-k}$ and estimate the slope of
+    this quantity as a function of $\log\frac1\varepsilon$. Compare it with $\frac4{e^2}$.
+  \item Check Fatou's lemma on $(f_n)$: which inequality is strict?
+  \item Compute the midpoint rule with $1000$ cells, $Q(f_n)$, for $n=10,10^2,\dots,10^5$. Why
+    does $Q(f_n)\to0$, the ``wrong'' limit? How must the number of cells grow with $n$ for
+    $Q(f_n)$ to stay within $10^{-3}$ of $\int_0^1f_n\,\dd x$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Riemann sums and Lebesgue sums]\label{ex:ig-lebesgue-sums}
+\medium This is a computational exercise (Python with NumPy). You may use
+\noteref{thm:mf-approximation} and \noteref{thm:ig-riemann}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $f(x)=x^{-1/2}$ on $(0,1]$. Show that $m(\{f\ge t\})=\min(1,t^{-2})$ for $t>0$, and
+    compute the Lebesgue sums $L_n=\int f_n\,\dd m=2^{-n}\sum_{i=1}^{n2^n}m(\{f\ge i2^{-n}\})$ of the
+    simple functions $f_n$ of the approximation theorem, for $n=1,\dots,16$. Show that
+    $L_n=1+2^n\sum_{i=2^n+1}^{n2^n}i^{-2}$ and that $2-L_n=\frac1n+2^{-n-1}+o(2^{-n})$. Which
+    term comes from the cut at height $n$, and which from the rounding?
+  \item Use instead the levels $ih$, $i\ge1$, with no cut: $L(h)=h\sum_{i\ge1}m(\{f\ge ih\})$.
+    Show that $2-L(h)\approx\frac h2$ for $h=2^{-k}$.
+  \item Compare with the Riemann sums with $N$ cells, at the right ends ($R_N$) and at the
+    midpoints ($M_N$). Show numerically that $2-R_N\approx1.46/\sqrt N$ and $2-M_N\approx0.60/\sqrt
+    N$, and explain the constants. Why are Lebesgue sums seldom used to compute integrals?
+  \item Let $C$ be the Cantor set. On the partition of $[0,1]$ into the $3^k$ intervals
+    $[j3^{-k},(j+1)3^{-k}]$, show that the upper Darboux sum of $\1_C$ equals
+    $\big(\frac52\,2^k-2\big)3^{-k}$, and check it for $k\le12$ with
+    \texttt{probnotes.measurable.cantor\_stage}. Which part of \noteref{thm:ig-riemann} does this
+    illustrate?
+\end{enumerate}
+\end{exercise}

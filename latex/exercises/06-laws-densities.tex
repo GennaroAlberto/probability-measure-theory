@@ -1,0 +1,207 @@
+% Exercises for Chapter 6 (L^p spaces, laws and densities). Statements only: solutions are kept
+% privately. Throughout, (X, A, mu) is a measure space, m is Lebesgue measure on B(R), and
+% (Omega, F, P) is a probability space, as in the notes.
+
+\begin{exercise}[The essential supremum]\label{ex:ld-essup}
+\easy Let $f,g:X\to\overline{\mathbb R}$ be measurable, and let
+$S_f=\{M>0:\mu(\{|f|>M\})=0\}$, so that $\|f\|_\infty=\inf S_f$ (\noteref{def:ld-Linfty}). Recall from
+the notes that the infimum is attained when $0<\|f\|_\infty<+\infty$, so that $|f|\le\|f\|_\infty$
+a.e., and that $\|f\|_\infty=0$ if and only if $f=0$ a.e.; you may use these facts.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\|f\|_\infty\le\sup_X|f|$, with equality if $\mu$ is the counting measure on a
+    set $X$, or if $f$ is continuous on $[0,1]$ and $\mu=m$. Give a function on
+    $(\mathbb R,\mathcal B(\mathbb R),m)$ that is finite everywhere with $\|f\|_\infty=+\infty$, and
+    compute $\|\1_{\mathbb Q}\|_\infty$ for $m$.
+  \item Show that $f=g$ a.e.\ implies $\|f\|_\infty=\|g\|_\infty$, and that
+    $\|f+g\|_\infty\le\|f\|_\infty+\|g\|_\infty$ when $f+g$ is defined a.e.
+  \item The quantity $\operatorname*{ess\,sup}f=\inf\{M\in\mathbb R:\mu(\{f>M\})=0\}$ is the
+    essential supremum of $f$ itself. Compare it with $\|f\|_\infty$ for $f\equiv-1$ and for
+    $f\ge0$, and show that $\|f\|_\infty=\max\big(\operatorname*{ess\,sup}f,\operatorname*{ess\,sup}(-f)\big)$
+    when $\mu(X)>0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[From $\|f\|_p$ to $\|f\|_\infty$]\label{ex:ld-lp-limit}
+\medium Let $0<\mu(X)<+\infty$ and $f:X\to\overline{\mathbb R}$ measurable. Recall from the proof of
+\noteref{prop:ld-inclusions} that $\|f\|_p\le\mu(X)^{\frac1p-\frac1q}\|f\|_q$ for $1\le p<q<\infty$
+(\noteref{eq:ld-norm-comparison}), and $\|f\|_p\le\mu(X)^{1/p}\|f\|_\infty$; in particular, on a
+probability space $p\mapsto\|f\|_p$ is non-decreasing on $[1,+\infty]$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\lim_{p\to\infty}\|f\|_p=\|f\|_\infty$, including when $\|f\|_\infty=+\infty$.
+    \emph{Hint:} for $0<M<\|f\|_\infty$, $\|f\|_p\ge M\mu(\{|f|>M\})^{1/p}$.
+  \item Compute $\|f\|_p$ on $([0,1],\mathcal B([0,1]),m)$ for $f(x)=2x$ and for the function of
+    \noteref{exa:ld-essup}, and check (a) on them.
+  \item Show that (a) fails on $((0,+\infty),\mathcal B,m)$ for $f=1$, but that it holds on any
+    measure space if $f\in L^r$ for some $r<\infty$. \emph{Hint:}
+    $\int|f|^p\,\dd\mu\le\|f\|_\infty^{p-r}\int|f|^r\,\dd\mu$ for $p>r$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Powers of $x$ and the failure of the inclusions]\label{ex:ld-powers}
+\medium This is a computational exercise. Let $a>0$ and $f_a(x)=x^{-a}$, with Lebesgue measure.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $f_a\in L^p((0,1))$ if and only if $ap<1$, that $f_a\in L^p((1,+\infty))$ if and
+    only if $ap>1$, and that $f_a\notin L^p((0,+\infty))$ for every $p\ge1$. Which $f_a$ are in
+    $L^\infty((0,1))$, and which in $L^\infty((1,+\infty))$?
+  \item Let $1\le p<q<\infty$. Using (a), find a function in $L^q((1,+\infty))\setminus
+    L^p((1,+\infty))$, and functions on $(0,+\infty)$ showing that neither of $L^p((0,+\infty))$ and
+    $L^q((0,+\infty))$ contains the other. Which hypothesis of \noteref{prop:ld-inclusions} fails?
+  \item On $(\mathbb N^*,\mathcal P(\mathbb N^*),\text{counting})$, show that $\ell^p\subseteq\ell^q$
+    for $p<q$, with $\|a\|_q\le\|a\|_p$, and that $a_n=n^{-a}$ is in $\ell^q$ but not in $\ell^p$
+    when $\frac1q<a\le\frac1p$.
+  \item Write code that returns $\|x^{-a}\|_p$ on an interval $(\ell,h)\subseteq(0,+\infty)$ in
+    closed form ($+\infty$ allowed). Tabulate the truncated integrals $\int_\varepsilon^1x^{-ap}\,\dd x$
+    and $\int_1^Rx^{-ap}\,\dd x$ for $a=\frac13$, $p\in\{2,3,4\}$, $\varepsilon=10^{-2},\dots,10^{-8}$ and
+    $R=10^2,\dots,10^6$, and explain from the table which integrals converge. Compare with
+    adaptive quadrature (\texttt{scipy.integrate.quad}).
+  \item Plot $p\mapsto\|f_{1/3}\|_p$ on $(0,1)$ for $p\in[1,3)$ and check numerically that it is
+    non-decreasing, as \noteref{eq:ld-norm-comparison} requires on this probability space.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Distribution functions and quantiles]\label{ex:ld-cdf}
+\medium Let $X$ be a random variable on $(\Omega,\mathcal F,\mathbb P)$ with distribution function
+$F_X$ (\noteref{def:ld-cdf}). You may use the properties of measures of \cref{ch:02-measures}, the
+uniqueness part of the extension theorem (\noteref{thm:mf-extension}), and that the finite disjoint
+unions of intervals $(a,b]$, $(-\infty,b]$, $(a,+\infty)$ and $\mathbb R$ form an algebra that
+generates $\mathcal B(\mathbb R)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $F_X$ is non-decreasing and right-continuous, with $\lim_{x\to-\infty}F_X(x)=0$ and
+    $\lim_{x\to+\infty}F_X(x)=1$; that $F_X(x^-)=\mathbb P(X<x)$; and that
+    $\mathbb P(X=x)=F_X(x)-F_X(x^-)$. Deduce that $F_X$ is continuous if $X$ is absolutely continuous,
+    and that $F_X$ has at most countably many jumps.
+  \item Let $F:\mathbb R\to[0,1]$ have the four properties of (a), and for $u\in(0,1)$ let
+    $F^{-1}(u)=\inf\{x\in\mathbb R:F(x)\ge u\}$. Show that $F^{-1}(u)$ is a real number and that
+    \[
+      F^{-1}(u)\le x\iff u\le F(x)\qquad(u\in(0,1),\ x\in\mathbb R).
+    \]
+  \item On $((0,1),\mathcal B((0,1)),m)$, let $Y=F^{-1}$. Show that $Y$ is a random variable whose
+    law, the image measure $m_{F^{-1}}$, has distribution function $F$. Conclude that every
+    function with the properties of (a) is the distribution function of some random variable.
+  \item Show that two random variables, possibly on different probability spaces, have the same
+    law if and only if they have the same distribution function. Compute $F^{-1}$ for the law of a
+    fair die and for the exponential law $F(x)=(1-e^{-\lambda x})\1_{[0,+\infty)}(x)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How many loaves to bake]\label{ex:ld-newsvendor}
+\medium \emph{(In the style of Ross, Ch.~4.)} Each morning a bakery bakes $k$ loaves, at a cost of
+$c$ per loaf, and sells them at a price $s>c$; loaves left in the evening are given away. The
+number $D$ of customers who want a loaf on a given day is a random variable with values in
+$\mathbb N$ and distribution function $F_D$, and the profit is $G_k=s\min(D,k)-ck$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\min(D,k)=\sum_{j=0}^{k-1}\1_{\{D>j\}}$, and deduce that
+    $\mathbb E[\min(D,k)]=\sum_{j=0}^{k-1}\big(1-F_D(j)\big)$.
+  \item Show that $\mathbb E[G_{k+1}]-\mathbb E[G_k]=s\big(1-F_D(k)\big)-c$. Deduce that the expected
+    profit is largest for $k^*=\min\{k\in\mathbb N:F_D(k)\ge1-\frac cs\}$.
+  \item Let $D\sim\mathcal P(20)$ (Poisson), $s=3$ and $c=1$. Compute $k^*$, $\mathbb E[G_{k^*}]$, and
+    the expected profit of the naive choice $k=\mathbb E[D]=20$, numerically with the discrete density
+    of $D$. Why is $k^*$ larger than the mean demand?
+  \item Suppose that the loaves left can be sold to a farm at $r$ per loaf, $0\le r<c$. Find the new
+    optimal number of loaves, and compute it for $r=0.5$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The empirical distribution function and the sample size]\label{ex:ld-ecdf}
+\hard This is a computational exercise. Let $X_1,\dots,X_n$ be independent random variables
+(\cref{ch:07-product-measures}) with the same distribution function $F$, and
+$F_n(x)=\frac1n\#\{k\le n:X_k\le x\}$ their empirical distribution function. You may use that the
+events $\{X_k\le x\}$, $k\le n$, are independent, so that $n\,F_n(x)$ has the binomial law
+$B(n,F(x))$; Chebyshev's inequality
+$\mathbb P(|Y-\mathbb E[Y]|\ge\varepsilon)\le\operatorname{var}(Y)/\varepsilon^2$, and the
+Dvoretzky--Kiefer--Wolfowitz inequality in the form proved by P.~Massart (\emph{Ann.\ Probab.}\ 18,
+1990, 1269--1283):
+$\mathbb P\big(\sup_x|F_n(x)-F(x)|>\varepsilon\big)\le2e^{-2n\varepsilon^2}$ for every $\varepsilon>0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Write vectorised code for $F_n$, and for $D_n=\sup_x|F_n(x)-F(x)|$ computed exactly from the
+    sorted sample (allow $F$ to have atoms: you will need $F(x^-)$). Check it against a fine grid.
+  \item Fix $x$. Show that $\mathbb E[F_n(x)]=F(x)$ and $\operatorname{var}(F_n(x))=F(x)(1-F(x))/n\le\frac1{4n}$.
+    Using Chebyshev, find $n$ such that $\mathbb P(|F_n(x)-F(x)|\ge0.01)\le0.05$ whatever $F$ and $x$.
+  \item Using the DKW inequality, find $n$ such that $\mathbb P(D_n>0.01)\le0.05$. Compare with (b):
+    which guarantee is stronger, and which needs more samples? What does this say about Chebyshev's
+    inequality?
+  \item With the $n$ of (c) and seed $2026$, draw $500$ samples of size $n$ from the exponential law
+    $\mathrm{Exp}(1)$ and report the fraction with $D_n>0.01$. Repeat with the Poisson law
+    $\mathcal P(3)$. Compare with $2e^{-2n\varepsilon^2}$ and with the limit
+    $2\sum_{j\ge1}(-1)^{j-1}e^{-2j^2\lambda^2}$, $\lambda=\varepsilon\sqrt n$, of
+    $\mathbb P(\sqrt nD_n>\lambda)$ for continuous $F$ (Kolmogorov). Is the DKW bound sharp?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Densities: the steps left to the reader]\label{ex:ld-density-integral}
+\medium This exercise completes the proof of \noteref{prop:ld-density-integral}. Let $f\ge0$ be
+measurable on $(X,\mathcal A,\mu)$, and $\nu(A)=\int_Af\,\dd\mu$ (\noteref{prop:ld-density-measure}). No
+$\sigma$-finiteness is assumed in (a)--(c).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\int_Xg\,\dd\nu=\int_Xgf\,\dd\mu$ in $[0,+\infty]$ for every measurable $g\ge0$.
+    Deduce that $g\in L^1(\nu)$ if and only if $gf\in L^1(\mu)$, and that then
+    $\int_Xg\,\dd\nu=\int_Xgf\,\dd\mu$. Deduce \noteref{cor:ld-image-density}.
+  \item (Chain rule.) Let $h\ge0$ be measurable and $\lambda(A)=\int_Ah\,\dd\nu$. Show that
+    $\lambda(A)=\int_Ahf\,\dd\mu$: in the notation of Radon--Nikodym derivatives,
+    $\frac{\dd\lambda}{\dd\mu}=\frac{\dd\lambda}{\dd\nu}\frac{\dd\nu}{\dd\mu}$.
+  \item Show that $\mu\ll\nu$ if and only if $\mu(\{f=0\})=0$, and that then $\mu(A)=\int_A\frac1f\,\dd\nu$
+    for every $A\in\mathcal A$: if $\nu\sim\mu$, then $\frac{\dd\mu}{\dd\nu}=1/\frac{\dd\nu}{\dd\mu}$.
+  \item Let $\mu$ be the counting measure on $([0,1],\mathcal B([0,1]))$. Show that $m\ll\mu$, but that
+    there is no measurable $f\ge0$ with $m(A)=\int_Af\,\dd\mu$ for all $A$. Which hypothesis of
+    \noteref{thm:ld-radon-nikodym} fails?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Radon--Nikodym derivatives between discrete laws]\label{ex:ld-rn-finite}
+\medium This is a computational exercise. Let $\nu=B(10,0.3)$ (binomial) and $\mu=\mathcal P(3)$
+(Poisson), as measures on $(\mathbb N,\mathcal P(\mathbb N))$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\nu\ll\mu$ but $\mu\not\ll\nu$, and compute $\frac{\dd\nu}{\dd\mu}(k)$ in closed form.
+    Where is it largest? Check numerically that $\int g\,\dd\nu=\int g\frac{\dd\nu}{\dd\mu}\,\dd\mu$ for
+    $g(k)=k$, $k^2$, $e^{k/2}$, and compare with the exact values $3$, $11.1$ and
+    $(0.7+0.3e^{1/2})^{10}$.
+  \item Give two laws on $\mathbb N$ that are singular, and two that are equivalent but different.
+    For $0<p,q<1$, compute $\frac{\dd B(n,p)}{\dd B(n,q)}$.
+  \item (Importance sampling.) The probability $\pi=\mathbb P(K\ge25)$ for $K\sim B(100,0.1)$ is
+    small. Show that $\pi=\mathbb E[w(K')\1_{\{K'\ge25\}}]$ for $K'\sim B(100,0.25)$, with
+    $w=\frac{\dd B(100,0.1)}{\dd B(100,0.25)}$. With seed $2026$ and $10^4$ draws, estimate $\pi$ both
+    naively (draws of $K$) and with the weight (draws of $K'$), with standard errors, and compare
+    with the exact value.
+  \item Why would the method of (c) fail if the roles of the two laws were exchanged in a problem
+    where $\nu\not\ll\mu$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The area of a tile]\label{ex:ld-tile}
+\easy \emph{(In the style of Ross, Ch.~5.)} This is also a computational exercise. The side $S$ of a
+square tile, in centimetres, is a random variable with density
+$f_S(s)=\frac34\big(1-(s-10)^2\big)\1_{(9,11)}(s)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Check that $f_S$ is a density and compute $F_S$. Compute $\mathbb E[A]$ for the area $A=S^2$,
+    using \noteref{eq:ld-ac-expectation} (no law of $A$ needed), and $\operatorname{var}(A)$.
+  \item Compute $F_A$, show that $A$ is absolutely continuous, and find its density $f_A$. You may use
+    the fundamental theorem of calculus and (d) of \cref{ex:ld-cdf}. Compute $\mathbb E[A]=\int af_A(a)\,\dd a$ again, and
+    $\mathbb P(A>110)$.
+  \item One can show that $S=10+M$, where $M$ is the median of three independent uniform random
+    variables on $(-1,1)$, has density $f_S$. With seed $2026$, draw $10^6$ such $S$, check the
+    claim by the distance $\sup_s|F_n(s)-F_S(s)|$, and estimate $\mathbb E[A]$ and $\mathbb P(A>110)$
+    with $95\%$ intervals.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A deductible and a limit]\label{ex:ld-insurance}
+\hard \emph{(In the style of Ross, Ch.~5.)} A loss $L$ has the exponential law with mean $1000$,
+$f_L(\ell)=\lambda e^{-\lambda\ell}\1_{(0,+\infty)}(\ell)$ with $\lambda=10^{-3}$. An insurance policy
+pays nothing for losses below the deductible $d=500$, pays $L-d$ above it, but never more than
+$u=2500$: the payment is $Y=\min\big((L-d)^+,u\big)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $F_Y$. Show that $\mathbb P_Y$ has atoms at $0$ and at $u$, with masses
+    $1-e^{-1/2}$ and $e^{-3}$, and a density on $(0,u)$, so that $Y$ is neither discrete nor
+    absolutely continuous. Write $\mathbb P_Y=\mathbb P_Y^{d}+\mathbb P_Y^{ac}$, with
+    $\mathbb P_Y^{d}$ concentrated on $\{0,u\}$ and $\mathbb P_Y^{ac}\ll m$.
+  \item Compute $\mathbb E[Y]$ in three ways: as $\int h(\ell)f_L(\ell)\,\dd\ell$ with
+    $h(\ell)=\min((\ell-d)^+,u)$; as $\int y\,\dd\mathbb P_Y(y)$, using the decomposition of (a); and as
+    $\int_0^{+\infty}\mathbb P(Y>t)\,\dd t$ (show first that $\mathbb E[Z]=\int_0^{+\infty}\mathbb P(Z>t)\,\dd t$
+    for every random variable $Z$ with values in $[0,u]$). Compute also $\operatorname{var}(Y)$.
+  \item Where is $F_Y$ differentiable? Compute $\int_{\mathbb R}F_Y'(y)\,\dd y$, and explain why it is not
+    $1$, in the light of \noteref{thm:ld-lebesgue}.
+  \item With seed $2026$, simulate $10^6$ losses, and compute $95\%$ intervals for $\mathbb E[Y]$,
+    $\mathbb P(Y=0)$ and $\mathbb P(Y=u)$ from the same draws. Do all three intervals contain the exact
+    values? Should they?
+\end{enumerate}
+\end{exercise}

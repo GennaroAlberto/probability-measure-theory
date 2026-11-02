@@ -1,0 +1,214 @@
+% Exercises for Chapter 15 (convergence of random variables and the laws of large numbers).
+% Statements only: solutions are kept privately. Throughout, (Omega, F, P) is a probability space,
+% Xbar_n = (X_1 + ... + X_n)/n is the sample mean, and the notation is that of the notes.
+
+\begin{exercise}[Moments and convergence in $L^p$]\label{ex:ll-moments}
+\easy
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X,X_1,X_2,\dots$ be i.i.d., not a.s.\ constant, with $\mathbb E\big[|X|^p\big]<+\infty$
+    for every $p\ge1$. Show that $\mathbb E\big[|X_n|^p\big]\to\mathbb E\big[|X|^p\big]$ for every
+    $p\ge1$, that $\mathbb E[X_n]\to\mathbb E[X]$ and $\Var(X_n)\to\Var(X)$, but that $(X_n)_n$
+    converges in probability to no random variable, and so in no $L^p$. \emph{Hint:} look at
+    $X_{n+1}-X_n$. Which converse implications in \noteref{prop:ll-Lp} does this rule out?
+  \item On $\Omega=[0,1]$ with Lebesgue measure, let $X_n=n^a\1_{(0,\frac1n)}$ with $a>0$. For
+    which $p\ge1$ does $X_n\xrightarrow{L^p}0$? Does $X_n\to0$ almost surely? Deduce that, for
+    $1\le p<q$, convergence in $L^p$ does not imply convergence in $L^q$.
+  \item Show that if $X_n\xrightarrow{L^2}X$ and $Y_n\xrightarrow{L^2}Y$, then
+    $X_nY_n\xrightarrow{L^1}XY$. \emph{Hint:} $X_nY_n-XY=(X_n-X)Y_n+X(Y_n-Y)$ and the
+    Cauchy--Schwarz inequality (\noteref{cor:ld-cauchy-schwarz}).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Almost surely convergent subsequences]\label{ex:ll-subsequence}
+\medium This exercise proves \noteref{prop:ll-subsequence}, which the notes leave as an exercise,
+in two ways. Let $X_n\xrightarrow{\mathbb P}X$ and $\varphi(t)=\frac t{1+t}$ for $t\ge0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Following the hint of the notes, choose $n_1<n_2<\cdots$ with
+    $\mathbb E\big[\varphi(|X_{n_k}-X|)\big]\le2^{-k}$. Show that
+    $\sum_{k\ge1}\varphi(|X_{n_k}-X|)$ is integrable, deduce that $\varphi(|X_{n_k}-X|)\to0$ a.s.,
+    and conclude that $X_{n_k}\xrightarrow{\text{a.s.}}X$. You may use \noteref{cor:in-series}
+    and \noteref{prop:in-ae}.
+  \item Give a second proof: choose $n_1<n_2<\cdots$ with
+    $\mathbb P(|X_{n_k}-X|>\frac1k)\le2^{-k}$, and apply the first Borel--Cantelli lemma
+    (\noteref{lem:ms-borel-cantelli-1}).
+  \item Show that, for any random variables $Y_n$ and $Y$, $Y_n\xrightarrow{\text{a.s.}}Y$ if and only
+    if $\mathbb P\big(\sup_{m\ge n}|Y_m-Y|>\varepsilon\big)\to0$ as $n\to\infty$, for every
+    $\varepsilon>0$. Deduce part~(2) of \noteref{thm:ll-implications} again.
+  \item For the typewriter sequence of \noteref{exa:ll-typewriter}, compute
+    $\mathbb P\big(\sup_{m\ge n}|X_m|>\varepsilon\big)$ for $0<\varepsilon<1$, and find explicitly
+    a subsequence that converges to $0$ almost surely. At which $\omega$ does your subsequence
+    fail to converge to $0$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The metric of convergence in probability]\label{ex:ll-criterion}
+\hard This exercise proves the results that the notes state without proof after the two
+counterexamples. Let $\varphi(t)=\frac t{1+t}$ and, for random variables $X,Y$,
+$d(X,Y)=\mathbb E\big[\varphi(|X-Y|)\big]$. You may use \noteref{prop:ll-metric} and
+\noteref{prop:ll-subsequence}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\varphi(s+t)\le\varphi(s)+\varphi(t)$ for $s,t\ge0$, and deduce that $d$ is a
+    metric on the set of real random variables, where random variables equal a.s.\ are
+    identified.
+  \item Show that $X_n\xrightarrow{\mathbb P}X$ if and only if every subsequence of $(X_n)_n$ has
+    a further subsequence that converges to $X$ almost surely. \emph{Hint for ``$\Leftarrow$'':}
+    if $d(X_n,X)\not\to0$, there are $\delta>0$ and a subsequence with $d(X_{n_k},X)\ge\delta$.
+  \item Prove part~(2) of \noteref{prop:ll-continuous-mapping}. More generally, show that if
+    $X_n\xrightarrow{\mathbb P}X$, $Y_n\xrightarrow{\mathbb P}Y$ and $g:\mathbb R^2\to\mathbb R$ is
+    continuous, then $g(X_n,Y_n)\xrightarrow{\mathbb P}g(X,Y)$; in particular
+    $X_n+Y_n\xrightarrow{\mathbb P}X+Y$ and $X_nY_n\xrightarrow{\mathbb P}XY$.
+  \item Prove \noteref{prop:ll-dominated}. \emph{Hint:} show first that $|X|\le Y$ a.s., and
+    use (b) with the dominated convergence theorem.
+  \item Show that (c) fails for the Borel function $f=\1_{(0,+\infty)}$, with $X_n=\frac1n$ and
+    $X=0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The two counterexamples in numbers]\label{ex:ll-typewriter-numerics}
+\medium This is a computational exercise. Use NumPy, or the module
+\texttt{probnotes.convergence}.
+\begin{enumerate}[label=(\alph*)]
+  \item In the typewriter sequence of \noteref{exa:ll-typewriter}, $X_n=Y_{k,j}$ with
+    $n=\frac{k(k-1)}2+j$, $1\le j\le k$. Show that
+    $k=\big\lceil\frac{\sqrt{8n+1}-1}2\big\rceil$, and find $(k,j)$ for $n=10^6$.
+  \item Fix $\omega$. Show that each block $k$ contains exactly one $n$ with $X_n(\omega)=1$,
+    unless $\omega=\frac jk$ with $0<j<k$, in which case it contains two. Count the
+    $n\le10^6$ with $X_n(\omega)=1$ for $\omega=\frac1{\sqrt2}$, $\omega=\frac13$ and
+    $\omega=\frac7{10}$, and compare with $\sqrt{2\cdot10^6}$. For $\omega=\frac7{10}$, compare
+    the count obtained in floating-point arithmetic, with \texttt{omega = 0.7}, with the count
+    obtained with exact fractions, and explain the difference.
+  \item For both counterexamples, tabulate the exact values of $\mathbb P(|X_n|>\frac12)$,
+    $\mathbb E|X_n|$, $\mathbb E[X_n^2]$ and $d(X_n,0)=\mathbb E\big[\frac{|X_n|}{1+|X_n|}\big]$ for
+    $n=10,10^2,10^3,10^4$ (give $\log_{10}$ of the moments that overflow). Match each column
+    with a mode of convergence, and check the table of \noteref{rem:ll-weakest}.
+  \item For the spike $X_n=2^n\1_{(0,\frac1n)}$, estimate $\mathbb P(|X_n|>\frac12)$ and
+    $d(X_n,0)$ for $n=10$ and $n=100$ by Monte Carlo, with $10^5$ uniform points $\omega$ drawn
+    with seed $2026$. Check that the estimates are within three standard errors of the exact
+    values. How many points are needed to estimate $\mathbb P(|X_n|>\frac12)$ with a relative
+    standard error of $1\%$, as a function of $n$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How large a sample? Chebyshev against the exact answer]\label{ex:ll-chebyshev-bernoulli}
+\medium This is a computational exercise. A poll estimates the proportion $p$ of voters in favour
+of a proposal by the sample mean $\bar X_n$ of $n$ i.i.d.\ $b(p)$ variables.
+\begin{enumerate}[label=(\alph*)]
+  \item Using \noteref{eq:ll-chebyshev-mean}, find the smallest $n$ that guarantees
+    $\mathbb P(|\bar X_n-p|>0.05)\le0.05$ whatever $p\in[0,1]$ is.
+  \item Let $p=\frac12$. Compute exactly, for $n=1,\dots,3000$, the probability
+    $\mathbb P(|\bar X_n-\frac12|>0.05)$; \texttt{scipy.stats.binom} gives the binomial law, and
+    beware of the cases where $n(p\pm0.05)$ is an integer. Find the smallest $n$ for which it is at most $0.05$, and the
+    smallest $n_0$ such that it is at most $0.05$ for \emph{every} $n\ge n_0$. Why are they different? Why does
+    your computation prove the claim for every $n\ge n_0$, not only up to $3000$?
+  \item Repeat (a) and (b) for $p=0.1$, using that $p$ is known to be $0.1$ in (a).
+  \item Check one value of (b) by simulation: with seed $2026$, draw $10^5$ values of
+    $\bar X_{n_0}$ for $p=\frac12$, and compare the frequency of $|\bar X_{n_0}-\frac12|>0.05$
+    with the exact probability (three standard errors).
+  \item Hoeffding's inequality, which you may use without proof, gives
+    $\mathbb P(|\bar X_n-p|>\varepsilon)\le2e^{-2n\varepsilon^2}$ for i.i.d.\ variables with values
+    in $[0,1]$. Which $n$ does it guarantee in (a)? Which of the two bounds is better for very
+    small tolerances $\delta$ in place of $0.05$, and why?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Averages that do not settle]\label{ex:ll-cauchy}
+\hard This is partly a computational exercise. Let $C_1,C_2,\dots$ be i.i.d.\ with the Cauchy
+density $\frac1{\pi(1+x^2)}$, and $\bar C_n=\frac1n\sum_{i=1}^nC_i$. By \exref{ex:cf-cauchy}, the
+characteristic function of $C_1$ is $e^{-|t|}$, and $\bar C_n$ has the same law as $C_1$.
+\begin{enumerate}[label=(\alph*)]
+  \item By \exref{ex:cf-cauchy}, $C_1\notin L^1$, so that neither \noteref{thm:ll-strong-lln} nor
+    \noteref{rem:ll-kolmogorov} applies. Show that $\mathbb P(|\bar C_n|>1)=\frac12$ for every
+    $n$, and deduce that $\bar C_n$ converges in probability to no constant.
+  \item Show that $\bar C_{2n}-\bar C_n$ has the law of $C_1$, for every $n$. \emph{Hint:} write it
+    as $\frac12(\bar C_n'-\bar C_n)$, where $\bar C_n'$ is the mean of $C_{n+1},\dots,C_{2n}$, and
+    use characteristic functions. Deduce that $(\bar C_n)_n$ converges in probability to no random
+    variable, and hence converges almost surely to no random variable.
+  \item With seed $2026$, simulate $1000$ independent paths $n\mapsto\bar C_n$ up to $n=10^4$
+    (\texttt{sample\_means} in \texttt{probnotes.convergence}). Estimate
+    $\mathbb P(|\bar C_n|>1)$ for $n=10,10^2,10^3,10^4$ and $\mathbb P(|\bar C_{10^4}-\bar
+    C_{5000}|>1)$, and compare them with (a) and (b). Do the same for $\mathcal N(0,1)$ variables,
+    where the exact value is $2(1-\Phi(\sqrt n))$. Plot a few paths of each kind.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How good are Markov's and Chebyshev's inequalities? (in the style of Ross, Ch.~8)]\label{ex:ll-cantelli}
+\hard In this exercise $a>0$, and the inequalities of Markov and Chebyshev are used with
+``$\ge$'': $\mathbb P(Y\ge a)\le\mathbb E[Y]/a$ for $Y\ge0$, and
+$\mathbb P(|X-\mu|\ge a)\le\sigma^2/a^2$ for $X\in L^2$ with mean $\mu$ and variance $\sigma^2$.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove these two versions, as in the proof of part~(1) of \noteref{thm:ll-implications}.
+    Show that both are sharp: for $0\le m\le a$, find a law of $Y\ge0$ with $\mathbb E[Y]=m$ and
+    $\mathbb P(Y\ge a)=\frac ma$; for $k\ge1$, find a law with mean $0$, variance $1$ and
+    $\mathbb P(|X|\ge k)=\frac1{k^2}$.
+  \item Prove the \emph{one-sided Chebyshev inequality} (Cantelli's inequality)
+    \[
+      \mathbb P(X-\mu\ge a)\le\frac{\sigma^2}{\sigma^2+a^2}.
+    \]
+    \emph{Hint:} for every $b\ge0$, $\{X-\mu\ge a\}\subseteq\{(X-\mu+b)^2\ge(a+b)^2\}$; apply
+    Markov's inequality and choose $b$ well.
+  \item Show that Cantelli's inequality is sharp, with a law taking two values.
+  \item A web server receives on average $500$ requests a minute, with a standard deviation of
+    $50$. Bound the probability that it receives at least $600$ requests in a given minute with
+    Markov's inequality, with Chebyshev's inequality and with Cantelli's inequality. What is this
+    probability if the number of requests is (approximately) normally distributed?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Records (in the style of Ross, Ch.~8)]\label{ex:ll-records}
+\medium Let $U_1,U_2,\dots$ be i.i.d.\ with a continuous distribution function, say $U(0,1)$. The
+$i$-th observation is a \emph{record} if $U_i>\max(U_1,\dots,U_{i-1})$ (the first one always is);
+let $I_i$ be the indicator of this event and $R_n=I_1+\dots+I_n$ the number of records among the
+first $n$ observations. You may use without proof that $I_1,I_2,\dots$ are independent and that
+$\mathbb P(I_i=1)=\frac1i$.
+\begin{enumerate}[label=(\alph*)]
+  \item Explain why $\mathbb P(I_i=1)=\frac1i$. Compute $\mathbb E[R_n]=H_n=\sum_{i=1}^n\frac1i$ and
+    $\Var(R_n)$, and show that $\Var(R_n)\le H_n$.
+  \item Show that $\frac{R_n}{\log n}\to1$ in $L^2$, hence in probability. You may use that
+    $\log(n+1)\le H_n\le1+\log n$.
+  \item For $n=10^6$, bound $\mathbb P(|R_n-H_n|>\frac12H_n)$ with Chebyshev's inequality.
+  \item Show that $\frac{R_n}{\log n}\to1$ almost surely. \emph{Hint:} as in the proof of
+    \noteref{thm:ll-strong-lln}, first take the subsequence $n_k=\lceil e^{k^2}\rceil$, then
+    use that $R_n$ is non-decreasing in $n$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Bernstein polynomials (in the style of Ross, Ch.~8)]\label{ex:ll-bernstein}
+\hard Let $f:[0,1]\to\mathbb R$ be continuous. Its \emph{Bernstein polynomials} are
+\[
+  B_nf(x)=\sum_{k=0}^nf\Big(\frac kn\Big)\binom nkx^k(1-x)^{n-k},\qquad x\in[0,1].
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $B_nf(x)=\mathbb E\big[f(S_n/n)\big]$, where $S_n\sim B(n,x)$, and explain why
+    the weak law of large numbers makes $B_nf(x)\to f(x)$ plausible.
+  \item Prove that $\sup_{x\in[0,1]}|B_nf(x)-f(x)|\to0$. \emph{Hint:} $f$ is bounded and uniformly
+    continuous; split the expectation according to whether $|\frac{S_n}n-x|\le\delta$, and use
+    Chebyshev's inequality with a bound that does not depend on $x$. (This proves the
+    Weierstrass approximation theorem: polynomials are dense in $C([0,1])$ for the uniform
+    norm.)
+  \item Suppose that $|f(s)-f(t)|\le L|s-t|$ for all $s,t\in[0,1]$. Show that, for every
+    $x\in[0,1]$, $|B_nf(x)-f(x)|\le L\sqrt{x(1-x)/n}\le\frac L{2\sqrt n}$.
+  \item For $f(x)=|x-\frac12|$, compute $B_nf(\frac12)-f(\frac12)$ for $n=10,10^2,10^3$ (exactly
+    for $n=10$, numerically for the others; \texttt{bernstein\_polynomial} in
+    \texttt{probnotes.convergence} does it), and compare with the bound in (c) and with
+    $\frac1{\sqrt{2\pi n}}$. Is the order $n^{-1/2}$ in (c) the right one?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A strong law for uncorrelated variables]\label{ex:ll-uncorrelated}
+\hard
+\begin{enumerate}[label=(\alph*)]
+  \item Let $(X_n)_{n\ge1}$ be random variables in $L^2$ that are pairwise uncorrelated
+    ($\Cov(X_i,X_j)=0$ for $i\ne j$), with $\mathbb E[X_n]=\mu$ and $\Var(X_n)\le C$ for every $n$,
+    for some constant $C$. Go through the proof of \noteref{thm:ll-strong-lln} and show that
+    $\bar X_n\to\mu$ almost surely and in $L^2$. Which steps change?
+  \item Let $U\sim U(0,1)$ and $X_n=\sqrt2\cos(2\pi nU)$, $n\ge1$. Show that
+    $\mathbb E[X_n]=0$ and $\mathbb E[X_nX_m]=\1_{\{n=m\}}$, so that (a) applies, but that $X_1$
+    and $X_2$ are not independent.
+  \item Check the conclusion of (a) directly in the example of (b): show that
+    $\big|\sum_{n=1}^N\cos(2\pi nu)\big|\le\frac1{|\sin(\pi u)|}$ for $u\in(0,1)$, and deduce
+    that $\bar X_N(\omega)\to0$ for every $\omega$ with $U(\omega)\in(0,1)$.
+  \item Show that the assumption $\Var(X_n)\le C$ cannot simply be dropped: if the $X_n$ are
+    independent with $\mathbb P(X_n=n)=\mathbb P(X_n=-n)=\frac12$, then $\bar X_n$ does not
+    converge to $0$ in $L^2$.
+\end{enumerate}
+\end{exercise}

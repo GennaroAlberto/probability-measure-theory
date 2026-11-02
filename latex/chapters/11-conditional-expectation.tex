@@ -1,5 +1,712 @@
-\begin{planned}
-  \item conditioning in the discrete case
-  \item conditional expectation given a $\sigma$-algebra: definition and existence
-  \item the absolutely continuous case
-\end{planned}
+% Chapter 11: Conditioning and conditional expectation.
+% Translation of Paola Siri's handwritten notes, PDF pages 162 ("CONDIZIONAMENTO") to 178:
+% conditioning on a discrete random variable (the heading "CONDIZIONAMENTO" is repeated on p. 164,
+% where a new lecture restates the definitions: one section here), the factorisation of
+% sigma(Y)-measurable random variables (Doob-Dynkin), Kolmogorov's definition of conditional
+% expectation (stated on p. 170 and again on p. 171 under "ATTESA CONDIZIONATA"; once here), its
+% existence via Radon-Nikodym, and the absolutely continuous case.
+
+Let $X$ and $Y$ be two random variables that are related to each other. How does knowing the
+value of $Y$ change what we know about $X$? When $Y$ is discrete, the event $\{Y=y\}$ has
+positive probability and the answer is elementary: we condition on it, and obtain a conditional
+law of $X$ and a conditional mean $h(y)$. The random variable $h(Y)$ has two properties: it is
+a function of $Y$, and it has the same integral as $X$ over every event that $Y$ determines.
+Kolmogorov made these two properties the definition of the conditional expectation
+$\mathbb E[X\mid\mathcal G]$ given a $\sigma$-algebra $\mathcal G$, and the Radon--Nikodym
+theorem shows that it exists. For absolutely continuous random vectors it is computed with
+conditional densities. The properties of conditional expectation are the subject of
+\cref{ch:12-conditional-properties}.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space.
+
+\section{Conditioning}\label{sec:ce-conditioning}
+
+Let $X$ and $Y$ be real random variables, related to each other. In what way does knowing the
+behaviour of $Y$ influence our knowledge of $X$?
+
+\subsection{The discrete case}\label{sec:ce-discrete}
+
+Let $(X,Y)$ be a discrete random vector (\cref{sec:pm-discrete}), with joint discrete density
+$f_{(X,Y)}$ and marginal discrete densities $f_X$ and $f_Y$
+(\cref{prop:pm-discrete-independence}). Suppose that $Y$ takes a value $y\in Y(\Omega)$. We can
+define the density of $X$ conditionally on the fact that $Y=y$:
+\[
+  f_{X\mid Y=y}(x)=\mathbb P(X=x\mid Y=y)=\frac{\mathbb P(X=x,\,Y=y)}{\mathbb P(Y=y)}
+  =\frac{f_{(X,Y)}(x,y)}{f_Y(y)}
+\]
+if $f_Y(y)=\mathbb P(Y=y)>0$, and in an arbitrary way otherwise. Another notation is $f_{X\mid Y}(x\mid y)$. If $f_Y(y)>0$,
+this is a discrete density in every respect. Indeed
+\begin{itemize}
+  \item $f_{X\mid Y=y}(x)\ge0$;
+  \item by part 1) of \cref{prop:pm-discrete-independence},
+    \[
+      \sum_{x\in X(\Omega)}f_{X\mid Y=y}(x)=\Big[\sum_{x\in X(\Omega)}f_{(X,Y)}(x,y)\Big]\cdot\frac1{f_Y(y)}
+      =f_Y(y)\cdot\frac1{f_Y(y)}=1 .
+    \]
+\end{itemize}
+$f_{X\mid Y=y}$ is called the \emph{density function of $X$ conditioned on the event $(Y=y)$}
+(when $\mathbb P(Y=y)>0$). We can compute the corresponding expected value:
+\[
+  \sum_{x\in X(\Omega)}x\,f_{X\mid Y=y}(x)=\mathbb E[X\mid Y=y].
+\]
+$\mathbb E[X\mid Y=y]=h(y)$ is called the \emph{expectation of $X$ conditioned on the event
+$(Y=y)$}. We collect these objects, together with two new ones, in a definition.
+
+\begin{definition}[Conditioning on a discrete random variable]\label{def:ce-discrete}
+Let $(X,Y)$ be a discrete random vector.
+\begin{enumerate}[label=\arabic*)]
+  \item The \emph{(discrete) density function of $X$ conditioned on the event $(Y=y)$} is
+    \[
+      f_{X\mid Y=y}(x)=\mathbb P(X=x\mid Y=y)=\frac{f_{(X,Y)}(x,y)}{f_Y(y)}
+      =\frac{\mathbb P(X=x,\,Y=y)}{\mathbb P(Y=y)}\qquad\text{if }f_Y(y)\ne0,
+    \]
+    and it is defined in an arbitrary way if $f_Y(y)=0$.
+  \item $f_{X\mid Y=y}$ defines a discrete measure (\cref{exa:ig-discrete-measure}) on
+    $(\mathbb R,\mathcal B(\mathbb R))$,
+    \[
+      \mathbb P_{X\mid Y=y}(A)=\sum_{x\in A\cap X(\Omega)}f_{X\mid Y=y}(x)=\mathbb P(X\in A\mid Y=y)
+      \qquad\forall A\in\mathcal B(\mathbb R),
+    \]
+    called the \emph{law of $X$ conditioned on the event $(Y=y)$}. If $f_Y(y)>0$ it is a
+    probability concentrated on $X(\Omega)$.
+  \item The \emph{expectation of $X$ conditioned on the event $(Y=y)$} is the quantity
+    \[
+      \mathbb E[X\mid Y=y]=\sum_{x\in X(\Omega)}x\,f_{X\mid Y=y}(x),
+    \]
+    well defined if $\sum_{x\in X(\Omega)}|x|\,f_{X\mid Y=y}(x)<+\infty$. Note that
+    $\mathbb E[X\mid Y=y]=h(y)$, with $h$ measurable.
+  \item The \emph{expectation of $X$ conditioned on $Y$} is the random variable
+    \[
+      \mathbb E[X\mid Y]=h\circ Y=h(Y).
+    \]
+\end{enumerate}
+\end{definition}
+
+Two comments on 3) and 4), added to the handwritten notes. First, if $X\in L^1$, then
+$\mathbb E[X\mid Y=y]$ is well defined for every $y$ with $f_Y(y)>0$: by
+\cref{thm:ld-image-integral} and \cref{exa:ig-discrete-measure},
+$\mathbb E[|X|]=\sum_{x,y}|x|\,f_{(X,Y)}(x,y)$, so that
+\[
+  \sum_{x\in X(\Omega)}|x|\,f_{X\mid Y=y}(x)=\frac1{f_Y(y)}\sum_{x\in X(\Omega)}|x|\,f_{(X,Y)}(x,y)
+  \le\frac{\mathbb E[|X|]}{f_Y(y)}<+\infty .
+\]
+If $X\ge0$, the sum in 3) is always defined, in $[0,+\infty]$. Second, $h$ is given by 3) on the
+set $C=\{y:f_Y(y)>0\}\subseteq Y(\Omega)$, which is at most countable, and an arbitrary value
+elsewhere, say a constant $c$. Any such $h$ is Borel: for $B\in\mathcal B(\mathbb R)$, the set
+$h^{-1}(B)$ is the at most countable set $\{y\in C:h(y)\in B\}$, united with $C^c$ if $c\in B$.
+Since $\mathbb P(Y\in C)=1$, the arbitrary values do not affect $h(Y)$ outside a negligible set.
+
+\begin{example}[Worked exercise: a Poisson variable given the sum]\label{exa:ce-poisson}
+Let $X\indep Y$ with $X\sim\mathcal P(\lambda)$ and $Y\sim\mathcal P(\mu)$, $\lambda,\mu>0$, and
+let $Z=X+Y$. Then $Z\sim\mathcal P(\lambda+\mu)$ (\cref{prop:rv-notable-discrete}).
+
+a) We determine the law of $X$ conditioned on the event $(Z=m)$, $m\in\mathbb N$; note that
+$f_Z(m)>0$. For every $k\in\mathbb N$ we compute $f_{X\mid Z=m}(k)$.
+\begin{itemize}
+  \item If $k>m$, then $f_{X\mid Z=m}(k)=\mathbb P(X=k\mid Z=m)=0$, since $X=k$ and $Z=m$ would
+    give $Y=m-k<0$.
+  \item If $k\le m$,
+    \[
+    \begin{aligned}
+      f_{X\mid Z=m}(k)&=\frac{\mathbb P(X=k,\,Z=m)}{\mathbb P(Z=m)}=\frac{\mathbb P(X=k,\,Y=m-k)}{\mathbb P(Z=m)}\\
+      &\overset{X\indep Y}{=}\frac{\mathbb P(X=k)\,\mathbb P(Y=m-k)}{\mathbb P(Z=m)}
+      =\frac{f_X(k)\,f_Y(m-k)}{f_Z(m)}\\
+      &=\frac{\Big(e^{-\lambda}\dfrac{\lambda^k}{k!}\Big)\Big(e^{-\mu}\dfrac{\mu^{m-k}}{(m-k)!}\Big)}
+        {e^{-(\lambda+\mu)}\dfrac{(\lambda+\mu)^m}{m!}}
+      =\frac{m!}{k!\,(m-k)!}\,\frac{\lambda^k\mu^{m-k}}{(\lambda+\mu)^m}\\
+      &=\binom mk\Big(\frac\lambda{\lambda+\mu}\Big)^k\Big(\underbrace{\frac\mu{\lambda+\mu}}_{=\,1-\frac\lambda{\lambda+\mu}}\Big)^{m-k},
+    \end{aligned}
+    \]
+    where the second equality uses the factorisation of the joint density of independent
+    variables (\cref{prop:pm-discrete-independence}).
+\end{itemize}
+Hence
+\[
+  X\mid Z=m\ \sim\ B\Big(m,\frac\lambda{\lambda+\mu}\Big),
+\]
+which is intuitive.
+
+\emph{Example.} In a post office there are two counters, $A$ and $B$. Let $X$ be the number of
+customers served by counter $A$ in one hour, and $Y$ the number of customers served by counter
+$B$ in one hour, with $X\indep Y$ (the two clerks do not influence each other). Then $X+Y=Z$ is
+the total number of customers served in one hour. If $Z=m$, then for each of the customers
+served we call ``success'' being served by $A$ and ``failure'' being served by $B$, and
+$X\mid Z=m$ is the number of successes.\footnote{Added to the handwritten notes: the computation
+in a) shows that, given $Z=m$, the $m$ customers behave like $m$ independent trials, each a
+success with probability $\frac\lambda{\lambda+\mu}$, the share of counter $A$ in the total
+rate.}
+
+b) By the mean of the binomial law,
+\[
+  \mathbb E[X\mid Z=m]=m\,\frac\lambda{\lambda+\mu}=h(m),\qquad
+  \mathbb E[X\mid Z]=h(Z)=Z\,\frac\lambda{\lambda+\mu}.
+\]
+\end{example}
+
+\begin{remark}[computational]\label{rem:ce-code-tables}
+For a discrete vector with finitely many values, the joint density is a table and conditioning
+on $Y=y$ normalises a column: \texttt{conditional\_pmf} and \texttt{conditional\_mean} in
+\coderef{code/src/probnotes/conditional.py} compute $f_{X\mid Y=y}$ and $h(y)$ for every
+column at once, leaving the columns with $f_Y(y)=0$ undefined. For the Poisson pair above, the
+conditional law computed from the joint density by \cref{def:ce-discrete} agrees with
+$B(m,\frac\lambda{\lambda+\mu})$ to rounding error, and a simulation of $(X,Z)$ reproduces
+both the law and $h(m)=m\frac\lambda{\lambda+\mu}$ (\cref{fig:ce-poisson},
+\exref{ex:ce-poisson-simulation}).
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch11-poisson}
+  \caption{$X\sim\mathcal P(2)$ and $Y\sim\mathcal P(3)$ independent, $Z=X+Y$. Left: the law of
+    $X$ given $Z=6$, computed from the joint density (bars), against $B(6,0.4)$ (dots) and the
+    relative frequencies among the pairs with $Z=6$ in $2\cdot10^5$ simulated pairs (diamonds). Right:
+    $h(m)=\mathbb E[X\mid Z=m]=0.4\,m$ against the averages of $X$ over the simulated pairs with
+    $Z=m$, with two standard errors.}
+  \label{fig:ce-poisson}
+\end{figure}
+
+\demo{11-conditional-expectation.ipynb}{the law of $X$ given $X+Y=m$ for a Poisson pair, with
+sliders for $\lambda$, $\mu$ and $m$.}
+
+We now observe two properties of $\mathbb E[X\mid Y]$.
+
+\begin{remark}[Integrals over the events of $\sigma(Y)$]\label{rem:ce-discrete-property}
+Let $A\in\sigma(Y)=\{Y^{-1}(B):B\in\mathcal B(\mathbb R)\}$ (\cref{prop:mf-sigma-f}); then
+$A=Y^{-1}(B)$ with $B\in\mathcal B(\mathbb R)$. Let $h:\mathbb R\to\mathbb R$ be a measurable
+function, with $h\ge0$ or $h(Y)\in L^1$.\footnote{The handwritten notes take any measurable
+$h$; the integrals below need $h\ge0$ or $h(Y)\in L^1$. Added here.} Since
+$\1_{Y^{-1}(B)}(\omega)=\1_B(Y(\omega))$, setting $g(y)=h(y)\1_B(y)$ we get, by
+\cref{def:ld-expectation},
+\begin{equation}\label{eq:ce-preimage}
+\begin{aligned}
+  \int_{Y^{-1}(B)}h(Y)\,\dd\mathbb P&=\int_\Omega h(Y)\1_{Y^{-1}(B)}\,\dd\mathbb P
+  =\int_\Omega h(Y)\1_B(Y)\,\dd\mathbb P=\int_\Omega g(Y)\,\dd\mathbb P\\
+  &=\int_{\mathbb R}g(y)\,\dd\mathbb P_Y(y)=\int_Bh(y)\,\dd\mathbb P_Y(y).
+\end{aligned}
+\end{equation}
+In terms of expectations, $\mathbb E[h(Y)\1_{Y^{-1}(B)}]=\mathbb E[h(Y)\1_B(Y)]=\mathbb E[g(Y)]$.
+
+Now let $(X,Y)$ be discrete, with $X\in L^1$ or $X\ge0$, and let $h$ be as in
+\cref{def:ce-discrete}. Then $h(Y)\ge0$ if $X\ge0$, and $h(Y)\in L^1$ if $X\in L^1$, since
+$\sum_y|h(y)|f_Y(y)\le\sum_y\sum_x|x|\,f_{(X,Y)}(x,y)=\mathbb E[|X|]$. Since $Y$ is discrete,
+$\mathbb P_Y$ is a discrete measure concentrated on $Y(\Omega)$, and
+\[
+\begin{aligned}
+  \int_{Y^{-1}(B)}\mathbb E[X\mid Y]\,\dd\mathbb P
+  &\overset{\eqref{eq:ce-preimage}}{=}\int_B\mathbb E[X\mid Y=y]\,\dd\mathbb P_Y(y)
+   =\sum_{y\in Y(\Omega)\cap B}\mathbb E[X\mid Y=y]\,f_Y(y)\\
+  &=\sum_{y\in Y(\Omega)}\Big(\sum_{x\in X(\Omega)}x\,f_{X\mid Y=y}(x)\Big)\1_B(y)\,f_Y(y)\\
+  &=\sum_{x\in X(\Omega)}\sum_{y\in Y(\Omega)}x\,\1_B(y)\,\underbrace{f_{X\mid Y=y}(x)\,f_Y(y)}_{=\,f_{(X,Y)}(x,y)}\\
+  &=\sum_{x\in X(\Omega)}\sum_{y\in Y(\Omega)}x\,\1_B(y)\,f_{(X,Y)}(x,y)
+   =\mathbb E[g(X,Y)],\quad g(x,y)=x\1_B(y),\\
+  &=\mathbb E[X\1_B(Y)]=\mathbb E[X\1_{Y^{-1}(B)}]=\int_\Omega X\1_{Y^{-1}(B)}\,\dd\mathbb P
+   =\int_{Y^{-1}(B)}X\,\dd\mathbb P .
+\end{aligned}
+\]
+The second equality is \cref{exa:ig-discrete-measure}. The product
+$f_{X\mid Y=y}(x)f_Y(y)$ equals $f_{(X,Y)}(x,y)$ also when $f_Y(y)=0$, because then
+$f_{(X,Y)}(x,y)\le f_Y(y)=0$. The order of summation can be exchanged because
+$\sum_x\sum_y|x|\,f_{(X,Y)}(x,y)=\mathbb E[|X|]<+\infty$ (for $X\ge0$ all the terms are
+non-negative), and $\mathbb E[g(X,Y)]$ is the sum against the joint density by
+\cref{thm:ld-image-integral} and \cref{exa:ig-discrete-measure}.\footnote{These
+justifications are added to the handwritten notes.} Hence
+\begin{equation}\label{eq:ce-discrete-property}
+  \int_{Y^{-1}(B)}\mathbb E[X\mid Y]\,\dd\mathbb P=\int_{Y^{-1}(B)}X\,\dd\mathbb P
+  \qquad\forall B\in\mathcal B(\mathbb R),
+\end{equation}
+that is, $\int_A\mathbb E[X\mid Y]\,\dd\mathbb P=\int_AX\,\dd\mathbb P$ for every
+$A=Y^{-1}(B)\in\sigma(Y)$.
+\end{remark}
+
+\begin{remark}\label{rem:ce-measurable}
+$\mathbb E[X\mid Y]=h(Y)$ is $\sigma(Y)$-measurable (see the theorem that follows).
+\end{remark}
+
+\begin{theorem}[Doob--Dynkin]\label{thm:ce-doob-dynkin}
+Let $X$ and $Y$ be two random variables. Then $X$ is $\sigma(Y)$-measurable if and only if
+there exists a measurable $h:\mathbb R\to\mathbb R$ such that $X=h(Y)$.\footnote{The handwritten
+notes state and prove this theorem without naming it. It is usually called the
+\emph{Doob--Dynkin lemma}, or the \emph{factorisation lemma}; see \citet[Section~20]{billingsley}.
+The name is added here.}
+\end{theorem}
+
+\begin{proof}
+``$\Leftarrow$''. Let $X=h(Y)$, and let $B\in\mathcal B(\mathbb R)$. Then
+\[
+  X^{-1}(B)=\big(h(Y)\big)^{-1}(B)=Y^{-1}\big(h^{-1}(B)\big).
+\]
+Since $h$ is measurable, $A=h^{-1}(B)\in\mathcal B(\mathbb R)$, so
+\[
+  X^{-1}(B)=Y^{-1}(A)\in\sigma(Y)=\{Y^{-1}(A):A\in\mathcal B(\mathbb R)\}.
+\]
+Hence $X$ is $\sigma(Y)$-measurable.
+
+``$\Rightarrow$''. Let $X$ be $\sigma(Y)$-measurable. We must find $h$.
+\begin{itemize}
+  \item Let $X$ be a non-negative simple function,
+    \begin{equation}\label{eq:ce-simple}
+      X=\sum_{i=1}^ka_i\1_{A_i},
+    \end{equation}
+    where $a_1,\dots,a_k\ge0$ and $A_1,\dots,A_k$ is a partition of $\Omega$; we take the canonical
+    form of \cref{prop:mf-canonical}, with distinct $a_i$ and $A_i=X^{-1}(\{a_i\})$. Moreover,
+    the $A_i$ must belong to $\sigma(Y)$, since $X$ is $\sigma(Y)$-measurable. Hence there are
+    $B_1,\dots,B_k$ with $B_i\in\mathcal B(\mathbb R)$ and $A_i=Y^{-1}(B_i)$. Let
+    \[
+      h=\sum_{i=1}^ka_i\1_{B_i};
+    \]
+    $h$ is measurable. Then
+    \[
+      h\circ Y=h(Y)=\sum_{i=1}^ka_i\1_{B_i}(Y)=\sum_{i=1}^ka_i\1_{Y^{-1}(B_i)}=\sum_{i=1}^ka_i\1_{A_i}=X,
+    \]
+    so $X=h(Y)$ with $h$ measurable.
+  \item Let $X\ge0$ be a $\sigma(Y)$-measurable random variable. By \cref{thm:mf-approximation},
+    applied on the measurable space $(\Omega,\sigma(Y))$, there are $\sigma(Y)$-measurable
+    simple functions $X_n\ge0$ as in \eqref{eq:ce-simple} with $X_n\nearrow X$. By the first
+    step there are measurable $h_n$ with $X_n=h_n(Y)$. Let $\tilde h=\limsup_nh_n$, which is
+    measurable (\cref{prop:mf-limits}), with $\tilde h(y)=(\limsup_nh_n)(y)=\limsup_n\big(h_n(y)\big)$.
+    Then
+    \[
+      X(\omega)=\lim_nX_n(\omega)=\lim_nh_n(Y(\omega))=\limsup_nh_n(Y(\omega))
+      =(\limsup_nh_n)(Y(\omega))=\tilde h(Y(\omega))
+    \]
+    for every $\omega\in\Omega$. The function $\tilde h$ takes values in $[0,+\infty]$, and the
+    value $+\infty$ only outside
+    $Y(\Omega)$, since $\tilde h(Y(\omega))=X(\omega)<+\infty$. Let $h=\tilde h$ on
+    $\{\tilde h<+\infty\}$ and $h=0$ on $\{\tilde h=+\infty\}$; this is a measurable function
+    $h:\mathbb R\to\mathbb R$ with $X=h(Y)$.\footnote{The handwritten notes take
+    $h=\limsup_nh_n$, which can take the value $+\infty$ at points that $Y$ does not take, while
+    the theorem asks for a real-valued $h$; corrected here. For a $\sigma(Y)$-measurable
+    $X:\Omega\to[0,+\infty]$, the same argument with $h=\limsup_nh_n$ gives $X=h(Y)$ with
+    $h:\mathbb R\to[0,+\infty]$ (\exref{ex:ce-doob-dynkin}).}
+  \item Let $X$ be a $\sigma(Y)$-measurable random variable. Then $X^+$ and $X^-$ are
+    $\sigma(Y)$-measurable and non-negative (\cref{prop:mf-operations}), and by the previous
+    step $X^+=h_1(Y)$ and $X^-=h_2(Y)$ with $h_1,h_2:\mathbb R\to[0,+\infty)$ measurable. So
+    \[
+      X=X^+-X^-=h_1(Y)-h_2(Y)=(h_1-h_2)(Y)=h(Y),
+    \]
+    with $h=h_1-h_2$ measurable. \qedhere
+\end{itemize}
+\end{proof}
+
+\begin{remark}[Summing up]\label{rem:ce-summary}
+For discrete random variables $X$ and $Y$ we have defined the quantities
+\[
+  \mathbb E[X\mid Y=y]=h(y)\qquad\text{and}\qquad\mathbb E[X\mid Y]=h(Y).
+\]
+We have observed that
+\begin{enumerate}[label=\arabic*)]
+  \item $\mathbb E[X\mid Y]=h(Y)$ is $\sigma(Y)$-measurable (\cref{rem:ce-measurable},
+    \cref{thm:ce-doob-dynkin});
+  \item for every $A\in\sigma(Y)$,
+    $\displaystyle\int_A\mathbb E[X\mid Y]\,\dd\mathbb P=\int_AX\,\dd\mathbb P$
+    (\cref{rem:ce-discrete-property}).
+\end{enumerate}
+\end{remark}
+
+Generalising these properties, we can define the conditional expectation in abstract terms.
+
+\section{Conditional expectation}\label{sec:ce-conditional-expectation}
+
+\begin{definition}[Conditional expectation]\label{def:ce-conditional-expectation}
+Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space, let $\mathcal G\subseteq\mathcal F$
+be a sub-$\sigma$-algebra of $\mathcal F$, and let $X$ be a random variable such that $X\ge0$
+or $X\in L^1(\Omega,\mathcal F,\mathbb P)$. The \emph{expectation of $X$ conditioned on
+$\mathcal G$} (or \emph{conditional expectation of $X$ given $\mathcal G$}) is a function
+\[
+  \hat X=\mathbb E[X\mid\mathcal G]:\Omega\to\overline{\mathbb R},
+\]
+with values in $[0,+\infty]$ if $X\ge0$ and in $\mathbb R$ if $X\in L^1$, such
+that\footnote{The handwritten notes write $\mathbb E[X\mid\mathcal G]:\Omega\to\mathbb R$. If
+$X\ge0$ is not integrable, $\mathbb E[X\mid\mathcal G]$ can take the value $+\infty$ with
+positive probability: for $\mathcal G=\{\emptyset,\Omega\}$ the only $\mathcal G$-measurable
+functions are the constants, and 2) with $A=\Omega$ forces the constant $\mathbb E[X]=+\infty$.
+Corrected here. The notes give this definition twice, at the end of the lecture on conditioning
+(p.~170) and at the start of the next one (p.~171); it appears once here.}
+\begin{enumerate}[label=\arabic*)]
+  \item $\mathbb E[X\mid\mathcal G]$ is $\mathcal G$-measurable;
+  \item for every $A\in\mathcal G$,
+    \[
+      \int_A\mathbb E[X\mid\mathcal G]\,\dd\mathbb P=\int_AX\,\dd\mathbb P .
+    \]
+\end{enumerate}
+This is the classical definition of conditional expectation, given by Kolmogorov in
+1933 \citep{kolmogorov-1933}. (In fact it suffices that $X^-\in L^1$:
+\exref{ex:ce-beyond-L1}.)
+\end{definition}
+
+The two properties pull in opposite directions. By 2), $\hat X$ has the same integral as $X$ on
+every event of $\mathcal G$; by 1), $\hat X$ can only use the information in $\mathcal G$. If
+$\mathcal G$ is generated by a finite partition $A_1,\dots,A_k$ of $\Omega$ with
+$\mathbb P(A_i)>0$, the $\mathcal G$-measurable functions are those constant on each $A_i$, and
+2) fixes the constants: $\hat X=\mathbb E[X\1_{A_i}]/\mathbb P(A_i)$ on $A_i$, the average of
+$X$ over $A_i$ (\exref{ex:ce-partition}).\footnote{This paragraph, \cref{fig:ce-partition} and
+the remark that follows are added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch11-partition}
+  \caption{$\Omega=(0,1)$ with Lebesgue measure, a random variable $X(\omega)$ (grey), and
+    $\mathbb E[X\mid\mathcal G]$ for $\mathcal G$ generated by $4$ intervals (left) and by $16$
+    intervals (right): on each interval $\mathbb E[X\mid\mathcal G]$ is the average of $X$, so
+    the signed areas between the two curves (shaded) cancel on every interval. A finer
+    $\mathcal G$ carries more information, and $\mathbb E[X\mid\mathcal G]$ follows $X$ more
+    closely.}
+  \label{fig:ce-partition}
+\end{figure}
+
+\begin{remark}[computational]\label{rem:ce-code-partition}
+The module \coderef{code/src/probnotes/conditional.py} works on finite probability spaces.
+There, the function \texttt{partition\_expectation} computes $\mathbb E[X\mid\mathcal G]$ as cell
+averages when $\mathcal G$ is generated by a partition, and the function
+\texttt{check\_conditional\_expectation} verifies 1) and 2) of
+\cref{def:ce-conditional-expectation} on every event of $\mathcal G$, in exact rational
+arithmetic. The function \texttt{factor\_through} finds the function $h$ of
+\cref{thm:ce-doob-dynkin} on a finite space, or a level set of $Y$ on which $X$ is not constant
+(\exref{ex:ce-partition}, \exref{ex:ce-doob-dynkin}).
+\end{remark}
+
+\demo{11-conditional-expectation.ipynb}{$\mathbb E[X\mid\mathcal G]$ on $\Omega=(0,1)$ for
+partitions with a chosen number of cells.}
+
+\begin{proposition}[Existence and uniqueness]\label{thm:ce-existence}
+A random variable defined in this way always exists, and it is unique a.s.: if $\hat X_1$ and
+$\hat X_2$ both satisfy 1) and 2) of \cref{def:ce-conditional-expectation}, then
+$\hat X_1=\hat X_2$ a.s.
+\end{proposition}
+
+In the proof we use the restriction $\mathbb P|_{\mathcal G}$ of $\mathbb P$ to $\mathcal G$, the
+probability on $(\Omega,\mathcal G)$ given by $\mathbb P|_{\mathcal G}(A)=\mathbb P(A)$ for
+$A\in\mathcal G$. For a $\mathcal G$-measurable function, the integrals with respect to
+$\mathbb P$ and to $\mathbb P|_{\mathcal G}$ coincide.\footnote{Added to the handwritten notes.
+For a non-negative $\mathcal G$-measurable simple function both integrals are the same finite
+sum (\cref{def:in-simple-integral}); a non-negative $\mathcal G$-measurable function is the
+increasing limit of such simple functions (\cref{thm:mf-approximation} on $(\Omega,\mathcal G)$),
+and the monotone convergence theorem (\cref{thm:in-monotone-convergence}) applies to both
+measures; for a signed function, apply this to its positive and negative parts. The point is
+that $\mathcal G$-measurability, not the measure, is what the restriction changes.}
+
+\begin{proof}
+\emph{Step 1: $X\ge0$.} We set
+\[
+  Q(A)=\int_AX\,\dd\mathbb P\qquad\forall A\in\mathcal G .
+\]
+$Q$ is a measure on $(\Omega,\mathcal G)$: by \cref{prop:ld-density-measure} the same formula
+defines a measure on $\mathcal F$, and $\mathcal G\subseteq\mathcal F$. It is not necessarily a
+probability: $\Omega\in\mathcal G$ and $Q(\Omega)=\int_\Omega X\,\dd\mathbb P=\mathbb E[X]$.
+Moreover $Q\ll\mathbb P$ on $(\Omega,\mathcal G)$, that is, $Q\ll\mathbb P|_{\mathcal G}$: if
+$A\in\mathcal G$ and $\mathbb P(A)=0$, then $Q(A)=\int_AX\,\dd\mathbb P=0$ (\cref{prop:in-ae}).
+
+Suppose first that $\mathbb E[X]<+\infty$. Then $Q$ and $\mathbb P|_{\mathcal G}$ are finite
+measures on $(\Omega,\mathcal G)$, and by the Radon--Nikodym theorem
+(\cref{thm:ld-radon-nikodym}) there exists, unique a.s., a random variable $\hat X\ge0$,
+$\mathcal G$-measurable, such that
+\[
+  \underbrace{Q(A)}_{=\,\int_AX\,\dd\mathbb P}=\int_A\hat X\,\dd\mathbb P\qquad\forall A\in\mathcal G .
+\]
+So $\hat X=\mathbb E[X\mid\mathcal G]$. The essential point is that the theorem is applied on the
+measurable space $(\Omega,\mathcal G)$, so the density $\hat X$ is $\mathcal G$-measurable;
+$X$ itself is a density of $Q$ on $(\Omega,\mathcal F)$, but it is not $\mathcal G$-measurable in
+general. Since $\int_\Omega\hat X\,\dd\mathbb P=\mathbb E[X]<+\infty$, $\hat X<+\infty$ a.s.
+(\cref{prop:in-ae}), and we may take $\hat X$ real-valued, changing it to $0$ on the set
+$\{\hat X=+\infty\}\in\mathcal G$.
+
+If $\mathbb E[X]=+\infty$, $Q$ need not be $\sigma$-finite on $(\Omega,\mathcal G)$, and the
+Radon--Nikodym theorem cannot be applied as stated.\footnote{The handwritten notes apply the
+Radon--Nikodym theorem to $Q$ for every $X\ge0$. The theorem as stated in
+\cref{thm:ld-radon-nikodym} requires $Q$ to be $\sigma$-finite on $(\Omega,\mathcal G)$, which holds
+when $\mathbb E[X]<+\infty$ but can fail otherwise: if $\mathcal G=\{\emptyset,\Omega\}$ and
+$\mathbb E[X]=+\infty$, then $Q$ takes only the values $0$ and $+\infty$. Corrected here: the case
+$\mathbb E[X]=+\infty$ is obtained by monotone convergence, and uniqueness is proved
+separately. \exref{ex:ce-beyond-L1} shows that $Q$ is $\sigma$-finite on $\mathcal G$ if and
+only if $\mathbb E[X\mid\mathcal G]<+\infty$ a.s.} We truncate: $X_n=\min(X,n)$ is non-negative
+and integrable, so $\hat X_n=\mathbb E[X_n\mid\mathcal G]$ exists. For every $n$ the set
+$A_n=\{\hat X_n>\hat X_{n+1}\}$ belongs to $\mathcal G$, and
+\[
+  \int_{A_n}(\hat X_n-\hat X_{n+1})\,\dd\mathbb P=\int_{A_n}(X_n-X_{n+1})\,\dd\mathbb P\le0,
+\]
+since $X_n\le X_{n+1}$; the integrand on the left is $>0$ on $A_n$, so $\mathbb P(A_n)=0$
+(\cref{prop:in-ae}). Let $N=\bigcup_nA_n\in\mathcal G$, a negligible set, and
+$\hat X=\sup_n\hat X_n\1_{N^c}$, a $\mathcal G$-measurable function with values in
+$[0,+\infty]$ (\cref{prop:mf-limits}). On $N^c$ the sequence $(\hat X_n)$ is increasing with
+limit $\hat X$, so for every $A\in\mathcal G$, by the monotone convergence theorem
+(\cref{thm:in-monotone-convergence}) applied twice,
+\[
+  \int_A\hat X\,\dd\mathbb P=\lim_n\int_{A\cap N^c}\hat X_n\,\dd\mathbb P
+  =\lim_n\int_{A\cap N^c}X_n\,\dd\mathbb P=\int_{A\cap N^c}X\,\dd\mathbb P=\int_AX\,\dd\mathbb P,
+\]
+where we used $A\cap N^c\in\mathcal G$ and $\mathbb P(N)=0$. So $\hat X=\mathbb E[X\mid\mathcal G]$.
+
+\emph{Uniqueness for $X\ge0$.} If $\hat X_1,\hat X_2:\Omega\to[0,+\infty]$ are
+$\mathcal G$-measurable and $\int_A\hat X_1\,\dd\mathbb P=\int_AX\,\dd\mathbb P=\int_A\hat X_2\,\dd\mathbb P$
+for every $A\in\mathcal G$, then $\hat X_1$ and $\hat X_2$ are densities of the same measure $Q$
+with respect to the finite measure $\mathbb P|_{\mathcal G}$ on $(\Omega,\mathcal G)$, and
+\cref{rem:ld-density-unique} gives $\hat X_1=\hat X_2$ a.s.
+
+\emph{Step 2: $X\in L^1$, of any sign.} Write $X=X^+-X^-$, with $X^+,X^-\ge0$ integrable. By Step 1
+there exist, unique a.s., $\mathbb E[X^+\mid\mathcal G]$ and $\mathbb E[X^-\mid\mathcal G]$,
+which can be taken real-valued since $X^\pm$ are integrable. For every $A\in\mathcal G$,
+\[
+\begin{aligned}
+  \int_AX\,\dd\mathbb P&=\int_AX^+\,\dd\mathbb P-\int_AX^-\,\dd\mathbb P
+  =\int_A\mathbb E[X^+\mid\mathcal G]\,\dd\mathbb P-\int_A\mathbb E[X^-\mid\mathcal G]\,\dd\mathbb P\\
+  &=\int_A\underbrace{\big(\mathbb E[X^+\mid\mathcal G]-\mathbb E[X^-\mid\mathcal G]\big)}_{\hat X=\mathbb E[X\mid\mathcal G]\ (\mathcal G\text{-measurable})}\dd\mathbb P,
+\end{aligned}
+\]
+where all the integrals are finite, since $\int_\Omega\mathbb E[X^\pm\mid\mathcal G]\,\dd\mathbb P=\mathbb E[X^\pm]<+\infty$.
+
+Is it unique? Let $\hat X_1$ and $\hat X_2$ be real-valued and $\mathcal G$-measurable, with
+\[
+  \int_A\hat X_1\,\dd\mathbb P=\int_AX\,\dd\mathbb P=\int_A\hat X_2\,\dd\mathbb P\qquad\forall A\in\mathcal G .
+\]
+Both are integrable: with $A=\{\hat X_1\ge0\}\in\mathcal G$, $\int_\Omega\hat X_1^+\,\dd\mathbb P=\int_AX\,\dd\mathbb P\le\mathbb E[|X|]$,
+and likewise for $\hat X_1^-$ and for $\hat X_2$. By \cref{prop:ig-ae}, part 4), applied on the
+measure space $(\Omega,\mathcal G,\mathbb P|_{\mathcal G})$, $\hat X_1=\hat X_2$ a.s. Hence
+\[
+  \mathbb E[X\mid\mathcal G]=\mathbb E[X^+\mid\mathcal G]-\mathbb E[X^-\mid\mathcal G]\quad\text{a.s.},
+\]
+and it exists and is unique a.s.
+\end{proof}
+
+Consider now, in particular, $\mathcal G=\sigma(Y)$, with $Y$ a random variable.
+
+\begin{definition}[Conditional expectation given a random variable]\label{def:ce-given-Y}
+Let $Y$ be a random variable, and $X\ge0$ or $X\in L^1$. The \emph{expectation of $X$
+conditioned on $Y$} is
+\[
+  \mathbb E[X\mid Y]=\mathbb E[X\mid\sigma(Y)]=h(Y),\qquad\text{with $h$ measurable};
+\]
+such an $h$ exists by \cref{thm:ce-doob-dynkin}, since $\mathbb E[X\mid\sigma(Y)]$ is
+$\sigma(Y)$-measurable.\footnote{If $X\ge0$, $\mathbb E[X\mid\sigma(Y)]$ can take the value
+$+\infty$, and then $h$ takes values in $[0,+\infty]$ (\exref{ex:ce-doob-dynkin}).} We call
+\[
+  h(y)=\mathbb E[X\mid Y=y]
+\]
+the \emph{expectation of $X$ conditioned on the event $(Y=y)$}. For now this is only a
+notation.\footnote{Added to the handwritten notes: $h$ is determined only $\mathbb P_Y$-a.e.
+If $h(Y)$ and $\tilde h(Y)$ are both versions of $\mathbb E[X\mid Y]$, then
+$\mathbb P_Y(\{h\ne\tilde h\})=\mathbb P(h(Y)\ne\tilde h(Y))=0$, but $h$ and $\tilde h$ may
+differ, for instance, at the points where $\mathbb P_Y$ puts no mass (\exref{ex:ce-doob-dynkin}).
+This is why $\mathbb E[X\mid Y=y]$ was arbitrary when $\mathbb P(Y=y)=0$ in
+\cref{def:ce-discrete}.}
+\end{definition}
+
+\begin{theorem}[The absolutely continuous case]\label{thm:ce-density}
+Let $(X,Y)$ be an absolutely continuous random vector, with joint density $f_{(X,Y)}$ and let
+$f_Y$ be the density of $Y$ (\cref{prop:pm-marginal-density}), with values in $[0,+\infty)$.
+Let $X\ge0$ or $X\in L^1$. Then
+\[
+  h(y)=\mathbb E[X\mid Y=y]=\int_{-\infty}^{+\infty}x\,f_{X\mid Y=y}(x)\,\dd x,
+\]
+where
+\[
+  f_{X\mid Y=y}(x)=
+  \begin{cases}
+    \dfrac{f_{(X,Y)}(x,y)}{f_Y(y)}&\text{if }f_Y(y)\ne0,\\[1.2ex]
+    \text{arbitrary value}&\text{if }f_Y(y)=0;
+  \end{cases}
+\]
+that is, $\mathbb E[X\mid Y]=h(Y)$ a.s. The function $f_{X\mid Y=y}$ is called the
+\emph{density function of $X$ conditioned on the event $(Y=y)$}.\footnote{Added to the
+handwritten notes: the arbitrary choices must keep $h$ Borel. We take $h$ equal to a constant
+on $\{f_Y=0\}$ and, if $X\in L^1$, on the $m$-negligible set
+$N=\{y:\int_{\mathbb R}|x|\,f_{(X,Y)}(x,y)\,\dd x=+\infty\}$; the proof shows that these sets are
+irrelevant.}
+\end{theorem}
+
+\begin{remark}\label{rem:ce-density-remarks}
+\leavevmode
+\begin{enumerate}[label=\arabic*),leftmargin=*]
+  \item $f_{X\mid Y=y}$ is a density function: $f_{X\mid Y=y}\ge0$ and
+    $\int_{-\infty}^{+\infty}f_{X\mid Y=y}(x)\,\dd x=1$. So it defines a probability measure
+    \[
+      \mathbb P_{X\mid Y=y}(A)=\int_Af_{X\mid Y=y}(x)\,\dd x\qquad\forall A\in\mathcal B(\mathbb R),
+    \]
+    called the \emph{law of $X$ conditioned on $(Y=y)$}.\footnote{The handwritten notes state
+    1) for every $y$. It holds for every $y$ with $f_Y(y)\ne0$ and
+    $f_Y(y)=\int f_{(X,Y)}(x,y)\,\dd x$, that is, for $m$-a.e.\ $y$ with $f_Y(y)\ne0$
+    (\cref{prop:pm-marginal-density}), hence for $\mathbb P_Y$-a.e.\ $y$; and for every $y$
+    with $f_Y(y)=0$ if the arbitrary value is a density. Corrected here.}
+  \item In the discrete case one can state and prove an analogous theorem, which gives back
+    the objects defined at the beginning (\cref{def:ce-discrete}; \exref{ex:ce-discrete-case}).
+  \item In practice, $\mathbb E[X\mid Y]$ is computed as follows:
+    \begin{itemize}
+      \item compute $f_{X\mid Y=y}(x)=\dfrac{f_{(X,Y)}(x,y)}{f_Y(y)}$ for $f_Y(y)\ne0$;
+      \item compute the expectation $\mathbb E[X\mid Y=y]=h(y)$;
+      \item take $h(Y)=\mathbb E[X\mid Y]$.
+    \end{itemize}
+  \item Knowing $f_Y$ and $f_{X\mid Y=y}$ gives $f_{(X,Y)}$:
+    \begin{equation}\label{eq:ce-joint-from-conditional}
+      f_{(X,Y)}(x,y)=f_{X\mid Y=y}(x)\,f_Y(y)\qquad\text{a.e.}
+    \end{equation}
+    \begin{itemize}
+      \item If $f_Y(y)\ne0$, this is the definition.
+      \item If $f_Y(y)=0$? Let $D=\{y:f_Y(y)\ne0\}$. Then $\mathbb P(Y\in D^c)=\int_{D^c}f_Y(y)\,\dd y=0$,
+        and
+        \[
+          \begin{aligned}
+          0=\mathbb P(Y\in D^c)&=\mathbb P\big((X,Y)\in\mathbb R\times D^c\big)
+          =\int_{\mathbb R\times D^c}f_{(X,Y)}(x,y)\,\dd x\,\dd y\\
+          &=\int_{\mathbb R^2}\underbrace{f_{(X,Y)}(x,y)\1_{D^c}(y)}_{\ge0}\,\dd x\,\dd y,
+          \end{aligned}
+        \]
+        so $f_{(X,Y)}(x,y)\1_{D^c}(y)=0$ a.e.\ (\cref{prop:in-ae}), that is,
+        $f_{(X,Y)}(x,y)=0$ for a.e.\ $(x,y)$ with $x\in\mathbb R$, $y\in D^c$. There the right-hand
+        side of \eqref{eq:ce-joint-from-conditional} is $0$ too ($f_{X\mid Y=y}$ is defined,
+        even if arbitrarily).
+    \end{itemize}
+  \item Independence:
+    \[
+    \begin{aligned}
+      X\indep Y&\iff f_{(X,Y)}(x,y)=f_X(x)f_Y(y)\ \text{a.e.}
+        \qquad\text{(\cref{thm:pm-density-independence})}\\
+      &\iff f_{X\mid Y=y}(x)f_Y(y)=f_X(x)f_Y(y)\ \text{a.e.}
+        \qquad\text{(by \eqref{eq:ce-joint-from-conditional})}\\
+      &\iff f_{X\mid Y=y}(x)=f_X(x)\ \text{for a.e.\ $(x,y)$ with $f_Y(y)\ne0$, where it makes sense.}
+    \end{aligned}
+    \]
+    For the last equivalence: on $\mathbb R\times D^c$ both sides of the previous line vanish,
+    and on $\mathbb R\times D$ we may divide by $f_Y(y)>0$.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}[Proof of \cref{thm:ce-density}]
+Let
+\[
+  h(y)=\begin{cases}
+    \displaystyle\int_{-\infty}^{+\infty}x\,\frac{f_{(X,Y)}(x,y)}{f_Y(y)}\,\dd x
+    =\frac1{f_Y(y)}\int_{-\infty}^{+\infty}x\,f_{(X,Y)}(x,y)\,\dd x&\text{if }f_Y(y)\ne0,\\[1.2ex]
+    \text{arbitrary value}&\text{if }f_Y(y)=0 .
+  \end{cases}
+\]
+\emph{$h$ is measurable.}
+\begin{itemize}
+  \item If $X\ge0$: the function $g(x,y)=x\,f_{(X,Y)}(x,y)$ is measurable and $\ge0$, and by
+    Tonelli's theorem (\cref{thm:pm-tonelli}) the function
+    $y\mapsto\int_{\mathbb R}g(x,y)\,\dd x$ is measurable. Hence $h$ is measurable.\footnote{The
+    handwritten notes write $g\ge0$. Since $X\ge0$ only gives
+    $\int_{(-\infty,0)\times\mathbb R}f_{(X,Y)}\,\dd x\,\dd y=\mathbb P(X<0)=0$, this holds after
+    replacing $f_{(X,Y)}$ by $f_{(X,Y)}\1_{[0,+\infty)}(x)$, which is another version of the
+    joint density (it differs from $f_{(X,Y)}$ on a negligible set); we use this version.
+    Here $h$ takes values in $[0,+\infty]$.}
+  \item If $X\in L^1$: $g(x,y)$ is integrable. Indeed
+    \[
+      \int_{\mathbb R^2}|g(x,y)|\,\dd x\,\dd y=\int_{\mathbb R^2}|x|\,f_{(X,Y)}(x,y)\,\dd x\,\dd y=\mathbb E[|X|]<+\infty
+    \]
+    (\cref{cor:ld-image-density}). By Fubini's theorem (\cref{thm:pm-fubini}) the function
+    $y\mapsto\int_{\mathbb R}g(x,y)\,\dd x$, defined outside the $m$-negligible set
+    $N=\{y:\int_{\mathbb R}|x|\,f_{(X,Y)}(x,y)\,\dd x=+\infty\}$, is integrable, hence
+    measurable, and so is $h$ (with a constant value on $N$).
+\end{itemize}
+Hence $h(Y)$ is $\sigma(Y)$-measurable (\cref{thm:ce-doob-dynkin}, ``$\Leftarrow$'').
+
+Let $A\in\sigma(Y)=\{Y^{-1}(B):B\in\mathcal B(\mathbb R)\}$, so that $A=Y^{-1}(B)$ with
+$B\in\mathcal B(\mathbb R)$, and let $D=\{y:f_Y(y)\ne0\}$. Then $h(Y)\ge0$ if $X\ge0$, and
+$h(Y)\in L^1$ if $X\in L^1$, since
+$\int_{\mathbb R}|h|f_Y\,\dd y\le\int_{\mathbb R}\int_{\mathbb R}|x|\,f_{(X,Y)}(x,y)\,\dd x\,\dd y=\mathbb E[|X|]$
+(the sets $D^c$ and $N$ are $\mathbb P_Y$-negligible). So we can compute
+\[
+\begin{aligned}
+  \int_Ah(Y)\,\dd\mathbb P&\overset{\eqref{eq:ce-preimage}}{=}\int_Bh(y)\,\dd\mathbb P_Y(y)
+  \overset{(a)}{=}\int_Bh(y)\,f_Y(y)\,\dd y\\
+  &\overset{(b)}{=}\int_{B\cap D}\Big(\int_{-\infty}^{+\infty}x\,\frac{f_{(X,Y)}(x,y)}{f_Y(y)}\,\dd x\Big)f_Y(y)\,\dd y\\
+  &\overset{(c)}{=}\int_{\mathbb R\times(B\cap D)}x\,f_{(X,Y)}(x,y)\,\dd x\,\dd y
+  \overset{(d)}{=}\int_{\mathbb R\times B}x\,f_{(X,Y)}(x,y)\,\dd x\,\dd y\\
+  &=\int_{\mathbb R^2}x\1_B(y)\,f_{(X,Y)}(x,y)\,\dd x\,\dd y
+  \overset{(e)}{=}\mathbb E[g(X,Y)]\quad\text{with }g(x,y)=x\1_B(y)\\
+  &=\int_\Omega g(X,Y)\,\dd\mathbb P=\int_\Omega X\1_B(Y)\,\dd\mathbb P=\int_\Omega X\1_{Y^{-1}(B)}\,\dd\mathbb P
+  =\int_{Y^{-1}(B)}X\,\dd\mathbb P=\int_AX\,\dd\mathbb P .
+\end{aligned}
+\]
+Here (a) holds because $Y$ is absolutely continuous (\cref{prop:ld-density-integral}); (b) because
+$f_Y=0$ on $D^c$ and $N$ is $m$-negligible; (c) is Tonelli's or Fubini's theorem; (d) holds because
+$f_{(X,Y)}=0$ a.e.\ on $\mathbb R\times D^c$, by 4) of \cref{rem:ce-density-remarks}; and (e)
+is \cref{cor:ld-image-density} for the random vector $(X,Y)$. Since $\mathbb E[X\mid\sigma(Y)]$
+is unique a.s.\ (\cref{thm:ce-existence}),
+\[
+  h(Y)=\mathbb E[X\mid Y]\quad\text{a.s.}\qedhere
+\]
+\end{proof}
+
+\begin{example}[Worked exercise: an exponential variable given the sum]\label{exa:ce-exponential}
+Let $X\indep Y$ with $X\sim\mathrm{Exp}(\lambda)$ and $Y\sim\mathrm{Exp}(\lambda)$, $\lambda>0$,
+and let $Z=X+Y$. Then $Z\sim\Gamma(2,\lambda)$ (\cref{prop:rv-notable-sums}).
+
+a) We determine $f_{X\mid Z=z}(x)$ for every $x\in\mathbb R$. The map
+$(X,Y)\mapsto(X,Z)=(X,X+Y)$ is linear with determinant $1$, and (a computation already done,
+\cref{cor:rv-linear}, \cref{prop:rv-sum-density})
+\[
+  f_{(X,Z)}(x,z)=f_{(X,Y)}(x,z-x)\overset{X\indep Y}{=}f_X(x)\,f_Y(z-x).
+\]
+For every $z\in\mathbb R$,
+\[
+  f_{X\mid Z=z}(x)=\frac{f_{(X,Z)}(x,z)}{f_Z(z)}\qquad\text{if }f_Z(z)\ne0 .
+\]
+Since $f_Z(z)=\frac{\lambda^2}{\Gamma(2)}z^{2-1}e^{-\lambda z}=\lambda^2ze^{-\lambda z}$ for $z>0$
+(\cref{def:tr-gamma}), and $f_Z(z)=0$ for $z\le0$, we get for every $z>0$
+\[
+\begin{aligned}
+  f_{X\mid Z=z}(x)&=\frac{f_X(x)\,f_Y(z-x)}{f_Z(z)}
+  =\frac{\big(\lambda e^{-\lambda x}\1_{(0,+\infty)}(x)\big)\big(\lambda e^{-\lambda(z-x)}\1_{(0,+\infty)}(z-x)\big)}
+        {\frac{\lambda^2}{\Gamma(2)}z^{2-1}e^{-\lambda z}}\\
+  &=\frac{\lambda^2e^{-\lambda z}\,\overbrace{\1_{(0,+\infty)}(x)\,\1_{(-\infty,z)}(x)}^{=\,\1_{(0,z)}(x)}}{\lambda^2z\,e^{-\lambda z}}
+  =\frac1z\1_{(0,z)}(x).
+\end{aligned}
+\]
+Hence
+\[
+  X\mid Z=z\ \sim\ U\big((0,z)\big),
+\]
+which is intuitive.
+
+\emph{Example.} Consider one counter of a post office. Let $X$ be the time needed to serve the
+first customer, $X\sim\mathrm{Exp}(\lambda)$, and $Y$ the time needed to serve the second
+customer, $Y\sim\mathrm{Exp}(\lambda)$, with $X\indep Y$. Then $Z=X+Y$ is the time needed to serve
+both. If $Z=z$, the time needed to serve the first customer can be any time $x\in[0,z]$, because
+the clerk serves the first and the second customer at the same speed (symmetry): the interval
+$[0,z]$ is split at $x$ into the service time $x$ of the first customer and the service time $z-x$
+of the second. Hence the uniform distribution.
+
+b) By \cref{thm:ce-density} ($X\ge0$, and $X\in L^1$),
+\[
+  \mathbb E[X\mid Z=z]=\int_0^zx\,\frac1z\,\dd x=\frac z2=h(z)\quad(z>0),\qquad
+  \mathbb E[X\mid Z]=\frac Z2=h(Z)\quad\text{a.s.}
+\]
+\end{example}
+
+\begin{remark}[computational]\label{rem:ce-code-binning}
+When $\mathbb P(Z=z)=0$, conditioning on $\{Z=z\}$ can be approximated by conditioning on
+$\{Z\in I\}$ for a small interval $I$: the average of $X$ over the simulated pairs with $Z\in I$
+estimates $\mathbb E[X\1_{\{Z\in I\}}]/\mathbb P(Z\in I)$, which is the value on $\{Z\in I\}$ of
+$\mathbb E[X\mid\mathcal G]$ for the $\sigma$-algebra $\mathcal G$ generated by the bins. The
+module \coderef{code/src/probnotes/conditional.py} computes these cell averages
+(\texttt{binned\_conditional\_mean}) and estimates $\mathbb E[(X-h(Z))\1_{\{Z\in B\}}]$
+(\texttt{defining\_property\_mc}), which vanishes for every $B$ when
+$h(Z)=\mathbb E[X\mid Z]$.
+For the exponential pair, the cell averages follow $\frac z2$, and the values of $X$ in a thin
+bin around $z$ are spread uniformly over $(0,z)$ (\cref{fig:ce-exponential},
+\exref{ex:ce-binning}).
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch11-exponential}
+  \caption{$X,Y$ independent $\mathrm{Exp}(1)$ and $Z=X+Y$. Left: $2000$ simulated pairs $(Z,X)$,
+    the line $h(z)=\frac z2$, and the averages of $X$ over bins of $Z$ of width $0.25$ computed
+    from $2\cdot10^5$ pairs, with two standard errors. Right: histograms of $X$ for the pairs
+    with $Z$ within $0.05$ of $z=1$ and of $z=3$, against the uniform densities on $(0,1)$ and
+    $(0,3)$.}
+  \label{fig:ce-exponential}
+\end{figure}
+
+\demo{11-conditional-expectation.ipynb}{$\mathbb E[X\mid X+Y]$ by binning for several pairs of
+independent variables, with sliders for the sample size and the bin width.}
+
+\furtherreading
+\textcite{billingsley}, Section~33 (conditional probability) and Section~34 (conditional
+expectation), defines $\mathbb E[X\mid\mathcal G]$ as here and proves its existence with the
+Radon--Nikodym theorem; Section~20 contains the factorisation of $\sigma(Y)$-measurable random
+variables. \textcite{durrett}, Section~4.1, and \textcite{williams}, Chapter~9, give the same
+definition, with many examples; Williams proves existence through orthogonal projection in
+$L^2$ instead. The definition goes back to \textcite{kolmogorov-1933}. \textcite{ross-5},
+Chapters~6 and~7, has many exercises on conditional laws and on computing expectations by
+conditioning.

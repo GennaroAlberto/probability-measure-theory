@@ -1,0 +1,194 @@
+% Exercises for Chapter 14 (Gaussian conditioning). Statements only: solutions are kept privately.
+% Throughout, (Omega, F, P) is a probability space, Gaussian vectors are as in Chapter 13, vectors are
+% columns, Phi is the distribution function of N(0, 1), and the notation is that of the notes.
+
+\begin{exercise}[Conditioning on an independent summand]\label{ex:gc-shift}
+\medium This exercise contains the step that the notes leave as an exercise in
+\noteref{sec:gc-bivariate}, and extends it to laws without densities. Let $Z$ and $Y$ be independent
+real random variables and $a\in\mathbb R$. You may use \noteref{thm:pm-independence-product},
+\noteref{thm:pm-fubini}, \noteref{cor:rv-linear} and \noteref{thm:ce-density}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $Z$ and $Y$ have densities $f_Z$ and $f_Y$. Compute the joint density of $(Z+aY,Y)$, then
+    $f_{Z+aY\mid Y=y}$, and show that it coincides with the density $f_{Z+ay}$ of $Z+ay$ for every $y$
+    with $f_Y(y)\ne0$. Deduce the conditional law in \noteref{thm:gc-bivariate}.
+  \item Drop the densities. Let $\varphi:\mathbb R^2\to\mathbb R$ be bounded and Borel, and
+    $\Phi_\varphi(y)=\mathbb E[\varphi(Z,y)]$. Show that $\Phi_\varphi$ is Borel and that
+    $\mathbb E[\varphi(Z,Y)\mid Y]=\Phi_\varphi(Y)$ a.s.
+  \item Let $(X,Y)$ be a Gaussian pair as in \noteref{eq:gc-pair}, with $\sigma_Y>0$ and a covariance
+    matrix that may be singular, and let $m(y)$ and $\sigma^2$ be as in \noteref{eq:gc-mean} and
+    \noteref{eq:gc-variance}. Show that for every bounded Borel $g$
+    \[
+      \mathbb E[g(X)\mid Y]=\int_{\mathbb R}g\,\dd\mathcal N\big(m(Y),\sigma^2\big)\qquad\text{a.s.},
+    \]
+    where $\mathcal N(m,0)=\delta_m$. Show, directly from \noteref{def:ce-conditional-expectation},
+    that $\mathbb E[X\mid Y]=m(Y)$ and $\mathbb E[(X-m(Y))^2\mid Y]=\sigma^2$ a.s.
+  \item Let $\sigma_X>0$ and $|\rho|=1$. Show that $X=m(Y)$ a.s. What is $m$ when $\rho=1$, and when
+    $\rho=-1$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Schur complements]\label{ex:gc-schur}
+\hard This exercise completes \noteref{thm:gc-block} and \noteref{prop:gc-precision} with some linear
+algebra. Let $C=\big(\begin{smallmatrix}C_{11}&C_{12}\\C_{21}&C_{22}\end{smallmatrix}\big)$ be a
+symmetric positive semi-definite $N\times N$ matrix split into blocks, with $C_{22}$ invertible, and
+let $\Sigma=C_{11}-C_{12}C_{22}^{-1}C_{21}$.
+\begin{enumerate}[label=(\alph*)]
+  \item With $M=\big(\begin{smallmatrix}I&-C_{12}C_{22}^{-1}\\0&I\end{smallmatrix}\big)$, show that
+    $MCM^T=\big(\begin{smallmatrix}\Sigma&0\\0&C_{22}\end{smallmatrix}\big)$. Deduce that
+    $\det C=\det\Sigma\,\det C_{22}$, that $\Sigma$ is positive semi-definite, and that $C$ is
+    invertible if and only if $\Sigma$ is.
+  \item Let $C$ be invertible. Show that
+    \[
+      C^{-1}=\begin{pmatrix}\Sigma^{-1}&-\Sigma^{-1}C_{12}C_{22}^{-1}\\
+      -C_{22}^{-1}C_{21}\Sigma^{-1}&C_{22}^{-1}+C_{22}^{-1}C_{21}\Sigma^{-1}C_{12}C_{22}^{-1}\end{pmatrix},
+    \]
+    and compare the first block with $(*)$ in \noteref{prop:gc-precision}.
+  \item A second proof of \noteref{thm:gc-block} for invertible $C$. Show that for $\underline x=(\underline x_1,\underline x_2)$
+    \[
+      \begin{aligned}
+      (\underline x-\underline\mu)^TC^{-1}(\underline x-\underline\mu)
+      &=\big(\underline x_1-\underline m_1(\underline x_2)\big)^T\Sigma^{-1}\big(\underline x_1-\underline m_1(\underline x_2)\big)\\
+      &\quad+(\underline x_2-\underline\mu_2)^TC_{22}^{-1}(\underline x_2-\underline\mu_2),
+      \end{aligned}
+    \]
+    with $\underline m_1(\underline x_2)=\underline\mu_1-C_{12}C_{22}^{-1}(\underline\mu_2-\underline x_2)$, and read off $f_{\underline X_1\mid\underline X_2=\underline x_2}$ from
+    \noteref{thm:gv-density}.
+  \item Let $\underline X=(\underline X_1,\underline X_2)\sim\mathcal N_N(\underline\mu,C)$. Show that the covariance matrix of
+    $\mathbb E[\underline X_1\mid\underline X_2]=\underline m_1(\underline X_2)$ is $C_{12}C_{22}^{-1}C_{21}$, so that
+    $C_{11}=\Sigma+C_{12}C_{22}^{-1}C_{21}$: a matrix version of \noteref{thm:cp-total-variance}.
+    Deduce that $\underline v^T\Sigma\underline v\le\underline v^TC_{11}\underline v$ for every $\underline v$ (conditioning cannot increase a variance), and
+    find when $\Sigma=C_{11}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Squares of a Gaussian pair]\label{ex:gc-squares}
+\easy Let $(X,Y)\sim\mathcal N_2\big(0,\big(\begin{smallmatrix}\sigma_X^2&c\\c&\sigma_Y^2\end{smallmatrix}\big)\big)$
+with $\sigma_X,\sigma_Y>0$ and $\rho=c/(\sigma_X\sigma_Y)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Write $X=aY+Z$ as in \noteref{thm:gc-bivariate}, and use $\mathbb E[Y^4]=3\sigma_Y^4$ to show
+    that $\mathbb E[X^2Y^2]=\sigma_X^2\sigma_Y^2+2c^2$.
+  \item Deduce that $\rho(X^2,Y^2)=\rho(X,Y)^2$. Check the value $\frac14$ of
+    \noteref{exa:gc-correlations}, and compute $\rho(X^2,Y^2)$ in \noteref{exa:gc-two-combinations}.
+  \item Show that $X^2\indep Y^2$ if and only if $X\indep Y$.
+  \item Let $X\sim\mathcal N(0,1)$, and let $Y=SX$ with $S$ independent of $X$ and
+    $\mathbb P(S=1)=\mathbb P(S=-1)=\frac12$ (\noteref{exa:gv-not-joint}). Compute $\rho(X,Y)$ and
+    $\rho(X^2,Y^2)$. Which hypothesis of (b) fails?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Fathers and sons]\label{ex:gc-ross-heights}
+\medium (in the style of Ross, Ch.~7) The heights in centimetres of a father, $X$, and of his adult
+son, $Y$, form a Gaussian pair with $\mu_X=175$, $\mu_Y=177$, $\sigma_X=7$, $\sigma_Y=7.5$ and
+$\rho(X,Y)=0.5$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the law of $Y$ given $X=190$, $\mathbb E[Y\mid X=190]$ and $\mathbb P(Y>190\mid X=190)$.
+  \item Show that in standard units both regressions have slope $\rho$:
+    $\mathbb E\big[\frac{Y-\mu_Y}{\sigma_Y}\,\big|\,X\big]=\rho\,\frac{X-\mu_X}{\sigma_X}$, and
+    symmetrically. Compute $\mathbb E[X\mid Y=190]$. Tall fathers have sons who are on average less
+    tall in standard units, and tall sons have fathers who are on average less tall: explain why
+    there is no contradiction.
+  \item Let $c\in\mathbb R$ and $k=\frac{c-\mu_X}{\sigma_X}$. Using property 2) of
+    \noteref{def:ce-conditional-expectation} with $A=\{X>c\}$, show that
+    \[
+      \mathbb E[Y\mid X>c]=\frac{\mathbb E[Y\1_{\{X>c\}}]}{\mathbb P(X>c)}
+      =\mu_Y+\rho\,\sigma_Y\,\frac{\varphi(k)}{1-\Phi(k)},
+    \]
+    where $\varphi$ is the density of $\mathcal N(0,1)$. Compute $\mathbb E[Y\mid X>190]$ and
+    $\mathbb E[X\mid X>190]$.
+  \item Verify $\operatorname{var}(Y)=\mathbb E[\operatorname{var}(Y\mid X)]+\operatorname{var}(\mathbb E[Y\mid X])$
+    (\noteref{thm:cp-total-variance}) in this example. What fraction of $\operatorname{var}(Y)$ does
+    knowing $X$ explain, and how does it depend on $\rho$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Repeated receptions of a signal]\label{ex:gc-ross-signal}
+\hard (in the style of Ross, Ch.~7) A signal $X\sim\mathcal N(\mu,\sigma^2)$, $\sigma>0$, is sent $n$
+times; the $i$-th reception is $Y_i=X+\varepsilon_i$, where $\varepsilon_1,\dots,\varepsilon_n$ are
+independent $\mathcal N(0,\tau^2)$ variables, $\tau>0$, independent of $X$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $(X,Y_1,\dots,Y_n)$ is a Gaussian vector and find its mean and covariance matrix.
+  \item Check that $(\tau^2I_n+\sigma^2\underline u\underline u^T)^{-1}=\tau^{-2}\big(I_n-\frac{\sigma^2}{\tau^2+n\sigma^2}\underline u\underline u^T\big)$,
+    with $\underline u=(1,\dots,1)^T$. Deduce from \noteref{thm:gc-block} that
+    $X\mid(Y_1,\dots,Y_n)=(y_1,\dots,y_n)\sim\mathcal N(m,s^2)$ with
+    \[
+      \frac1{s^2}=\frac1{\sigma^2}+\frac n{\tau^2},\qquad
+      m=s^2\Big(\frac\mu{\sigma^2}+\frac{n\bar y}{\tau^2}\Big),\quad\bar y=\frac1n\sum_{i=1}^ny_i .
+    \]
+    Interpret $m$ as a weighted average, and $\frac1{s^2}$ as a sum of precisions.
+  \item Compute $\mathbb E[X\mid\bar Y]$ with \noteref{thm:gc-bivariate}, where
+    $\bar Y=\frac1n\sum_iY_i$, and show that $\mathbb E[X\mid Y_1,\dots,Y_n]=\mathbb E[X\mid\bar Y]$:
+    the average of the receptions carries all the information about $X$ that they contain.
+  \item For $n=1$, $\mu=0$ and $\sigma=\tau=1$, recover \noteref{exa:gc-signal}. How many receptions
+    are needed for the conditional standard deviation of $X$ to be at most $0.1$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The block formula as a regression]\label{ex:gc-regression}
+\medium This is a computational exercise. Let $\underline X\sim\mathcal N_4(\underline\mu,C)$ with
+\[
+  \underline\mu=\begin{pmatrix}1\\0\\-1\\2\end{pmatrix},\qquad
+  C=\begin{pmatrix}4&2&1&0.5\\2&3&1&0\\1&1&2&0.5\\0.5&0&0.5&1\end{pmatrix},
+\]
+and condition $X_1$ on $\underline X_{(2)}=(X_2,X_3,X_4)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $A=C_{12}C_{22}^{-1}$, $\mu_1-A\underline\mu_{(2)}$ and $\Sigma_1$ in exact arithmetic, and
+    check them with \texttt{conditional\_law}.
+  \item By the proof of \noteref{thm:gc-block}, $X_1=(\mu_1-A\underline\mu_{(2)})+A\underline X_{(2)}+Z$ with
+    $Z\sim\mathcal N(0,\Sigma_1)$ independent of $\underline X_{(2)}$: an exact linear regression model. For the
+    least-squares fit of $X_1$ on $\underline X_{(2)}$ and an intercept over $n$ draws, the standard error of the
+    $k$-th slope is close to $\sqrt{\Sigma_1(C_{22}^{-1})_{kk}/n}$. Choose $n$ so that all three
+    standard errors are at most $0.005$.
+  \item Draw $n$ vectors (seed $2026$), fit the regression with \texttt{regression\_fit}, and compare
+    the slopes, the intercept and the residual variance with (a), in units of standard errors.
+  \item Estimate instead $\mathbb E[X_1\mid\underline X_{(2)}=\underline\mu_{(2)}]=\mu_1$ from the same draws by averaging
+    $X_1$ over the cube $\max_k|X_k-\mu_k|<h$, $k=2,3,4$, for $h=0.1$ and $h=0.2$. Predict the number of
+    draws in the cube from the density of $\underline X_{(2)}$, and compare the standard error of the cube
+    average with that of the regression prediction $\sqrt{\Sigma_1/n}$ at $\underline\mu_{(2)}$. Why is the cube so
+    wasteful in three dimensions?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A Gaussian graphical model]\label{ex:gc-graphical}
+\medium This is a computational exercise. Let $P$ be the $5\times5$ matrix with $P_{kk}=1$,
+$P_{kl}=P_{lk}=-0.4$ for the pairs $\{k,l\}=\{1,2\},\{2,3\},\{3,4\},\{2,5\}$, and $P_{kl}=0$ otherwise.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $P$ is positive definite (numerically, or by a bound on its eigenvalues), so that
+    $C=P^{-1}$ is the covariance matrix of some $\underline X\sim\mathcal N_5(\underline 0,C)$. Which pairs $X_k,X_l$ are
+    conditionally independent given the other three components (\noteref{prop:gc-precision})? Draw
+    the graph.
+  \item Compute $C$ and the correlation matrix of $\underline X$. Are any two components of $\underline X$ uncorrelated?
+  \item Show that the conditional correlation of $X_k$ and $X_l$ given the other components is
+    $-P_{kl}/\sqrt{P_{kk}P_{ll}}$. Draw $n=10^5$ vectors (seed $2026$), estimate $C$ by the sample
+    covariance, invert it, and compute the estimated conditional correlations. Using that each
+    estimate has standard deviation about $1/\sqrt n$ when the true value is $0$, recover the graph.
+  \item With \texttt{schur\_complement}, decide whether $X_1\indep X_4$ given $X_2$ alone, given $X_3$
+    alone, given $X_5$ alone, and whether $X_1\indep X_3$ given $X_5$. State a rule in terms of the
+    paths of the graph, and prove it for $X_1,X_4$ given $X_2$ from the block formulas.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Partial sums and a discrete Brownian bridge]\label{ex:gc-partial-sums-bridge}
+\hard This exercise extends \noteref{exa:gc-partial-sums}; part (d) is computational. Let
+$X_1,\dots,X_N$ be independent $\mathcal N(0,1)$ variables, $N\ge2$, $S_0=0$ and
+$S_k=X_1+\dots+X_k$ for $k=1,\dots,N$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\operatorname{cov}(S_k,S_l)=\min(k,l)$ and that $C^{-1}$ is tridiagonal, with
+    $(C^{-1})_{kk}=2$ for $k<N$, $(C^{-1})_{NN}=1$ and $(C^{-1})_{k,k\pm1}=-1$. \emph{Hint:} $S=AX$
+    with $A$ lower triangular of ones; compute $A^{-1}$ and $C^{-1}=(A^{-1})^TA^{-1}$.
+  \item Let $\underline W\sim\mathcal N_N(\underline\mu,C)$ with $C$ invertible, and $Q=C^{-1}$. Show, with
+    \exref{ex:gc-schur} (b) or directly, that the law of one component $W_k$ given
+    $W_l=w_l$ for all $l\ne k$ is
+    $\mathcal N\big(\mu_k-\sum_{l\ne k}\frac{Q_{kl}}{Q_{kk}}(w_l-\mu_l),\ \frac1{Q_{kk}}\big)$. Deduce that
+    $S_k\mid(S_l)_{l\ne k}\sim\mathcal N\big(\frac{S_{k-1}+S_{k+1}}2,\frac12\big)$ for $1\le k<N$ and
+    $S_N\mid(S_l)_{l<N}\sim\mathcal N(S_{N-1},1)$, and recover \noteref{exa:gc-partial-sums} b).
+  \item Show that, given $S_N=s$, $(S_1,\dots,S_{N-1})\sim\mathcal N_{N-1}\big((\frac{ks}N)_k,\ (\min(k,l)-\frac{kl}N)_{k,l}\big)$,
+    and recover \noteref{exa:gc-partial-sums} a) for $N=3$.
+  \item Let $N=10$ and $s=2$. Draw $10^6$ vectors $(S_1,\dots,S_N)$ (seed $2026$) and keep those
+    with $|S_N-s|<0.05$. Compare the averages of $S_k$ over the slab with $\frac{ks}N$ and with
+    $\frac kN\bar S_N$, where $\bar S_N$ is the average of $S_N$ over the slab, in units of standard
+    errors. Show that $\mathbb E[S_k\mid|S_N-s|<h]=\frac kN\mathbb E[S_N\mid|S_N-s|<h]$ exactly, and
+    that the covariance of $(S_k)_{k<N}$ given $|S_N-s|<h$ is
+    $\big(\min(k,l)-\frac{kl}N\big)+\frac{kl}{N^2}\operatorname{var}(S_N\mid|S_N-s|<h)$. Is the bias of
+    the slab visible next to the Monte Carlo error?
+\end{enumerate}
+\end{exercise}

@@ -1,0 +1,206 @@
+% Exercises for Chapter 13 (Gaussian vectors). Statements only: solutions are kept privately.
+% Throughout, (Omega, F, P) is a probability space, vectors are columns, and N_N(mu, C) is the
+% Gaussian law of the notes. The computational exercises can be done with probnotes.gaussian.
+
+\begin{exercise}[Which matrices are covariance matrices?]\label{ex:gv-covariance-matrices}
+\easy
+\begin{enumerate}[label=(\alph*)]
+  \item For $c\in\mathbb R$ let
+    $C_c=\begin{pmatrix}2&1&-1\\1&2&1\\-1&1&c\end{pmatrix}$. Show that $C_c$ is the covariance
+    matrix of some random vector if and only if $c\ge2$. For $c=1$ (the matrix written in the
+    handwritten version of \noteref{exa:gv-affine}), find $\underline a\in\mathbb R^3$ with
+    $\underline a^TC_1\underline a<0$, and explain directly, without
+    \noteref{lem:gv-covariance-psd}, why no random vector $\underline X$ with components in $L^2$
+    has covariance matrix $C_1$.
+  \item Let $\underline X\sim\mathcal N_3(\underline 0,C_2)$. Find $\underline a\ne\underline 0$ with
+    $C_2\underline a=\underline 0$, and show that $\underline a^T\underline X=0$ almost surely. On
+    which plane does the law of $\underline X$ live?
+  \item Let $N\ge2$, $\rho\in\mathbb R$, and $R_\rho\in\mathcal M_N(\mathbb R)$ the matrix with $1$
+    on the diagonal and $\rho$ everywhere else. Show that $R_\rho$ is a covariance matrix if and only
+    if $-\frac1{N-1}\le\rho\le1$. \emph{Hint:} find the eigenvalues of $R_\rho$, using the vector
+    $(1,\dots,1)^T$ and the vectors orthogonal to it.
+  \item For $0\le\rho\le1$, let $W_0,W_1,\dots,W_N$ be \iid with law $\mathcal N(0,1)$ and
+    $X_i=\sqrt\rho\,W_0+\sqrt{1-\rho}\,W_i$. Show that $\underline X\sim\mathcal N_N(\underline 0,R_\rho)$,
+    giving $A\in\mathcal M_{N\times(N+1)}(\mathbb R)$ with $AA^T=R_\rho$. For
+    $\rho=-\frac1{N-1}$, show that $X_1+\dots+X_N=0$ almost surely for every
+    $\underline X\sim\mathcal N_N(\underline 0,R_\rho)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Gaussian vectors through linear combinations]\label{ex:gv-linear-combinations}
+\medium
+\begin{enumerate}[label=(\alph*)]
+  \item Let $A\in\mathcal M_{N\times K}(\mathbb R)$ and $A'\in\mathcal M_{N\times K'}(\mathbb R)$ with
+    $AA^T=A'A'^T$, and let $\underline X\sim\mathcal N_K(\underline 0,I_K)$,
+    $\underline X'\sim\mathcal N_{K'}(\underline 0,I_{K'})$. Show that $A\underline X+\underline\mu$
+    and $A'\underline X'+\underline\mu$ have the same law. Find $A'\in\mathcal M_{2\times1}(\mathbb R)$
+    with $A'A'^T=AA^T$ for the matrix $A=\left(\begin{smallmatrix}1&1\\2&2\end{smallmatrix}\right)$ of
+    \noteref{exa:gv-degenerate}, and describe the two maps $\underline x\mapsto A\underline x$ and
+    $x\mapsto A'x$.
+  \item Let $\underline Y$ be a random vector with values in $\mathbb R^N$. Show that
+    $\underline Y$ is a Gaussian vector if and only if, for every $\underline a\in\mathbb R^N$, the
+    real random variable $\underline a^T\underline Y$ is Gaussian (possibly degenerate).
+    \emph{Hint:} for ``$\Leftarrow$'', show first that the $Y_i$ are in $L^2$, call
+    $\underline\mu$ and $C$ the mean vector and the covariance matrix of $\underline Y$, and compute
+    $\Phi_{\underline Y}(\underline a)=\Phi_{\underline a^T\underline Y}(1)$.
+  \item Let $X_1,\dots,X_N$ be independent Gaussian random variables, some of which may be
+    degenerate. Show in two ways that $(X_1,\dots,X_N)^T$ is a Gaussian vector: with (b), and with
+    \noteref{prop:gv-concatenation}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Degenerate Gaussian vectors]\label{ex:gv-degenerate}
+\medium This exercise proves \noteref{rem:gv-degenerate}, which the notes state without proof. Let
+$\underline Y=A\underline X+\underline\mu$ with $\underline X\sim\mathcal N_K(\underline 0,I_K)$,
+$A\in\mathcal M_{N\times K}(\mathbb R)$, $C=AA^T$, and let $r=\operatorname{rank}C$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\ker C=\ker A^T$, and deduce that $\operatorname{Im}C=\operatorname{Im}A$.
+  \item Show that $\mathbb P(\underline Y\in\underline\mu+\operatorname{Im}C)=1$.
+  \item Suppose that $C$ is singular. Show that a proper linear subspace $V$ of $\mathbb R^N$ has
+    Lebesgue measure zero. (\emph{Hint:} $V$ is contained in a hyperplane
+    $\{\underline x:\underline a^T\underline x=0\}$ with $|\underline a|=1$; complete $\underline a$
+    to an orthonormal basis and change variables with \noteref{thm:rv-jacobi} in $\mathbb R^N$.)
+    Deduce that $\underline Y$ is not absolutely continuous, and conclude, with
+    \noteref{thm:gv-density}, that a Gaussian vector is absolutely continuous if and only if its
+    covariance matrix is invertible.
+  \item Let $r\ge1$, and let $U\in\mathcal M_{N\times r}(\mathbb R)$ have orthonormal columns that
+    span $\operatorname{Im}C$, so that $C=U\Lambda U^T$ with $\Lambda$ diagonal and positive definite
+    (spectral theorem). Show that $\underline W=U^T(\underline Y-\underline\mu)\sim\mathcal N_r(\underline 0,\Lambda)$
+    is absolutely continuous on $\mathbb R^r$, and that $\underline Y=\underline\mu+U\underline W$
+    almost surely: a degenerate Gaussian vector is a non-degenerate one of dimension $r$, placed in
+    $\mathbb R^N$ by an affine map. Find $U$, $\Lambda$ and the law of $\underline W$ for
+    \noteref{exa:gv-degenerate}.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[An atom at zero]\label{ex:gv-random-sign}
+\easy This is a computational exercise on the pair $(X,Y)=(X,ZX)$ of \noteref{exa:gv-not-joint}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\operatorname{cov}(X,Y)=0$, but that $X$ and $Y$ are not independent. Why does
+    this not contradict \noteref{thm:gv-independence}?
+  \item Show that the law of $X+Y$ is $\frac12\delta_0+\frac12\mathcal N(0,4)$, and write its
+    distribution function $F$. Where is $F$ discontinuous?
+  \item Simulate $n=10^5$ pairs (seed $2026$). Give an estimate of $\mathbb P(X+Y=0)$ with an
+    asymptotic $95\%$ confidence interval. Compute $\sup_x|F_n(x)-F(x)|$ for the empirical
+    distribution function $F_n$ of the simulated values of $X+Y$ (careful: there are many ties at
+    $0$; compare $F_n$ and $F$ at each sample point, from the right and from the left), and compare
+    it with the half-width $\varepsilon=\sqrt{\log(2/0.05)/(2n)}$ of the $95\%$
+    Dvoretzky--Kiefer--Wolfowitz band. Do the same for $Y$ against the $\mathcal N(0,1)$ distribution
+    function.
+  \item Compute the sample correlation of $X$ and $Y$, and of $X^2$ and $Y^2$. What do they say?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Uncorrelated, Gaussian, and still dependent]\label{ex:gv-sign-flip}
+\medium Let $X\sim\mathcal N(0,1)$, $c>0$, and $Y=X$ on $\{|X|\le c\}$, $Y=-X$ on $\{|X|>c\}$.
+Write $\varphi$ and $\Phi$ for the density and the distribution function of $\mathcal N(0,1)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $Y\sim\mathcal N(0,1)$.
+  \item Show that $\operatorname{cov}(X,Y)=2\big(2\Phi(c)-1-2c\varphi(c)\big)-1$, that this is an
+    increasing function of $c$ with limits $-1$ and $1$, and find numerically the unique $c^*$ with
+    $\operatorname{cov}(X,Y)=0$.
+  \item For $c=c^*$, show that $X$ and $Y$ are not independent, and deduce that $(X,Y)^T$ is not a
+    Gaussian vector. Check this directly: compute $\mathbb P(X+Y=0)$.
+  \item Simulate $10^6$ pairs with $c=c^*$ (seed $2026$). Is the sample correlation within two
+    standard errors of $0$? (\emph{Careful:} what is the standard error of the sample mean of $XY$
+    here?) Compare the fraction of pairs with $X+Y=0$ with (c).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The bivariate normal law]\label{ex:gv-bivariate}
+\medium (in the style of Ross, Ch.~6) Let $\mu_X,\mu_Y\in\mathbb R$, $\sigma_X,\sigma_Y>0$,
+$-1<\rho<1$, and
+\[
+  (X,Y)^T\sim\mathcal N_2\left(\begin{pmatrix}\mu_X\\\mu_Y\end{pmatrix},
+  \begin{pmatrix}\sigma_X^2&\rho\sigma_X\sigma_Y\\\rho\sigma_X\sigma_Y&\sigma_Y^2\end{pmatrix}\right).
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the covariance matrix is invertible, that $\rho$ is the correlation coefficient
+    of $X$ and $Y$, and that
+    \[
+      f_{(X,Y)}(x,y)=\frac1{2\pi\sigma_X\sigma_Y\sqrt{1-\rho^2}}
+      \exp\Big[-\frac{u^2-2\rho uv+v^2}{2(1-\rho^2)}\Big],
+    \]
+    where $u=(x-\mu_X)/\sigma_X$ and $v=(y-\mu_Y)/\sigma_Y$.
+    When are $X$ and $Y$ independent?
+  \item The scores of a student in two exams are modelled by such a pair, with $\mu_X=70$,
+    $\sigma_X=10$, $\mu_Y=65$, $\sigma_Y=12$ and $\rho=0.6$. Find the law of the average score
+    $\frac12(X+Y)$, the probability that the total $X+Y$ exceeds $150$, and the probability that the
+    student does better in the second exam.
+  \item In (b), find $a\in\mathbb R$ such that $X+aY$ and $X-Y$ are independent.
+  \item Show that, for $r>0$, the ellipse
+    $E_r=\{(x,y):u^2-2\rho uv+v^2\le(1-\rho^2)r^2\}$ has probability
+    $\mathbb P\big((X,Y)\in E_r\big)=1-e^{-r^2/2}$, whatever the parameters. \emph{Hint:} whiten as
+    in the proof of \noteref{thm:gv-density}, and use \noteref{prop:rv-notable-sums}~d). Which $r$
+    gives an ellipse of probability $0.9$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sample mean and sample variance]\label{ex:gv-sample-mean}
+\hard (in the style of Ross, Ch.~7) Let $X_1,\dots,X_n$ be \iid with law $\mathcal N(\mu,\sigma^2)$,
+$\sigma>0$, $n\ge2$, and let
+\[
+  \bar X=\frac1n\sum_{i=1}^nX_i,\qquad S^2=\frac1{n-1}\sum_{i=1}^n(X_i-\bar X)^2 .
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $(\bar X,X_1-\bar X,\dots,X_n-\bar X)^T$ is a Gaussian vector of
+    $\mathbb R^{n+1}$, and compute its mean vector and its covariance matrix. Is it absolutely
+    continuous?
+  \item Deduce that $\bar X$ is independent of $(X_1-\bar X,\dots,X_n-\bar X)$, and hence of $S^2$.
+  \item Let $Q\in\mathcal M_n(\mathbb R)$ be an orthogonal matrix whose first row is
+    $\frac1{\sqrt n}(1,\dots,1)$, and $\underline W=Q\underline X$. Find the law of $\underline W$, and
+    show that $\sum_{i=1}^n(X_i-\bar X)^2=\sum_{k=2}^nW_k^2$. Deduce that
+    $(n-1)S^2/\sigma^2\sim\chi^2(n-1)$, and compute $\mathbb E[S^2]$ and $\operatorname{var}(S^2)$.
+  \item The independence in (b) is special to Gaussian samples. Let $n=2$ and $X_1,X_2$ be \iid
+    with law $\mathrm{Exp}(1)$. Show that $\operatorname{cov}(\bar X,S^2)=1$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Sampling Gaussian vectors, also degenerate ones]\label{ex:gv-sampling}
+\medium This is a computational exercise. Let $C$ be the covariance matrix of
+\noteref{exa:gv-affine} and $C_2$ the singular matrix of \exref{ex:gv-covariance-matrices}.
+\begin{enumerate}[label=(\alph*)]
+  \item Simulate $n=10^5$ points of $\mathcal N_3(\underline 0,C)$ (seed $2026$) twice, as
+    $A\underline X$ with $A$ the symmetric square root of $C$ and with $A$ its Cholesky factor. For
+    each sample, compare the sample covariance matrix with $C$, and the sample covariance matrix of
+    $\underline Z=(X_1-X_2,X_1+X_3)^T$ with the matrix $\Sigma$ of \noteref{exa:gv-affine}.
+  \item Show that if $\underline Y\sim\mathcal N_N(\underline\mu,C)$ with $C$ invertible, then
+    $(\underline Y-\underline\mu)^TC^{-1}(\underline Y-\underline\mu)\sim\chi^2(N)$. For the samples of
+    (a), compare the fraction of points with $\underline y^TC^{-1}\underline y\le r$ with the
+    $\chi^2(3)$ distribution function at $r=1$, $3$ and $7.815$.
+  \item Check that \texttt{numpy.linalg.cholesky} fails on $C_2$. Sample $10^5$ points of
+    $\mathcal N_3(\underline 0,C_2)$ with the symmetric square root and with a Cholesky
+    factorisation that allows zero pivots (\texttt{probnotes.gaussian.psd\_cholesky}, or your own),
+    and check that all the points lie on the plane of \exref{ex:gv-covariance-matrices}~(b).
+  \item How large must $n$ be for the sample variance of the first coordinate (whose variance is
+    $2$) to have standard deviation at most $0.01$? Use \exref{ex:gv-sample-mean}~(c). Check your
+    answer by computing $1000$ independent sample variances of that size (seed $2026$).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Whitening a Gaussian sample]\label{ex:gv-whitening}
+\medium This is a computational exercise. Let $\underline Y_1,\dots,\underline Y_n$ be \iid with law
+$\mathcal N_N(\underline\mu,C)$, $C$ invertible.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that if $A\in\mathcal M_N(\mathbb R)$ and $AA^T=C$, then the vectors
+    $A^{-1}(\underline Y_k-\underline\mu)$ are \iid with law $\mathcal N_N(\underline 0,I_N)$. Show
+    that if also $B\in\mathcal M_N(\mathbb R)$ and $BB^T=C$, then $B=AQ$ for an orthogonal matrix $Q$: two ``whitenings'' differ by an
+    orthogonal transformation.
+  \item In practice $\underline\mu$ and $C$ are unknown, and one uses the sample mean
+    $\bar{\underline Y}$ and the sample covariance matrix $\hat C$ (with divisor $n-1$), assumed
+    invertible. Show that the vectors $\hat C^{-1/2}(\underline Y_k-\bar{\underline Y})$, with
+    $\hat C^{-1/2}$ the inverse of the symmetric square root of $\hat C$, have sample mean exactly
+    $\underline 0$ and sample covariance matrix exactly $I_N$, whatever the law of the
+    $\underline Y_k$.
+  \item Simulate $n=2000$ points with $\underline\mu=(1,-2,0.5)^T$ and $C$ the matrix of
+    \noteref{exa:gv-affine} (seed $2026$). Whiten them with the true parameters, by the inverse
+    symmetric square root and by the inverse Cholesky factor, and with the estimated ones. Report the
+    largest off-diagonal entry of the sample covariance matrix in each case, and find the orthogonal
+    matrix that relates the two whitenings with the true parameters.
+  \item With the true parameters, each off-diagonal entry of the sample covariance matrix of the
+    whitened sample has standard deviation close to $n^{-1/2}$: why? How large must $n$ be for the
+    $95\%$ asymptotic interval $\pm1.96\,n^{-1/2}$ to be at most $\pm0.01$? Check by simulation how
+    often the entry falls within $0.01$, in $100$ repetitions (one generator, seed $2026$) with
+    samples of that size from $\mathcal N_2\big((1,-2)^T,\left(\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right)\big)$.
+\end{enumerate}
+\end{exercise}

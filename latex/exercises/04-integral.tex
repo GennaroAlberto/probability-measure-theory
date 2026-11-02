@@ -1,0 +1,202 @@
+% Exercises for Chapter 4 (The integral of non-negative functions). Statements only:
+% solutions are kept privately. Throughout, (X, A, mu) is a measure space, m is the
+% Borel-Lebesgue measure on B(R), and f_n are the dyadic approximants of Chapter 3.
+
+\begin{exercise}[Rules for the integral of simple functions]\label{ex:in-simple-rules}
+\easy This exercise revisits the properties of the integral of simple functions that the notes
+leave to the reader (\noteref{prop:in-simple-properties}). You may use
+\noteref{def:in-simple-integral}, \noteref{prop:in-simple-well-defined}, properties (1)--(3) of
+\noteref{prop:in-simple-properties} and \noteref{prop:mf-common-partition}, with the convention
+$0\cdot\infty=0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $A_1,\dots,A_k\in\mathcal A$ be arbitrary measurable sets, not necessarily disjoint
+    and not necessarily covering $X$, and let $a_1,\dots,a_k\in[0,+\infty]$. Show that
+    $\varphi=\sum_{i=1}^ka_i\1_{A_i}$ belongs to $\mathcal S^+(X)$ and that
+    $\int_X\varphi\,\dd\mu=\sum_{i=1}^ka_i\,\mu(A_i)$.
+  \item Let $\varphi,\psi\in\mathcal S^+(X)$ with $\varphi\le\psi$. Construct $\eta\in\mathcal
+    S^+(X)$ with $\psi=\varphi+\eta$ (where $\varphi=+\infty$ the difference $\psi-\varphi$ is not
+    defined, so choose $\eta$ there). Deduce property (4), monotonicity, from property (3).
+  \item Let $E,F\in\mathcal A$ be disjoint. Show that
+    $\int_{E\cup F}\varphi\,\dd\mu=\int_E\varphi\,\dd\mu+\int_F\varphi\,\dd\mu$, and deduce property
+    (5).
+  \item Show that if $\int_X\varphi\,\dd\mu<+\infty$, then $\mu(\{\varphi=+\infty\})=0$ and
+    $\mu(\{\varphi>0\})<+\infty$, and that the converse holds. Show that the converse fails for
+    measurable functions that are not simple: on $((0,1),\mathcal B((0,1)),m)$, find $f$ with
+    finite values and $\int f\,\dd m=+\infty$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Approximation from below, not from above]\label{ex:in-from-below}
+\medium The integral of \noteref{def:in-integral} approximates $f$ from below by simple
+functions (and, as the proof of \noteref{thm:in-monotone-convergence} shows, finite-valued ones
+suffice). This exercise shows that approximating from above would not work. Let
+$f:X\to[0,+\infty]$ be measurable. You may use \noteref{sec:in-simple},
+\noteref{prop:in-properties}, \noteref{cor:in-series} and \noteref{rem:mf-dyadic}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $\int^*f\,\dd\mu=\inf\{\int_X\psi\,\dd\mu:\psi\in\mathcal S^+(X),\ \psi\ge f\}$, the
+    \emph{upper integral}. Show that $\int_Xf\,\dd\mu\le\int^*f\,\dd\mu$.
+  \item Suppose that $\mu(X)<+\infty$ and that $f$ is bounded. Show that
+    $\int^*f\,\dd\mu=\int_Xf\,\dd\mu$. \emph{Hint:} compare $f$ with $f_n$ and $f_n+2^{-n}$.
+  \item On $((0,1),\mathcal B((0,1)),m)$ let $f(x)=x^{-1/2}$. Show that $f$ is integrable, by
+    comparing it with $\sum_{j\ge0}2^{(j+1)/2}\1_{[2^{-j-1},2^{-j})}$, and that
+    $\int^*f\,\dd m=+\infty$.
+  \item On $(\mathbb R,\mathcal B(\mathbb R),m)$ let $f(x)=e^{-|x|}$. Show that $f$ is
+    integrable and bounded, but $\int^*f\,\dd m=+\infty$. Which hypothesis of (b) fails in (c),
+    and which in (d)?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The layer-cake formula]\label{ex:in-layer-cake}
+\hard Let $f:X\to[0,+\infty]$ be measurable, let $f_n$ be its dyadic approximants
+(\noteref{eq:mf-dyadic}), and let $G(t)=\mu(\{f\ge t\})$ for $t>0$. You may use the results of
+the chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $f_n=2^{-n}\sum_{k=1}^{n2^n}\1_{\{f\ge k2^{-n}\}}$, and deduce that
+    $\int_Xf_n\,\dd\mu=2^{-n}\sum_{k=1}^{n2^n}G(k2^{-n})$.
+  \item Deduce that $\int_Xf\,\dd\mu=\lim_n2^{-n}\sum_{k=1}^{n2^n}G(k2^{-n})$.
+  \item Suppose that $G(t)<+\infty$ for every $t>0$. Since $G$ is non-increasing, it is Riemann
+    integrable on every interval $[a,b]\subseteq(0,+\infty)$. Show that
+    \[
+      \int_Xf\,\dd\mu=\int_0^{+\infty}G(t)\,\dd t=\lim_{a\downarrow0,\ b\uparrow+\infty}\int_a^bG(t)\,\dd t,
+    \]
+    an improper Riemann integral, possibly $+\infty$. \emph{Hint:} bound $2^{-n}G(k2^{-n})$ above
+    and below by integrals of $G$ over neighbouring intervals. What happens if
+    $G(t_0)=+\infty$ for some $t_0>0$?
+  \item Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space and $Y:\Omega\to[0,+\infty)$ a
+    random variable. Show that
+    $\int_\Omega Y\,\dd\mathbb P=\int_0^{+\infty}\mathbb P(Y\ge t)\,\dd t=\int_0^{+\infty}\mathbb P(Y>t)\,\dd t$,
+    and that $\int_\Omega Y\,\dd\mathbb P=\sum_{k\ge1}\mathbb P(Y\ge k)$ if $Y$ takes values in
+    $\mathbb N$.
+  \item Compute $\int_{(0,1)}x^{-p}\,\dd m(x)$ for every $p>0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[How fast does $\int f_n$ approach $\int f$?]\label{ex:in-dyadic-rates}
+\medium This is a computational exercise on the dyadic approximants $f_n$
+(\noteref{eq:mf-dyadic}) and on the rate in \noteref{rem:in-dyadic}. On
+$(\mathbb R,\mathcal B(\mathbb R),m)$ let $\delta_n=\int f\,\dd m-\int f_n\,\dd m$. You may use
+\cref{ex:in-layer-cake}, in particular
+$\int f_n\,\dd\mu=2^{-n}\sum_{k=1}^{n2^n}\mu(\{f\ge k2^{-n}\})$.
+\begin{enumerate}[label=(\alph*)]
+  \item Write a vectorised function that computes $\int f_n\,\dd\mu$ from the function
+    $t\mapsto\mu(\{f\ge t\})$, summing in chunks so that $n=20$ fits in memory. Check it on a
+    finite space with a thousand points against $\sum_xf_n(x)\,\mu(\{x\})$. Prove that for
+    $f(x)=x$ on $[0,1]$ (and $0$ elsewhere) $\int f_n\,\dd m=\frac12-2^{-n-1}$.
+  \item For $f(x)=x^2$ on $[0,1]$, $f(x)=x^{-1/2}$ on $(0,1)$ (each $0$ elsewhere) and
+    $f(x)=1/(1+x^2)$ on $\mathbb R$, find $m(\{f\ge t\})$ and $\int f\,\dd m$, and tabulate
+    $2^{n+1}\delta_n$, $n\,\delta_n$ and $2^{n/2}\delta_n$ for $n=1,\dots,18$. Which of the three
+    settles down for each function?
+  \item Write $f-f_n=r_n+c_n+s_n$, where $r_n=(f-f_n)\1_{\{2^{-n}\le f<n\}}$ is the rounding
+    error, $c_n=(f-n)\1_{\{f\ge n\}}$ is the cut, and $s_n=f\1_{\{f<2^{-n}\}}$ collects the small
+    values that $f_n$ discards. Show that $\int r_n\,\dd m\le2^{-n}m(\{2^{-n}\le f<n\})$, compute
+    $\int c_n\,\dd m$ and $\int s_n\,\dd m$ exactly for the three functions, and explain the rates
+    found in (b).
+  \item For $f(x)=1/(1+x^2)$, the rule of thumb ``the rounding error is half a step on average''
+    predicts $\delta_n\approx3\cdot2^{-n/2}$. Show that in fact
+    $2^{n/2}\delta_n\to-2\zeta(\frac12)\approx2.9207$, where $\zeta(\frac12)\approx-1.46035$ is the
+    constant in $\sum_{k=1}^Nk^{-1/2}=2\sqrt N+\zeta(\frac12)+O(N^{-1/2})$. \emph{Hint:}
+    $\sqrt{1-u}=1-\sqrt u\,F(u)$ with $F(u)=\sqrt u/(1+\sqrt{1-u})$, which is increasing on
+    $[0,1]$; compare a Riemann sum of $F$ with $\int_0^1F$. Why does the rule of thumb fail here,
+    although it works for $x^2$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Markov's inequality]\label{ex:in-markov}
+\easy Let $f:X\to[0,+\infty]$ be measurable. You may use \noteref{prop:in-properties},
+\noteref{prop:in-additivity} and \noteref{prop:in-ae}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\mu(\{f\ge t\})\le\frac1t\int_Xf\,\dd\mu$ for every $t\in(0,+\infty)$.
+  \item Deduce, in one line each, item (1) of \noteref{prop:in-ae} and the implication
+    ``$\int_Xf\,\dd\mu=0\Rightarrow f=0$ a.e.'' of its item (2).
+  \item Show that if $f$ is integrable, then $\{f>0\}$ is a countable union of measurable sets
+    of finite measure.
+  \item Suppose that $f$ is integrable and $t>0$. Show that equality holds in (a) if and only if
+    $f(x)\in\{0,t\}$ for almost every $x$.
+  \item Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space and $Y:\Omega\to\mathbb R$ a
+    random variable. Show \emph{Chebyshev's inequality}
+    $\mathbb P(|Y|\ge t)\le t^{-2}\int_\Omega Y^2\,\dd\mathbb P$ for $t>0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Series of non-negative functions at work]\label{ex:in-series-uses}
+\medium You may use \noteref{cor:in-series}, \noteref{prop:in-ae} and the results of
+\cref{ch:02-measures}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $(A_n)_{n\ge1}$ be measurable sets with $\sum_n\mu(A_n)<+\infty$, and let
+    $N=\sum_{n\ge1}\1_{A_n}$, so that $N(x)$ counts the sets $A_n$ that contain $x$. Show that
+    $\int_XN\,\dd\mu=\sum_n\mu(A_n)$ and $\limsup_nA_n=\{N=+\infty\}$, and deduce the first
+    Borel--Cantelli lemma (\noteref{lem:ms-borel-cantelli-1}).
+  \item Let $f_n\ge0$ be measurable with $\sum_n\int_Xf_n\,\dd\mu<+\infty$. Show that $f_n\to0$
+    a.e.
+  \item For $q\in[0,1]$ let $h_q(x)=|x-q|^{-1/2}$ for $x\ne q$ and $h_q(q)=+\infty$. Show that
+    $\int_{[0,1]}h_q\,\dd m\le2(1+\sqrt2)$, by comparing $h_q$ on $[0,1]$ with
+    $\sum_{j\ge0}2^{(j+1)/2}\1_{\{2^{-j-1}\le|x-q|<2^{-j}\}}$.
+  \item Let $(q_k)_{k\ge1}$ be an enumeration of $\mathbb Q\cap[0,1]$ and
+    $g=\sum_{k\ge1}2^{-k}h_{q_k}$ on $[0,1]$. Show that $g$ is integrable on $[0,1]$, hence finite
+    a.e., although $g=+\infty$ at every rational point and $g$ is unbounded on every
+    non-degenerate interval.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Small sets carry a small integral]\label{ex:in-abs-continuity}
+\medium Let $f:X\to[0,+\infty]$ be measurable and integrable. You may use the results of the
+chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $\int_{\{f>M\}}f\,\dd\mu\to0$ as $M\to+\infty$. \emph{Hint:} apply monotone
+    convergence to $f\1_{\{f\le M\}}$, and use \noteref{prop:in-ae}.
+  \item Show that for every $\varepsilon>0$ there is $\delta>0$ such that
+    $\int_Ef\,\dd\mu<\varepsilon$ for every $E\in\mathcal A$ with $\mu(E)<\delta$.
+  \item On $((0,1),\mathcal B((0,1)),m)$, show that $f(x)=1/x$ has $\int_{(0,\delta)}f\,\dd m=+\infty$
+    for every $\delta\in(0,1)$: (b) fails without integrability, even for a function with finite
+    values.
+  \item Show that $M\mu(\{f>M\})\to0$ as $M\to+\infty$, which improves Markov's inequality
+    (\cref{ex:in-markov}) for large $M$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Decreasing sequences]\label{ex:in-decreasing}
+\medium This exercise is partly computational. Let $(f_n)_{n\ge1}$ be non-negative measurable
+functions with $f_n\ge f_{n+1}$, and $f=\lim_nf_n$. You may use the results of the chapter and
+\cref{ex:in-layer-cake}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that if $\int_Xf_1\,\dd\mu<+\infty$, then $\int_Xf_n\,\dd\mu\to\int_Xf\,\dd\mu$.
+    \emph{Hint:} $f_1<+\infty$ a.e.; apply monotone convergence to $f_1-f_n$ on
+    $\{f_1<+\infty\}$, and use additivity.
+  \item Show that the hypothesis $\int f_1\,\dd\mu<+\infty$ cannot be dropped: on
+    $(\mathbb R,\mathcal B(\mathbb R),m)$ take $f_n=\1_{[n,+\infty)}$, and on
+    $((0,1),\mathcal B((0,1)),m)$ take $f_n(x)=x^{-1}\1_{(0,1/n)}(x)$. In both cases
+    $f_n\searrow0$ but $\int f_n\,\dd m=+\infty$ for every $n$.
+  \item For $f_n(x)=x^{-1}\1_{(0,1/n)}(x)$, compute the integrals of the dyadic approximants
+    $\varphi_k$ of $f_n$, for $k=1,\dots,20$ and $n=1,2,4$, from $m(\{f_n\ge t\})$. Show that they
+    equal $k/n$ for $k\le n$ and $1+\sum_{j=n2^k+1}^{k2^k}\frac1j$ for $k\ge n$, so that they grow
+    like $1+\log(k/n)$. How does this show that $\int f_n\,\dd m=+\infty$?
+  \item Repeat (c) for $g_n(x)=x^{-1/2}\1_{(0,1/n)}(x)$. Show that $\int g_n\,\dd m=2/\sqrt n$,
+    which tends to $0$ as (a) predicts, and that, once $k\ge\sqrt n$, the dyadic integrals fall
+    short of it by $\frac1k$, up to a rounding error below $2^{-k}/n$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[When is Fatou's lemma strict?]\label{ex:in-fatou-strict}
+\medium This exercise is partly computational. You may use the results of the chapter.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that Fatou's lemma and monotonicity together imply the monotone convergence
+    theorem.
+  \item Let $X=\{0,\dots,N-1\}$ with $\mu(\{x\})=w_x>0$, and let $f_n=h_{n\bmod p}$ be a periodic
+    sequence of functions $X\to[0,+\infty)$, with period $p$. Show that
+    $\liminf_nf_n=\min_jh_j$ pointwise and $\liminf_n\int f_n\,\dd\mu=\min_j\int h_j\,\dd\mu$, and
+    that equality holds in Fatou's lemma if and only if some $h_j$ equals $\min_ih_i$ at every
+    point.
+  \item Draw $10^4$ random examples with $p=3$ and $N=6$, with independent values $h_j(x)$
+    uniform in $\{0,1,2,3\}$ and weights $w_x$ uniform in $(0,1)$. Check Fatou's lemma and the
+    criterion of (b) in each case, and compare the fraction of strict inequalities with its
+    exact probability, which you should compute from (b). Find by hand an example with $p=N=3$
+    and $w_x=1$ in which the two sides are $0$ and $2$.
+  \item On $(\mathbb R,\mathcal B(\mathbb R),m)$ let $f_n=\1_{[0,1)}+\1_{[n,n+1)}$. Compute, by hand
+    and with step functions, $\int f_n\,\dd m$ and $\int\inf_{n\le k\le K}f_k\,\dd m$ for
+    $K=50$, and show that Fatou's lemma reads $1<2$.
+  \item Show that Fatou's lemma becomes false if $\liminf$ is replaced by $\limsup$ on both
+    sides, and that the reverse inequality $\limsup_n\int f_n\,\dd\mu\le\int\limsup_nf_n\,\dd\mu$
+    can fail too. \emph{Hint:} $f_n=\1_{[0,1)}$ for even $n$ and $\1_{[1,2)}$ for odd $n$; the
+    sliding bump.
+\end{enumerate}
+\end{exercise}

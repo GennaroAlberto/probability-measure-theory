@@ -4,10 +4,10 @@
 \graphicspath{{figures/}}
 % PRIVATE BUILD. latex/solutions/ is copied in from the private solutions repo
 % by `make solutions` and is git-ignored here: never commit it.
-\renewcommand{\coursechapter}[2]{%
-  \chapter{#2}\label{ch:#1}%
-  \IfFileExists{exercises/#1.tex}{\input{exercises/#1}}{}%
-  \IfFileExists{solutions/#1.tex}{\section*{Solutions}\input{solutions/#1}}{}}
+\renewcommand{\coursechapter}[3][]{%
+  \chapter{#3}\label{ch:#2}\coursechaptermark{#1}%
+  \IfFileExists{exercises/#2.tex}{\input{exercises/#2}}{}%
+  \IfFileExists{solutions/#2.tex}{\section*{Solutions}\input{solutions/#2}}{}}
 \usepackage{xr}
 \externaldocument[N-]{notes}
 \newcommand{\noteref}[1]{\cref{N-#1}}

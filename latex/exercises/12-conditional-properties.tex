@@ -1,0 +1,232 @@
+% Exercises for Chapter 12 (properties of conditional expectation). Statements only: solutions
+% are kept privately. Throughout, (Omega, F, P) is a probability space, G is a sub-sigma-algebra
+% of F, and the notation is that of the notes.
+
+\begin{exercise}[Trivial $\sigma$-algebras]\label{ex:cp-trivial}
+\easy This exercise completes 1) of \noteref{prop:cp-special-cases}.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that a function $Z:\Omega\to\overline{\mathbb R}$ is $\{\emptyset,\Omega\}$-measurable if
+    and only if it is constant.
+  \item Let $\mathcal N=\{A\in\mathcal F:\mathbb P(A)=0\text{ or }\mathbb P(A)=1\}$. Show that
+    $\mathcal N$ is a $\sigma$-algebra, and that a random variable $Z$ is $\mathcal N$-measurable if
+    and only if $Z$ is a.s.\ constant. \emph{Hint:} look at the distribution function of $Z$.
+  \item Show that $\mathcal N\indep\sigma(X)$ for every random variable $X$, and deduce that
+    $\mathbb E[X\mid\mathcal N]=\mathbb E[X]$ a.s.\ for $X\ge0$ or $X\in L^1$, in two ways: from 4)
+    of \noteref{prop:cp-special-cases}, and directly from (b) and the definition.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Conditional Fatou and dominated convergence]\label{ex:cp-convergence}
+\medium The notes state \noteref{lem:cp-fatou} and \noteref{thm:cp-dominated-convergence} without
+proof. You may use \noteref{prop:cp-linearity}, \noteref{prop:cp-monotonicity},
+\noteref{thm:cp-monotone-convergence} and \noteref{prop:cp-contraction}.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove \noteref{lem:cp-fatou}. \emph{Hint:} apply \noteref{thm:cp-monotone-convergence} to
+    $Y_n=\inf_{k\ge n}X_k$. Where do you use that $\mathbb N$ is countable?
+  \item Prove \noteref{thm:cp-dominated-convergence}, applying (a) to $Y+X_n$ and $Y-X_n$. Why is
+    $\mathbb E[Y\mid\mathcal G]<+\infty$ a.s., and why does it matter?
+  \item Show that if $X_n\to X$ in $L^p$, $p\ge1$, then $\mathbb E[X_n\mid\mathcal G]\to\mathbb E[X\mid\mathcal G]$
+    in $L^p$.
+  \item On $\Omega=(0,1)$ with Lebesgue measure, let $X_n=n\1_{(0,1/n)}$ and
+    $\mathcal G=\sigma\big((0,\frac12)\big)$. Compute $\mathbb E[X_n\mid\mathcal G]$, and show that
+    $X_n\to0$ a.s.\ while $\mathbb E[X_n\mid\mathcal G]$ does not tend to $\mathbb E[0\mid\mathcal G]=0$
+    a.s. Which hypothesis of \noteref{thm:cp-dominated-convergence} fails? Is the inequality of
+    \noteref{lem:cp-fatou} strict here?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Convex functions, Jensen and Cauchy--Schwarz]\label{ex:cp-jensen}
+\medium This exercise supplies the facts on convex functions used in the proof of
+\noteref{thm:cp-jensen}, and two consequences. Let $\Phi:\mathbb R\to\mathbb R$ be convex.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that for $s<t<u$
+    \[
+      \frac{\Phi(t)-\Phi(s)}{t-s}\le\frac{\Phi(u)-\Phi(s)}{u-s}\le\frac{\Phi(u)-\Phi(t)}{u-t}.
+    \]
+    Deduce that the right derivative $\Phi'_+(q)=\lim_{h\downarrow0}\frac{\Phi(q+h)-\Phi(q)}h$
+    exists and is finite at every $q$, that $\Phi'_+$ is non-decreasing, that
+    $\Phi(x)\ge\Phi(q)+\Phi'_+(q)(x-q)$ for all $x,q\in\mathbb R$, that $\Phi$ is continuous, and that
+    $\Phi(x)=\sup_{q\in\mathbb Q}\big(\Phi(q)+\Phi'_+(q)(x-q)\big)$ for every $x$.
+  \item The family of all the supporting lines $L_t(x)=\Phi(t)+\Phi'_+(t)(x-t)$, $t\in\mathbb R$,
+    also has supremum $\Phi$. Explain why the proof of \noteref{thm:cp-jensen} would not work with
+    it as written.
+  \item Let $X\in L^2$. Show that
+    $\operatorname{var}(X\mid\mathcal G)=\mathbb E[X^2\mid\mathcal G]-\big(\mathbb E[X\mid\mathcal G]\big)^2$
+    a.s., and deduce \noteref{thm:cp-jensen} for $\Phi(x)=x^2$ without using (a).
+  \item Let $X,Y\in L^2$. Prove the conditional Cauchy--Schwarz inequality
+    \[
+      \big(\mathbb E[XY\mid\mathcal G]\big)^2\le\mathbb E[X^2\mid\mathcal G]\,\mathbb E[Y^2\mid\mathcal G]\qquad\text{a.s.}
+    \]
+    \emph{Hint:} for every $t\in\mathbb Q$, $\mathbb E[(X+tY)^2\mid\mathcal G]\ge0$ a.s.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A conditional expectation of a non-integrable variable]\label{ex:cp-heavy-tail}
+\medium This exercise is about the vector $(X,Y)$ of \noteref{exa:cp-gamma-conditional}, whose
+joint density is $x\,e^{-xy}$ on $D=(0,+\infty)\times[1,+\infty)$; the last part is computational.
+\begin{enumerate}[label=(\alph*)]
+  \item (The notes leave this as an exercise.) Let $Z=Y-1$. Compute the joint density $f_{(X,Z)}$
+    with \noteref{cor:rv-linear}, then $f_{Z\mid X=x}$, and check that
+    $f_{Z\mid X=x}(z)=f_{Y\mid X=x}(z+1)$. More generally, show that if $Z=aY+c$ with $a\ne0$, then
+    $f_{Z\mid X=x}(z)=\frac1{|a|}f_{Y\mid X=x}\big(\frac{z-c}a\big)$.
+  \item Show that $\mathbb E[Y]=+\infty$ and that $\mathbb E[Y\1_{\{X\le t\}}]=+\infty$ for every
+    $t>0$, while
+    \[
+      \mathbb E\big[Y\1_{\{X>t\}}\big]=e^{-t}+E_1(t),\qquad E_1(t)=\int_t^{+\infty}\frac{e^{-x}}x\,\dd x .
+    \]
+    Check property 2) of \noteref{def:ce-conditional-expectation} for $\mathbb E[Y\mid X]=\frac1X+1$
+    on the events $\{X>t\}$ and $\{X\le t\}$.
+  \item Show that $W=X(Y-1)$ has the law $\mathrm{Exp}(1)$ and is independent of $X$. Deduce that if
+    $X,W$ are independent $\mathrm{Exp}(1)$ variables, then $(X,1+W/X)$ has the law of $(X,Y)$, and
+    check that $\mathbb P(1+W/X>y)=\frac1y$ for $y\ge1$.
+  \item Simulate $10^6$ pairs with (c) (seed $2026$). Compare the averages of $Y$ over the bins
+    $[0.5,0.75),[0.75,1),\dots,[2.75,3)$ of $X$ with their exact values
+    $\mathbb E[Y\1_{\{X\in I\}}]/\mathbb P(X\in I)$, in units of standard errors. What happens on the
+    bins $[0,0.05)$ and $[0.05,0.1)$, and to the average of all the simulated $Y$ as the sample grows?
+    Explain both with (b).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A die and some coins]\label{ex:cp-total-variance-simulation}
+\medium (in the style of Ross, Ch.~7) This is partly a computational exercise. A fair die is
+rolled; if it shows $N$, then $N$ fair coins are tossed, and $X$ is the number of heads.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\mathbb E[X\mid N]$, $\operatorname{var}(X\mid N)$, $\mathbb E[X]$ and
+    $\operatorname{var}(X)$ with \noteref{thm:cp-total-variance}. Which share of $\operatorname{var}(X)$
+    does the die explain? Compute $\mathbb P(X=0)$ and $\mathbb E[N\mid X=0]$.
+  \item Using only $0\le X\le6$, choose the number $n$ of simulations for which the standard error of
+    the sample mean of $X$ is at most $0.002$. Which $n$ would the exact variance give? Simulate
+    $10^6$ pairs $(N,X)$ (seed $2026$) and compare the sample mean and the sample variance with the
+    exact values, in units of their standard errors. (For the sample variance, use the standard error
+    $\sqrt{(\mu_4-\sigma^4)/n}$, with $\mu_4$ the fourth central moment of $X$.)
+  \item A nested simulation draws $R$ values $N_1,\dots,N_R$ of the die and, for each $N_r$, $k$
+    independent values $X_{r,1},\dots,X_{r,k}$ of the number of heads given $N_r$. Let $s_r^2$ and
+    $\bar X_r$ be the sample variance and the mean of row $r$. Show that
+    $\mathbb E[s_r^2]=\mathbb E[\operatorname{var}(X\mid N)]$ and
+    $\operatorname{var}(\bar X_r)=\operatorname{var}(\mathbb E[X\mid N])+\frac1k\mathbb E[\operatorname{var}(X\mid N)]$.
+    Deduce unbiased estimators of the two terms of the law of total variance. Run it with $R=10^4$,
+    $k=10$ (seed $2026$) and compare with (a).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Mean independence is not independence]\label{ex:cp-mean-independence}
+\easy This is partly a computational exercise. Let $Y$ be uniform on $(-1,1)$, let $\varepsilon$ be
+independent of $Y$ with $\mathbb P(\varepsilon=1)=\mathbb P(\varepsilon=-1)=\frac12$, and let
+$X=\varepsilon Y$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show with the properties of \noteref{sec:cp-list} that $\mathbb E[X\mid Y]=0=\mathbb E[X]$.
+    Show that $X$ is uniform on $(-1,1)$, and that $X$ and $Y$ are not independent, by computing
+    $\mathbb P(X\le-\frac12,\,Y\le-\frac12)$.
+  \item Show that for $X,Y\in L^2$: $X\indep Y$ implies $\mathbb E[X\mid Y]=\mathbb E[X]$, which
+    implies $\operatorname{cov}(X,Y)=0$. With $W=Y^2$, show that $\operatorname{cov}(Y,W)=0$ and
+    $\mathbb E[Y\mid W]=0=\mathbb E[Y]$, but $\mathbb E[W\mid Y]\ne\mathbb E[W]$: the relation
+    ``$\mathbb E[U\mid V]=\mathbb E[U]$'' is not symmetric, and neither implication can be reversed.
+  \item Simulate $10^6$ pairs $(Y,\varepsilon)$ (seed $2026$). Over $20$ bins of $Y$ of equal
+    width, compare the averages of $X$ with $0$, and the averages of $X^2$ with their exact values,
+    in units of standard errors. How many deviations above $2$ standard errors would you expect?
+  \item Choose $n$, using only $p(1-p)\le\frac14$, so that the standard error of the frequency of
+    $\{X\le-\frac12,\,Y\le-\frac12\}$ is at most $0.001$. Simulate $n$ pairs (seed $2026$) and
+    compare the frequency with the value of (a) and with $\mathbb P(X\le-\frac12)\,\mathbb P(Y\le-\frac12)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The best predictor and the best affine predictor]\label{ex:cp-best-predictor}
+\medium This is partly a computational exercise on \noteref{exa:cp-signal}. Let
+$X\sim\mathrm{Exp}(1)$ be the signal, $W\sim\mathcal N(0,\sigma^2)$ a noise independent of $X$,
+$\sigma>0$, and $Y=X+W$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that, given $Y=y$, $X$ has the law $\mathcal N(y-\sigma^2,\sigma^2)$ conditioned on
+    $(0,+\infty)$, and that
+    \[
+      h(y)=\mathbb E[X\mid Y=y]=m+\sigma\,\frac{\varphi(m/\sigma)}{\Phi(m/\sigma)},\qquad m=y-\sigma^2,
+    \]
+    where $\varphi$ and $\Phi$ are the standard Gaussian density and distribution function.
+  \item Find $a,b$ that minimise $\mathbb E[(X-a-bY)^2]$, and show that the minimum is
+    $\frac{\sigma^2}{1+\sigma^2}$. Interpret $a+bY$ as an orthogonal projection, as in
+    \noteref{rem:cp-orthogonal}. Why is $h$ not affine, although the noise is Gaussian?
+  \item Let $\sigma=1$. Show that $\mathbb E[(X-h(Y))^2]=\mathbb E[X^2]-\mathbb E[h(Y)^2]$, and
+    compute it by numerical integration. Simulate $10^6$ pairs (seed $2026$) and estimate the mean
+    squared errors of $h(Y)$ and of the best affine predictor, with standard errors. Is the
+    difference significant?
+  \item Fit the regression of $X$ on the indicators of $K$ bins of $Y$ with the same number of
+    training samples each, for $K=1,2,4,\dots,256$, on the first $2000$ pairs of a sample of
+    $10^5$ pairs (seed $2026$), and evaluate the mean squared error on $10^6$ new pairs (seed $2027$).
+    Repeat with all the $10^5$ training pairs. Which $K$ is best in each case? Explain the shape of the curves, and why the error on the
+    training pairs alone would mislead.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Random sums]\label{ex:cp-random-sums}
+\hard (in the style of Ross, Ch.~7) Let $N$ be a random variable with values in $\mathbb N$, and
+$X_1,X_2,\dots$ i.i.d.\ random variables, independent of $N$, with $\mathbb E[X_1]=\mu$ and
+$\operatorname{var}(X_1)=\sigma^2$. Let $S=\sum_{i=1}^NX_i$ ($S=0$ if $N=0$).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $S$ is a random variable, and that, if $N\in L^2$, then $S\in L^2$,
+    $\mathbb E[S\mid N]=N\mu$ and $\operatorname{var}(S\mid N)=N\sigma^2$. \emph{Hint:} compute
+    $\mathbb E[S\1_{\{N=n\}}]$ and $\mathbb E[S^2\1_{\{N=n\}}]$ with $S_n=X_1+\dots+X_n$.
+  \item Deduce that $\mathbb E[S]=\mathbb E[N]\mu$ and
+    $\operatorname{var}(S)=\mathbb E[N]\sigma^2+\operatorname{var}(N)\mu^2$. Which term is due to the
+    randomness of $N$?
+  \item The number of claims received by an insurer in a year is $N\sim\mathcal P(10)$, and the
+    claims have the law $\Gamma(2,1)$ (in thousands of euros). Compute the mean and the standard
+    deviation of the total $S$, and $\mathbb P(S=0)$. Compare with a fixed number of $10$ claims.
+  \item Let $N$ have the geometric law $\mathbb P(N=n)=p(1-p)^{n-1}$, $n\in\mathbb N^*$, and
+    $X_i\sim\mathrm{Exp}(\theta)$. Show, conditioning on $N$, that
+    $\Phi_S(t)=\mathbb E\big[\Phi_{X_1}(t)^N\big]$, and deduce from \noteref{thm:cf-uniqueness} that
+    $S\sim\mathrm{Exp}(p\theta)$. Check (b).
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A coin with a random bias]\label{ex:cp-beta-binomial}
+\medium (in the style of Ross, Ch.~7) Let $P\sim\mathrm{Beta}(a,b)$, $a,b>0$
+(\noteref{def:rv-beta}), and let $X$ be a random variable with values in $\{0,\dots,n\}$ such that
+\[
+  \mathbb P(X=k\mid P)=\binom nkP^k(1-P)^{n-k}\quad\text{a.s.},\qquad k=0,\dots,n,
+\]
+with $\mathbb P(X=k\mid P)$ as in \noteref{def:cp-conditional-probability}: given $P$, $X$ is the
+number of heads in $n$ tosses of a coin with bias $P$.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $g$ be bounded and Borel. Show, with \noteref{prop:cp-taking-out} and
+    \noteref{prop:cp-expectation}, that
+    $\mathbb E[g(P)\1_{\{X=k\}}]=\binom nk\int_0^1g(x)\,x^k(1-x)^{n-k}f_P(x)\,\dd x$. Deduce the law of
+    $X$, and that $\mathbb E[g(P)\mid X]=H(X)$ with $H(k)=\int_0^1g(x)\,f_{P\mid X=k}(x)\,\dd x$, where
+    $P\mid X=k\sim\mathrm{Beta}(a+k,b+n-k)$. (This is the mixed case of the footnote to
+    \noteref{exa:cp-poisson-gamma}.)
+  \item Let $a=b=1$. Show that $X$ is uniform on $\{0,\dots,n\}$ and that
+    $\mathbb E[P\mid X]=\frac{X+1}{n+2}$. A further toss $T$ is made, with
+    $\mathbb P(T=1\mid\sigma(P,X))=P$; show that $\mathbb P(T=1\mid X)=\frac{X+1}{n+2}$ (Laplace's rule
+    of succession).
+  \item Compute $\mathbb E[X]$ and $\operatorname{var}(X)$ with \noteref{thm:cp-total-variance},
+    and check the case $a=b=1$ against (b).
+  \item Show that $\mathbb E[P\mid X]$ is affine in $X$ and coincides with the best affine predictor
+    $\mathbb E[P]+\frac{\operatorname{cov}(P,X)}{\operatorname{var}(X)}(X-\mathbb E[X])$. Show that the
+    same happens in \noteref{exa:cp-poisson-gamma}: $\mathbb E[X\mid Y]$ is the best affine function
+    of $Y$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Conditional independence]\label{ex:cp-conditional-independence}
+\hard This exercise proves \noteref{prop:cp-conditional-independence-densities} in the absolutely
+continuous case and compares conditional independence with independence. You may use that two
+probability measures on $\mathcal B(\mathbb R^2)$ that agree on the rectangles $(a,b]\times(c,d]$
+with rational endpoints are equal (the $\pi$--$\lambda$ theorem, Billingsley, \emph{Probability and Measure}, Section~3).
+\begin{enumerate}[label=(\alph*)]
+  \item Let $(U,V)$ be an absolutely continuous random vector, $U$ with values in $\mathbb R^d$ and
+    $V$ real, and let $\varphi:\mathbb R^d\times\mathbb R\to\mathbb R$ be Borel with $\varphi\ge0$ or
+    $\varphi(U,V)\in L^1$. Show, as in the proof of \noteref{thm:ce-density}, that
+    $\mathbb E[\varphi(U,V)\mid V]=g(V)$ a.s.\ with $g(v)=\int\varphi(u,v)\,f_{U\mid V=v}(u)\,\dd u$,
+    where $f_{U\mid V=v}=f_{(U,V)}(\cdot,v)/f_V(v)$ if $f_V(v)\ne0$. Deduce that
+    $\operatorname{var}(X\mid Y=y)$ is the variance of $f_{X\mid Y=y}$ for $\mathbb P_Y$-a.e.\ $y$
+    (\noteref{def:cp-conditional-variance}).
+  \item Let $(Y_1,Y_2,Y_3)$ be absolutely continuous, with the conditional densities of the footnote
+    to \noteref{prop:cp-conditional-independence-densities}. Prove that $Y_1\cindep{Y_3}Y_2$ if and
+    only if $f_{(Y_1,Y_2)\mid Y_3=y_3}(y_1,y_2)=f_{Y_1\mid Y_3=y_3}(y_1)\,f_{Y_2\mid Y_3=y_3}(y_2)$ for
+    a.e.\ $(y_1,y_2,y_3)$ with $f_{Y_3}(y_3)\ne0$.
+  \item Let $Y_3,\varepsilon_1,\varepsilon_2$ be independent $\mathcal N(0,1)$ variables, and
+    $Y_i=Y_3+\varepsilon_i$, $i=1,2$: two noisy measurements of $Y_3$. Show that $Y_1\cindep{Y_3}Y_2$,
+    but that $Y_1$ and $Y_2$ are not independent.
+  \item Let $Y_1,Y_2$ be independent with $\mathbb P(Y_i=1)=\mathbb P(Y_i=0)=\frac12$, and
+    $Y_3=Y_1+Y_2$. Show that $Y_1\indep Y_2$, but that $Y_1$ and $Y_2$ are not conditionally
+    independent given $Y_3$.
+\end{enumerate}
+\end{exercise}

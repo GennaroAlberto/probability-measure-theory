@@ -1,5 +1,585 @@
-\begin{planned}
-  \item the integral of non-negative simple functions
-  \item the integral of non-negative measurable functions
-  \item monotone convergence (Beppo Levi) and Fatou's lemma
-\end{planned}
+% Chapter 4: The integral of non-negative functions.
+% Translation of Paola Siri's handwritten notes, PDF pages 51-61: sections 1 (integration of
+% non-negative simple functions) and 2 (integration of non-negative measurable functions) of the
+% part "Integrazione secondo Lebesgue".
+
+With this chapter the second part of the notes, \emph{Lebesgue integration} (``Integrazione
+secondo Lebesgue''), begins. We define the integral of a non-negative function in two steps.
+For a non-negative simple function, which takes finitely many values on measurable sets, the
+integral is the sum of the values times the measures of the sets where they are taken. For a
+non-negative measurable function, it is the supremum of the integrals of the simple functions
+below it. The two main results are the monotone convergence theorem of Beppo Levi, which lets
+us exchange limits and integrals for increasing sequences, and Fatou's lemma, which gives an
+inequality for arbitrary sequences of non-negative functions.
+
+Throughout the chapter $(X,\mathcal A,\mu)$ is a measure space. Integrals take values in
+$\overline{\mathbb R}^+=[0,+\infty]$, where $a+(+\infty)=+\infty$, $a\cdot(+\infty)=+\infty$ for
+$a>0$, and $0\cdot(+\infty)=0$. With these conventions, sums and products in $[0,+\infty]$ are
+commutative and associative, multiplication distributes over addition, $a\le b$ implies
+$ac\le bc$, and the limit of an increasing sequence always exists in $[0,+\infty]$; we use these
+rules without comment.\footnote{These two sentences are added to the handwritten notes, which
+state only the convention $0\cdot\infty=0$.}
+
+\section{Integration of non-negative simple functions}\label{sec:in-simple}
+
+Recall that $\mathcal S(X)$ denotes the simple functions, the measurable functions with values
+in $\overline{\mathbb R}$ and finite image (\cref{def:mf-simple}).
+
+\begin{definition}[Integral of a non-negative simple function]\label{def:in-simple-integral}
+Let $f:X\to\overline{\mathbb R}^+=[0,+\infty]$ be a non-negative simple function,
+\[
+  f\in\mathcal S^+(X)=\{f\in\mathcal S(X):f\ge0\},
+\]
+written as
+\[
+  f=\sum_{i=1}^na_i\1_{A_i},\qquad a_1,\dots,a_n\in[0,+\infty],\quad A_1,\dots,A_n\in\mathcal A\text{ a partition of }X
+\]
+(\cref{prop:mf-canonical}). The \emph{(Lebesgue) integral of $f$ with respect to the measure
+$\mu$} is the quantity
+\[
+  \int_Xf\,\dd\mu=\sum_{i=1}^na_i\,\mu(A_i)\ \ge0,
+\]
+with the convention $0\cdot\infty=0$.
+\end{definition}
+
+When $X=\mathbb R$ and $\mu=m$, and the $A_i$ are intervals, the integral is the area of the
+region under the graph of $f$ (\cref{fig:in-simple}, left). The convention says that a
+negligible set contributes nothing, even where $f=+\infty$, and that the value $0$ contributes
+nothing, even on a set of infinite measure.\footnote{These two sentences are added to the
+handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch04-simple}
+  \caption{A non-negative simple function on an interval, constant on each set $A_i$ of a
+    partition, as in the sketches of the notes (pp.~51--52). Left: its integral is the shaded
+    area, $\sum_ia_i\,m(A_i)$. Right: the integral over a set $E$ (between the gold lines)
+    keeps only the part of the area above $E$, $\sum_ia_i\,m(A_i\cap E)$.}
+  \label{fig:in-simple}
+\end{figure}
+
+\begin{proposition}\label{prop:in-simple-well-defined}
+The definition of $\int_Xf\,\dd\mu$ does not depend on the representation of $f$.
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+  f=\sum_{i=1}^na_i\1_{A_i}=\sum_{j=1}^mb_j\1_{B_j},
+\]
+where $a_1,\dots,a_n,b_1,\dots,b_m\in[0,+\infty]$ and $A_1,\dots,A_n\in\mathcal A$ and
+$B_1,\dots,B_m\in\mathcal A$ are two partitions of $X$. Then
+\[
+  A_i=\bigcup_{j=1}^m(A_i\cap B_j),\qquad B_j=\bigcup_{i=1}^n(A_i\cap B_j)
+\]
+are disjoint unions, and as in \cref{prop:mf-common-partition}
+\[
+  f=\sum_{i=1}^n\sum_{j=1}^ma_i\1_{A_i\cap B_j}=\sum_{i=1}^n\sum_{j=1}^mb_j\1_{A_i\cap B_j}.
+\]
+If $A_i\cap B_j\ne\emptyset$, then $a_i=b_j$: both are the value $f(x)$ at any point
+$x\in A_i\cap B_j$. Hence, by the additivity of $\mu$,
+\[
+  \sum_{i=1}^na_i\,\mu(A_i)=\sum_{i=1}^n\sum_{j=1}^ma_i\,\mu(A_i\cap B_j)
+  =\sum_{i=1}^n\sum_{j=1}^mb_j\,\mu(A_i\cap B_j)=\sum_{j=1}^mb_j\,\mu(B_j).
+\]
+The middle equality holds term by term: if $A_i\cap B_j\ne\emptyset$, then $a_i=b_j$; if
+$A_i\cap B_j=\emptyset$, both terms are $0$ because $\mu(\emptyset)=0$. The last equality is
+additivity again, now with $B_j=\bigcup_i(A_i\cap B_j)$.
+\end{proof}
+
+\begin{definition}[Integral over a set]\label{def:in-simple-integral-set}
+Let $f\in\mathcal S^+(X)$ and $E\in\mathcal A$. We define
+\[
+  \int_Ef\,\dd\mu=\int_Xf\1_E\,\dd\mu .
+\]
+\end{definition}
+
+If $f=\sum_{i=1}^na_i\1_{A_i}$ as in \cref{def:in-simple-integral}, then
+\[
+  f\1_E=\Big(\sum_{i=1}^na_i\1_{A_i}\Big)\1_E=\sum_{i=1}^na_i\1_{A_i\cap E}
+  =\sum_{i=1}^na_i\1_{A_i\cap E}+0\cdot\1_{E^c},
+\]
+a representation of the simple function $f\1_E$ with the partition
+$A_1\cap E,\dots,A_n\cap E,E^c$ of $X$. Therefore
+\[
+  \int_Ef\,\dd\mu=\sum_{i=1}^na_i\,\mu(A_i\cap E)
+\]
+(\cref{fig:in-simple}, right).
+
+\begin{proposition}[Properties]\label{prop:in-simple-properties}
+\begin{enumerate}[label=(\arabic*)]
+  \item If $A\in\mathcal A$, then $\int_X\1_A\,\dd\mu=\mu(A)$.
+  \item If $f\in\mathcal S^+(X)$ and $\alpha\ge0$, then $\alpha\int_Xf\,\dd\mu=\int_X(\alpha
+    f)\,\dd\mu$.
+  \item If $f,g\in\mathcal S^+(X)$, then $\int_X(f+g)\,\dd\mu=\int_Xf\,\dd\mu+\int_Xg\,\dd\mu$.
+  \item \emph{(Monotonicity.)} If $f,g\in\mathcal S^+(X)$ and $f\le g$, then
+    $\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+  \item If $E,F\in\mathcal A$ with $E\subseteq F$, and $f\in\mathcal S^+(X)$, then
+    $\int_Ef\,\dd\mu\le\int_Ff\,\dd\mu$.
+\end{enumerate}
+Properties (2) and (3) together are called the \emph{linearity} of the integral (on
+$\mathcal S^+(X)$, with non-negative coefficients).
+\end{proposition}
+
+Here $\alpha f$ and $f+g$ are again in $\mathcal S^+(X)$, by \cref{cor:mf-simple-operations}:
+their values lie in $[0,+\infty]$, so $f+g$ is defined everywhere.
+
+\begin{proof}
+(1) $\1_A=1\cdot\1_A+0\cdot\1_{A^c}$, so
+$\int_X\1_A\,\dd\mu=\int_A\dd\mu=1\cdot\mu(A)+0\cdot\mu(A^c)=\mu(A)$.
+
+(2) If $f=\sum_{i=1}^na_i\1_{A_i}$, then $\alpha f=\sum_{i=1}^n(\alpha a_i)\1_{A_i}$ with the same
+partition, and
+\begin{align*}
+  \int_X(\alpha f)\,\dd\mu&=\int_X\alpha\sum_{i=1}^na_i\1_{A_i}\,\dd\mu
+  =\int_X\sum_{i=1}^n(\alpha a_i)\1_{A_i}\,\dd\mu\\
+  &=\sum_{i=1}^n(\alpha a_i)\,\mu(A_i)=\alpha\sum_{i=1}^na_i\,\mu(A_i)=\alpha\int_Xf\,\dd\mu .
+\end{align*}
+
+(3)--(4) We use the representation with the same indicators,\footnote{The handwritten notes
+leave (3), (4) and (5) as an exercise, with the hints used here (a common partition for (3) and
+(4); property (4) for (5)). We write out the proofs because the rest of the notes rely on them,
+monotonicity above all; \exref{ex:in-simple-rules} revisits them.}
+\[
+  f=\sum_{i=1}^na_i\1_{A_i},\qquad g=\sum_{i=1}^nb_i\1_{A_i},
+\]
+where $A_1,\dots,A_n\in\mathcal A$ is a partition of $X$ (\cref{prop:mf-common-partition}). Then
+$f+g=\sum_{i=1}^n(a_i+b_i)\1_{A_i}$, so by distributivity
+\[
+  \int_X(f+g)\,\dd\mu=\sum_{i=1}^n(a_i+b_i)\,\mu(A_i)=\sum_{i=1}^na_i\,\mu(A_i)+\sum_{i=1}^nb_i\,\mu(A_i)
+  =\int_Xf\,\dd\mu+\int_Xg\,\dd\mu .
+\]
+If $f\le g$ and $A_i\ne\emptyset$, then $a_i=f(x)\le g(x)=b_i$ for $x\in A_i$, so
+$a_i\,\mu(A_i)\le b_i\,\mu(A_i)$; if $A_i=\emptyset$, both terms are $0$. Summing over $i$ gives
+$\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+
+(5) We use (4), because $f\1_E\le f\1_F$: on $E$ both functions equal $f$; outside $F$ both
+are $0$; on $F\setminus E$, $f\1_E=0\le f=f\1_F$.
+\end{proof}
+
+\section{Integration of non-negative measurable functions}\label{sec:in-measurable}
+
+\begin{definition}[Integral of a non-negative measurable function]\label{def:in-integral}
+Let $f:X\to\overline{\mathbb R}^+=[0,+\infty]$ be a non-negative measurable function. The
+\emph{(Lebesgue) integral of $f$ with respect to $\mu$} is the quantity
+\[
+  \int_Xf\,\dd\mu=\sup\Big\{\int_X\varphi\,\dd\mu:\ \varphi\in\mathcal S^+(X),\ 0\le\varphi\le f\Big\}\ \ge0 .
+\]
+\begin{itemize}
+  \item If $\int_Xf\,\dd\mu<+\infty$, $f$ is called \emph{integrable} (in the sense of Lebesgue).
+  \item If $E\in\mathcal A$, we define
+    \[
+      \int_Ef\,\dd\mu=\int_Xf\1_E\,\dd\mu .
+    \]
+    (The function $f\1_E$ is measurable: $\{f\1_E>t\}=E\cap\{f>t\}$ for $t\ge0$.)
+\end{itemize}
+\end{definition}
+
+\begin{remark}[Consistency]\label{rem:in-consistent}
+If $f\in\mathcal S^+(X)$, the integral of \cref{def:in-integral} coincides with that of
+\cref{def:in-simple-integral}: $f$ is one of the functions $\varphi$ in the supremum, and every
+$\varphi\in\mathcal S^+(X)$ with $\varphi\le f$ has a smaller or equal integral, by monotonicity
+(\cref{prop:in-simple-properties}~(4)). The same holds for integrals over a set $E$, applied to
+$f\1_E$. So the notation $\int_Xf\,\dd\mu$ is not ambiguous.\footnote{Added to the handwritten
+notes, which use this fact without comment.}
+\end{remark}
+
+\begin{proposition}[Properties]\label{prop:in-properties}
+Let $f,g$ be non-negative measurable functions.
+\begin{enumerate}[label=(\arabic*)]
+  \item If $\alpha\ge0$, then $\int_X\alpha f\,\dd\mu=\alpha\int_Xf\,\dd\mu$.
+  \item $\int_X(f+g)\,\dd\mu=\int_Xf\,\dd\mu+\int_Xg\,\dd\mu$.
+  \item \emph{(Monotonicity.)} If $f\le g$, then $\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+  \item If $E\subseteq F$, with $E,F\in\mathcal A$, then $\int_Ef\,\dd\mu\le\int_Ff\,\dd\mu$.
+\end{enumerate}
+\end{proposition}
+
+Properties (1), (3) and (4) are simple, and we prove them now.\footnote{The handwritten notes
+call (1), (3) and (4) trivial and leave them as an exercise. We prove them because the proof of
+the monotone convergence theorem below uses (3) and (4), and the later chapters use all
+three.} Property (2) is more complicated: we come back to it after the monotone convergence
+theorem (\cref{prop:in-additivity}).
+
+\begin{proof}[Proof of (1), (3) and (4)]
+(3) If $f\le g$, every $\varphi\in\mathcal S^+(X)$ with $\varphi\le f$ also satisfies
+$\varphi\le g$. So the set whose supremum is $\int_Xf\,\dd\mu$ is contained in the set whose
+supremum is $\int_Xg\,\dd\mu$, and the first supremum is smaller or equal.
+
+(4) $f\1_E\le f\1_F$, as in the proof of \cref{prop:in-simple-properties}~(5); apply (3).
+
+(1) If $\alpha=0$, then $\alpha f=0$ (recall $0\cdot\infty=0$), and $\int_X0\,\dd\mu=0=0\cdot\int_Xf\,\dd\mu$:
+the only $\varphi\in\mathcal S^+(X)$ with $\varphi\le0$ is $\varphi=0$, whose integral is $0$. If
+$\alpha>0$, the map $\varphi\mapsto\alpha\varphi$ is a bijection from
+$\{\varphi\in\mathcal S^+(X):\varphi\le f\}$ onto $\{\psi\in\mathcal S^+(X):\psi\le\alpha f\}$, with
+inverse $\psi\mapsto\psi/\alpha$, and $\int_X\alpha\varphi\,\dd\mu=\alpha\int_X\varphi\,\dd\mu$ by
+\cref{prop:in-simple-properties}~(2). Since $\sup_{s\in S}\alpha s=\alpha\sup S$ for every
+$S\subseteq[0,+\infty]$ and $\alpha\in(0,+\infty)$,
+\[
+  \int_X\alpha f\,\dd\mu=\sup_{\varphi}\alpha\int_X\varphi\,\dd\mu=\alpha\sup_\varphi\int_X\varphi\,\dd\mu
+  =\alpha\int_Xf\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\subsection{The monotone convergence theorem}\label{sec:in-mct}
+
+\begin{theorem}[Monotone convergence theorem (Beppo Levi)]\label{thm:in-monotone-convergence}
+Let $(f_n)_{n\ge1}$ be an increasing sequence of non-negative measurable functions:
+$f_n\le f_{n+1}$ for every $n$. Then
+\[
+  \int_X\lim_{n\to\infty}f_n\,\dd\mu=\lim_{n\to\infty}\int_Xf_n\,\dd\mu .
+\]
+\end{theorem}
+
+\begin{proof}
+Let $f=\lim_nf_n$, the pointwise limit, which exists in $[0,+\infty]$ because the sequence is
+increasing: $f_n\nearrow f$. Then $f\ge0$, and $f$ is measurable by \cref{cor:mf-pointwise-limit}.
+By monotonicity (\cref{prop:in-properties}~(3)),
+\[
+  \int_Xf_n\,\dd\mu\le\int_Xf_{n+1}\,\dd\mu\le\int_Xf\,\dd\mu ,
+\]
+since $f_n\le f_{n+1}\le f$. So $\big(\int_Xf_n\,\dd\mu\big)_{n\ge1}$ is an increasing sequence: it
+has a limit, and
+\[
+  \lim_n\int_Xf_n\,\dd\mu\le\int_Xf\,\dd\mu .
+\]
+We prove the opposite inequality. Let $\varepsilon\in(0,1)$, and let $\varphi\in\mathcal S^+(X)$
+with $0\le\varphi\le f$. Suppose first that $\varphi$ takes only finite values, and write
+$\varphi=\sum_{i=1}^mb_i\1_{B_i}$ with $b_i\in[0,+\infty)$ and $B_1,\dots,B_m\in\mathcal A$ a
+partition of $X$. Let
+\[
+  A_n=\{f_n\ge\varepsilon\varphi\}=\bigcup_{i=1}^m\big(B_i\cap\{f_n\ge\varepsilon b_i\}\big)\in\mathcal A .
+\]
+\begin{itemize}
+  \item $A_n\subseteq A_{n+1}$, because $f_n\le f_{n+1}$.
+  \item $\bigcup_nA_n=X$. Indeed, let $x\in X$. If $\varphi(x)=0$, then
+    $f_n(x)\ge0=\varepsilon\varphi(x)$, so $x\in A_n$ for every $n$. If $\varphi(x)>0$, then,
+    since $\varphi(x)$ is finite and $\varepsilon<1$,
+    \[
+      \varepsilon\varphi(x)<\varphi(x)\le f(x)=\sup_nf_n(x),
+    \]
+    because the sequence $(f_n(x))_n$ is increasing. So $f_n(x)>\varepsilon\varphi(x)$ for some
+    $n$, that is, $x\in A_n$.\footnote{The handwritten notes argue that
+    $\bigcup_nA_n\supseteq\{\sup_nf_n>\varepsilon\varphi\}=\{f>\varepsilon\varphi\}=X$, because
+    ``$\varepsilon\varphi<f$ always''. This fails at the points where $\varphi=f=0$ (which lie in
+    every $A_n$ anyway) and at the points where $\varphi=f=+\infty$ (where $x$ may lie in no
+    $A_n$). Corrected here: the points where $\varphi=0$ are treated separately, and $\varphi$ is
+    first taken finite-valued; the last paragraph of the proof removes this restriction.}
+\end{itemize}
+By the two points above, $A_n\nearrow X$, hence $A_n\cap B_i\nearrow B_i$ for each $i$, and by
+continuity from below (\cref{thm:ms-continuity-below}) $\mu(A_n\cap B_i)\nearrow\mu(B_i)$. Hence
+\[
+  \int_X\varphi\,\dd\mu=\sum_{i=1}^mb_i\,\mu(B_i)=\sum_{i=1}^mb_i\lim_n\mu(A_n\cap B_i)
+  =\lim_n\sum_{i=1}^mb_i\,\mu(A_n\cap B_i)=\lim_n\int_{A_n}\varphi\,\dd\mu .
+\]
+On the other hand, $\varepsilon\varphi\1_{A_n}\le f_n\1_{A_n}$ by the definition of $A_n$, and
+$A_n\subseteq X$; by \cref{prop:in-properties}~(3) and~(4) (and \cref{rem:in-consistent}),
+\[
+  \int_{A_n}\varepsilon\varphi\,\dd\mu\le\int_{A_n}f_n\,\dd\mu\le\int_Xf_n\,\dd\mu .
+\]
+Then, by \cref{prop:in-simple-properties}~(2),
+\[
+  \varepsilon\int_X\varphi\,\dd\mu=\lim_n\int_{A_n}\varepsilon\varphi\,\dd\mu\le\lim_n\int_Xf_n\,\dd\mu .
+\]
+Letting $\varepsilon\to1$, we obtain
+\[
+  \int_X\varphi\,\dd\mu\le\lim_n\int_Xf_n\,\dd\mu .
+\]
+If $\varphi=\sum_{i=1}^mb_i\1_{B_i}$ takes the value $+\infty$, let
+$\varphi_M=\sum_{i=1}^m\min(b_i,M)\1_{B_i}$ for $M\in\mathbb N^*$. Then $\varphi_M\in\mathcal S^+(X)$
+is finite-valued and $\varphi_M\le\varphi\le f$, so $\int_X\varphi_M\,\dd\mu\le\lim_n\int_Xf_n\,\dd\mu$
+by what we have just proved. As $M\to\infty$, $\min(b_i,M)\,\mu(B_i)\to b_i\,\mu(B_i)$ for each $i$
+(if $b_i=+\infty$, the left side is $M\mu(B_i)\to+\infty$ when $\mu(B_i)>0$, and $0$ when
+$\mu(B_i)=0$), so $\int_X\varphi_M\,\dd\mu\to\int_X\varphi\,\dd\mu$, and the inequality holds for
+$\varphi$ as well. Taking the supremum over all such $\varphi$,
+\[
+  \int_Xf\,\dd\mu=\sup\Big\{\int_X\varphi\,\dd\mu:\varphi\in\mathcal S^+(X),\ 0\le\varphi\le f\Big\}
+  \le\lim_n\int_Xf_n\,\dd\mu .
+\]
+Hence
+\[
+  \int_Xf\,\dd\mu=\int_X\big(\lim_nf_n\big)\,\dd\mu=\lim_n\int_Xf_n\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Note: the dyadic approximants]\label{rem:in-dyadic}
+In particular, if $f\ge0$ is measurable,
+\[
+  \int_Xf\,\dd\mu=\lim_n\int_Xf_n\,\dd\mu ,
+\]
+where $f_n\in\mathcal S^+(X)$ are the simple functions that approximate $f$
+(\cref{thm:mf-approximation} and \eqref{eq:mf-dyadic}).
+\end{remark}
+
+The monotone convergence theorem says nothing about how fast the integrals converge.
+\Cref{fig:in-monotone} shows that the rate depends on $f$: the integral of $f-f_n$ collects the
+rounding of $f$ down to a multiple of $2^{-n}$, the cut at height $n$ where $f$ is large, and
+the values below $2^{-n}$, which $f_n$ discards (\exref{ex:in-dyadic-rates}).\footnote{This
+paragraph and \cref{fig:in-monotone} are added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch04-monotone}
+  \caption{Monotone convergence for the dyadic approximants $f_n$ of \eqref{eq:mf-dyadic}, on
+    $(\mathbb R,\mathcal B(\mathbb R),m)$. Left: the function $f$ of \cref{fig:mf-dyadic}, on $[0,3]$, and the
+    regions under $f_1\le f_2\le f_4$, whose areas increase to the area under $f$. Right: the
+    gap $\int f\,\dd m-\int f_n\,\dd m$ on a logarithmic scale, computed exactly from the
+    measures of the sets $\{f\ge t\}$. It halves at each step for the bounded $x^2$ on $[0,1]$,
+    decreases like $1/n$ for the unbounded $x^{-1/2}$ on $(0,1)$, and like $2^{-n/2}$ for
+    $1/(1+x^2)$, which lives on a set of infinite measure.}
+  \label{fig:in-monotone}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:in-code}
+\coderef{code/src/probnotes/integral.py} computes the integral of a non-negative simple function
+from any representation $\sum_ia_i\1_{A_i}$, with the convention $0\cdot\infty=0$: on finite and
+countable spaces, with the measures of \cref{ch:02-measures}, and on $\mathbb R$ with Lebesgue
+measure, when the $A_i$ are finite unions of intervals (\texttt{StepFunction}). The tests check
+\cref{prop:in-simple-well-defined,prop:in-simple-properties} on random examples.
+\texttt{dyadic\_integral} computes $\int f_n\,\dd\mu$ from the function $t\mapsto\mu(\{f\ge t\})$
+alone, using $f_n=2^{-n}\sum_{k=1}^{n2^n}\1_{\{f\ge k2^{-n}\}}$ (\exref{ex:in-layer-cake}).
+\end{remark}
+
+\demo{04-integral.ipynb}{the areas under $f_n$ increasing to the area under $f$, with a slider
+for $n$, and the gap $\int f-\int f_n$ for several functions.}
+
+We now prove property (2) of \cref{prop:in-properties}.
+
+\begin{proposition}[Additivity]\label{prop:in-additivity}
+Let $f,g$ be non-negative measurable functions. Then
+\[
+  \int_X(f+g)\,\dd\mu=\int_Xf\,\dd\mu+\int_Xg\,\dd\mu .
+\]
+\end{proposition}
+
+\begin{proof}
+Since $f,g\ge0$ are measurable, there exist increasing sequences $(f_n)_{n\ge1}$ and
+$(g_n)_{n\ge1}$ of functions in $\mathcal S^+(X)$ such that $f_n\nearrow f$ and $g_n\nearrow g$
+(\cref{thm:mf-approximation}). Then $f_n+g_n\in\mathcal S^+(X)$ and $f_n+g_n\nearrow f+g$; in
+particular $f+g$ is measurable, as a pointwise limit of measurable functions
+(\cref{cor:mf-pointwise-limit}). Hence
+\begin{align*}
+  \int_X(f+g)\,\dd\mu&=\int_X\lim_n(f_n+g_n)\,\dd\mu
+  \overset{\text{B.~Levi}}{=}\lim_n\int_X(f_n+g_n)\,\dd\mu
+  \overset{(*)}{=}\lim_n\Big(\int_Xf_n\,\dd\mu+\int_Xg_n\,\dd\mu\Big)\\
+  &=\lim_n\int_Xf_n\,\dd\mu+\lim_n\int_Xg_n\,\dd\mu
+  \overset{\text{B.~Levi}}{=}\int_X\lim_nf_n\,\dd\mu+\int_X\lim_ng_n\,\dd\mu\\
+  &=\int_Xf\,\dd\mu+\int_Xg\,\dd\mu ,
+\end{align*}
+where ``B.~Levi'' is \cref{thm:in-monotone-convergence} and $(*)$ is additivity on
+$\mathcal S^+(X)$ (\cref{prop:in-simple-properties}~(3)).
+\end{proof}
+
+By induction, $\sum_{n=1}^Nf_n$ is measurable and
+$\int_X\sum_{n=1}^Nf_n\,\dd\mu=\sum_{n=1}^N\int_Xf_n\,\dd\mu$ for non-negative measurable
+$f_1,\dots,f_N$.
+
+\begin{corollary}[of the theorem of Beppo Levi]\label{cor:in-series}
+Let $(f_n)_{n\ge1}$ be non-negative measurable functions. Then
+\[
+  \int_X\Big(\sum_{n=1}^\infty f_n\Big)\,\dd\mu=\sum_{n=1}^\infty\Big(\int_Xf_n\,\dd\mu\Big).
+\]
+\end{corollary}
+
+\begin{proof}
+We apply the theorem of Beppo Levi to the sequence of partial sums,\footnote{The handwritten
+notes leave the proof as an exercise, with this hint. We write it out because later chapters
+rely on it.} which increases to the sum of the series:
+\[
+  \Big(\sum_{n=1}^Nf_n\Big)_{N\ge1}\nearrow\sum_{n=1}^\infty f_n .
+\]
+The partial sums are non-negative and measurable, so $\sum_{n=1}^\infty f_n$ is measurable
+(\cref{cor:mf-pointwise-limit}), and by \cref{thm:in-monotone-convergence} and the finite
+additivity just proved,
+\[
+  \int_X\sum_{n=1}^\infty f_n\,\dd\mu=\lim_N\int_X\sum_{n=1}^Nf_n\,\dd\mu
+  =\lim_N\sum_{n=1}^N\int_Xf_n\,\dd\mu=\sum_{n=1}^\infty\int_Xf_n\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+Recall that $f=0$ a.e.\ means $\mu(\{f\ne0\})=0$, and $f=g$ a.e.\ means $\mu(\{f\ne g\})=0$
+(\cref{def:mf-ae-null,def:mf-ae-equal}). Likewise, $f<+\infty$ a.e.\ means
+$\mu(\{f=+\infty\})=0$, and $f\le g$ a.e.\ means $\mu(\{f>g\})=0$.
+
+\begin{proposition}[Integrals and negligible sets]\label{prop:in-ae}
+Let $f,g:X\to[0,+\infty]$ be measurable.
+\begin{enumerate}[label=(\arabic*)]
+  \item If $\int_Xf\,\dd\mu<+\infty$, then $f<+\infty$ a.e.
+  \item $f=0$ a.e.\ if and only if $\int_Xf\,\dd\mu=0$.
+  \item If $E\in\mathcal A$ and $\mu(E)=0$, then $\int_Ef\,\dd\mu=0$.
+  \item If $f=g$ a.e., then $\int_Xf\,\dd\mu=\int_Xg\,\dd\mu$.
+  \item If $f\le g$ a.e., then $\int_Xf\,\dd\mu\le\int_Xg\,\dd\mu$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) Let $E=\{f=+\infty\}$, which is measurable (\cref{rem:mf-extended}); we prove that
+$\mu(E)=0$. Since $f\ge f\1_E=(+\infty)\cdot\1_E$, monotonicity gives
+\[
+  +\infty>\int_Xf\,\dd\mu\ge\int_Xf\1_E\,\dd\mu=\int_X(+\infty)\cdot\1_E\,\dd\mu=(+\infty)\cdot\mu(E),
+\]
+which is true only if $\mu(E)=0$.
+
+(2) ``$\Rightarrow$'': let $f=0$ a.e.; we prove that $\int_Xf\,\dd\mu=0$. Suppose, by
+contradiction, that $\int_Xf\,\dd\mu>0$. By the definition of the supremum there is
+$\varphi\in\mathcal S^+(X)$ with $0\le\varphi\le f$ and
+\[
+  \int_X\varphi\,\dd\mu=\sum_{i=1}^ma_i\,\mu(A_i)>0 ,
+\]
+so there is $i\in\{1,\dots,m\}$ with $a_i>0$ and $\mu(A_i)>0$. Then, for every $x\in A_i$,
+$0<a_i=\varphi(x)\le f(x)$: so $f>0$ on $A_i$, that is, $A_i\subseteq\{f\ne0\}$, and
+$\mu(\{f\ne0\})\ge\mu(A_i)>0$. This is absurd, since $f=0$ a.e.
+
+``$\Leftarrow$'': let $\int_Xf\,\dd\mu=0$; we prove that $f=0$ a.e. For $n\ge1$, let
+$A_n=\{f>\frac1n\}$. Since $f\ge\frac1n\1_{A_n}$, monotonicity gives
+\[
+  0=\int_Xf\,\dd\mu\ge\int_X\frac1n\1_{A_n}\,\dd\mu=\int_{A_n}\frac1n\,\dd\mu=\frac1n\,\mu(A_n),
+\]
+so $\mu(A_n)\le0$, that is, $\mu(A_n)=0$. Now
+\[
+  \bigcup_nA_n=\bigcup_n\Big\{f>\frac1n\Big\}=\{f>0\}=\{f\ne0\},
+\]
+so $\mu(\{f\ne0\})\le\sum_n\mu(A_n)=0$ by countable subadditivity
+(\cref{prop:ms-subadditive}): $f=0$ a.e.
+
+(3) Let $E\in\mathcal A$ with $\mu(E)=0$. Then $\1_E$ is negligible (\cref{prop:mf-indicator}), and so
+is $f\1_E$. Indeed,
+\[
+  \{f\1_E\ne0\}\subseteq\{\1_E\ne0\}=E,\qquad\text{so}\qquad\mu(\{f\1_E\ne0\})=0 .
+\]
+By (2), $0=\int_Xf\1_E\,\dd\mu=\int_Ef\,\dd\mu$.
+
+(4) Let $f=g$ a.e.; we prove that $\int_Xf\,\dd\mu=\int_Xg\,\dd\mu$. Let $A=\{f=g\}$, a measurable
+set (\cref{def:mf-ae-equal}); then $\mu(A^c)=0$, and by (3)
+\[
+  \int_{A^c}f\,\dd\mu=0=\int_{A^c}g\,\dd\mu .
+\]
+Since $f=f\1_A+f\1_{A^c}$, additivity (\cref{prop:in-additivity}) gives
+\[
+  \int_Xf\,\dd\mu=\int_X(f\1_A+f\1_{A^c})\,\dd\mu=\int_Xf\1_A\,\dd\mu+\int_Xf\1_{A^c}\,\dd\mu
+  =\int_Af\,\dd\mu+\int_{A^c}f\,\dd\mu=\int_Af\,\dd\mu ,
+\]
+and $\int_Af\,\dd\mu=\int_Ag\,\dd\mu$ because $f\1_A=g\1_A$. The same computation for $g$ gives
+$\int_Ag\,\dd\mu=\int_Xg\,\dd\mu$.
+
+(5) The argument is analogous.\footnote{The handwritten notes leave (5) to the reader (``do
+it''). We prove it because later chapters use it.} Let $A=\{f\le g\}=\{f>g\}^c$, a measurable set
+(\exref{ex:mf-limits}), with $\mu(A^c)=0$. As in (4), using (3), additivity, and
+$f\1_A\le g\1_A$ with monotonicity,
+\[
+  \int_Xf\,\dd\mu=\int_Af\,\dd\mu+\int_{A^c}f\,\dd\mu=\int_Af\,\dd\mu\le\int_Ag\,\dd\mu
+  =\int_Ag\,\dd\mu+\int_{A^c}g\,\dd\mu=\int_Xg\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\begin{theorem}[Monotone convergence theorem, second version]\label{thm:in-monotone-convergence-ae}
+Let $(f_n)_{n\ge1}$ be a sequence of non-negative measurable functions that is increasing a.e.,
+and let $f:X\to[0,+\infty]$ be the a.e.\ limit of the sequence ($f_n\nearrow f$ a.e.). Suppose
+that $f$ is measurable. Then
+\[
+  \int_Xf\,\dd\mu=\lim_n\int_Xf_n\,\dd\mu .
+\]
+\end{theorem}
+
+\begin{proof}
+Let $N\in\mathcal A$ with $\mu(N)=0$ be such that $f_n(x)\nearrow f(x)$ for every $x\in N^c$. (Such
+an $N$ exists: take the union of a negligible set off which $(f_n(x))_n$ is increasing and of a
+negligible set off which $f_n(x)\to f(x)$.) Then
+\[
+  f_n=f_n\1_{N^c}\ \text{a.e.},\qquad f=f\1_{N^c}\ \text{a.e.},
+\]
+since the functions differ at most on $N$. Moreover, $f_n\1_{N^c}\nearrow f\1_{N^c}$ pointwise:
+on $N^c$ by the choice of $N$, and on $N$ all these functions are $0$. Hence, by
+\cref{prop:in-ae}~(4) and \cref{thm:in-monotone-convergence},
+\[
+  \int_Xf\,\dd\mu\overset{(4)}{=}\int_Xf\1_{N^c}\,\dd\mu\overset{\text{B.~Levi}}{=}\lim_n\int_Xf_n\1_{N^c}\,\dd\mu
+  \overset{(4)}{=}\lim_n\int_Xf_n\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+\begin{remark}[Monotonicity is essential]\label{rem:in-monotonicity-essential}
+In the monotone convergence theorem, monotonicity is essential. For example, let
+$(X,\mathcal A,\mu)=(\mathbb R,\mathcal B(\mathbb R),m)$ and
+\[
+  f_n=\1_{[n,n+1)}\longrightarrow f=0 .
+\]
+Indeed $\lim_nf_n(x)=0$ for every $x$, since $f_n(x)=0$ as soon as $n>x$. But the sequence
+$(f_n(x))_n$ is not increasing: if $x\in[n,n+1)$, then $f_n(x)=1$ and $f_{n+1}(x)=0$. And
+\[
+  \int_Xf_n\,\dd m=\int_X\1_{[n,n+1)}\,\dd m=m([n,n+1))=1\not\longrightarrow0=\int_Xf\,\dd m .
+\]
+The mass of $f_n$ slides off to infinity (\cref{fig:in-escape}, left). For decreasing sequences
+the conclusion of the theorem needs an extra hypothesis (\exref{ex:in-decreasing}).\footnote{This
+sentence and the previous one are added to the handwritten notes.}
+\end{remark}
+
+\subsection{Fatou's lemma}\label{sec:in-fatou}
+
+If the sequence is not monotone, the following lemma holds.
+
+\begin{lemma}[Fatou's lemma]\label{lem:in-fatou}
+Let $(f_n)_{n\ge1}$ be a sequence of non-negative measurable functions. Then
+\[
+  \int_X\Big(\liminf_nf_n\Big)\,\dd\mu\le\liminf_n\Big(\int_Xf_n\,\dd\mu\Big).
+\]
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+  f=\liminf_nf_n=\lim_n\Big(\inf_{k\ge n}f_k\Big)=\lim_ng_n,\qquad\text{where }g_n=\inf_{k\ge n}f_k .
+\]
+The functions $g_n$ are measurable (\cref{prop:mf-limits}), and
+\begin{equation}\label{eq:in-fatou-gn}
+  0\le g_n\nearrow f .
+\end{equation}
+For every $k\ge n$ we have $g_n\le f_k$, hence $\int_Xg_n\,\dd\mu\le\int_Xf_k\,\dd\mu$ for every
+$k\ge n$. Therefore
+\[
+  \int_Xg_n\,\dd\mu\le\inf_{k\ge n}\int_Xf_k\,\dd\mu\le\sup_m\inf_{k\ge m}\int_Xf_k\,\dd\mu
+  =\liminf_n\int_Xf_n\,\dd\mu .
+\]
+By \eqref{eq:in-fatou-gn} we may apply the theorem of Beppo Levi to $(g_n)_{n\ge1}$:
+\[
+  \int_Xf\,\dd\mu=\int_X\lim_ng_n\,\dd\mu\overset{\text{B.~Levi}}{=}\lim_n\int_Xg_n\,\dd\mu
+  \le\liminf_n\int_Xf_n\,\dd\mu .\qedhere
+\]
+\end{proof}
+
+The inequality can be strict. For the sliding bump of \cref{rem:in-monotonicity-essential},
+$\liminf_nf_n=0$ while $\int_Xf_n\,\dd m=1$ for every $n$, so the two sides are $0<1$. The mass
+can also escape upwards, as for $n\1_{(0,1/n)}$, or spread out, as for $\frac1n\1_{[0,n)}$
+(\cref{fig:in-escape}); in each case $\int_Xf_n\,\dd m=1$ and $f_n\to0$ a.e.\footnote{This
+paragraph and \cref{fig:in-escape} are added to the handwritten notes.}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch04-escape}
+  \caption{Three sequences on $(\mathbb R,\mathcal B(\mathbb R),m)$ with $\int f_n\,\dd m=1$ for
+    every $n$ and $f_n\to0$ a.e. The mass slides off to infinity (left, the example of
+    \cref{rem:in-monotonicity-essential}), concentrates on a shrinking set (centre), or spreads
+    thinly over a growing set (right). For each of them Fatou's lemma reads $0<1$.}
+  \label{fig:in-escape}
+\end{figure}
+
+\begin{remark}[Computational]\label{rem:in-fatou-code}
+In \coderef{code/src/probnotes/integral.py}, \texttt{SEQUENCES} lists these sequences, as step
+functions, together with an alternating one and a sequence for which both sides of Fatou's
+lemma are finite and different. \texttt{tail\_infimum} computes $\inf_{n\le k\le K}f_k$ exactly on
+the common refinement of the $f_k$, and \texttt{fatou\_sides} compares the integrals of these
+functions, which approach $\int g_n\,\dd m$ as $K$ grows, with $\int f_n\,\dd m$
+(\exref{ex:in-fatou-strict}).
+\end{remark}
+
+\demo{04-integral.ipynb}{the sequences of \cref{fig:in-escape} and the tail infima
+$g_n=\inf_{k\ge n}f_k$, with both sides of Fatou's lemma, and Fatou's lemma for random periodic
+sequences on a finite space.}
+
+\furtherreading
+\textcite{rudin-rca}, Chapter~1, also defines the integral of a non-negative function as a
+supremum over simple functions (there, simple functions take finite values only), and proves the monotone convergence theorem (Theorem~1.26),
+the integration of series term by term (Theorem~1.27) and Fatou's lemma (Lemma~1.28).
+\textcite{billingsley}, Sections~15--16, defines the integral through finite partitions of $X$ and
+proves the same results; \textcite{durrett}, Sections~1.4--1.6, builds the integral in four steps
+(simple, bounded, non-negative, general functions); \textcite{williams}, Chapters~5--6, is a short
+account on a general measure space (Chapter~5) and then in the language of probability
+(Chapter~6).

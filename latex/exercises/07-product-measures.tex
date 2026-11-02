@@ -1,0 +1,190 @@
+% Exercises for Chapter 7 (product measures and random vectors). Statements only: solutions are
+% kept privately. Throughout, (X_1, A_1, mu_1) and (X_2, A_2, mu_2) are measure spaces, m is the
+% Borel-Lebesgue measure on B(R), m_ = m (x) m is Lebesgue measure on B(R^2), and
+% (Omega, F, P) is a probability space, as in the notes.
+
+\begin{exercise}[The product measure]\label{ex:pm-product-measure}
+\medium This exercise proves \noteref{thm:pm-product-measure} from
+\noteref{prop:pm-sections}, which you may use, together with the series theorem
+\noteref{cor:in-series} and the uniqueness result quoted in
+\noteref{rem:pm-cdf-independence}: \emph{if two measures on $\sigma(\mathcal P)$ agree on
+a family $\mathcal P$ of subsets of $X$ closed under finite intersections, and
+$X=\bigcup_{n\ge1}P_n$ for some $P_n\in\mathcal P$ of finite measure, then they are equal.}
+\begin{enumerate}[label=(\alph*)]
+  \item Without assuming $\sigma$-finiteness, show that every section of a set
+    $E\in\mathcal A_1\otimes\mathcal A_2$ is measurable. \emph{Hint:} for fixed $x$, the sets
+    $E\subseteq X_1\times X_2$ with $E^2_x\in\mathcal A_2$ form a $\sigma$-algebra.
+  \item Let $\mu_1,\mu_2$ be $\sigma$-finite. Show that $\mu_1\otimes\mu_2$ is a measure, and
+    that $\mu_1\otimes\mu_2(A\times B)=\mu_1(A)\mu_2(B)$.
+  \item Show that $\mu_1\otimes\mu_2$ is $\sigma$-finite, and that it is the only measure on
+    $\mathcal A_1\otimes\mathcal A_2$ with this value on measurable rectangles.
+  \item Let $D=\{(x,x):x\in\mathbb R\}$ be the diagonal of $\mathbb R^2$. Show that
+    $D\in\mathcal B(\mathbb R)\otimes\mathcal B(\mathbb R)$ and $\underline m(D)=0$, and that
+    the same holds for the graph $\{(x,h(x)):x\in\mathbb R\}$ of any Borel function
+    $h:\mathbb R\to\mathbb R$. Which picture of \noteref{rem:pm-null-sections} does $D$ illustrate?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[What can go wrong without the hypotheses]\label{ex:pm-hypotheses}
+\hard Let $X_1=X_2=[0,1]$ with the Borel $\sigma$-algebra, let $\mu_1=m$ be Lebesgue measure
+and $\mu_2=\gamma$ the counting measure ($\gamma(B)$ is the number of points of $B$,
+\noteref{exa:ms-examples}). Let $D=\{(x,x):x\in[0,1]\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $D\in\mathcal B([0,1])\otimes\mathcal B([0,1])$ (\emph{hint:} cover $D$ by
+    $2^n$ squares $I\times I$, with $I$ the dyadic intervals of length $2^{-n}$), and compute
+    \[
+      \int_{[0,1]}\gamma(D^2_x)\,\dd m(x)\qquad\text{and}\qquad\int_{[0,1]}m(D^1_y)\,\dd\gamma(y).
+    \]
+  \item Which hypothesis of \noteref{prop:pm-sections} fails? Show that it fails: no countable
+    family of sets of finite counting measure covers $[0,1]$.
+  \item Show that, when $D$ is replaced by a measurable rectangle $A\times B$, both iterated
+    integrals in (a) equal $m(A)\gamma(B)$. So the two formulas of
+    \noteref{thm:pm-product-measure} agree on rectangles but not on $D$: explain why this does not
+    contradict the theorem, and why \noteref{thm:pm-tonelli} cannot be applied to $\1_D$.
+  \item Now let $X_1=X_2=\mathbb N$ with counting measures, which are $\sigma$-finite, and
+    $a_{jk}=1$ if $j=k$, $a_{jk}=-1$ if $k=j+1$, $a_{jk}=0$ otherwise. Show that
+    $\sum_j\sum_ka_{jk}\ne\sum_k\sum_ja_{jk}$, and say which hypothesis of
+    \noteref{thm:pm-fubini} fails. Why is there no such example with $a_{jk}\ge0$?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Discrete random vectors]\label{ex:pm-discrete}
+\easy These are the proofs that the notes leave as an exercise in
+\noteref{prop:pm-discrete-independence}. Let $Z=(X,Y)$ be a discrete random vector with joint
+discrete density $f_Z$. You may use \noteref{thm:pm-independence-product}.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove part 1) of the proposition. Give an example where
+    $Z(\Omega)\ne X(\Omega)\times Y(\Omega)$.
+  \item Prove part 2), both directions. \emph{Hint:} for ``$\Leftarrow$'', write
+    $\mathbb P_Z(A\times B)$ as a double sum.
+  \item Show that if $f_Z(x,y)=g(x)h(y)$ for all $x,y$, for some functions $g,h\ge0$, then
+    $X\indep Y$, and find $f_X$ and $f_Y$ in terms of $g$ and $h$ (the discrete analogue of
+    \noteref{rem:pm-factorisation}).
+  \item Let $X$ and $Y$ be independent, with Poisson laws of parameters $\lambda$ and $\nu$.
+    Show that $\mathbb P(X=Y)=e^{-\lambda-\nu}\sum_{k\ge0}\frac{(\lambda\nu)^k}{(k!)^2}$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[The expectation of a product]\label{ex:pm-expectation-product}
+\easy This completes the proof of \noteref{thm:pm-expectation-product}, whose last step the
+notes leave as an exercise. You may use \noteref{thm:pm-tonelli},
+\noteref{thm:pm-fubini}, \noteref{thm:pm-independence-product} and
+\noteref{thm:ld-image-integral}.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X,Y\in L^1$ be independent. Write out the computation that gives
+    $\mathbb E[XY]=\mathbb E[X]\,\mathbb E[Y]$, saying which theorem justifies each equality.
+  \item Let $X,Y\ge0$ be independent, not necessarily integrable. Show that
+    $\mathbb E[XY]=\mathbb E[X]\,\mathbb E[Y]$ in $[0,+\infty]$, with $0\cdot\infty=0$. Why is
+    this consistent when $\mathbb E[X]=0$ and $\mathbb E[Y]=+\infty$?
+  \item Independence cannot be dropped: find $X\in L^1$ with $X^2\notin L^1$, and conclude that
+    $XY\notin L^1$ for $Y=X$.
+  \item Let $X$ be uniform on $\{-1,0,1\}$ and $Y=X^2$. Write the joint discrete density, and
+    show that $\operatorname{cov}(X,Y)=0$ although $X$ and $Y$ are not independent.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Two iterated integrals that differ]\label{ex:pm-fubini-numerics}
+\medium This is a computational exercise. Let
+$f(x,y)=\dfrac{x^2-y^2}{(x^2+y^2)^2}$ on $(0,1]^2$.
+\begin{enumerate}[label=(\alph*)]
+  \item Check that $\frac{\partial}{\partial y}\frac{y}{x^2+y^2}=f(x,y)$, and deduce that
+    $\int_0^1f(x,y)\,\dd y=\frac1{1+x^2}$ for every $x\in(0,1]$ and $\int_0^1f(x,y)\,\dd x=-\frac1{1+y^2}$
+    for every $y\in(0,1]$. Compute the two iterated integrals.
+  \item Show that for $0<\varepsilon<1$
+    \[
+      \int_\varepsilon^1\!\!\int_\varepsilon^1|f(x,y)|\,\dd y\,\dd x=\log\frac1\varepsilon-\frac\pi2+2\arctan\varepsilon,
+    \]
+    and conclude that $f$ is not integrable on $(0,1]^2$. Which hypothesis of
+    \noteref{thm:pm-fubini} fails? What does \noteref{thm:pm-tonelli} give for $f^+$ and $f^-$?
+    What are the two iterated integrals of $f$ over $[\varepsilon,1]^2$?
+  \item Write a function that computes an iterated integral by the midpoint rule, with $n$
+    points for the outer and $kn$ points for the inner integral. For $n=200$ and
+    $k=1,4,16,64,256$, compute both iterated integrals. Explain why $k=1$ gives $0$ for both,
+    for every $n$, and why large $k$ gives $\pm\frac\pi4$. Check the second answer with nested
+    adaptive quadrature (\texttt{scipy.integrate.quad}).
+  \item Let $U,V$ be independent and uniform on $(0,1)$. Compute Monte Carlo averages of
+    $f(U,V)$ with $10^6$ samples and five different seeds. Explain the results.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Is this table a product?]\label{ex:pm-dice}
+\medium (in the style of Ross, Ch.~6) This is a computational exercise. Two fair dice are
+rolled; let $D_1,D_2$ be the two results.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $X=\max(D_1,D_2)$ and $Y=\min(D_1,D_2)$. Write a function that returns the joint
+    discrete density of a pair of functions on a finite probability space, and use it to find
+    the joint density of $(X,Y)$ and the marginal densities. Are $X$ and $Y$ independent? Find
+    the largest value of $|f_Z(x,y)-f_X(x)f_Y(y)|$ and where it is attained, and
+    $\operatorname{cov}(X,Y)$, as exact fractions.
+  \item Do the same for $S=D_1+D_2$ and $T=D_1-D_2$, and for the parity of $S$ and $D_1$.
+  \item Show that a non-negative table $(f_{ij})$ with $\sum_{ij}f_{ij}=1$ is the joint density
+    of a pair of independent random variables if and only if it has rank one, and compute the
+    ranks of the three tables of (a) and (b).
+  \item For a finite table, show that $F_{(X,Y)}=F_XF_Y$ on the grid of values implies
+    $f_Z=f_Xf_Y$, using $f_Z(x_i,y_j)=F(x_i,y_j)-F(x_{i-1},y_j)-F(x_i,y_{j-1})+F(x_{i-1},y_{j-1})$.
+    (This is ``$\Leftarrow$'' of \noteref{rem:pm-cdf-independence} without $\pi$-systems.) Compute $\max|F_{(X,Y)}-F_XF_Y|$ for the pair of (a).
+  \item Simulate $n=10^2,10^4,10^6$ rolls of two dice (seed $2026$), and compute
+    $\max|\hat f_Z-\hat f_X\hat f_Y|$ from the relative frequencies, for (parity of $S$, $D_1$)
+    and for $(S,T)$. How does it behave as $n$ grows, in each case?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Uncorrelated is not independent]\label{ex:pm-uncorrelated}
+\medium This is a computational exercise on three pairs: $(X,X^2)$ with $X$ uniform on $(-1,1)$;
+$(\cos T,\sin T)$ with $T$ uniform on $(0,2\pi)$; and a point uniform on the unit disk
+$\{x^2+y^2<1\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that in each case $\operatorname{cov}(X,Y)=0$, and that $X$ and $Y$ are not
+    independent, by finding $A,B$ with $\mathbb P(X\in A,Y\in B)\ne\mathbb P(X\in A)\mathbb P(Y\in B)$.
+  \item Show that $\cos T$ has the density $\frac1{\pi\sqrt{1-x^2}}$ on $(-1,1)$, but that
+    $(\cos T,\sin T)$ is not absolutely continuous. \emph{Hint:} \noteref{rem:pm-null-sections}.
+    So the converse of \noteref{prop:pm-marginal-density} is false.
+  \item Show that $\operatorname{Var}(XY)$ equals $\frac17$, $\frac18$ and $\frac1{24}$ for the
+    three pairs. How many samples $N$ does the asymptotic $95\%$ interval
+    $\hat c\pm1.96\sqrt{\operatorname{Var}(XY)/N}$ for $\mathbb E[XY]$ need to have half-width at
+    most $0.005$? Run the three simulations with these $N$ (seed $2026$): do the intervals contain
+    $0$?
+  \item Let $F_n$ be the empirical joint distribution function of $n$ samples, and $F_n^X$,
+    $F_n^Y$ the empirical marginal ones. Compute $\max|F_n-F_n^XF_n^Y|$ over the grid of sample
+    quantiles of levels $\frac1{40},\dots,\frac{39}{40}$, for $n=10^3,\dots,10^6$, for the three
+    pairs and for a pair of independent uniforms. Show that for $(X,X^2)$ the limit is
+    $\frac18$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[A joint density]\label{ex:pm-joint-density}
+\medium (in the style of Ross, Ch.~6) Let $(X,Y)$ have the joint density
+$f(x,y)=c\,x\,e^{-x(1+y)}$ for $x,y>0$, and $0$ elsewhere.
+\begin{enumerate}[label=(\alph*)]
+  \item Find $c$ and the marginal densities. Are $X$ and $Y$ independent?
+  \item Show that $\mathbb E[Y]=+\infty$ but $\mathbb E[XY]=1$. Is this in conflict with
+    \noteref{thm:pm-expectation-product}?
+  \item Show, using Tonelli's theorem, that
+    $\mathbb P(X\le s,\,XY\le t)=(1-e^{-s})(1-e^{-t})$ for $s,t\ge0$. Deduce the law of $XY$,
+    and that $X$ and $XY$ are independent.
+  \item Show that $\mathbb P(X>Y)=1-\frac{\sqrt\pi}2e^{1/4}\operatorname{erfc}(\frac12)\approx0.4544$,
+    where $\operatorname{erfc}(z)=\frac2{\sqrt\pi}\int_z^\infty e^{-u^2}\dd u$. Check (c) and (d) by
+    simulation, drawing $X$ with density $e^{-x}$ and then $Y=E/X$ with $E\sim\mathrm{Exp}(1)$
+    independent of $X$; why does this give the right joint law?
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}[Breaking a stick]\label{ex:pm-broken-stick}
+\hard (in the style of Ross, Ch.~6) A stick of length $1$ is broken into three pieces. We ask
+for the probability that the three pieces form a triangle, that is, that each is shorter than
+$\frac12$.
+\begin{enumerate}[label=(\alph*)]
+  \item The stick is broken at two points $U,V$, independent and uniform on $(0,1)$. Using that
+    the law of $(U,V)$ is $m\otimes m$ restricted to $(0,1)^2$
+    (\noteref{thm:pm-independence-product}), show that the probability is $\frac14$.
+  \item The stick is broken at a uniform point $U$; then the \emph{longer} piece is broken at a
+    uniform point of it, that is, at the fraction $W$ of its length, with $W$ uniform on $(0,1)$
+    and independent of $U$. Show that the probability is $2\log2-1\approx0.386$.
+  \item If instead one of the two pieces is chosen with probability $\frac12$ each,
+    independently of $U$ and $W$, and broken at the fraction $W$, show that the probability is
+    $\log2-\frac12$.
+  \item Check (a)--(c) by simulation with $10^6$ trials (seed $2026$), with standard errors,
+    and compute the probability in (b) also as an iterated integral of an indicator by the
+    midpoint rule.
+\end{enumerate}
+\end{exercise}

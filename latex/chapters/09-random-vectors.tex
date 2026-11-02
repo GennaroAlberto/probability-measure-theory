@@ -1,5 +1,1042 @@
-\begin{planned}
-  \item transformations of discrete random vectors; sums
-  \item the change-of-variables formula for densities
-  \item the Beta law; worked exercises
-\end{planned}
+% Chapter 9: Transformations of random vectors.
+% Translation of Paola Siri's handwritten notes, PDF pages 125 ("TRASFORMAZIONI DI VETTORI
+% ALEATORI") to 149: the discrete case (law of h(X,Y), discrete convolution, notable sums,
+% pp. 125-126), the absolutely continuous case (C^1-diffeomorphisms, Jacobi's change-of-variables
+% theorem, the density of g(Z), real functions of a vector, the density of a sum, functions of
+% independent variables, notable sums, the Gamma-Beta exercise and the Beta law, pp. 127-136),
+% and the five typed worked exercises of pp. 137-149 (p. 140 ends with "next lecture").
+
+\Cref{ch:08-transformations} computed the law of a function $g(X)$ of one random variable. This
+chapter does the same for a random vector $Z=(X,Y)$: we look for the law of a real function
+$h(X,Y)$, such as the sum $X+Y$, and of a vector function $g(X,Y)$. In the discrete case the law is
+obtained by adding up the joint discrete density over preimages; for the sum of two independent
+variables this is the discrete convolution of their densities. In the absolutely continuous case
+the tool is the change-of-variables formula of multivariable calculus, which gives the density of
+$g(Z)$ when $g$ is a $C^1$-diffeomorphism; the density of a sum of independent variables is the
+convolution of their densities. Along the way we find the laws of sums of the classical random
+variables, and a new law, the Beta law, which appears in a remarkable independence property of the
+Gamma law. The chapter ends with five worked exercises.
+
+Throughout, $(\Omega,\mathcal F,\mathbb P)$ is a probability space and $Z=(X,Y)$ is a random vector
+(\cref{def:pm-random-vector}). We consider
+\[
+  T=h(X,Y),\ \ h:\mathbb R^2\to\mathbb R\ \text{measurable},\qquad
+  W=(U,V)=g(X,Y),\ \ g:\mathbb R^2\to\mathbb R^2\ \text{measurable};
+\]
+$T$ is a random variable and $W$ a random vector, by \cref{prop:mf-composition}.
+
+\section{The discrete case}\label{sec:rv-discrete}
+
+Let $h:\mathbb R^2\to\mathbb R$ be measurable, and let $Z=(X,Y)$ be a discrete random vector
+(\cref{sec:pm-discrete}) with joint discrete density $f_Z$. Then $T=h(X,Y)$ is a discrete random
+variable, since
+\[
+  T(\Omega)=h\big((X,Y)(\Omega)\big)=h\big(Z(\Omega)\big)
+\]
+is the image of a finite or countable set.
+
+\begin{proposition}[Functions of a discrete random vector]\label{prop:rv-discrete}
+Let $Z=(X,Y)$ be a discrete random vector with joint discrete density $f_Z$.
+\begin{enumerate}[label=\arabic*)]
+  \item If $h:\mathbb R^2\to\mathbb R$ is measurable, $T=h(Z)$ is a discrete random variable,
+    $T(\Omega)=h(Z(\Omega))$, and
+    \[
+      f_T(t)=\sum_{z\in h^{-1}(\{t\})}f_Z(z)\qquad\forall t\in T(\Omega).
+    \]
+  \item If $g:\mathbb R^2\to\mathbb R^2$ is measurable, $W=g(Z)=g(X,Y)$ is a discrete random vector,
+    $W(\Omega)=g(Z(\Omega))$, and
+    \[
+      f_W(w)=\sum_{z\in g^{-1}(\{w\})}f_Z(z)\qquad\forall w\in W(\Omega).
+    \]
+\end{enumerate}
+The sums run over the finitely or countably many points $z\in Z(\Omega)$ of the preimage, since
+$f_Z=0$ elsewhere.
+\end{proposition}
+
+\begin{proof}
+As in the one-dimensional case (\cref{thm:tr-discrete}): for $t\in T(\Omega)$,
+\[
+  f_T(t)=\mathbb P_T(\{t\})=\mathbb P\big(h(Z)=t\big)=\mathbb P_Z\big(h^{-1}(\{t\})\big)
+  =\sum_{z\in h^{-1}(\{t\})}\mathbb P_Z(\{z\})=\sum_{z\in h^{-1}(\{t\})}f_Z(z),
+\]
+because $\mathbb P_Z$ is a discrete measure concentrated on $Z(\Omega)$ (\cref{sec:pm-discrete}).
+The proof of 2) is the same, with $g^{-1}(\{w\})$ in place of $h^{-1}(\{t\})$.
+\end{proof}
+
+\subsection{Sums of discrete random variables}\label{sec:rv-discrete-sums}
+
+A special case. Let $X$ and $Y$ be discrete random variables with values in $\mathbb N$,
+$Z=(X,Y)$, and $h(x,y)=x+y$, so that $T=X+Y$. Then $T$ takes values in $\mathbb N$, and for every
+$t\in\mathbb N$ the points of $\mathbb N^2$ in $h^{-1}(\{t\})$ are
+$\{z=(x,y)\in\mathbb N^2:x+y=t\}$.
+
+\begin{proposition}[Discrete convolution]\label{thm:rv-discrete-sum}
+Let $X$ and $Y$ be random variables with values in $\mathbb N$, with joint discrete density $f_Z$.
+Then for every $t\in\mathbb N$
+\[
+  f_{X+Y}(t)=\sum_{\substack{x,y\in\mathbb N\\x+y=t}}f_Z(x,y)=\sum_{x=0}^tf_Z(x,t-x).
+\]
+If moreover $X\indep Y$, then
+\[
+  f_{X+Y}(t)=\sum_{x=0}^tf_X(x)f_Y(t-x)=\sum_{x=-\infty}^{+\infty}f_X(x)f_Y(t-x)=(f_X*f_Y)(t),
+\]
+the \emph{discrete convolution} of $f_X$ and $f_Y$.
+\end{proposition}
+
+\begin{proof}
+The first formula is \cref{prop:rv-discrete} with $h(x,y)=x+y$. If $X\indep Y$, then
+$f_Z(x,y)=f_X(x)f_Y(y)$ (\cref{prop:pm-discrete-independence}). The sum may be extended to all
+$x\in\mathbb Z$, from $-\infty$ to $+\infty$: it is the same thing, because $f_X(x)=0$ if $x<0$ and
+$f_Y(t-x)=0$ if $x>t$.
+\end{proof}
+
+\begin{proposition}[Notable laws]\label{prop:rv-notable-discrete}
+Let $X$ and $Y$ be independent random variables.
+\begin{enumerate}[label=\arabic*)]
+  \item If $X\sim\mathcal P(\lambda)$ and $Y\sim\mathcal P(\mu)$, then $X+Y\sim\mathcal P(\lambda+\mu)$.
+  \item If $X\sim B(n,p)$ and $Y\sim B(m,p)$, then $X+Y\sim B(n+m,p)$.
+  \item If $X\sim G(p)$ and $Y\sim G(p)$, then $X+Y\sim\mathrm{Pascal}(2,p)$.
+  \item If $X\sim\mathrm{Pascal}(n,p)$ and $Y\sim\mathrm{Pascal}(m,p)$, then
+    $X+Y\sim\mathrm{Pascal}(n+m,p)$.
+\end{enumerate}
+\end{proposition}
+
+The notes state these facts without proof. All four follow from \cref{thm:rv-discrete-sum}
+(\exref{ex:rv-notable-sums}); see also \citet[Chapter~6]{ross-5}, where sums of independent random
+variables are treated.
+
+\begin{remark}[Recall: the Pascal law]\label{rem:rv-pascal}
+Let $n\in\mathbb N^*$ and $p\in(0,1)$. A random variable $X$ has the \emph{Pascal law}
+$\mathrm{Pascal}(n,p)$ if it is the trial at which the $n$-th success occurs, in a sequence of
+independent Bernoulli trials with probability of success $p$. Then $X(\Omega)=\{n,n+1,\dots\}$ and
+\[
+  \mathbb P(X=k)=f_X(k)=\binom{k-1}{n-1}p^n(1-p)^{k-n}\qquad\forall k\ge n .
+\]
+If $n=1$, $X\sim\mathrm{Pascal}(1,p)=G(p)$, the \emph{geometric law}: $X(\Omega)=\mathbb N^*$ and
+\[
+  \mathbb P(X=k)=p(1-p)^{k-1}\qquad\forall k\ge1 .
+\]
+\end{remark}
+
+\begin{remark}[computational]\label{rem:rv-code-discrete}
+A discrete density on $\{0,1,\dots,N\}$ is an array, and the discrete convolution of
+\cref{thm:rv-discrete-sum} is \texttt{numpy.convolve}. In \coderef{code/src/probnotes/vectors.py},
+\texttt{convolve\_pmfs} convolves two densities on the integers (keeping track of where they start,
+as for the geometric law on $\mathbb N^*$), \texttt{convolve\_power} gives the law of a sum of $n$
+independent copies, and \texttt{law\_of\_function} computes the law of $h(X,Y)$ of
+\cref{prop:rv-discrete} from a joint table. The tests check the four statements of
+\cref{prop:rv-notable-discrete} to rounding error. For instance, the sum of ten fair dice takes the
+value $35$ with probability $4\,395\,456/6^{10}\approx0.0727$ (\exref{ex:rv-convolution}).
+\end{remark}
+
+\demo{09-random-vectors.ipynb}{the law of $X+Y$ by discrete convolution, for Poisson, binomial,
+geometric and Pascal summands, against simulation.}
+
+\section{The absolutely continuous case}\label{sec:rv-ac}
+
+\begin{definition}[$C^1$-diffeomorphism]\label{def:rv-diffeomorphism}
+Let $A\subseteq\mathbb R^2$ be open. A map $\Phi:A\to\mathbb R^2$ is a \emph{$C^1$-diffeomorphism}
+(of $A$ onto $\Phi(A)$) if
+\begin{itemize}
+  \item $\Phi$ is continuously differentiable ($C^1$);
+  \item $\Phi$ is invertible, that is, injective: it has an inverse $\Phi^{-1}:\Phi(A)\to A$;
+  \item $\Phi(A)$ is open,\footnote{This condition is not in the handwritten definition. It is
+    implicit there, since $\Phi^{-1}$ must be differentiable on $\Phi(A)$, and it follows from the
+    other conditions by the inverse function theorem. Added here.} and $\Phi^{-1}$ is continuously
+    differentiable ($C^1$).
+\end{itemize}
+Then the Jacobian determinant $\det J_\Phi$ is different from zero on $A$.\footnote{The handwritten
+notes write ``$\Phi$ is invertible (Jacobian determinant different from zero on $A$)''. A
+non-vanishing Jacobian determinant only makes $\Phi$ \emph{locally} invertible: the map
+$(r,\theta)\mapsto(r\cos\theta,r\sin\theta)$ on $(0,+\infty)\times\mathbb R$ has Jacobian determinant
+$r>0$ and is not injective. What is needed is that $\Phi$ be injective; then $\det J_\Phi\ne0$
+follows from the chain rule, $J_{\Phi^{-1}}(\Phi(x))\,J_\Phi(x)=I$. Conversely, by the inverse
+function theorem, a $C^1$ map that is injective on an open set $A$ and has $\det J_\Phi\ne0$ on $A$
+has an open image and a $C^1$ inverse: these two conditions are what one checks in practice.
+Corrected here.}
+\end{definition}
+
+\begin{theorem}[Jacobi's transformation theorem; change of variables]\label{thm:rv-jacobi}
+Let $A\subseteq\mathbb R^2$ be open and $\Phi:A\to\mathbb R^2$ a $C^1$-diffeomorphism. Let $f$ be a
+measurable function on $\Phi(A)$ that is either non-negative or (Lebesgue) integrable on $\Phi(A)$.
+Then
+\[
+  \int_{\Phi(A)}f(y)\,\dd y=\int_Af\big(\Phi(x)\big)\,\big|\det J_\Phi(x)\big|\,\dd x .
+\]
+\end{theorem}
+
+The notes state this theorem without proof. It is \citet[Theorem~2.47]{folland}, which also shows
+that $f\circ\Phi$ is measurable; applied to $|f|$, it shows that $f$ is integrable on $\Phi(A)$ if
+and only if $(f\circ\Phi)\,|\det J_\Phi|$ is integrable on $A$. See also \citet[Section~17]{billingsley}
+and \citet[Chapter~7]{rudin-rca}, where the formula is proved under weaker hypotheses on $\Phi$.
+Here $y,x\in\mathbb R^2$, and $\dd y$, $\dd x$ denote integration with respect to Lebesgue measure
+$\underline m$ of the plane (\cref{rem:pm-borel-plane,rem:pm-double-integral}).
+
+\begin{theorem}[Density of a transformed random vector]\label{thm:rv-density}
+Let $Z=(X,Y)$ be an absolutely continuous random vector with density $f_Z$
+(\cref{def:pm-ac-vector}), and let $g:\mathbb R^2\to\mathbb R^2$ be a $C^1$-diffeomorphism (of
+$\mathbb R^2$ onto $g(\mathbb R^2)$). Then the random vector $W=(U,V)=g(Z)=g(X,Y)$ is absolutely
+continuous, with density
+\[
+  f_W(u,v)=f_Z\big(g^{-1}(u,v)\big)\,\big|\det J_{g^{-1}}(u,v)\big|\,\1_{g(\mathbb R^2)}(u,v)
+  \qquad\forall(u,v)\in\mathbb R^2,
+\]
+where
+\[
+  \big|\det J_{g^{-1}}(u,v)\big|=\frac1{\big|\det J_g\big(g^{-1}(u,v)\big)\big|}.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $D=g(\mathbb R^2)$; $D$ is open, by \cref{def:rv-diffeomorphism}.\footnote{The handwritten notes
+argue that $D=(g^{-1})^{-1}(\mathbb R^2)$ is the preimage of the open set $\mathbb R^2$ under the
+continuous map $g^{-1}$, hence open. Since $g^{-1}$ is defined on $D$, this only shows that $D$ is
+open in itself. That $D$ is open is part of \cref{def:rv-diffeomorphism} as stated here, and in any
+case a consequence of the inverse function theorem; corrected here.} Let
+\[
+  \Phi=g^{-1}:D\longrightarrow\mathbb R^2 .
+\]
+$\Phi$ is a $C^1$-diffeomorphism of $D$ onto $\Phi(D)=\mathbb R^2$, with inverse $g$.
+
+We look for a measurable function $f_W\ge0$ such that
+\[
+  \mathbb P_W(B)=\mathbb P(W\in B)=\int_Bf_W(u,v)\,\dd u\,\dd v\qquad\forall B\in\mathcal B(\mathbb R^2).
+\]
+Let $B\in\mathcal B(\mathbb R^2)$. The set $g^{-1}(B)=\{z:g(z)\in B\}=\Phi(B\cap D)$ is a Borel set,
+since $g$ is continuous. Hence
+\[
+\begin{aligned}
+  \mathbb P(W\in B)&=\mathbb P\big(g(Z)\in B\big)=\mathbb P\big(Z\in g^{-1}(B)\big)=\mathbb P\big(Z\in\Phi(B\cap D)\big)\\
+  &=\int_{\Phi(B\cap D)}f_Z(x,y)\,\dd x\,\dd y=\int_{\mathbb R^2}f_Z(x,y)\,\1_{\Phi(B\cap D)}(x,y)\,\dd x\,\dd y .
+\end{aligned}
+\]
+Now $\mathbb R^2=\Phi(D)$, and the change of variables (\cref{thm:rv-jacobi}, with $A=D$, applied to
+the non-negative measurable function $f_Z\1_{\Phi(B\cap D)}$) gives
+\[
+  \mathbb P(W\in B)=\int_Df_Z\big(\Phi(u,v)\big)\,\1_{\Phi(B\cap D)}\big(\Phi(u,v)\big)\,
+  \big|\det J_\Phi(u,v)\big|\,\dd u\,\dd v .
+\]
+For $(u,v)\in D$, since $\Phi$ is injective,
+\[
+  \1_{\Phi(B\cap D)}\big(\Phi(u,v)\big)=\1_{\Phi^{-1}(\Phi(B\cap D))}(u,v)=\1_{B\cap D}(u,v)=\1_B(u,v).
+\]
+Therefore
+\[
+\begin{aligned}
+  \mathbb P(W\in B)&=\int_Df_Z\big(\Phi(u,v)\big)\,\1_B(u,v)\,\big|\det J_\Phi(u,v)\big|\,\dd u\,\dd v\\
+  &=\int_B\underbrace{f_Z\big(\Phi(u,v)\big)\,\big|\det J_\Phi(u,v)\big|\,\1_D(u,v)}_{=\,f_W(u,v)}\,\dd u\,\dd v .
+\end{aligned}
+\]
+The function $f_W$ is Borel, since $\Phi$ and $\det J_\Phi$ are continuous on the open set $D$. As
+$B\in\mathcal B(\mathbb R^2)$ is arbitrary, $\mathbb P_W\ll\underline m$ and
+$\frac{\dd\mathbb P_W}{\dd\underline m}=f_W$, where
+\[
+  f_W(u,v)=f_Z\big(g^{-1}(u,v)\big)\,\big|\det J_{g^{-1}}(u,v)\big|\,\1_{g(\mathbb R^2)}(u,v).
+\]
+Finally, differentiating $g(\Phi(w))=w$ on $D$ gives $J_g(\Phi(w))\,J_\Phi(w)=I$, hence
+$\det J_{g^{-1}}(w)=1/\det J_g\big(g^{-1}(w)\big)$.
+\end{proof}
+
+\begin{example}[Linear transformation]\label{cor:rv-linear}
+Let $Z=(X,Y)$ be an absolutely continuous random vector with density $f_Z$,\footnote{The handwritten
+notes write ``a random vector''; the formula uses its density. Added here, as in
+\cref{thm:rv-piecewise}.} and let
+$g:\mathbb R^2\to\mathbb R^2$ be
+\[
+  g(z)=Az+b,\qquad A\in\mathcal M_2(\mathbb R),\ b\in\mathbb R^2
+\]
+(vectors are columns). If $A$ is invertible, $g$ is a $C^1$-diffeomorphism of $\mathbb R^2$ onto
+$\mathbb R^2$:
+\[
+  w=g(z)=Az+b\iff z=A^{-1}(w-b)=g^{-1}(w),
+\]
+and $J_{g^{-1}}=A^{-1}$, so $\det J_{g^{-1}}=\det A^{-1}=(\det A)^{-1}$. By \cref{thm:rv-density},
+$W=AZ+b$ is absolutely continuous with density
+\[
+  f_W(w)=f_Z\big(A^{-1}(w-b)\big)\,\big|(\det A)^{-1}\big|=\frac1{|\det A|}\,f_Z\big(A^{-1}(w-b)\big),
+  \qquad w\in\mathbb R^2 .
+\]
+\end{example}
+
+\begin{remark}[The case of one variable]\label{rem:rv-affine-1d}
+For a real random variable $X$ with density $f_X$, and $Y=aX+b$ with $a\ne0$, the same formula
+reads
+\[
+  f_Y(y)=\frac1{|a|}\,f_X\Big(\frac{y-b}a\Big)
+\]
+(\cref{thm:tr-density}; compare \cref{prop:tr-affine-gaussian}).
+\end{remark}
+
+We generalise \cref{thm:rv-density}. As in \cref{cor:tr-piecewise}, open sets $A_1,\dots,A_m$ form an
+\emph{almost sure partition} of a set $A\in\mathcal B(\mathbb R^2)$ if they are pairwise disjoint,
+contained in $A$, and $A_0=A\setminus(A_1\cup\dots\cup A_m)$ has $\underline m(A_0)=0$.
+
+\begin{theorem}[Piecewise version]\label{thm:rv-piecewise}
+Let $Z=(X,Y)$ be an absolutely continuous random vector with density $f_Z$,\footnote{The handwritten
+notes write ``a random vector''; the formula uses its density, so $Z$ must be absolutely continuous.
+Added here.} and let $A\in\mathcal B(\mathbb R^2)$ be such that
+\[
+  \mathbb P(Z\in A)=\mathbb P_Z(A)=1 .
+\]
+Let $A_1,\dots,A_m$ be an almost sure partition of $A$ into open sets, and let $g:A\to\mathbb R^2$ be
+measurable and such that each restriction $g|_{A_i}=g_i$ is a $C^1$-diffeomorphism of $A_i$ onto
+$g(A_i)$, $i=1,\dots,m$. Then $W=g(Z)$ is an absolutely continuous random vector,\footnote{$W=g(Z)$
+is defined on the event $\{Z\in A\}$, of probability $1$; outside it, $W$ may be given any constant
+value, which does not change its law. Added to the handwritten notes.} with density
+\[
+  f_W(w)=\sum_{i=1}^mf_Z\big(g_i^{-1}(w)\big)\,\big|\det J_{g_i^{-1}}(w)\big|\,\1_{g(A_i)}(w)
+  \qquad\forall w=(u,v)\in\mathbb R^2 .
+\]
+\end{theorem}
+
+The notes state this generalisation without proof. With $m=1$ and $A=A_1$ open, the proof is that of
+\cref{thm:rv-density}, with $A$ in place of $\mathbb R^2$; in general one splits
+$\mathbb P(W\in B)=\sum_{i=1}^m\mathbb P\big(Z\in A_i,\ g_i(Z)\in B\big)$ and applies the change of
+variables on each $A_i$ (\exref{ex:rv-piecewise}). It is the two-dimensional analogue of
+\cref{cor:tr-piecewise}.
+
+\subsection{Real functions of a random vector}\label{sec:rv-real-functions}
+
+What happens if we consider $h:\mathbb R^2\to\mathbb R$, and
+\[
+  T=h(Z)=h(X,Y)\ ?
+\]
+There are two possible routes; let $Z$ be absolutely continuous, with density $f_Z$.
+\begin{enumerate}[label=\arabic*)]
+  \item Compute the distribution function of $T$:
+    \[
+      F_T(t)=\mathbb P(T\le t)=\mathbb P_T\big((-\infty,t]\big)=\mathbb P_Z\big(h^{-1}((-\infty,t])\big)
+      =\int_{h^{-1}((-\infty,t])}f_Z(x,y)\,\dd x\,\dd y .
+    \]
+    The notes leave as an exercise the laws of $T_1=\min(X,Y)$ and $T_2=\max(X,Y)$
+    (\exref{ex:rv-min-max}).
+  \item If possible, construct a suitable $C^1$-diffeomorphism
+    \[
+      g:\mathbb R^2\to\mathbb R^2,\qquad g=(h,k),
+    \]
+    with $k$ chosen in a suitable way; typically $k(x,y)=x$ or $k(x,y)=y$. Then for
+    \[
+      W=(T,V),\qquad T=h(X,Y),\quad V=k(X,Y),
+    \]
+    one finds $f_W$ by \cref{thm:rv-density}, and then $f_T$ as the first marginal density of $W$
+    (\cref{prop:pm-marginal-density}).
+\end{enumerate}
+
+\subsection{The density of a sum}\label{sec:rv-sums}
+
+A special case. Let $X$ and $Y$ be absolutely continuous random variables such that the vector
+$Z=(X,Y)$ is absolutely continuous, for instance because $X\indep Y$,\footnote{The handwritten notes
+write ``let $X,Y$ be absolutely continuous random variables ($X\indep Y$)''. The first method needs
+the joint density $f_Z$, and $Z$ need not be absolutely continuous when $X$ and $Y$ are: for $Y=X$,
+$Z$ lives on the diagonal, an $\underline m$-negligible set (\exref{ex:pm-product-measure}). If
+$X\indep Y$, then $Z$ is absolutely continuous with density $f_X(x)f_Y(y)$: by Tonelli's theorem the
+measure $C\mapsto\int_Cf_X(x)f_Y(y)\,\dd x\,\dd y$ takes the value $\mathbb P_X(A)\mathbb P_Y(B)$ on
+every rectangle $A\times B$, so it is $\mathbb P_X\otimes\mathbb P_Y=\mathbb P_Z$
+(\cref{thm:pm-product-measure,thm:pm-independence-product}). Added here.} and let
+$h:\mathbb R^2\to\mathbb R$, $h(x,y)=x+y$, so that
+\[
+  T=h(X,Y)=X+Y .
+\]
+
+\begin{proposition}[Density of a sum]\label{prop:rv-sum-density}
+Let $Z=(X,Y)$ be an absolutely continuous random vector with density $f_Z$. Then $T=X+Y$ is
+absolutely continuous, with density
+\[
+  f_T(s)=\int_{-\infty}^{+\infty}f_Z(x,s-x)\,\dd x .
+\]
+If moreover $X\indep Y$, then
+\[
+  f_T(s)=\int_{-\infty}^{+\infty}f_X(x)\,f_Y(s-x)\,\dd x=(f_X*f_Y)(s),
+\]
+the \emph{convolution} of $f_X$ and $f_Y$.\footnote{As for the marginal densities
+(\cref{prop:pm-marginal-density}), the integral may be $+\infty$ on an $m$-negligible set of values
+of $s$; there $f_T$ is set equal to $0$. Added to the handwritten notes.}
+\end{proposition}
+
+\begin{proof}[First method: the distribution function]
+For every $t\in\mathbb R$,
+\[
+  F_T(t)=\mathbb P(T\le t)=\mathbb P(X+Y\le t)=\mathbb P\big((X,Y)\in h^{-1}((-\infty,t])\big)
+  =\mathbb P_Z(A_t),
+\]
+where $A_t=h^{-1}((-\infty,t])=\{(x,y)\in\mathbb R^2:x+y\le t\}$ is the half-plane below the line
+$x+y=t$ (\cref{fig:rv-regions}, left). Then, by Tonelli's theorem (\cref{thm:pm-tonelli}), the
+substitution $s=x+y$ (that is, $y=s-x$) in the inner integral, and Tonelli's theorem again,
+\[
+\begin{aligned}
+  F_T(t)&=\int_{A_t}f_Z(x,y)\,\dd x\,\dd y
+  =\int_{-\infty}^{+\infty}\Big(\int_{-\infty}^{t-x}f_Z(x,y)\,\dd y\Big)\dd x\\
+  &=\int_{-\infty}^{+\infty}\Big(\int_{-\infty}^{t}f_Z(x,s-x)\,\dd s\Big)\dd x
+  =\int_{-\infty}^{t}\Big(\int_{-\infty}^{+\infty}f_Z(x,s-x)\,\dd x\Big)\dd s .
+\end{aligned}
+\]
+So for every $t\in\mathbb R$
+\[
+  F_T(t)=\mathbb P_T\big((-\infty,t]\big)=\int_{(-\infty,t]}f_T(s)\,\dd s,\qquad\text{where }
+  f_T(s)=\int_{-\infty}^{+\infty}f_Z(x,s-x)\,\dd x .
+\]
+The half-lines $\{(-\infty,t]:t\in\mathbb R\}$ generate $\mathcal B(\mathbb R)$
+(\cref{prop:sa-borel-generators}) and are closed under finite intersections; so the probability
+measures $\mathbb P_T$ and $B\mapsto\int_Bf_T(s)\,\dd s$, which agree on them, agree on
+$\mathcal B(\mathbb R)$ (by the uniqueness result recalled in \cref{rem:pm-cdf-independence}). Hence
+$\mathbb P_T\ll m$ and $f_T=\frac{\dd\mathbb P_T}{\dd m}$ is the density of $T$. If $X\indep Y$,
+then $f_Z(x,y)=f_X(x)f_Y(y)$ for $\underline m$-a.e.\ $(x,y)$ (\cref{thm:pm-density-independence}), and
+\[
+  f_T(s)=\int_{-\infty}^{+\infty}f_X(x)\,f_Y(s-x)\,\dd x=(f_X*f_Y)(s)\qquad\text{for $m$-a.e.\ }s,
+\]
+the convolution.\footnote{The two integrands differ only on the image of an $\underline m$-negligible
+set under the linear map $(x,y)\mapsto(x,x+y)$, which is negligible, so by Tonelli's theorem the
+integrals agree for a.e.\ $s$; this is enough for a density. Added to the handwritten notes.}
+\end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch09-regions}
+  \caption{Three pictures of the notes. Left: the half-plane $A_t=\{x+y\le t\}$ of the first proof of
+    \cref{prop:rv-sum-density}; for fixed $x$ the inner integral runs over $y\le t-x$. Centre: the
+    strip $\{u>0,\ u<v<u+1\}$ where the integrand of $f_V(v)=\int f_U(u)f_Y(v-u)\,\dd u$ is non-zero in
+    \cref{exa:rv-laplace-uniform}; at height $v$ it is the segment $(\max(0,v-1),v)$, which starts at
+    $0$ when $v\le1$. Right: the strip $D=\{t<s<t+2\}$ where the vector $(X+Y,X-Y)$ of the same
+    example has positive density.}
+  \label{fig:rv-regions}
+\end{figure}
+
+\begin{proof}[Second method: a linear transformation]
+Consider $g(x,y)=(x,x+y)$ and $W=g(Z)$. In matrix form,
+\[
+  W=\begin{pmatrix}U\\T\end{pmatrix}=A\begin{pmatrix}X\\Y\end{pmatrix}+b=\begin{pmatrix}X\\X+Y\end{pmatrix},
+  \qquad\text{where } b=\begin{pmatrix}0\\0\end{pmatrix},\quad A=\begin{pmatrix}1&0\\1&1\end{pmatrix}.
+\]
+Here $\det A=1=\det A^{-1}$ and $A^{-1}=\begin{pmatrix}1&0\\-1&1\end{pmatrix}$, so
+\[
+  Z=\begin{pmatrix}X\\Y\end{pmatrix}=A^{-1}(W-b)=A^{-1}\begin{pmatrix}U\\T\end{pmatrix}
+  =\begin{pmatrix}U\\T-U\end{pmatrix}.
+\]
+By \cref{cor:rv-linear},
+\[
+  f_W(w)=f_W(u,t)=\frac1{|\det A|}\,f_Z\big(A^{-1}(w-b)\big)=f_Z(u,t-u),
+\]
+and the density of $T$ is the second marginal density of $W$ (\cref{prop:pm-marginal-density}):
+\[
+  f_T(t)=\int_{-\infty}^{+\infty}f_W(u,t)\,\dd u=\int_{-\infty}^{+\infty}f_Z(u,t-u)\,\dd u
+  \overset{X\indep Y}{=}\int_{-\infty}^{+\infty}f_X(u)\,f_Y(t-u)\,\dd u .\qedhere
+\]
+\end{proof}
+
+\begin{proposition}[Functions of independent random variables]\label{prop:rv-functions-independent}
+Let $X\indep Y$, and let $g,h:\mathbb R\to\mathbb R$ be measurable. Then $g(X)\indep h(Y)$.
+
+In general, let the random vectors $(X_1,\dots,X_n)$ and $(Y_1,\dots,Y_m)$ be independent, that is,
+$\mathbb P\big((X_1,\dots,X_n)\in A,\ (Y_1,\dots,Y_m)\in B\big)=\mathbb P\big((X_1,\dots,X_n)\in
+A\big)\,\mathbb P\big((Y_1,\dots,Y_m)\in B\big)$ for all $A\in\mathcal B(\mathbb R^n)$ and
+$B\in\mathcal B(\mathbb R^m)$. If $g:\mathbb R^n\to\mathbb R$ and $h:\mathbb R^m\to\mathbb R$ are
+measurable, then $g(X_1,\dots,X_n)\indep h(Y_1,\dots,Y_m)$.
+\end{proposition}
+
+\begin{proof}
+Let $A,B\in\mathcal B(\mathbb R)$. Since $g^{-1}(A),h^{-1}(B)\in\mathcal B(\mathbb R)$ and $X\indep Y$,
+\[
+\begin{aligned}
+  \mathbb P\big(g(X)\in A,\ h(Y)\in B\big)&=\mathbb P\big(X\in g^{-1}(A),\ Y\in h^{-1}(B)\big)
+  =\mathbb P\big(X\in g^{-1}(A)\big)\,\mathbb P\big(Y\in h^{-1}(B)\big)\\
+  &=\mathbb P\big(g(X)\in A\big)\,\mathbb P\big(h(Y)\in B\big).
+\end{aligned}
+\]
+The general statement has the same proof, with $g^{-1}(A)\in\mathcal B(\mathbb R^n)$ and
+$h^{-1}(B)\in\mathcal B(\mathbb R^m)$.
+\end{proof}
+
+The same computation shows that if $X_1,\dots,X_n$ are independent and $g_1,\dots,g_n:\mathbb
+R\to\mathbb R$ are measurable, then $g_1(X_1),\dots,g_n(X_n)$ are independent.\footnote{This
+sentence is added to the handwritten notes, which use it in d) below and in
+\cref{exa:rv-uniform-products}, e).}
+
+\begin{proposition}[Notable sums]\label{prop:rv-notable-sums}
+\leavevmode
+\begin{enumerate}[label=\alph*)]
+  \item If $X\sim\mathcal N(\mu_X,\sigma_X^2)$, $Y\sim\mathcal N(\mu_Y,\sigma_Y^2)$ and $X\indep Y$,
+    then $X+Y\sim\mathcal N(\mu_X+\mu_Y,\sigma_X^2+\sigma_Y^2)$.
+  \item If $X\sim\mathrm{Exp}(\lambda)$, $Y\sim\mathrm{Exp}(\lambda)$ and $X\indep Y$, then
+    $X+Y\sim\Gamma(2,\lambda)$.
+  \item If $X\sim\Gamma(\alpha,\lambda)$, $Y\sim\Gamma(\beta,\lambda)$ and $X\indep Y$, then
+    $X+Y\sim\Gamma(\alpha+\beta,\lambda)$.
+  \item If $X_1,\dots,X_n$ are \iid with law $\mathcal N(0,1)$, then
+    \[
+      X_1^2+\dots+X_n^2\sim\Gamma\Big(\frac n2,\frac12\Big)=\chi^2(n),
+    \]
+    the \emph{chi-squared law with parameter $n$} (with $n$ degrees of freedom).
+\end{enumerate}
+\end{proposition}
+
+The notes state a)--c) without proof; c) is proved in \cref{prop:rv-gamma-beta} below, b) is the
+case $\alpha=\beta=1$ of c), since $\mathrm{Exp}(\lambda)=\Gamma(1,\lambda)$ (\cref{def:tr-gamma}),
+and a) is \exref{ex:rv-notable-sums}; it is proved again with characteristic functions in
+\cref{ch:10-characteristic-functions}. For d): by the previous proposition,
+$X_1^2,\dots,X_n^2$ are \iid with law $\chi^2(1)=\Gamma(\frac12,\frac12)$ (\cref{exa:tr-chi-square}),
+and c), applied $n-1$ times, gives the claim.\footnote{To apply c) to $X_1^2+\dots+X_k^2$ and
+$X_{k+1}^2$, one needs these two variables to be independent. By
+\cref{prop:rv-functions-independent} it suffices that the vectors $(X_1,\dots,X_k)$ and $X_{k+1}$ be
+independent, which follows from the independence of $X_1,\dots,X_{k+1}$: \exref{ex:rv-notable-sums}.
+Added to the handwritten notes.} See also \citet[Section~20]{billingsley} on convolution.
+
+\subsection{The Gamma and Beta laws}\label{sec:rv-gamma-beta}
+
+The notes pose the following exercise: \emph{let $X\indep Y$, $X\sim\Gamma(\alpha,\lambda)$,
+$Y\sim\Gamma(\beta,\lambda)$; set $S=X+Y$ and $T=\frac XS=\frac X{X+Y}$, and determine the laws of
+$S$ and of $T$.} Its solution proves c) of \cref{prop:rv-notable-sums}, and more; we state the
+result as a proposition.
+
+\begin{proposition}[Gamma and Beta]\label{prop:rv-gamma-beta}
+Let $\alpha,\beta,\lambda>0$, and let $X\sim\Gamma(\alpha,\lambda)$ and $Y\sim\Gamma(\beta,\lambda)$
+be independent. Let $S=X+Y$ and $T=\frac X{X+Y}$. Then $S$ and $T$ are independent,
+$S\sim\Gamma(\alpha+\beta,\lambda)$, and $T$ has density
+\[
+  f_T(t)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\,t^{\alpha-1}(1-t)^{\beta-1}\,\1_{(0,1)}(t).
+\]
+\end{proposition}
+
+\begin{proof}
+Consider the vector
+\[
+  U=(S,T)=g(X,Y),\qquad\text{where } g(x,y)=\Big(x+y,\ \frac x{x+y}\Big).
+\]
+\begin{itemize}
+  \item The law of $(X,Y)$ is concentrated on $A=(0,+\infty)\times(0,+\infty)$, that is,
+    $\mathbb P(X>0,\ Y>0)=1$.
+  \item $g:A\to\mathbb R^2$ is a $C^1$-diffeomorphism. It is $C^1$ on the open set $A$, with
+    \[
+      \det J_g(x,y)=\begin{vmatrix}1&1\\[2pt]\dfrac{x+y-x}{(x+y)^2}&\dfrac{-x}{(x+y)^2}\end{vmatrix}
+      =-\frac x{(x+y)^2}-\frac y{(x+y)^2}=-\frac1{x+y}\ne0\quad\text{on }A .
+    \]
+  \item We determine $g^{-1}$:
+    \[
+      \begin{cases}s=x+y\\[2pt] t=\dfrac x{x+y}\end{cases}\iff
+      \begin{cases}s=x+y\\ x=ts\end{cases}\iff
+      \begin{cases}s=ts+y\\ x=ts\end{cases}\iff
+      \begin{cases}y=s(1-t)\\ x=st\end{cases}
+    \]
+    so $g$ is injective on $A$, with $g^{-1}(s,t)=\big(st,\ s(1-t)\big)$.
+  \item $\det J_{g^{-1}}(s,t)=\begin{vmatrix}t&s\\1-t&-s\end{vmatrix}=-st-s+st=-s\ne0$ on $g(A)$.
+    (Check: $\det J_{g^{-1}}(s,t)=1/\det J_g\big(g^{-1}(s,t)\big)$, as in \cref{thm:rv-density}, since
+    $\det J_g(st,s(1-t))=-\frac1s$.)
+  \item $g(A)$ is the set of $(s,t)$ such that $g^{-1}(s,t)\in A$:
+    \[
+    \begin{aligned}
+      g(A)&=\big\{(s,t)\in\mathbb R^2:\ st>0,\ s(1-t)>0\big\}\\
+      &=\big\{(s,t)\in\mathbb R^2:\ s>0,\ 0<t<1\big\}=(0,+\infty)\times(0,1).
+    \end{aligned}
+    \]
+\end{itemize}
+Moreover, with $Z=(X,Y)$: since $X\indep Y$, $Z$ is absolutely continuous with density $f_Xf_Y$ (see
+the beginning of \cref{sec:rv-sums}), and by \cref{def:tr-gamma}
+\[
+\begin{aligned}
+  f_Z(x,y)=f_X(x)f_Y(y)&=\Big(\frac{\lambda^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\lambda x}\1_{(0,+\infty)}(x)\Big)
+  \Big(\frac{\lambda^\beta}{\Gamma(\beta)}y^{\beta-1}e^{-\lambda y}\1_{(0,+\infty)}(y)\Big)\\
+  &=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha)\Gamma(\beta)}\,x^{\alpha-1}y^{\beta-1}e^{-\lambda(x+y)}\,\1_A(x,y).
+\end{aligned}
+\]
+Then, by \cref{thm:rv-piecewise} (with $m=1$ and $A_1=A$),
+\[
+\begin{aligned}
+  f_U(s,t)&=f_Z\big(g^{-1}(s,t)\big)\,\big|\det J_{g^{-1}}(s,t)\big|\,\1_{g(A)}(s,t)
+  =f_Z\big(st,s(1-t)\big)\,|-s|\,\1_{(0,+\infty)\times(0,1)}(s,t)\\
+  &=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha)\Gamma(\beta)}\,(st)^{\alpha-1}\big(s(1-t)\big)^{\beta-1}
+  e^{-\lambda s}\cdot s\ \1_{(0,+\infty)\times(0,1)}(s,t)\\
+  &=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha)\Gamma(\beta)}
+  \underbrace{\Big(s^{\alpha+\beta-1}e^{-\lambda s}\1_{(0,+\infty)}(s)\Big)}_{f_1(s)}
+  \underbrace{\Big(t^{\alpha-1}(1-t)^{\beta-1}\1_{(0,1)}(t)\Big)}_{f_2(t)} .
+\end{aligned}
+\]
+Hence, by \cref{rem:pm-factorisation}:
+\begin{itemize}
+  \item $S\indep T$;
+  \item $f_S(s)=c_1f_1(s)$ and $f_T(t)=c_2f_2(t)$, with
+    $c_1c_2=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha)\Gamma(\beta)}$;
+  \item $S\sim\Gamma(\alpha+\beta,\lambda)$: $f_S=c_1f_1$ is a probability density and a multiple of the
+    density of $\Gamma(\alpha+\beta,\lambda)$ (\cref{def:tr-gamma}), and two probability densities that
+    are multiples of each other are equal, so
+    \[
+      f_S(s)=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha+\beta)}\,s^{\alpha+\beta-1}e^{-\lambda s}\,\1_{(0,+\infty)}(s);
+    \]
+  \item therefore $c_1=\frac{\lambda^{\alpha+\beta}}{\Gamma(\alpha+\beta)}$,
+    $c_2=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}$, and
+    \[
+      f_T(t)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\,t^{\alpha-1}(1-t)^{\beta-1}\,\1_{(0,1)}(t).
+      \qedhere
+    \]
+\end{itemize}
+\end{proof}
+
+\begin{definition}[Beta law]\label{def:rv-beta}
+Let $\alpha,\beta>0$. A random variable $T$ has the \emph{Beta law with parameters $\alpha$ and
+$\beta$}, written $T\sim\mathrm{Beta}(\alpha,\beta)$, if it is absolutely continuous with density
+\[
+  f_T(t)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\,t^{\alpha-1}(1-t)^{\beta-1}\,\1_{(0,1)}(t).
+\]
+\end{definition}
+
+The Beta law models proportions, and it is used in Bayesian statistics. If $\alpha=\beta=1$, then
+$T\sim U((0,1))$. \Cref{fig:rv-beta} shows some examples of graphs.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.72\textwidth]{ch09-beta}
+  \caption{Densities of $\mathrm{Beta}(\alpha,\beta)$ in the four cases sketched in the notes:
+    $0<\alpha,\beta<1$ (a U shape, unbounded at both ends); $\alpha=1$, $\beta>1$ (decreasing, with
+    value $\beta$ at $0$); $1<\alpha,\beta\le2$ (a hump with vertical tangents at $0$ and $1$ when
+    $\alpha,\beta<2$); $1<\alpha\le2$, $\beta>2$ (a hump peaking left of $\frac12$, flat at $1$). Dashed:
+    $\alpha=\beta=1$, the uniform law.}
+  \label{fig:rv-beta}
+\end{figure}
+
+The function
+\[
+  B:(\alpha,\beta)\mapsto\int_0^1t^{\alpha-1}(1-t)^{\beta-1}\,\dd t=\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)},
+  \qquad\alpha,\beta>0,
+\]
+is called the \emph{Beta function}; the identity holds because the density of
+\cref{def:rv-beta} integrates to $1$. The mean of $T\sim\mathrm{Beta}(\alpha,\beta)$ is
+\[
+\begin{aligned}
+  \mathbb E[T]&=\int_{-\infty}^{+\infty}t\,f_T(t)\,\dd t
+  =\int_0^1t\cdot\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\,t^{\alpha-1}(1-t)^{\beta-1}\,\dd t\\
+  &=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\cdot\frac{\Gamma(\alpha+1)\Gamma(\beta)}{\Gamma(\alpha+\beta+1)}
+  \underbrace{\int_0^1\frac{\Gamma(\alpha+\beta+1)}{\Gamma(\alpha+1)\Gamma(\beta)}\,t^{\alpha}(1-t)^{\beta-1}\,\dd t}_{=\,1}\\
+  &=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}\cdot\frac{\alpha\Gamma(\alpha)\Gamma(\beta)}{(\alpha+\beta)\Gamma(\alpha+\beta)}
+  =\frac\alpha{\alpha+\beta},
+\end{aligned}
+\]
+where the integral is $1$ because the integrand is the density of $\mathrm{Beta}(\alpha+1,\beta)$, and
+$\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$ (\cref{def:tr-gamma-function}). Similarly
+\[
+  \Var(T)=\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)};
+\]
+the notes leave the computation as an exercise (\exref{ex:rv-beta-moments}).
+
+\begin{remark}[computational]\label{rem:rv-code-gamma-beta}
+Independence of $S$ and $T$ is much more than $\operatorname{cov}(S,T)=0$. If $X$ and $Y$ are \iid,
+positive and integrable, exchanging them leaves $S$ unchanged and turns $T$ into $1-T$, so $(S,T)$ and
+$(S,1-T)$ have the same law and $\operatorname{cov}(S,T)=0$ whatever the law of $X$; but if $X$ and $Y$
+are not constant, $S$ and $T$ are independent only for Gamma laws (with the same $\lambda$, by a
+theorem of \citet{lukacs-gamma}).
+\Cref{fig:rv-gamma-beta} compares, as in \cref{rem:pm-code-uncorrelated}, the joint distribution
+function of samples of $(S,T)$ with the product of the marginal ones: \texttt{sample\_gamma\_beta}
+and \texttt{joint\_cdf\_gap} in \coderef{code/src/probnotes/vectors.py}. For independent uniforms the
+correlation is $0$ but the gap tends to about $0.05$: for instance $\{S>1.9,\ T<0.1\}$ is empty,
+while $\mathbb P(S>1.9)\,\mathbb P(T<0.1)=\frac1{200}\cdot\frac1{18}>0$
+(\exref{ex:rv-gamma-beta-sim}).\footnote{This remark and \cref{fig:rv-gamma-beta} are added to the
+handwritten notes.} The function \texttt{transformed\_density} implements the formula of
+\cref{thm:rv-density,thm:rv-piecewise} for any $g^{-1}$, computing the Jacobian determinant by finite
+differences when it is not given; the tests recover the product density of
+\cref{prop:rv-gamma-beta} with it.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch09-gamma-beta}
+  \caption{Left: $3000$ samples (seed $7$) of $(S,T)=(X+Y,\frac X{X+Y})$ for independent $X\sim\Gamma(2,1)$ and
+    $Y\sim\Gamma(3,1)$, which are independent with laws $\Gamma(5,1)$ and $\mathrm{Beta}(2,3)$.
+    Centre: the same for independent uniforms on $(0,1)$; the samples fill a region that is not a
+    rectangle. Right: the largest gap $|F_{(S,T)}-F_SF_T|$ over a grid of sample quantiles, from $n$
+    samples (seed $2026$), for these two pairs and for $Y\sim\Gamma(3,3)$, a different rate. Only for the
+    Gamma pair with a common rate does it decrease like $n^{-1/2}$. The sample correlations printed in
+    the first two panels, computed from $10^5$ samples (seed $2026$), are both close to $0$.}
+  \label{fig:rv-gamma-beta}
+\end{figure}
+
+\demo{09-random-vectors.ipynb}{the Jacobian formula against simulation, and the pair $(S,T)$ for
+Gamma variables with any parameters, with its correlation and its distribution-function gap.}
+
+\section{Worked exercises}\label{sec:rv-worked}
+
+The notes end the topic with five exercises, whose statements are typed. The statement of the
+second one is pasted twice, at the end of a lecture and at the beginning of the next; we give it
+once.
+
+\begin{example}[Worked exercise: integer and fractional parts of an exponential]\label{exa:rv-integer-part}
+Let $X$ be an exponential random variable with parameter $\lambda>0$.
+\begin{enumerate}[label=\alph*)]
+  \item Let $Y=[X]$, the integer part of $X$. (i) Compute the density of $Y$ and recognise the law of
+    $Y+1$. (ii) Compute the mean of $Y$.
+  \item Let $Z=\frac12[2X]$. Compute the density of $Z$.
+  \item Let $T=X-[X]$. Compute the density of $T$.
+\end{enumerate}
+
+\emph{Solution.} a) Since $X>0$ a.s., $Y$ takes values in $\mathbb N$ (outside a null event). For
+every $k\in\mathbb N$:
+
+(i) since $X$ is absolutely continuous, $\mathbb P(X=k)=0$ and
+\[
+\begin{aligned}
+  f_Y(k)&=\mathbb P(Y=k)=\mathbb P([X]=k)=\mathbb P(k\le X<k+1)=F_X(k+1)-F_X(k)\\
+  &=\big(1-e^{-\lambda(k+1)}\big)-\big(1-e^{-\lambda k}\big)=e^{-\lambda k}-e^{-\lambda k-\lambda}
+  =e^{-\lambda k}\big(1-e^{-\lambda}\big)=\big(1-e^{-\lambda}\big)\big(e^{-\lambda}\big)^k .
+\end{aligned}
+\]
+The variable $Y+1$ takes values in $\mathbb N^*$, and
+\[
+  f_{Y+1}(k)=\mathbb P(Y+1=k)=\mathbb P(Y=k-1)=\big(1-e^{-\lambda}\big)\big(e^{-\lambda}\big)^{k-1}
+  \qquad\forall k\in\mathbb N^*,
+\]
+so $Y+1\sim G(p)$ with $p=1-e^{-\lambda}$ (\cref{rem:rv-pascal}).
+
+(ii) $\mathbb E[Y+1]=\frac1p$, hence
+\[
+  \mathbb E[Y]=\mathbb E[Y+1]-1=\frac1p-1=\frac1{1-e^{-\lambda}}-1=\frac{1-1+e^{-\lambda}}{1-e^{-\lambda}}
+  =\frac{e^{-\lambda}}{1-e^{-\lambda}}=\frac1{e^\lambda-1}.
+\]
+
+b) $Z$ takes values in $\{\frac k2:k\in\mathbb N\}$; the notes leave the rest as an exercise
+(\exref{ex:rv-worked-details}).
+
+c) $T=X-[X]$ takes values in $[0,1)$. So
+\begin{itemize}
+  \item $F_T(t)=\mathbb P(T\le t)=0$ for every $t<0$;
+  \item $F_T(t)=1$ for every $t\ge1$;
+  \item for every $0\le t<1$, since the events $\{[X]=k\}$, $k\in\mathbb N$, form a partition of the
+    sure event (up to the null event $\{X\le0\}$), and $X-[X]=X-k$ on $\{[X]=k\}$,
+    \[
+    \begin{aligned}
+      F_T(t)&=\mathbb P(T\le t)=\sum_{k=0}^\infty\mathbb P\big(T\le t,\ [X]=k\big)
+      =\sum_{k=0}^\infty\mathbb P\big(0\le X-[X]\le t,\ [X]=k\big)\\
+      &=\sum_{k=0}^\infty\mathbb P(k\le X\le k+t)\\
+      &=\sum_{k=0}^\infty\big(F_X(k+t)-F_X(k)\big)=\sum_{k=0}^\infty\Big(\big(1-e^{-\lambda(k+t)}\big)-\big(1-e^{-\lambda k}\big)\Big)\\
+      &=\sum_{k=0}^\infty\big(e^{-\lambda k}-e^{-\lambda(k+t)}\big)
+      =\sum_{k=0}^\infty e^{-\lambda k}\big(1-e^{-\lambda t}\big)\\
+      &=\big(1-e^{-\lambda t}\big)\sum_{k=0}^\infty\big(e^{-\lambda}\big)^k
+      =\big(1-e^{-\lambda t}\big)\cdot\frac1{1-e^{-\lambda}},
+    \end{aligned}
+    \]
+    because $0<e^{-\lambda}<1$.
+\end{itemize}
+Hence\footnote{Here and below a density is read off a continuous distribution function $F_T$ that is
+continuously differentiable outside finitely many points: then $F_T(t)=\int_{-\infty}^tF_T'(s)\,\dd s$
+for every $t$, and $F_T'$ is a density of $T$, by the argument at the end of the first proof of
+\cref{prop:rv-sum-density}. Added to the handwritten notes.}
+\begin{itemize}
+  \item $f_T(t)=0$ if $t<0$ or $t\ge1$;
+  \item if $t\in[0,1)$, $f_T(t)=\dfrac1{1-e^{-\lambda}}\cdot\lambda e^{-\lambda t}=\dfrac{\lambda e^{-\lambda t}}{1-e^{-\lambda}}$,
+\end{itemize}
+an exponential density ``squashed'' onto $[0,1)$.
+\end{example}
+
+\begin{example}[Worked exercise: a pair of geometric variables]\label{exa:rv-geometric-pair}
+Let $(X,Y)$ be a pair of random variables with values in $\mathbb N$, with joint density
+\[
+  f_{X,Y}(i,j)=(1-a)^2a^{i+j}\qquad\forall i\in\mathbb N,\ j\in\mathbb N,\qquad\text{where }0<a<1 .
+\]
+\begin{enumerate}[label=\alph*)]
+  \item Determine the marginal laws of $X$ and $Y$.
+  \item Compute the law of $S=X+Y$.
+  \item Let now $U=\min(X,Y)$ and $V=X-Y$. Show that for all $k\in\mathbb N$, $r\in\mathbb Z$,
+    $f_{U,V}(k,r)=(1-a)^2a^{2k+|r|}$ (discuss according to the sign of $r$).
+  \item Determine the marginal laws of $U$ and $V$.
+\end{enumerate}
+
+\emph{Solution.} a) For every $i\in\mathbb N$ (\cref{prop:pm-discrete-independence}),
+\[
+  f_X(i)=\sum_{j=0}^\infty f_{(X,Y)}(i,j)=\sum_{j=0}^\infty(1-a)^2a^{i+j}=(1-a)^2a^i\sum_{j=0}^\infty a^j
+  =(1-a)^2a^i\cdot\frac1{1-a}=(1-a)a^i .
+\]
+Analogously, $f_Y(j)=(1-a)a^j$ for every $j\in\mathbb N$. Since the joint density factorises,
+$(1-a)^2a^{i+j}=\big((1-a)a^i\big)\big((1-a)a^j\big)=f_X(i)f_Y(j)$, we get $X\indep Y$.
+
+b) $S=X+Y$ takes values in $\mathbb N$. For every $k\in\mathbb N$,
+\[
+\begin{aligned}
+  \mathbb P(S=k)=f_S(k)&=\sum_{i=0}^\infty\mathbb P(S=k,\ X=i)=\sum_{i=0}^\infty\mathbb P(X=i,\ Y=k-i)\\
+  &=\sum_{i=0}^k\mathbb P(X=i)\,\mathbb P(Y=k-i)\\
+  &=\sum_{i=0}^kf_X(i)f_Y(k-i)=\sum_{i=0}^k(1-a)a^i\cdot(1-a)a^{k-i}\\
+  &=\sum_{i=0}^k(1-a)^2a^k=(1-a)^2a^k(k+1).
+\end{aligned}
+\]
+The sum in the third line is $(f_X*f_Y)(k)$: one can either remember the formula of
+\cref{thm:rv-discrete-sum} or, as here, work from the joint density.\footnote{Added: $X+1$ and $Y+1$
+are geometric with parameter $1-a$, and indeed $S+2\sim\mathrm{Pascal}(2,1-a)$, as
+\cref{prop:rv-notable-discrete} predicts.}
+
+c) $(U,V)$ takes values in $\mathbb N\times\mathbb Z$. For $k\in\mathbb N$ and $r\in\mathbb Z$,
+\[
+  f_{(U,V)}(k,r)=\mathbb P(U=k,\ V=r)=\mathbb P\big(\min(X,Y)=k,\ X-Y=r\big)\qquad(*)
+\]
+\begin{itemize}
+  \item if $r\ge0$, then $X\ge Y$ on $\{V=r\}$, so $\min(X,Y)=Y$ and
+    $(*)=\mathbb P(Y=k,\ X=k+r)=(1-a)^2a^{k+r+k}=(1-a)^2a^{2k+r}$;
+  \item if $r<0$, then $X<Y$ on $\{V=r\}$, so $\min(X,Y)=X$ and
+    $(*)=\mathbb P(X=k,\ Y=k-r)=(1-a)^2a^{k-r+k}=(1-a)^2a^{2k-r}$.
+\end{itemize}
+Hence $f_{U,V}(k,r)=(1-a)^2a^{2k+|r|}$ for all $k\in\mathbb N$, $r\in\mathbb Z$.
+
+d) (The notes solve this item at the next lecture.) For every $r\in\mathbb Z$, since $0<a^2<1$,
+\[
+\begin{aligned}
+  f_V(r)=\mathbb P(V=r)&=\sum_{k=0}^\infty f_{(U,V)}(k,r)=\sum_{k=0}^\infty(1-a)^2a^{2k+|r|}\\
+  &=(1-a)^2a^{|r|}\sum_{k=0}^\infty\big(a^2\big)^k=\frac{(1-a)^2a^{|r|}}{1-a^2}=\frac{1-a}{1+a}\,a^{|r|}.
+\end{aligned}
+\]
+For every $k\in\mathbb N$,
+\[
+\begin{aligned}
+  f_U(k)=\mathbb P(U=k)&=\sum_{r=-\infty}^{+\infty}f_{(U,V)}(k,r)=(1-a)^2a^{2k}\sum_{r=-\infty}^{+\infty}a^{|r|}\\
+  &=(1-a)^2a^{2k}\Big(\sum_{r=-\infty}^{-1}a^{-r}+a^0+\sum_{r=1}^{+\infty}a^r\Big)\\
+  &=(1-a)^2a^{2k}\Big(1+2\sum_{r=1}^\infty a^r\Big)=(1-a)^2a^{2k}\Big(1+\frac{2a}{1-a}\Big)\\
+  &=(1-a)^2a^{2k}\,\frac{1+a}{1-a}=\big(1-a^2\big)a^{2k}.
+\end{aligned}
+\]
+Since $f_U(k)f_V(r)=f_{(U,V)}(k,r)$ for all $k,r$, the variables $U$ and $V$ are independent.\footnote{This last observation is added to the handwritten notes.}
+\end{example}
+
+\begin{example}[Worked exercise: a Poisson variable times a Bernoulli variable]\label{exa:rv-poisson-bernoulli}
+Let $X$ and $Y$ be independent random variables, with Poisson law of parameter $\lambda>0$ and
+Bernoulli law of parameter $p\in(0,1)$ respectively. Let $U=XY$.
+\begin{enumerate}[label=\alph*)]
+  \item Determine the law of $U$.
+  \item Compute the mean and the variance of $U$.
+  \item Compute the correlation coefficient $\rho(X,U)$.
+\end{enumerate}
+
+\emph{Solution.} Recall that
+\begin{itemize}
+  \item $X\sim\mathcal P(\lambda)$: $f_X(k)=e^{-\lambda}\frac{\lambda^k}{k!}$ for all $k\in\mathbb N$;
+    $\mathbb E[X]=\lambda$, $\Var(X)=\lambda$, $\mathbb E[X^2]=\Var(X)+\mathbb E[X]^2=\lambda+\lambda^2$;
+  \item $Y\sim b(p)$: $f_Y(1)=p$, $f_Y(0)=1-p$; $\mathbb E[Y]=p$, $\Var(Y)=p(1-p)$,
+    $\mathbb E[Y^2]=\Var(Y)+\mathbb E[Y]^2=p-p^2+p^2=p$ (note that $Y^2\sim b(p)$).
+\end{itemize}
+
+a) $U=XY$ takes values in $\mathbb N$; we look for $f_U(k)=\mathbb P(U=k)$, $k\in\mathbb N$. If $k=0$,
+since $X\indep Y$,
+\[
+\begin{aligned}
+  \mathbb P(U=0)&=\mathbb P(XY=0)=\mathbb P\big(\{X=0\}\cup\{Y=0\}\big)=\mathbb P(X=0)+\mathbb P(Y=0)-\mathbb P(X=0,\ Y=0)\\
+  &=e^{-\lambda}\frac{\lambda^0}{0!}+(1-p)-\Big(e^{-\lambda}\frac{\lambda^0}{0!}\Big)(1-p)
+  =e^{-\lambda}+1-p-e^{-\lambda}+e^{-\lambda}p=1-p+e^{-\lambda}p .
+\end{aligned}
+\]
+Alternatively, since $\{Y=0\}$, $\{Y=1\}$ form a partition of the sure event,
+\[
+\begin{aligned}
+  \mathbb P(U=0)&=\underbrace{\mathbb P(U=0\mid Y=0)}_{=\,1}\mathbb P(Y=0)+\mathbb P(U=0\mid Y=1)\,\mathbb P(Y=1)\\
+  &=\mathbb P(Y=0)+\underbrace{\mathbb P(X=0\mid Y=1)}_{=\,\mathbb P(X=0)}\mathbb P(Y=1)=(1-p)+pe^{-\lambda}.
+\end{aligned}
+\]
+If $k\ne0$,
+\[
+  \mathbb P(U=k)=\mathbb P(XY=k)=\mathbb P(X=k,\ Y=1)=\mathbb P(X=k)\,\mathbb P(Y=1)=pe^{-\lambda}\frac{\lambda^k}{k!}.
+\]
+
+b) By \cref{thm:pm-expectation-product}, since $X\indep Y$,
+\[
+  \mathbb E[U]=\mathbb E[XY]=\mathbb E[X]\,\mathbb E[Y]=\lambda p,
+\]
+and, since $X^2\indep Y^2$ (\cref{prop:rv-functions-independent}),
+\[
+\begin{aligned}
+  \Var(U)&=\Var(XY)=\mathbb E\big[(XY)^2\big]-\mathbb E[XY]^2=\mathbb E[X^2Y^2]-(\lambda p)^2
+  =\underbrace{\mathbb E[X^2]}_{\lambda+\lambda^2}\underbrace{\mathbb E[Y^2]}_{p}-\lambda^2p^2\\
+  &=\lambda p+\lambda^2p-\lambda^2p^2 .
+\end{aligned}
+\]
+
+c) $\rho(X,U)=\dfrac{\operatorname{cov}(X,U)}{\sqrt{\Var(X)}\sqrt{\Var(U)}}$, where, since
+$X^2\indep Y$,
+\[
+  \operatorname{cov}(X,U)=\mathbb E[XU]-\mathbb E[X]\,\mathbb E[U]=\mathbb E[X^2Y]-\mathbb E[X]\,\mathbb E[U]=\dots;
+\]
+the notes leave the end as an exercise (\exref{ex:rv-worked-details}).
+\end{example}
+
+\begin{example}[Worked exercise: a Laplace variable and a uniform variable]\label{exa:rv-laplace-uniform}
+Let $X$ and $Y$ be independent random variables, $Y\sim U(0,1)$, and $X$ with density
+$f(x)=\frac12e^{-|x|}$, $x\in\mathbb R$.
+\begin{enumerate}[label=\alph*)]
+  \item Determine the density function of the random variable $U=\sqrt{|X|}$.
+  \item Determine the law of the random variable $V=U+Y$.
+  \item Determine the joint law of the vector $(S,T)=(X+Y,\ X-Y)$.
+\end{enumerate}
+
+\emph{Solution.} a) $U=g(X)$, with $g:\mathbb R\to\mathbb R$, $x\mapsto\sqrt{|x|}$. For $u\in\mathbb R$,
+\[
+  F_U(u)=\mathbb P(U\le u)=\mathbb P\big(\sqrt{|X|}\le u\big)=0\qquad\text{if }u\le0 .
+\]
+If $u>0$, since $X$ is absolutely continuous,
+\[
+  F_U(u)=\mathbb P\big(|X|\le u^2\big)=\mathbb P\big(-u^2\le X\le u^2\big)=F_X(u^2)-F_X(-u^2).
+\]
+Therefore $f_U(u)=0$ for $u\le0$, and for $u>0$, since $f_X$ is continuous
+(\cref{rem:ld-continuous-density}),
+\[
+  f_U(u)=\frac{\dd}{\dd u}F_U(u)=f_X(u^2)\cdot2u-f_X(-u^2)\cdot(-2u)=2u\big[f_X(u^2)+f_X(-u^2)\big]\qquad(*)
+\]
+(the notes suggest doing this again with the other method, \cref{cor:tr-piecewise}:
+\exref{ex:rv-worked-details}). Recall that $f_X(x)=\frac12e^{-|x|}$ for all $x\in\mathbb R$, a
+symmetric peak of height $\frac12$ at $0$. Hence
+\[
+  (*)=2u\Big[\frac12e^{-u^2}+\frac12e^{-u^2}\Big]=2ue^{-u^2},\qquad
+  f_U(u)=2ue^{-u^2}\,\1_{(0,+\infty)}(u).
+\]
+
+b) $V=U+Y$. Since $X\indep Y$, $U\indep Y$ (\cref{prop:rv-functions-independent}). By
+\cref{prop:rv-sum-density}, for every $v\in\mathbb R$,
+\[
+  f_V(v)=\int_{-\infty}^{+\infty}f_U(u)\,f_Y(v-u)\,\dd u=(f_U*f_Y)(v)
+  =\int_{-\infty}^{+\infty}2ue^{-u^2}\,\underbrace{\1_{(0,+\infty)}(u)\,\1_{(0,1)}(v-u)}_{=\,\1_A(u,v)}\,\dd u,
+\]
+and $\1_A(u,v)\ne0$ if and only if $u>0$ and $0<v-u<1$, that is, $u<v<u+1$, or $v-1<u<v$: the set
+$A$ is the strip of \cref{fig:rv-regions}, centre. Hence
+\begin{itemize}
+  \item if $v\le0$, $f_V(v)=0$;
+  \item if $0<v\le1$, with the substitution $t=u^2$, $\dd t=2u\,\dd u$,
+    \[
+      f_V(v)=\int_0^v2ue^{-u^2}\,\dd u=\int_0^{v^2}e^{-t}\,\dd t=\big[-e^{-t}\big]_0^{v^2}=1-e^{-v^2};
+    \]
+  \item if $v>1$,
+    \[
+    \begin{aligned}
+      f_V(v)&=\int_{v-1}^v2ue^{-u^2}\,\dd u=\int_{(v-1)^2}^{v^2}e^{-t}\,\dd t=\big[-e^{-t}\big]_{(v-1)^2}^{v^2}\\
+      &=e^{-(v-1)^2}-e^{-v^2}=e^{-v^2}\big[e^{2v-1}-1\big].
+    \end{aligned}
+    \]
+\end{itemize}
+So
+\[
+  f_V(v)=\big(1-e^{-v^2}\big)\1_{(0,1]}(v)+e^{-v^2}\big[e^{2v-1}-1\big]\1_{(1,+\infty)}(v).
+\]
+
+c) $(S,T)=(X+Y,X-Y)=g(X,Y)$, where $g:\mathbb R^2\to\mathbb R^2$, $g(x,y)=(x+y,x-y)$, is a
+$C^1$-diffeomorphism (one can also use the formula for linear transformations,
+\cref{cor:rv-linear}):
+\[
+  g:\begin{cases}s=x+y\\t=x-y\end{cases}\implies g^{-1}:\begin{cases}x=\dfrac{s+t}2\\[4pt]y=\dfrac{s-t}2\end{cases},
+  \qquad
+  \det J_{g^{-1}}=\begin{vmatrix}\frac12&\frac12\\[2pt]\frac12&-\frac12\end{vmatrix}=-\frac14-\frac14=-\frac12\ne0 .
+\]
+By \cref{thm:rv-density}, and since $X\indep Y$,
+\[
+\begin{aligned}
+  f_{(S,T)}(s,t)&=f_{(X,Y)}\big(g^{-1}(s,t)\big)\,\big|\det J_{g^{-1}}(s,t)\big|\,\1_{g(\mathbb R^2)}(s,t)
+  =f_X\Big(\frac{s+t}2\Big)f_Y\Big(\frac{s-t}2\Big)\cdot\frac12\\
+  &=\frac12e^{-\left|\frac{s+t}2\right|}\cdot\1_{(0,1)}\Big(\frac{s-t}2\Big)\cdot\frac12
+  =\frac14e^{-\frac{|s+t|}2}\,\1_D(s,t),
+\end{aligned}
+\]
+where
+\[
+  D=\Big\{(s,t)\in\mathbb R^2:\ 0<\frac{s-t}2<1\Big\}=\big\{(s,t)\in\mathbb R^2:\ t<s<t+2\big\}
+  =\big\{(s,t)\in\mathbb R^2:\ s-2<t<s\big\},
+\]
+the strip between the lines $s=t$ and $s=t+2$ (\cref{fig:rv-regions}, right).
+\end{example}
+
+\begin{example}[Worked exercise: products of uniform variables]\label{exa:rv-uniform-products}
+Let $X$ and $Y$ be independent random variables with uniform law on the interval $(0,1)$.
+\begin{enumerate}[label=\alph*)]
+  \item Determine the laws of $Z=-\log X$ and $W=-\log Y$.
+  \item Compute the law of $Z+W$.
+  \item Deduce the law of $X\cdot Y=e^{-(Z+W)}$.
+  \item Find the result of c) again without using the previous items.
+  \item If $X_1,\dots,X_n$ are independent random variables with uniform law on $(0,1)$, what is
+    the distribution of $U_n=X_1\cdot\ldots\cdot X_n$?
+\end{enumerate}
+
+\emph{Solution.} a) $X\sim U(0,1)$ and $Z=-\log X$. The law of $X$ is concentrated on $A=(0,1)$, and
+$g:A\to\mathbb R$, $g(x)=-\log x$, is $C^1$ and invertible, with $C^1$ inverse:
+\[
+  y=g(x)=-\log x\implies\log x=-y\implies x=e^{-y}=g^{-1}(y)\implies\frac{\dd}{\dd y}g^{-1}(y)=-e^{-y},
+\]
+and $g(A)=(0,+\infty)$. Then, by \cref{cor:tr-piecewise} (with a single piece),
+\[
+\begin{aligned}
+  f_Z(z)&=f_X\big(g^{-1}(z)\big)\,\Big|\frac{\dd}{\dd z}g^{-1}(z)\Big|\,\1_{g(A)}(z)=f_X\big(e^{-z}\big)\,e^{-z}\,\1_{(0,+\infty)}(z)\\
+  &=e^{-z}\,\1_{(0,1)}\big(e^{-z}\big)\,\1_{(0,+\infty)}(z)=e^{-z}\,\1_{(0,+\infty)}(z),
+\end{aligned}
+\]
+since the two indicators are the same function of $z$. So $Z\sim\mathrm{Exp}(1)$. (The notes suggest
+doing this again with the other method, computing $F_Z$: \exref{ex:rv-worked-details}.) In the same
+way $W=-\log Y\sim\mathrm{Exp}(1)$, and $Z\indep W$ because $X\indep Y$
+(\cref{prop:rv-functions-independent}).
+
+b) $T=Z+W\sim\Gamma(2,1)$ (\cref{prop:rv-notable-sums}, b)).
+
+c) Since $Z=-\log X\implies X=e^{-Z}$ and $W=-\log Y\implies Y=e^{-W}$,
+\[
+  U=XY=e^{-(Z+W)}=e^{-T}.
+\]
+The function $g:\mathbb R\to\mathbb R$, $g(t)=e^{-t}$, is $C^1$ and invertible with $C^1$ inverse (a
+$C^1$-diffeomorphism of $\mathbb R$ onto $g(\mathbb R)=(0,+\infty)$), with
+\[
+  g^{-1}(u)=-\log u,\qquad\frac{\dd}{\dd u}g^{-1}(u)=-\frac1u .
+\]
+Then, by \cref{thm:tr-density},
+\[
+  f_U(u)=f_T\big(g^{-1}(u)\big)\,\Big|\frac{\dd}{\dd u}g^{-1}(u)\Big|\,\1_{g(\mathbb R)}(u)
+  =f_T(-\log u)\cdot\frac1u\cdot\1_{(0,+\infty)}(u)\qquad(*)
+\]
+Since $T\sim\Gamma(2,1)$, $f_T(t)=\frac{1^2}{\Gamma(2)}t^{2-1}e^{-t}\1_{(0,+\infty)}(t)=te^{-t}\1_{(0,+\infty)}(t)$, and
+\[
+  (*)=(-\log u)\,e^{-(-\log u)}\,\1_{(0,+\infty)}(-\log u)\cdot\frac1u\cdot\1_{(0,+\infty)}(u)
+  =-\frac{\log u}{u}\cdot u\cdot\1_{(0,1)}(u)
+\]
+(the indicator $\1_{(0,+\infty)}(u)$ is superfluous). Hence
+\[
+  f_U(u)=-\log u\cdot\1_{(0,1)}(u),\qquad U=XY=e^{-(Z+W)}.
+\]
+
+d) The notes leave this as an exercise, to be done in two ways: 1) with the vector transformation
+$(U,V)=(XY,X)$; 2) by computing $F_U(u)$ directly for every $u\in\mathbb R$
+(\exref{ex:rv-products-uniforms}).
+
+e) Let $X_1,\dots,X_n$ be \iid with law $U(0,1)$, and $U_n=X_1\cdot\ldots\cdot X_n$.
+\begin{itemize}
+  \item The variables $Z_i=-\log X_i$ are \iid with law $\mathrm{Exp}(1)$ (and $X_i=e^{-Z_i}$), by
+    item a) and \cref{prop:rv-functions-independent}.
+  \item $Z_1+\dots+Z_n=T_n\sim\Gamma(n,1)$, as in item b) (\cref{prop:rv-notable-sums}, c), applied
+    $n-1$ times).
+  \item $U_n=X_1\cdot\ldots\cdot X_n=e^{-(Z_1+\dots+Z_n)}=e^{-T_n}$: this is the same transformation as
+    in item c), so
+    \[
+      f_{U_n}(u)=f_{T_n}(-\log u)\cdot\frac1u\cdot\1_{(0,+\infty)}(u)\qquad(**)
+    \]
+\end{itemize}
+In this case $T_n\sim\Gamma(n,1)$, so
+$f_{T_n}(t)=\frac{1^n}{\Gamma(n)}t^{n-1}e^{-t}\1_{(0,+\infty)}(t)=\frac1{(n-1)!}t^{n-1}e^{-t}\1_{(0,+\infty)}(t)$,
+and
+\[
+  (**)=\frac1{(n-1)!}(-\log u)^{n-1}\cdot e^{\log u}\cdot\frac1u\cdot\1_{(0,1)}(u):\qquad
+  f_{U_n}(u)=\frac{(-\log u)^{n-1}}{(n-1)!}\,\1_{(0,1)}(u).
+\]
+\end{example}
+
+\begin{remark}[computational]\label{rem:rv-code-worked}
+Every law found in the worked exercises has a closed form in
+\coderef{code/src/probnotes/vectors.py}, with a sampler: \texttt{fractional\_part\_pdf},
+\texttt{min\_diff\_pmf}, \texttt{poisson\_bernoulli\_pmf} and \texttt{uniform\_product\_pdf}, for
+instance, and \texttt{sample\_worked}. The tests check each
+law against simulation, and the integrals of the densities against $1$. \Cref{fig:rv-worked} shows
+three of them. The distribution function of $U_n$ is
+$F_{U_n}(u)=u\sum_{k=0}^{n-1}\frac{(-\log u)^k}{k!}$ on $(0,1]$, the Erlang tail of
+\cref{prop:tr-erlang} at $-\log u$; \exref{ex:rv-products-uniforms} uses it to choose a sample size
+for a simulation check.
+\end{remark}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{ch09-worked}
+  \caption{Three laws of the worked exercises against histograms of $10^5$ samples (seed $2026$). Left:
+    the fractional part $X-[X]$ of $X\sim\mathrm{Exp}(\lambda)$, for $\lambda=0.5,2,5$
+    (\cref{exa:rv-integer-part}). Centre: $U=\sqrt{|X|}$ and $V=U+Y$ of \cref{exa:rv-laplace-uniform}.
+    Right: the product $U_n$ of $n$ independent uniforms, $n=2,3,4$ (\cref{exa:rv-uniform-products}),
+    whose density $\frac{(-\log u)^{n-1}}{(n-1)!}$ is unbounded at $0$.}
+  \label{fig:rv-worked}
+\end{figure}
+
+\demo{09-random-vectors.ipynb}{the product of $n$ uniforms, its density and its distribution function
+against simulation, with a slider for $n$.}
+
+\furtherreading
+\textcite{billingsley}, Section~17, proves the change-of-variables formula, and Section~20 treats
+random vectors, their transformations and convolution; \textcite{folland}, Section~2.6, proves the
+formula for $C^1$-diffeomorphisms. \textcite{ross-5}, Chapter~6, works out many examples of joint
+densities of functions of random variables and of sums of independent random variables; \textcite{durrett}, Section~2.1, treats sums of independent random variables
+with measure-theoretic proofs. \textcite{lukacs-gamma} proves that the independence of $X+Y$ and
+$X/(X+Y)$ characterises the Gamma laws.
